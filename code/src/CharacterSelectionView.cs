@@ -127,7 +127,7 @@ namespace Modbed
             culturesListPanel.IntValue = vm.SelectedCultureIndex;
             groupsListPanel.IntValue = vm.SelectedGroupIndex;
             charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-            perkListPanel.IntValue = _params.selectedPerk;
+            perkListPanel.IntValue = vm.SelectedPerkIndex;
             ModuleLogger.Log("vm.SelectedCharacterIndex {0}", vm.SelectedCharacterIndex);
 
 
@@ -135,17 +135,17 @@ namespace Modbed
                 vm.SelectedCultureChanged(w as ListPanel);
                 groupsListPanel.IntValue = vm.SelectedGroupIndex;
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                perkListPanel.IntValue = _params.selectedPerk;
+                perkListPanel.IntValue = vm.SelectedPerkIndex;
             });
             groupsListPanel.SelectEventHandlers.Add(w => {
                 vm.SelectedGroupChanged(w as ListPanel);
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                perkListPanel.IntValue = _params.selectedPerk;
+                perkListPanel.IntValue = vm.SelectedPerkIndex;
             });
             charactersListPanel.SelectEventHandlers.Add(w =>
             {
                 vm.SelectedCharacterChanged(w as ListPanel);
-                perkListPanel.IntValue = _params.selectedPerk;
+                perkListPanel.IntValue = vm.SelectedPerkIndex;
             });
             perkListPanel.SelectEventHandlers.Add(w =>
             {

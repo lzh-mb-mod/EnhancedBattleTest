@@ -30,27 +30,11 @@ namespace Modbed
 
         public override void AfterStart()
         {
-            var scene = this.Mission.Scene;
-            
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
-            playerTeam = this.Mission.Teams.Add(BattleSideEnum.Attacker, 0xff3f51b5, banner:Banner.CreateRandomBanner());
-            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
-            playerTeam.AddTacticOption(new TacticCharge(playerTeam));
-            // playerTeam.AddTacticOption(new TacticFullScaleAttack(playerTeam));
-            playerTeam.ExpireAIQuerySystem();
-            playerTeam.ResetTactic();
-            this.Mission.PlayerTeam = playerTeam;
 
-            enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, 0xffff6090, banner: Banner.CreateRandomBanner());
-            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
-            enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
-            // enemyTeam.AddTacticOption(new TacticFullScaleAttack(enemyTeam));
-
-            enemyTeam.SetIsEnemyOf(playerTeam, true);
-            playerTeam.SetIsEnemyOf(enemyTeam, true);
-            enemyTeam.ExpireAIQuerySystem();
-            enemyTeam.ResetTactic();
+            var team1 = this.Mission.Teams.Add(side: BattleSideEnum.Attacker, color: 0, color2: 0);
+            this.Mission.PlayerTeam = team1;
         }
 
         public void ShouldStart(EnhancedBattleTestParams param)
@@ -67,6 +51,26 @@ namespace Modbed
 
         private void AfterStart2()
         {
+            var playerTeamCulture = this.battleTestParams.playerSoldierCount == 0 ? this.battleTestParams.PlayerHeroClass.Culture : this.battleTestParams.PlayerTroopHeroClass.Culture;
+            playerTeam = this.Mission.Teams.Add(BattleSideEnum.Attacker, color: playerTeamCulture.Color, color2: playerTeamCulture.Color2);
+            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
+            playerTeam.AddTacticOption(new TacticCharge(playerTeam));
+            // playerTeam.AddTacticOption(new TacticFullScaleAttack(playerTeam));
+            playerTeam.ExpireAIQuerySystem();
+            playerTeam.ResetTactic();
+            this.Mission.PlayerTeam = playerTeam;
+
+            var enemyTeamCulture = this.battleTestParams.EnemyTroopHeroClass.Culture;
+            enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.ClothAlternativeColor, color2: enemyTeamCulture.ClothAlternativeColor2);
+            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
+            enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
+            enemyTeam.ExpireAIQuerySystem();
+            enemyTeam.ResetTactic();
+            // enemyTeam.AddTacticOption(new TacticFullScaleAttack(enemyTeam));
+
+            enemyTeam.SetIsEnemyOf(playerTeam, true);
+            playerTeam.SetIsEnemyOf(enemyTeam, true);
+
             // see TaleWorlds.MountAndBlade.dll/FlagDominationSpawningBehaviour.cs: TaleWorlds.MountAndBlade.FlagDominationSpawningBehaviour.SpawnAgents()
             this._started = true;
             var scene = this.Mission.Scene;
@@ -91,7 +95,6 @@ namespace Modbed
             var agentDefaultDir = new TL.Vec2(0, 1);
             var useFreeCamera = this.battleTestParams.useFreeCamera;
 
-
             BasicCharacterObject soldierCharacter = this.battleTestParams.PlayerTroopHeroClass.TroopCharacter;
             var playerTroopFormationClass = FormationClass.Infantry;
             var playerTroopFormation = playerTeam.GetFormation(playerTroopFormationClass);
@@ -102,17 +105,17 @@ namespace Modbed
             {
                 var playerMat = TL.Mat3.Identity;
                 playerMat.RotateAboutUp(agentDefaultDir.AngleBetween(xDir));
+                BasicCultureObject playerCulture = this.battleTestParams.PlayerHeroClass.Culture;
                 BasicCharacterObject playerCharacter = this.battleTestParams.PlayerHeroClass.HeroCharacter;
                 Equipment equipment = applyPerkFor(this.battleTestParams.PlayerHeroClass, true,
                     this.battleTestParams.playerSelectedPerk);
                 AgentBuildData agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(playerCharacter))
-                    .ClothingColor1(0xff3f51b5)
-                    .ClothingColor2(0xff3f51b5)
+                    .Team(playerTeam)
+                    .ClothingColor1(playerCulture.Color)
+                    .ClothingColor2(playerCulture.Color2)
                     .IsFemale(false)
                     .InitialFrame(new TL.MatrixFrame(playerMat, playerPos))
-                    .Team(playerTeam)
                     .Equipment(equipment);
-
                 Agent player = this.Mission.SpawnAgent(agentBuildData, false, 0);
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
@@ -150,15 +153,14 @@ namespace Modbed
             
             for (var i = 0; i < this.battleTestParams.playerSoldierCount; i += 1)
             {
-
                 Equipment equipment = applyPerkFor(this.battleTestParams.PlayerTroopHeroClass, false,
                     this.battleTestParams.playerTroopSelectedPerk);
                 AgentBuildData soldierBuildData = new AgentBuildData(new BasicBattleAgentOrigin(soldierCharacter))
-                    .ClothingColor1(playerTeam.Color)
-                    .ClothingColor2(playerTeam.Color2)
-                    .Banner(playerTeam.Banner)
-                    .IsFemale(false)   
                     .Team(playerTeam)
+                    .ClothingColor1(playerTeamCulture.Color)
+                    .ClothingColor2(playerTeamCulture.Color2)
+                    .Banner(playerTeam.Banner)
+                    .IsFemale(false)
                     .Formation(playerTroopFormation)
                     .Equipment(equipment);
 
@@ -174,7 +176,6 @@ namespace Modbed
                 }
 
                 var agent = this.Mission.SpawnAgent(soldierBuildData);
-                agent.SetTeam(playerTeam, true);
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
@@ -189,16 +190,16 @@ namespace Modbed
                 enemyFormation.SetPositioning(wp, -xDir, null);
                 enemyFormation.FormOrder = FormOrder.FormOrderCustom(width);
             }
-
+            
             for (var i = 0; i < this.battleTestParams.enemySoldierCount; i += 1)
             {
                 Equipment equipment = applyPerkFor(this.battleTestParams.EnemyTroopHeroClass, false,
                     this.battleTestParams.enemyTroopSelectedPerk);
                 AgentBuildData enemyBuildData = new AgentBuildData(new BasicBattleAgentOrigin(enemyCharacter))
-                    .ClothingColor1(enemyTeam.Color)
-                    .ClothingColor2(enemyTeam.Color2)
-                    .Banner(enemyTeam.Banner)
                     .Team(enemyTeam)
+                    .ClothingColor1(enemyTeamCulture.ClothAlternativeColor)
+                    .ClothingColor2(enemyTeamCulture.ClothAlternativeColor2)
+                    .Banner(enemyTeam.Banner)
                     .Formation(enemyFormation)
                     .Equipment(equipment);;
 

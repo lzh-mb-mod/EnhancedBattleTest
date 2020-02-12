@@ -1,0 +1,10 @@
+# Changelog
+
+## [0.3.2] - 2020-02-13
+
+### Changed
+- Change team color to the color of culture.
+- Do not use any banner.
+
+### Fixed
+- Fix the bug that the selected perk is displayed incorrectly after changing selected character.
