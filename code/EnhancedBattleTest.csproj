@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProcessorArchitecture>amd64</ProcessorArchitecture>
+    <Mb2Bin>C:\game\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord - Beta\bin\Win64_Shipping_Client</Mb2Bin>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="TaleWorlds.Core">
+      <HintPath>$(Mb2Bin)/TaleWorlds.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.DotNet">
+      <HintPath>$(Mb2Bin)/TaleWorlds.DotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Engine">
+      <HintPath>$(Mb2Bin)/TaleWorlds.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Engine.GauntletUI">
+      <HintPath>$(Mb2Bin)/TaleWorlds.Engine.GauntletUI.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.GauntletUI">
+      <HintPath>$(Mb2Bin)/TaleWorlds.GauntletUI.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.GauntletUI.Data">
+      <HintPath>$(Mb2Bin)/TaleWorlds.GauntletUI.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.GauntletUI.PrefabSystem">
+      <HintPath>$(Mb2Bin)/TaleWorlds.GauntletUI.PrefabSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.InputSystem">
+      <HintPath>$(Mb2Bin)/TaleWorlds.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Library">
+      <HintPath>$(Mb2Bin)/TaleWorlds.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.Localization">
+      <HintPath>$(Mb2Bin)/TaleWorlds.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade">
+      <HintPath>$(Mb2Bin)/TaleWorlds.MountAndBlade.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade.GauntletUI">
+      <HintPath>$(Mb2Bin)/TaleWorlds.MountAndBlade.GauntletUI.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade.View">
+      <HintPath>$(Mb2Bin)/TaleWorlds.MountAndBlade.View.dll</HintPath>
+    </Reference>
+	
+    <Reference Include="TaleWorlds.TwoDimension">
+      <HintPath>$(Mb2Bin)/TaleWorlds.TwoDimension.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="Install" DependsOnTargets="build">
+    <Copy SourceFiles=".\bin\Debug\netstandard2.0\EnhancedBattleTest.dll" DestinationFolder="$(Mb2Bin)" />
+  </Target>
+</Project>

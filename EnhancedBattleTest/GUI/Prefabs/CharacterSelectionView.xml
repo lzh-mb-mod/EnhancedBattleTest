@@ -1,0 +1,63 @@
+<Prefab>
+  <Variables>
+  </Variables>
+  <VisualDefinitions>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" Brush="Frame1Brush">
+      <Children>
+        <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Select Character" Brush="CenterAlignedLargeFont" />
+
+        <ListPanel Id="Cultures" DataSource="{Cultures}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="150" MarginLeft="20">
+          <ItemTemplate>
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" ButtonType="Radio" MarginLeft="14" MarginRight="14" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItem">
+              <Children>
+                <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItemText"/>
+              </Children>
+            </ButtonWidget>
+          </ItemTemplate>
+        </ListPanel>
+
+        <ListPanel Id="Groups" DataSource="{Groups}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="150" MarginLeft="320">
+          <ItemTemplate>
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" ButtonType="Radio" MarginLeft="14" MarginRight="14" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItem">
+              <Children>
+                <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItemText"/>
+              </Children>
+            </ButtonWidget>
+          </ItemTemplate>
+        </ListPanel>
+
+        <ListPanel Id="Characters" DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="150" MarginLeft="620">
+          <ItemTemplate>
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" ButtonType="Radio" MarginLeft="14" MarginRight="14" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItem">
+              <Children>
+                <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItemText"/>
+              </Children>
+            </ButtonWidget>
+          </ItemTemplate>
+        </ListPanel>
+		
+        <ListPanel Id="Perks" DataSource="{Perks}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="150" MarginLeft="920">
+          <ItemTemplate>
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" ButtonType="Radio" MarginLeft="14" MarginRight="14" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItem">
+              <Children>
+                <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownItemText"/>
+              </Children>
+            </ButtonWidget>
+          </ItemTemplate>
+        </ListPanel>
+
+        <ListPanel LayoutImp.LayoutMethod="HorizontalSpaced" WidthSizePolicy="Fixed" SuggestedWidth="600" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" MarginBottom="200">
+          <Children>
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="false" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" Command.Click="Done" Brush="ButtonBrush4">
+              <Children>
+                <TextWidget Text="Done" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

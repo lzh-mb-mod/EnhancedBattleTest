@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Module>
+	<Name value = "EnhancedBattleTest"/>
+	<Id value = "EnhancedBattleTest"/>
+	<Version value = "1.0"/>
+	<SingleplayerModule value="true"/>
+	<MultiplayerModule value="true"/>
+	<DependedModules/>
+	<SubModules>
+		<SubModule>
+			<Name value = "EnhancedBattleTestSubModule"/>
+			<Version value = "1.0"/>
+			<DLLName value = "EnhancedBattleTest.dll"/>
+			<SubModuleClassType value = "Modbed.EnhancedBattleTestSubModule"/>
+			<Tags>
+				<Tag key="DedicatedServerType" value ="none" />
+				<Tag key="IsNoRenderModeElement" value ="false" />
+			</Tags>
+		</SubModule>
+	</SubModules>
+	
+	<Xmls></Xmls>
+</Module>
