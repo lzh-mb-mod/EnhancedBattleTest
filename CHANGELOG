@@ -1,7 +1,8 @@
 # Changelog
-## [0.3.4] - 2020-02
+## [0.3.4] - 2020-02-14
 
 ### Changed
+- Keep compatible with Bannerlord `b0.7.1`.
 - Change map to `mp_sergeant_map_001` and adjust default formation position.
 
 ### Fixed
