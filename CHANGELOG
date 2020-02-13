@@ -2,7 +2,7 @@
 ## [0.3.3] - 2020-02-13
 
 ### Added
-- Add victory celebration for part of troops.
+- Add victory celebration for victory troops. Celebration will end after issueing orders.
 - Add agent label which is missed after v0.3.1.
 - Add escape menu and option UI.
 
