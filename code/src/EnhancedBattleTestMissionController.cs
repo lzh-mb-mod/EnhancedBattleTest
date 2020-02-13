@@ -32,12 +32,14 @@ namespace Modbed
         public Agent _playerAgent;
         private Team playerTeam;
         private Team enemyTeam;
+        private AgentVictoryLogic victoryLogic;
 
         public EnhancedBattleTestMissionController()
         {
             this._game = Game.Current;
             _started = false;
             _shouldExit = false;
+            victoryLogic = null;
         }
 
         public override void AfterStart()
@@ -64,6 +66,21 @@ namespace Modbed
             // playerTeam.AddTacticOption(new TacticFullScaleAttack(playerTeam));
             playerTeam.ExpireAIQuerySystem();
             playerTeam.ResetTactic();
+            playerTeam.OnOrderIssued += (type, formations, param) =>
+            {
+                if (victoryLogic != null)
+                {
+                    foreach (var formation in formations)
+                    {
+                        foreach (var agent in formation.Units)
+                        {
+                            victoryLogic.OnAgentDeleted(agent);
+                            agent.WieldNextWeapon(0);
+                        }
+                    }
+                    victoryLogic = null;
+                }
+            };
             this.Mission.PlayerTeam = playerTeam;
 
             var enemyTeamCulture = this.BattleTestParams.EnemyTroopHeroClass.Culture;
@@ -71,7 +88,7 @@ namespace Modbed
                 enemyTeamCulture.BackgroundColor2, enemyTeamCulture.ForegroundColor2);
             enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.BackgroundColor2, color2: enemyTeamCulture.ForegroundColor2, banner: enemyTeamBanner);
             enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam, 5f, 1f));
-            enemyTeam.AddTacticOption(new TacticSergeantMPBotTactic(enemyTeam));
+            enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
             enemyTeam.ExpireAIQuerySystem();
             enemyTeam.ResetTactic();
             // enemyTeam.AddTacticOption(new TacticFullScaleAttack(enemyTeam));
@@ -164,7 +181,7 @@ namespace Modbed
                 var centerPos = startPos + yDir * (width / 2);
                 var wp = new WorldPosition(scene, centerPos.ToVec3());
                 playerTroopFormation.SetPositioning(wp, xDir, null);
-                //playerTroopFormation.FormOrder = FormOrder.FormOrderCustom(width);
+                playerTroopFormation.FormOrder = FormOrder.FormOrderCustom(width);
                 mapHasNavMesh = wp.GetNavMesh() != System.UIntPtr.Zero;
             }
             
@@ -195,7 +212,6 @@ namespace Modbed
                 var agent = this.Mission.SpawnAgent(soldierBuildData);
                 agent.SetTeam(playerTeam, true);
                 agent.WieldInitialWeapons();
-                agent.AddComponent((AgentComponent)new AgentAIStateFlagComponent(agent));
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
@@ -208,7 +224,7 @@ namespace Modbed
                 var centerPos = startPos + yDir * (width / 2) + xDir * this.BattleTestParams.distance;
                 var wp = new WorldPosition(scene, centerPos.ToVec3());
                 enemyFormation.SetPositioning(wp, -xDir, null);
-                //enemyFormation.FormOrder = FormOrder.FormOrderCustom(width);
+                enemyFormation.FormOrder = FormOrder.FormOrderCustom(width);
             }
             
             for (var i = 0; i < this.BattleTestParams.enemySoldierCount; i += 1)
@@ -236,7 +252,6 @@ namespace Modbed
                 var agent = this.Mission.SpawnAgent(enemyBuildData);
                 agent.SetTeam(enemyTeam, true);
                 agent.WieldInitialWeapons();
-                agent.AddComponent((AgentComponent)new AgentAIStateFlagComponent(agent));
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
@@ -305,18 +320,18 @@ namespace Modbed
                 if (!playerVictory && !enemyVictory)
                     return;
                 _ended = true;
-                var victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
+                victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
                 if (victoryLogic == null)
                     return;
                 if (enemyVictory)
                 {
                     _ended = true;
-                    victoryLogic.SetTimersOfVictoryReactionsForRetreating(this.enemyTeam.Side);
+                    victoryLogic.SetTimersOfVictoryReactions(this.enemyTeam.Side);
                 }
                 else
                 {
                     _ended = true;
-                    victoryLogic.SetTimersOfVictoryReactionsForRetreating(this.playerTeam.Side);
+                    victoryLogic.SetTimersOfVictoryReactions(this.playerTeam.Side);
                 }
             }
         }
