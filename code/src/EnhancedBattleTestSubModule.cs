@@ -31,7 +31,7 @@ namespace Modbed
             EnhancedBattleTestSubModule._instance = this;
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
               "battletest",
-              new TextObject("{=battletest}Battle Test", (Dictionary<string, TextObject>)null),
+              new TextObject("{=battletest}Enhanced Battle Test", (Dictionary<string, TextObject>)null),
               1,
               () =>
               {

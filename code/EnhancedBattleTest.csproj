@@ -45,6 +45,9 @@
     <Reference Include="TaleWorlds.MountAndBlade.View">
       <HintPath>$(Mb2Bin)/TaleWorlds.MountAndBlade.View.dll</HintPath>
     </Reference>
+    <Reference Include="TaleWorlds.MountAndBlade.ViewModelCollection">
+      <HintPath>$(Mb2Bin)/TaleWorlds.MountAndBlade.ViewModelCollection.dll</HintPath>
+    </Reference>
 	
     <Reference Include="TaleWorlds.TwoDimension">
       <HintPath>$(Mb2Bin)/TaleWorlds.TwoDimension.dll</HintPath>

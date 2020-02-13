@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
-using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade;
 using TL = TaleWorlds.Library;
 
@@ -12,10 +10,24 @@ namespace Modbed
     public class EnhancedBattleTestMissionController : MissionLogic
     {
         private Game _game;
-        public EnhancedBattleTestParams battleTestParams;
-        private bool _shouldStart;
+        private EnhancedBattleTestParams _battleTestParams;
+
+        public EnhancedBattleTestParams BattleTestParams
+        {
+            get => _battleTestParams;
+            set
+            {
+                _battleTestParams = value;
+                int playerNumber = this.BattleTestParams.useFreeCamera ? 0 : 1;
+                _shouldCelebrateVictory = playerNumber + this.BattleTestParams.playerSoldierCount != 0 &&
+                                          this.BattleTestParams.enemySoldierCount != 0;
+            }
+        }
+
         private bool _started;
         private bool _shouldExit;
+        private bool _shouldCelebrateVictory;
+        private bool _ended = false;
         public Action<TL.Vec3> freeCameraInitialPos;
         public Agent _playerAgent;
         private Team playerTeam;
@@ -24,7 +36,7 @@ namespace Modbed
         public EnhancedBattleTestMissionController()
         {
             this._game = Game.Current;
-            _shouldStart = _started = false;
+            _started = false;
             _shouldExit = false;
         }
 
@@ -32,16 +44,6 @@ namespace Modbed
         {
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
-
-            var team1 = this.Mission.Teams.Add(side: BattleSideEnum.Attacker, color: 0, color2: 0);
-            this.Mission.PlayerTeam = team1;
-        }
-
-        public void ShouldStart(EnhancedBattleTestParams param)
-        {
-            //this._shouldStart = true;
-            this.battleTestParams = param;
-            AfterStart2();
         }
 
         public void ShouldExit()
@@ -49,54 +51,67 @@ namespace Modbed
             _shouldExit = true;
         }
 
-        private void AfterStart2()
+        public void AddTeams()
         {
-            var playerTeamCulture = this.battleTestParams.playerSoldierCount == 0 ? this.battleTestParams.PlayerHeroClass.Culture : this.battleTestParams.PlayerTroopHeroClass.Culture;
-            playerTeam = this.Mission.Teams.Add(BattleSideEnum.Attacker, color: playerTeamCulture.Color, color2: playerTeamCulture.Color2);
-            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
+            // see TaleWorlds.MountAndBlade.dll/MissionMultiplayerFlagDomination.cs : TaleWorlds.MountAndBlade.MissionMultiplayerFlagDomination.AfterStart();
+            var playerTeamCulture = this.BattleTestParams.playerSoldierCount == 0 ? this.BattleTestParams.PlayerHeroClass.Culture : this.BattleTestParams.PlayerTroopHeroClass.Culture;
+            Banner playerTeamBanner = new Banner(playerTeamCulture.BannerKey,
+                playerTeamCulture.BackgroundColor1,
+                playerTeamCulture.ForegroundColor1);
+            playerTeam = this.Mission.Teams.Add(BattleSideEnum.Attacker, color: playerTeamCulture.BackgroundColor1, color2: playerTeamCulture.ForegroundColor1, banner: playerTeamBanner);
+            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam, 5f, 1f));
             playerTeam.AddTacticOption(new TacticCharge(playerTeam));
             // playerTeam.AddTacticOption(new TacticFullScaleAttack(playerTeam));
             playerTeam.ExpireAIQuerySystem();
             playerTeam.ResetTactic();
             this.Mission.PlayerTeam = playerTeam;
 
-            var enemyTeamCulture = this.battleTestParams.EnemyTroopHeroClass.Culture;
-            enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.ClothAlternativeColor, color2: enemyTeamCulture.ClothAlternativeColor2);
-            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
-            enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
+            var enemyTeamCulture = this.BattleTestParams.EnemyTroopHeroClass.Culture;
+            Banner enemyTeamBanner = new Banner(enemyTeamCulture.BannerKey,
+                enemyTeamCulture.BackgroundColor2, enemyTeamCulture.ForegroundColor2);
+            enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.BackgroundColor2, color2: enemyTeamCulture.ForegroundColor2, banner: enemyTeamBanner);
+            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam, 5f, 1f));
+            enemyTeam.AddTacticOption(new TacticSergeantMPBotTactic(enemyTeam));
             enemyTeam.ExpireAIQuerySystem();
             enemyTeam.ResetTactic();
             // enemyTeam.AddTacticOption(new TacticFullScaleAttack(enemyTeam));
 
             enemyTeam.SetIsEnemyOf(playerTeam, true);
             playerTeam.SetIsEnemyOf(enemyTeam, true);
+        }
+
+        public void SpawnAgents()
+        {
+            var playerTeamCulture = this.BattleTestParams.playerSoldierCount == 0 ? this.BattleTestParams.PlayerHeroClass.Culture : this.BattleTestParams.PlayerTroopHeroClass.Culture;
+            var enemyTeamCulture = this.BattleTestParams.EnemyTroopHeroClass.Culture;
 
             // see TaleWorlds.MountAndBlade.dll/FlagDominationSpawningBehaviour.cs: TaleWorlds.MountAndBlade.FlagDominationSpawningBehaviour.SpawnAgents()
+            // see TaleWorlds.MountAndBlade.dll/SpawningBehaviourBase.cs: TaleWorlds.MountAndBlade.SpawningBehaviourBase.OnTick()
             this._started = true;
             var scene = this.Mission.Scene;
 
-            if (this.battleTestParams.skyBrightness >= 0)
+            if (this.BattleTestParams.skyBrightness >= 0)
             {
-                scene.SetSkyBrightness(this.battleTestParams.skyBrightness);
+                scene.SetSkyBrightness(this.BattleTestParams.skyBrightness);
             }
 
-            if (this.battleTestParams.rainDensity >= 0)
+            if (this.BattleTestParams.rainDensity >= 0)
             {
-                scene.SetRainDensity(this.battleTestParams.rainDensity);
+                scene.SetRainDensity(this.BattleTestParams.rainDensity);
             }
 
-            var xInterval = this.battleTestParams.soldierXInterval;
-            var yInterval = this.battleTestParams.soldierYInterval;
-            var soldiersPerRow = this.battleTestParams.soldiersPerRow;
+            var xInterval = this.BattleTestParams.soldierXInterval;
+            var yInterval = this.BattleTestParams.soldierYInterval;
+            var soldiersPerRow = this.BattleTestParams.soldiersPerRow;
 
-            var startPos = this.battleTestParams.formationPosition;
-            var xDir = this.battleTestParams.formationDirection;
-            var yDir = this.battleTestParams.formationDirection.LeftVec();
+            var startPos = this.BattleTestParams.formationPosition;
+            var xDir = this.BattleTestParams.formationDirection;
+            var yDir = this.BattleTestParams.formationDirection.LeftVec();
             var agentDefaultDir = new TL.Vec2(0, 1);
-            var useFreeCamera = this.battleTestParams.useFreeCamera;
+            var useFreeCamera = this.BattleTestParams.useFreeCamera;
 
-            BasicCharacterObject soldierCharacter = this.battleTestParams.PlayerTroopHeroClass.TroopCharacter;
-            var playerTroopFormationClass = FormationClass.Infantry;
+            BasicCharacterObject playerTroopCharacter = this.BattleTestParams.PlayerTroopHeroClass.TroopCharacter;
+            var playerTroopFormationClass = playerTroopCharacter.CurrentFormationClass;
             var playerTroopFormation = playerTeam.GetFormation(playerTroopFormationClass);
 
             var playerPosVec2 = startPos + xDir * -10 + yDir * -10;
@@ -105,12 +120,13 @@ namespace Modbed
             {
                 var playerMat = TL.Mat3.Identity;
                 playerMat.RotateAboutUp(agentDefaultDir.AngleBetween(xDir));
-                BasicCultureObject playerCulture = this.battleTestParams.PlayerHeroClass.Culture;
-                BasicCharacterObject playerCharacter = this.battleTestParams.PlayerHeroClass.HeroCharacter;
-                Equipment equipment = applyPerkFor(this.battleTestParams.PlayerHeroClass, true,
-                    this.battleTestParams.playerSelectedPerk);
+                BasicCultureObject playerCulture = this.BattleTestParams.PlayerHeroClass.Culture;
+                BasicCharacterObject playerCharacter = this.BattleTestParams.PlayerHeroClass.HeroCharacter;
+                Equipment equipment = applyPerkFor(this.BattleTestParams.PlayerHeroClass, true,
+                    this.BattleTestParams.playerSelectedPerk);
                 AgentBuildData agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(playerCharacter))
                     .Team(playerTeam)
+                    .Banner(playerTeam.Banner)
                     .ClothingColor1(playerCulture.Color)
                     .ClothingColor2(playerCulture.Color2)
                     .IsFemale(false)
@@ -120,6 +136,7 @@ namespace Modbed
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
+                player.SetTeam(playerTeam, true);
 
                 Mission.MainAgent = player;
                 playerTroopFormation.PlayerOwner = player;
@@ -128,7 +145,7 @@ namespace Modbed
             }
             else
             {
-                var c = this.battleTestParams.playerSoldierCount;
+                var c = this.BattleTestParams.playerSoldierCount;
                 if (c <= 0)
                 {
                     this.freeCameraInitialPos(new TL.Vec3(startPos.x, startPos.y, 30));
@@ -147,15 +164,15 @@ namespace Modbed
                 var centerPos = startPos + yDir * (width / 2);
                 var wp = new WorldPosition(scene, centerPos.ToVec3());
                 playerTroopFormation.SetPositioning(wp, xDir, null);
-                playerTroopFormation.FormOrder = FormOrder.FormOrderCustom(width);
+                //playerTroopFormation.FormOrder = FormOrder.FormOrderCustom(width);
                 mapHasNavMesh = wp.GetNavMesh() != System.UIntPtr.Zero;
             }
             
-            for (var i = 0; i < this.battleTestParams.playerSoldierCount; i += 1)
+            for (var i = 0; i < this.BattleTestParams.playerSoldierCount; i += 1)
             {
-                Equipment equipment = applyPerkFor(this.battleTestParams.PlayerTroopHeroClass, false,
-                    this.battleTestParams.playerTroopSelectedPerk);
-                AgentBuildData soldierBuildData = new AgentBuildData(new BasicBattleAgentOrigin(soldierCharacter))
+                Equipment equipment = applyPerkFor(this.BattleTestParams.PlayerTroopHeroClass, false,
+                    this.BattleTestParams.playerTroopSelectedPerk);
+                AgentBuildData soldierBuildData = new AgentBuildData(new BasicBattleAgentOrigin(playerTroopCharacter))
                     .Team(playerTeam)
                     .ClothingColor1(playerTeamCulture.Color)
                     .ClothingColor2(playerTeamCulture.Color2)
@@ -176,25 +193,28 @@ namespace Modbed
                 }
 
                 var agent = this.Mission.SpawnAgent(soldierBuildData);
+                agent.SetTeam(playerTeam, true);
+                agent.WieldInitialWeapons();
+                agent.AddComponent((AgentComponent)new AgentAIStateFlagComponent(agent));
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
-            BasicCharacterObject enemyCharacter = this.battleTestParams.EnemyTroopHeroClass.TroopCharacter;
+            BasicCharacterObject enemyCharacter = this.BattleTestParams.EnemyTroopHeroClass.TroopCharacter;
             
-            var enemyFormationClass = FormationClass.Ranged;
+            var enemyFormationClass = enemyCharacter.CurrentFormationClass;
             var enemyFormation = enemyTeam.GetFormation(enemyFormationClass);
             {
                 float width = this.getInitialFormationWidth(enemyTeam, enemyFormationClass);
-                var centerPos = startPos + yDir * (width / 2) + xDir * this.battleTestParams.distance;
+                var centerPos = startPos + yDir * (width / 2) + xDir * this.BattleTestParams.distance;
                 var wp = new WorldPosition(scene, centerPos.ToVec3());
                 enemyFormation.SetPositioning(wp, -xDir, null);
-                enemyFormation.FormOrder = FormOrder.FormOrderCustom(width);
+                //enemyFormation.FormOrder = FormOrder.FormOrderCustom(width);
             }
             
-            for (var i = 0; i < this.battleTestParams.enemySoldierCount; i += 1)
+            for (var i = 0; i < this.BattleTestParams.enemySoldierCount; i += 1)
             {
-                Equipment equipment = applyPerkFor(this.battleTestParams.EnemyTroopHeroClass, false,
-                    this.battleTestParams.enemyTroopSelectedPerk);
+                Equipment equipment = applyPerkFor(this.BattleTestParams.EnemyTroopHeroClass, false,
+                    this.BattleTestParams.enemyTroopSelectedPerk);
                 AgentBuildData enemyBuildData = new AgentBuildData(new BasicBattleAgentOrigin(enemyCharacter))
                     .Team(enemyTeam)
                     .ClothingColor1(enemyTeamCulture.ClothAlternativeColor)
@@ -209,11 +229,14 @@ namespace Modbed
                     var y = i % soldiersPerRow;
                     var mat = TL.Mat3.Identity;
                     mat.RotateAboutUp(agentDefaultDir.AngleBetween(-xDir));
-                    var pos = startPos + xDir * this.battleTestParams.distance + xDir * xInterval * x + yDir * yInterval * y;
+                    var pos = startPos + xDir * this.BattleTestParams.distance + xDir * xInterval * x + yDir * yInterval * y;
                     var agentFrame = new TaleWorlds.Library.MatrixFrame(TaleWorlds.Library.Mat3.Identity, new TL.Vec3(pos.x, pos.y, 30));
                     enemyBuildData.InitialFrame(agentFrame);
                 }
                 var agent = this.Mission.SpawnAgent(enemyBuildData);
+                agent.SetTeam(enemyTeam, true);
+                agent.WieldInitialWeapons();
+                agent.AddComponent((AgentComponent)new AgentAIStateFlagComponent(agent));
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
@@ -228,7 +251,7 @@ namespace Modbed
 
         float getInitialFormationWidth(Team team, FormationClass fc)
         {
-            var bp = this.battleTestParams;
+            var bp = this.BattleTestParams;
             var formation = team.GetFormation(fc);
             var mounted = fc == FormationClass.Cavalry || fc == FormationClass.HorseArcher;
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
@@ -246,24 +269,9 @@ namespace Modbed
 
         public override void OnMissionTick(float dt)
         {
-            if (!this._started)
+            if (this._started)
             {
-                if (this._shouldStart)
-                {
-                    try
-                    {
-                        this.AfterStart2();
-                        this._shouldStart = false;
-                    }
-                    catch (System.Exception e)
-                    {
-                        ModuleLogger.Log("{0}", e);
-                    }
-                }
-            }
-            else
-            {
-                var scene = this.Mission.Scene;
+                CheckVictory();
                 if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.C))
                 {
                     this.SwitchCamera();
@@ -288,7 +296,32 @@ namespace Modbed
             return equipment;
         }
 
-        void SwitchCamera()
+        private void CheckVictory()
+        {
+            if (!_ended && _shouldCelebrateVictory)
+            {
+                bool playerVictory = this.enemyTeam.ActiveAgents.IsEmpty();
+                bool enemyVictory = this.playerTeam.ActiveAgents.IsEmpty();
+                if (!playerVictory && !enemyVictory)
+                    return;
+                _ended = true;
+                var victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
+                if (victoryLogic == null)
+                    return;
+                if (enemyVictory)
+                {
+                    _ended = true;
+                    victoryLogic.SetTimersOfVictoryReactionsForRetreating(this.enemyTeam.Side);
+                }
+                else
+                {
+                    _ended = true;
+                    victoryLogic.SetTimersOfVictoryReactionsForRetreating(this.playerTeam.Side);
+                }
+            }
+        }
+
+        private void SwitchCamera()
         {
             ModuleLogger.Log("SwitchCamera");
             if (this._playerAgent == null || !this._playerAgent.IsActive())

@@ -16,22 +16,25 @@ namespace Modbed
         {
             List<MissionView> missionViewList = new List<MissionView>();
             missionViewList.Add(ViewCreator.CreateMissionAgentStatusUIHandler(mission));
-            // missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
+            missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
+            missionViewList.Add(ViewCreator.CreateMissionMainAgentEquipmentController(mission));
+            missionViewList.Add(ViewCreator.CreateMissionSingleplayerEscapeMenu());
             missionViewList.Add(ViewCreator.CreateOrderTroopPlacerView(mission));
             // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
             missionViewList.Add(ViewCreator.CreateMissionKillNotificationUIHandler());
             missionViewList.Add(new MissionItemContourControllerView());
             missionViewList.Add(new MissionAgentContourControllerView());
             missionViewList.Add(ViewCreator.CreateMissionFlagMarkerUIHandler());
-            // missionViewList.Add(ViewCreator.CreateOptionsUIHandler());
+            missionViewList.Add(ViewCreator.CreateOptionsUIHandler());
             // missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
             // missionViewList.Add((MissionView) new MissionBoundaryWallView());
-            // missionViewList.Add((MissionView) new SpectatorCameraView());
-            missionViewList.Add(ViewCreator.CreateMissionOrderUIHandler());
+            //missionViewList.Add((MissionView) new SpectatorCameraView());
             missionViewList.Add(new EnhancedBattleTestMissionView(mission));
             var selectionView = new CharacterSelectionView();
             missionViewList.Add(selectionView);
-            missionViewList.Add(new EnhancedBattleTestSelectMissionView(selectionView));
+            var orderView = new EnhancedBattleTestMissionOrderUIHandler();
+            missionViewList.Add(orderView);
+            missionViewList.Add(new EnhancedBattleTestSelectMissionView(selectionView, orderView));
             return missionViewList.ToArray();
         }
     }
@@ -61,12 +64,14 @@ namespace Modbed
         private EnhancedBattleTestVM _dataSource;
         private EnhancedBattleTestMissionController _missionController;
         private CharacterSelectionView _selectionView;
+        private EnhancedBattleTestMissionOrderUIHandler _orderView;
         private bool _isOpen;
         private bool _toOpen;
 
-        public EnhancedBattleTestSelectMissionView(CharacterSelectionView selectionView)
+        public EnhancedBattleTestSelectMissionView(CharacterSelectionView selectionView, EnhancedBattleTestMissionOrderUIHandler orderView)
         {
             this._selectionView = selectionView;
+            this._orderView = orderView;
             this.ViewOrderPriorty = 22;
             this._isOpen = this._toOpen = false;
         }
@@ -116,7 +121,10 @@ namespace Modbed
             this._isOpen = true;
             this._dataSource = new EnhancedBattleTestVM(_selectionView, (param) =>
             {
-                this._missionController.ShouldStart(param);
+                this._missionController.BattleTestParams = param;
+                this._missionController.AddTeams();
+                this._orderView.EnhancedBattleInitialize();
+                this._missionController.SpawnAgents();
                 this.OnClose();
             }, (param) =>
             {

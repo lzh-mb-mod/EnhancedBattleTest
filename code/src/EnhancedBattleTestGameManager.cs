@@ -7,6 +7,8 @@
 using TaleWorlds.Core;
 using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Source.Missions;
+
 namespace Modbed
 {
     public class EnhancedBattleTestGameManager : MBGameManager
@@ -76,12 +78,14 @@ namespace Modbed
             MissionState.OpenNew(
                 "EnhancedBattleTest",
                 new MissionInitializerRecord(scene),
-                missionController => new MissionBehaviour[3] {
+                missionController => new MissionBehaviour[] {
                     new EnhancedBattleTestMissionController(),
                     // new BattleTeam1MissionController(),
                     // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
                     new AgentBattleAILogic(),
+                    new AgentVictoryLogic(),
                     new FieldBattleController(),
+                    new MissionOptionsComponent(),
                     // new MissionBoundaryPlacer(),
                 }
             );

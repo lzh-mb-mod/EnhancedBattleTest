@@ -6,7 +6,7 @@
   <Window>
     <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" Brush="Frame1Brush">
       <Children>
-        <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Battle Test 0.3" Brush="CenterAlignedLargeFont" />
+        <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Enhanced Battle Test 0.3" Brush="CenterAlignedLargeFont" />
         <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" SuggestedWidth="600" MarginTop="150">
           <Children>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
