@@ -63,11 +63,11 @@ namespace Modbed
 
         public void NewMission()
         {
-            MBMultiplayerOptionsAccessor.SetFriendlyFireDamageMeleeFriendPercent(20);
+            MBMultiplayerOptionsAccessor.SetFriendlyFireDamageMeleeFriendPercent(90);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageMeleeSelfPercent(50);
-            MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(20);
+            MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedSelfPercent(20);
-            string scene = "mp_skirmish_map_001a";
+            string scene = "mp_sergeant_map_001";
             // string scene = "mp_test_bora";
             // string scene = "battle_test";
             // string scene = "mp_duel_001_winter";

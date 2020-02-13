@@ -25,6 +25,7 @@ namespace Modbed
         private string _soldierXInterval, _soldierYInterval;
         private string _soldiersPerRow;
         private string _playerName, _playerTroopName, _enemyTroopName;
+        private string _formationPosition;
 
         [DataSourceProperty]
         public string PlayerSoldierCount
@@ -178,9 +179,20 @@ namespace Modbed
 
         public string RainDensity => this.currentParams.rainDensity.ToString();
 
-        public string FormationPosition => this.currentParams.formationPositionString;
+        [DataSourceProperty]
+        public string FormationPosition
+        {
+            get => this._formationPosition;
+            set
+            {
+                if (this._formationPosition == value)
+                    return;
+                this._formationPosition = value;
+                this.OnPropertyChanged(nameof(FormationPosition));
+            }
+        }
 
-        public string FormationDirection => this.currentParams.formationDirectionString;
+        public string FormationDirection => this.currentParams.FormationDirectionString;
         
         public bool UseFreeCamera
         {
@@ -202,7 +214,7 @@ namespace Modbed
             this._soldierXInterval = currentParams.soldierXInterval.ToString();
             this._soldierYInterval = currentParams.soldierYInterval.ToString();
             this._soldiersPerRow = currentParams.soldiersPerRow.ToString();
-            //this.FormationPosition = string.Format("{0},{1}", currentParams.FormationPosition.x, lastParams.FormationPosition.y);
+            this.FormationPosition = currentParams.FormationPositionString;
             //this.FormationDirection = string.Format("{0},{1}", currentParams.formationDirection.x, lastParams.formationDirection.y);
 
             this.PlayerName = this.PlayerHeroClass.HeroName.ToString();
@@ -228,6 +240,7 @@ namespace Modbed
                 currentParams.soldierXInterval = System.Convert.ToSingle(this.SoldierXInterval);
                 currentParams.soldierYInterval = System.Convert.ToSingle(this.SoldierYInterval);
                 currentParams.soldiersPerRow = System.Convert.ToInt32(this.SoldiersPerRow);
+                currentParams.FormationPositionString = this.FormationPosition;
             }
             catch
             {

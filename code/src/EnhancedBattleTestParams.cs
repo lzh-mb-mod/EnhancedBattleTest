@@ -13,15 +13,17 @@ namespace Modbed
         public float soldierXInterval, soldierYInterval;
         public int soldiersPerRow;
         public Vec2 formationPosition;
-        public string formationPositionString
+        public string FormationPositionString
         {
-            get { return string.Format("{0},{1}", this.formationPosition.x, this.formationPosition.y); }
+            get => $"{this.formationPosition.x},{this.formationPosition.y}";
+            set
+            {
+                var posParts = value.Split(',');
+                formationPosition = new Vec2(System.Convert.ToSingle(posParts[0]), System.Convert.ToSingle(posParts[1]));
+            }
         }
         public Vec2 formationDirection;
-        public string formationDirectionString
-        {
-            get { return string.Format("{0},{1}", this.formationDirection.x, this.formationDirection.y); }
-        }
+        public string FormationDirectionString => $"{this.formationDirection.x},{this.formationDirection.y}";
         public float skyBrightness;
         public float rainDensity;
         public string playerHeroClassStringId;
@@ -51,16 +53,16 @@ namespace Modbed
 
         private static EnhancedBattleTestParams CreateDefault() {
             var p = new EnhancedBattleTestParams();
-            p.playerSoldierCount = 200;
-            p.enemySoldierCount = 200;
+            p.playerSoldierCount = 20;
+            p.enemySoldierCount = 20;
             // p.playerSoldierCount = 50;
             // p.enemySoldierCount = 1;
-            p.distance = 150;
+            p.distance = 50;
             p.soldierXInterval = 5f;
-            p.soldierYInterval = 1.5f;
+            p.soldierYInterval = 3f;
             p.soldiersPerRow = 100;
             // p.soldiersPerRow = 10;
-            p.formationPosition = new Vec2(150, 100);
+            p.formationPosition = new Vec2(250, 500);
             p.formationDirection = new Vec2(1, 0);
             p.skyBrightness = -1;
             p.rainDensity = 0;

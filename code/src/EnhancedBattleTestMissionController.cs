@@ -132,7 +132,7 @@ namespace Modbed
             var playerTroopFormation = playerTeam.GetFormation(playerTroopFormationClass);
 
             var playerPosVec2 = startPos + xDir * -10 + yDir * -10;
-            var playerPos = new TL.Vec3(playerPosVec2.x, playerPosVec2.y, 30);
+            var playerPos = new TL.Vec3(playerPosVec2.x, playerPosVec2.y, this.Mission.Scene.GetTerrainHeight(playerPosVec2));
             if (!useFreeCamera)
             {
                 var playerMat = TL.Mat3.Identity;
@@ -205,7 +205,7 @@ namespace Modbed
                     var mat = TL.Mat3.Identity;
                     var pos = startPos + xDir * (-xInterval * x) + yDir * yInterval * y;
                     mat.RotateAboutUp(agentDefaultDir.AngleBetween(xDir));
-                    var agentFrame = new TaleWorlds.Library.MatrixFrame(mat, new TL.Vec3(pos.x, pos.y, 30));
+                    var agentFrame = new TaleWorlds.Library.MatrixFrame(mat, new TL.Vec3(pos.x, pos.y, this.Mission.Scene.GetTerrainHeight(pos)));
                     soldierBuildData.InitialFrame(agentFrame);
                 }
 
@@ -246,7 +246,7 @@ namespace Modbed
                     var mat = TL.Mat3.Identity;
                     mat.RotateAboutUp(agentDefaultDir.AngleBetween(-xDir));
                     var pos = startPos + xDir * this.BattleTestParams.distance + xDir * xInterval * x + yDir * yInterval * y;
-                    var agentFrame = new TaleWorlds.Library.MatrixFrame(TaleWorlds.Library.Mat3.Identity, new TL.Vec3(pos.x, pos.y, 30));
+                    var agentFrame = new TaleWorlds.Library.MatrixFrame(TaleWorlds.Library.Mat3.Identity, new TL.Vec3(pos.x, pos.y, this.Mission.Scene.GetTerrainHeight(pos)));
                     enemyBuildData.InitialFrame(agentFrame);
                 }
                 var agent = this.Mission.SpawnAgent(enemyBuildData);

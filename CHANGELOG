@@ -1,4 +1,12 @@
 # Changelog
+## [0.3.4] - 2020-02
+
+### Changed
+- Change map to `mp_sergeant_map_001` and adjust default formation position.
+
+### Fixed
+- Fix a bug that changing formation position does not work.
+
 ## [0.3.3] - 2020-02-13
 
 ### Added
