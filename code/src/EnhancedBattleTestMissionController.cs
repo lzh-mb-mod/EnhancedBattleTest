@@ -25,7 +25,6 @@ namespace Modbed
         }
 
         private bool _started;
-        private bool _shouldExit;
         private bool _shouldCelebrateVictory;
         private bool _ended = false;
         public Action<TL.Vec3> freeCameraInitialPos;
@@ -38,7 +37,6 @@ namespace Modbed
         {
             this._game = Game.Current;
             _started = false;
-            _shouldExit = false;
             victoryLogic = null;
         }
 
@@ -47,12 +45,7 @@ namespace Modbed
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
         }
-
-        public void ShouldExit()
-        {
-            _shouldExit = true;
-        }
-
+        
         public void AddTeams()
         {
             // see TaleWorlds.MountAndBlade.dll/MissionMultiplayerFlagDomination.cs : TaleWorlds.MountAndBlade.MissionMultiplayerFlagDomination.AfterStart();
@@ -75,7 +68,9 @@ namespace Modbed
                         foreach (var agent in formation.Units)
                         {
                             victoryLogic.OnAgentDeleted(agent);
-                            agent.WieldNextWeapon(0);
+                            EquipmentIndex index = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+                            agent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
+                            agent.TryToWieldWeaponInSlot(index, Agent.WeaponWieldActionType.WithAnimation, false);
                         }
                     }
                     victoryLogic = null;
@@ -279,7 +274,7 @@ namespace Modbed
 
         public override bool MissionEnded(ref MissionResult missionResult)
         {
-            return _shouldExit;
+            return true;
         }
 
         public override void OnMissionTick(float dt)
@@ -291,12 +286,44 @@ namespace Modbed
                 {
                     this.SwitchCamera();
                 }
-
-                if (this.Mission.InputManager.IsGameKeyPressed((int) GameKeyDefinition.Leave))
+                if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F))
                 {
-                    _shouldExit = true;
-                    this.Mission.EndMission();
+                    if (this._playerAgent == null || !this._playerAgent.IsActive())
+                    {
+                        try
+                        {
+                            Agent closestAllyAgent = this.Mission.GetClosestAllyAgent(this.Mission.PlayerTeam, new WorldPosition(this.Mission.Scene, this.Mission.Scene.LastFinalRenderCameraPosition).GetGroundVec3(), 20f);
+                            if (closestAllyAgent != null)
+                            {
+                                this.displayMessage("Taking control of ally troops nearby.");
+                                if (this._playerAgent != null && this._playerAgent.IsActive())
+                                    this._playerAgent.Controller = Agent.ControllerType.AI;
+                                closestAllyAgent.Controller = Agent.ControllerType.Player;
+                                this.Mission.MainAgent = closestAllyAgent;
+                                this._playerAgent = closestAllyAgent;
+                                foreach (var formation in this.playerTeam.Formations)
+                                {
+                                    formation.PlayerOwner = closestAllyAgent;
+                                    playerTeam.PlayerOrderController.Owner = closestAllyAgent;
+                                }
+                                return;
+                            }
+                            this.displayMessage("No ally troop nearby.");
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            this.displayMessage(ex.Message);
+                            return;
+                        }
+                    }
                 }
+
+                //if (this.Mission.InputManager.IsGameKeyPressed((int) GameKeyDefinition.Leave))
+                //{
+                //    _shouldExit = true;
+                //    this.Mission.EndMission();
+                //}
             }
         }
 
@@ -347,6 +374,7 @@ namespace Modbed
             if (this.Mission.MainAgent == null)
             {
                 this._playerAgent.Controller = Agent.ControllerType.Player;
+                this.Mission.MainAgent = this._playerAgent;
                 this.displayMessage("switch to player agent");
             }
             else

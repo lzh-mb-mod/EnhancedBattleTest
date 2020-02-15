@@ -14,28 +14,31 @@ namespace Modbed
         [ViewMethod("EnhancedBattleTest")]
         public static MissionView[] OpenTestMission(Mission mission)
         {
-            List<MissionView> missionViewList = new List<MissionView>();
-            missionViewList.Add(ViewCreator.CreateMissionAgentStatusUIHandler(mission));
-            missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
-            missionViewList.Add(ViewCreator.CreateMissionMainAgentEquipmentController(mission));
-            missionViewList.Add(ViewCreator.CreateMissionSingleplayerEscapeMenu());
-            missionViewList.Add(ViewCreator.CreateOrderTroopPlacerView(mission));
-            // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
-            missionViewList.Add(ViewCreator.CreateMissionKillNotificationUIHandler());
-            missionViewList.Add(new MissionItemContourControllerView());
-            missionViewList.Add(new MissionAgentContourControllerView());
-            missionViewList.Add(ViewCreator.CreateMissionFlagMarkerUIHandler());
-            missionViewList.Add(ViewCreator.CreateOptionsUIHandler());
-            // missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
-            // missionViewList.Add((MissionView) new MissionBoundaryWallView());
-            //missionViewList.Add((MissionView) new SpectatorCameraView());
-            missionViewList.Add(new EnhancedBattleTestMissionView(mission));
             var selectionView = new CharacterSelectionView();
-            missionViewList.Add(selectionView);
             var orderView = new EnhancedBattleTestMissionOrderUIHandler();
-            missionViewList.Add(orderView);
-            missionViewList.Add(new EnhancedBattleTestSelectMissionView(selectionView, orderView));
-            return missionViewList.ToArray();
+            var missionViewList = new MissionView[]
+            {
+                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
+                ViewCreator.CreateMissionAgentLabelUIHandler(mission),
+                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
+                ViewCreator.CreateMissionLeaveView(),
+                ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateOrderTroopPlacerView(mission),
+                // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
+                ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
+                new MissionItemContourControllerView(),
+                new MissionAgentContourControllerView(),
+                ViewCreator.CreateMissionFlagMarkerUIHandler(),
+                ViewCreator.CreateOptionsUIHandler(),
+                // missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
+                // missionViewList.Add((MissionView) new MissionBoundaryWallView());
+                //missionViewList.Add((MissionView) new SpectatorCameraView());
+                new EnhancedBattleTestMissionView(mission),
+                selectionView,
+                orderView,
+                new EnhancedBattleTestSelectMissionView(selectionView, orderView)
+            };
+            return missionViewList;
         }
     }
 
@@ -128,9 +131,7 @@ namespace Modbed
                 this.OnClose();
             }, (param) =>
             {
-                this._missionController.ShouldExit();
                 this.Mission.EndMission();
-                //this.OnClose();
             });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");

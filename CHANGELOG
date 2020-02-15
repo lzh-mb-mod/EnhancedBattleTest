@@ -1,4 +1,10 @@
 # Changelog
+
+## [0.3.5] - 2020-02-
+
+## Fixed
+- Fix a bug that soldiers will not recover from victory celebration after player issueing an order when soldiers only have one weapon in slots.
+
 ## [0.3.4] - 2020-02-14
 
 ### Changed
