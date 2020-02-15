@@ -86,10 +86,10 @@ namespace Modbed
                     new AgentVictoryLogic(),
                     new FieldBattleController(),
                     new MissionOptionsComponent(),
+                    new EnhancedBattleTestMakeGruntLogic(),
                     // new MissionBoundaryPlacer(),
                 }
             );
         }
     }
-
 }

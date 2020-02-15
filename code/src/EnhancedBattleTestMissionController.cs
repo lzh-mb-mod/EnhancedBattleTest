@@ -19,7 +19,7 @@ namespace Modbed
             {
                 _battleTestParams = value;
                 int playerNumber = this.BattleTestParams.useFreeCamera ? 0 : 1;
-                _shouldCelebrateVictory = playerNumber + this.BattleTestParams.playerSoldierCount != 0 &&
+                _shouldCelebrateVictory = (playerNumber + this.BattleTestParams.playerSoldierCount) != 0 &&
                                           this.BattleTestParams.enemySoldierCount != 0;
             }
         }
@@ -31,19 +31,22 @@ namespace Modbed
         public Agent _playerAgent;
         private Team playerTeam;
         private Team enemyTeam;
-        private AgentVictoryLogic victoryLogic;
+        private AgentVictoryLogic _victoryLogic;
+        private EnhancedBattleTestMakeGruntLogic _makeGruntLogic;
 
         public EnhancedBattleTestMissionController()
         {
             this._game = Game.Current;
             _started = false;
-            victoryLogic = null;
+            _victoryLogic = null;
         }
 
         public override void AfterStart()
         {
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
+            _makeGruntLogic = this.Mission.GetMissionBehaviour<EnhancedBattleTestMakeGruntLogic>();
+            this.Mission.AllowAiTicking = false;
         }
         
         public void AddTeams()
@@ -54,27 +57,31 @@ namespace Modbed
                 playerTeamCulture.BackgroundColor1,
                 playerTeamCulture.ForegroundColor1);
             playerTeam = this.Mission.Teams.Add(BattleSideEnum.Attacker, color: playerTeamCulture.BackgroundColor1, color2: playerTeamCulture.ForegroundColor1, banner: playerTeamBanner);
-            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam, 5f, 1f));
+            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam, 0f, 0f));
             playerTeam.AddTacticOption(new TacticCharge(playerTeam));
-            // playerTeam.AddTacticOption(new TacticFullScaleAttack(playerTeam));
             playerTeam.ExpireAIQuerySystem();
             playerTeam.ResetTactic();
             playerTeam.OnOrderIssued += (type, formations, param) =>
             {
-                if (victoryLogic != null)
+                foreach (var formation in formations)
                 {
-                    foreach (var formation in formations)
+                    if (_victoryLogic != null)
                     {
                         foreach (var agent in formation.Units)
                         {
-                            victoryLogic.OnAgentDeleted(agent);
-                            EquipmentIndex index = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
-                            agent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
-                            agent.TryToWieldWeaponInSlot(index, Agent.WeaponWieldActionType.WithAnimation, false);
+                            _victoryLogic.OnAgentDeleted(agent);
+                            if (!agent.IsPlayerControlled)
+                            {
+                                EquipmentIndex index = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
+                                agent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
+                                agent.TryToWieldWeaponInSlot(index, Agent.WeaponWieldActionType.WithAnimation, false);
+                            }
                         }
                     }
-                    victoryLogic = null;
+
+                    _makeGruntLogic?.AddFormation(formation, 1f);
                 }
+                _victoryLogic = null;
             };
             this.Mission.PlayerTeam = playerTeam;
 
@@ -82,14 +89,15 @@ namespace Modbed
             Banner enemyTeamBanner = new Banner(enemyTeamCulture.BannerKey,
                 enemyTeamCulture.BackgroundColor2, enemyTeamCulture.ForegroundColor2);
             enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.BackgroundColor2, color2: enemyTeamCulture.ForegroundColor2, banner: enemyTeamBanner);
-            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam, 5f, 1f));
+            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam, 0f, 0f));
             enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
             enemyTeam.ExpireAIQuerySystem();
             enemyTeam.ResetTactic();
-            // enemyTeam.AddTacticOption(new TacticFullScaleAttack(enemyTeam));
 
             enemyTeam.SetIsEnemyOf(playerTeam, true);
             playerTeam.SetIsEnemyOf(enemyTeam, true);
+
+            this.Mission.AllowAiTicking = true;
         }
 
         public void SpawnAgents()
@@ -148,7 +156,6 @@ namespace Modbed
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
-                player.SetTeam(playerTeam, true);
 
                 Mission.MainAgent = player;
                 playerTroopFormation.PlayerOwner = player;
@@ -205,7 +212,6 @@ namespace Modbed
                 }
 
                 var agent = this.Mission.SpawnAgent(soldierBuildData);
-                agent.SetTeam(playerTeam, true);
                 agent.WieldInitialWeapons();
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
@@ -245,7 +251,6 @@ namespace Modbed
                     enemyBuildData.InitialFrame(agentFrame);
                 }
                 var agent = this.Mission.SpawnAgent(enemyBuildData);
-                agent.SetTeam(enemyTeam, true);
                 agent.WieldInitialWeapons();
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
@@ -267,7 +272,7 @@ namespace Modbed
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
             var unitSpacing = 1;
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
-            var actualSoldiersPerRow = System.Math.Min(bp.soldiersPerRow, bp.playerSoldierCount);
+            var actualSoldiersPerRow = System.Math.Min(bp.soldiersPerRow, team == playerTeam ? bp.playerSoldierCount : bp.enemySoldierCount);
             var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
             return width;
         }
@@ -318,12 +323,6 @@ namespace Modbed
                         }
                     }
                 }
-
-                //if (this.Mission.InputManager.IsGameKeyPressed((int) GameKeyDefinition.Leave))
-                //{
-                //    _shouldExit = true;
-                //    this.Mission.EndMission();
-                //}
             }
         }
 
@@ -347,18 +346,18 @@ namespace Modbed
                 if (!playerVictory && !enemyVictory)
                     return;
                 _ended = true;
-                victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
-                if (victoryLogic == null)
+                _victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
+                if (_victoryLogic == null)
                     return;
                 if (enemyVictory)
                 {
                     _ended = true;
-                    victoryLogic.SetTimersOfVictoryReactions(this.enemyTeam.Side);
+                    _victoryLogic.SetTimersOfVictoryReactions(this.enemyTeam.Side);
                 }
                 else
                 {
                     _ended = true;
-                    victoryLogic.SetTimersOfVictoryReactions(this.playerTeam.Side);
+                    _victoryLogic.SetTimersOfVictoryReactions(this.playerTeam.Side);
                 }
             }
         }

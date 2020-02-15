@@ -1,6 +1,24 @@
 # Changelog
 
-## [0.3.5] - 2020-02-
+## [0.3.6] - 2020-02-15
+
+## Added
+- Now troops will make grunt after being issued an order.
+
+## Changed
+- Set AI think time and apply time both to 0.
+
+## Fixed
+- Fix crashing when player troop number is 0.
+
+## [0.3.5] - 2020-02-15
+
+## Added
+- Now player can control one of the troops by pressing `F` after being killed.
+
+## Changed
+- Change kill notification to single player style.
+- Use built-in way to leave mission.
 
 ## Fixed
 - Fix a bug that soldiers will not recover from victory celebration after player issueing an order when soldiers only have one weapon in slots.

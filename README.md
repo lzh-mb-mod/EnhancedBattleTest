@@ -2,15 +2,16 @@
 
 A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 
-## how to install
-1. put `BattleTest.dll` and `BattleTest.bat` into `bin\Win64_Shipping_Client`.
-2. put `BattleTest` folder of the zip file into "Modules", same level with "Native".
+## How to install
+1. put `EnhancedBattleTest.dll` and `EnhancedBattleTest.bat` into `bin\Win64_Shipping_Client`.
+2. put `EnhancedBattleTest` folder (which containing `GUI` folder) of the zip file into `Modules`, same level with `Native`.
 3. put `navmesh.bin` into `Modules\Native\SceneObj\mp_skirmish_map_001a` to enable formation order.
 
 ## How to use
-1. start the mod by clicking `BattleTest.bat`.
-2. press `TAB` key to exit the battle scene.
+1. start the mod by clicking `EnhancedBattleTest.bat`.
+2. press and hold `TAB` key for a while to exit the battle scene.
 3. press `c` key to switch between free camera and main agent camera.
+4. press `f` key to control one of your troops after you being killed.
 
 
 ## Build from source:
@@ -40,4 +41,4 @@ If you find the cause of crash, please tell me.
   
   bilibili: 月光暖大床
   
-  my website: modbed.cn
+  website: modbed.cn
