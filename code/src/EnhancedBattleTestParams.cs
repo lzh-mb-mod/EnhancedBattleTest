@@ -8,6 +8,7 @@ namespace Modbed
 {
     public class EnhancedBattleTestParams
     {
+        public string scene;
         public int playerSoldierCount, enemySoldierCount;
         public float distance;
         public float soldierXInterval, soldierYInterval;
@@ -53,6 +54,7 @@ namespace Modbed
 
         private static EnhancedBattleTestParams CreateDefault() {
             var p = new EnhancedBattleTestParams();
+            p.scene = "mp_skirmish_map_001a";
             p.playerSoldierCount = 20;
             p.enemySoldierCount = 20;
             // p.playerSoldierCount = 50;
@@ -101,6 +103,7 @@ namespace Modbed
         {
             return new EnhancedBattleTestParams
             {
+                scene = (string)this.scene.Clone(),
                 playerSoldierCount = this.playerSoldierCount,
                 enemySoldierCount = this.enemySoldierCount,
                 distance = this.distance,

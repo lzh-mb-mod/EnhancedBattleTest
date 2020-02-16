@@ -31,11 +31,23 @@ namespace Modbed
     public class EnhancedBattleTestMissionOrderUIHandler : MissionOrderGauntletUIHandler
     {
         private bool _isInitialized = false;
+        private EnhancedBattleTestMissionController _controller;
+
         public override void OnMissionScreenInitialize()
-        { }
+        {
+            _controller = Mission.Current.GetMissionBehaviour<EnhancedBattleTestMissionController>();
+            if (!_controller.ShowSelectViewFirst)
+            {
+                base.OnMissionScreenInitialize();
+                this._isInitialized = true;
+            }
+        }
 
         public override void OnMissionScreenActivate()
-        { }
+        {
+            if (!_controller.ShowSelectViewFirst)
+                base.OnMissionScreenActivate();
+        }
 
         public override void OnMissionScreenTick(float dt)
         {
@@ -49,7 +61,7 @@ namespace Modbed
                 base.OnMissionScreenFinalize();
         }
 
-        public void  EnhancedBattleInitialize()
+        public void EnhancedBattleInitialize()
         {
             base.OnMissionScreenInitialize();
             base.OnMissionScreenActivate();

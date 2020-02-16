@@ -33,12 +33,14 @@ namespace Modbed
         private Team enemyTeam;
         private AgentVictoryLogic _victoryLogic;
         private EnhancedBattleTestMakeGruntLogic _makeGruntLogic;
+        public bool ShowSelectViewFirst { get; private set; }
 
-        public EnhancedBattleTestMissionController()
+        public EnhancedBattleTestMissionController(bool showSelectViewFirst)
         {
             this._game = Game.Current;
             _started = false;
             _victoryLogic = null;
+            this.ShowSelectViewFirst = showSelectViewFirst;
         }
 
         public override void AfterStart()
@@ -46,7 +48,13 @@ namespace Modbed
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
             _makeGruntLogic = this.Mission.GetMissionBehaviour<EnhancedBattleTestMakeGruntLogic>();
-            this.Mission.AllowAiTicking = false;
+            if (ShowSelectViewFirst)
+                this.Mission.AllowAiTicking = false;
+            else
+            {
+                AddTeams();
+                SpawnAgents();
+            }
         }
         
         public void AddTeams()
@@ -278,7 +286,7 @@ namespace Modbed
 
         public override bool MissionEnded(ref MissionResult missionResult)
         {
-            return true;
+            return false;
         }
 
         public override void OnMissionTick(float dt)
