@@ -1,4 +1,7 @@
-﻿using TaleWorlds.Engine.GauntletUI;
+﻿using TaleWorlds.Core;
+using TaleWorlds.Engine.GauntletUI;
+using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace Modbed
@@ -7,70 +10,55 @@ namespace Modbed
     {
         private GauntletLayer _gauntletLayer;
         private EnhancedBattleTestVM _dataSource;
-        private EnhancedBattleTestMissionController _missionController;
         private CharacterSelectionView _selectionView;
-        private EnhancedBattleTestMissionOrderUIHandler _orderView;
-        private bool _isOpen;
-        private bool _toOpen;
 
-        public EnhancedBattleTestView(CharacterSelectionView selectionView, EnhancedBattleTestMissionOrderUIHandler orderView)
+        public EnhancedBattleTestView(CharacterSelectionView selectionView)
         {
             this._selectionView = selectionView;
-            this._orderView = orderView;
             this.ViewOrderPriorty = 22;
-            this._isOpen = this._toOpen = false;
         }
 
         public override void OnMissionScreenInitialize()
         {
             base.OnMissionScreenInitialize();
-            this._missionController = this.Mission.GetMissionBehaviour<EnhancedBattleTestMissionController>();
-            this._toOpen = this._missionController.ShowSelectViewFirst;
+            Open();
         }
         public override void OnMissionScreenFinalize()
         {
-            if (this._gauntletLayer != null)
-            {
-                this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
-                this.MissionScreen.RemoveLayer(_gauntletLayer);
-                this._gauntletLayer = null;
-            }
-            if (this._dataSource != null)
-            {
-                this._dataSource.OnFinalize();
-                this._dataSource = null;
-            }
+            Close();
             base.OnMissionScreenFinalize();
-        }
-        public override void OnMissionScreenTick(float dt)
-        {
-            base.OnMissionScreenTick(dt);
-            if (this._toOpen && this.MissionScreen.SetDisplayDialog(true))
-            {
-                this._toOpen = false;
-                this.OnOpen();
-            }
         }
         public override bool OnEscape()
         {
-            if (!this._isOpen)
-                return base.OnEscape();
-            this.OnClose();
+            base.OnEscape();
+            this.Close();
             return true;
         }
 
-        public void OnOpen()
+        public void Open()
         {
-            if (this._isOpen)
-                return;
-            this._isOpen = true;
             this._dataSource = new EnhancedBattleTestVM(_selectionView, (param) =>
             {
-                this._missionController.BattleTestParams = param;
-                this._missionController.AddTeams();
-                this._orderView.EnhancedBattleInitialize();
-                this._missionController.SpawnAgents();
-                this.OnClose();
+                MissionState.OpenNew(
+                    "EnhancedBattleTestBattle",
+                    new MissionInitializerRecord(param.SceneName),
+                    missionController => new MissionBehaviour[] {
+                        new EnhancedBattleTestMissionController(param),
+                        // new BattleTeam1MissionController(),
+                        // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
+                        new AgentBattleAILogic(),
+                        new AgentVictoryLogic(),
+                        new FieldBattleController(),
+                        new MissionOptionsComponent(),
+                        new EnhancedBattleTestMakeGruntLogic(),
+                        // new MissionBoundaryPlacer(),
+                    }
+                );
+                //this._missionController.BattleTestParams = param;
+                //this._missionController.AddTeams();
+                //this._orderView.EnhancedBattleInitialize();
+                //this._missionController.SpawnEnemyTeamAgents();
+                //this.OnClose();
             }, (param) =>
             {
                 this.Mission.EndMission();
@@ -82,16 +70,14 @@ namespace Modbed
             this.MissionScreen.AddLayer(this._gauntletLayer);
         }
 
-        public void OnClose()
+        public void Close()
         {
-            if (!this._isOpen)
-                return;
-            this._isOpen = false;
-            this.MissionScreen.RemoveLayer(this._gauntletLayer);
-            this.MissionScreen.SetDisplayDialog(false);
-            this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
-            this._gauntletLayer = null;
-
+            if (this._gauntletLayer != null)
+            {
+                this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
+                this.MissionScreen.RemoveLayer(_gauntletLayer);
+                this._gauntletLayer = null;
+            }
             if (this._dataSource != null)
             {
                 this._dataSource.OnFinalize();

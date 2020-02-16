@@ -9,6 +9,17 @@
         <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Enhanced Battle Test 0.3" Brush="CenterAlignedLargeFont" />
         <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" SuggestedWidth="600" MarginTop="150">
           <Children>
+		    <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
+			  <Children>
+                <ButtonWidget Id="MapDown" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Creation.NumericLeftArrow" Command.Click="PreviousMap" />
+                <Widget Id="TextContainer" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="34" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <Children>
+				    <TextWidget Text="@SelectedMapName" WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" />
+                  </Children>
+                </Widget>
+                <ButtonWidget Id="MapUp" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="Creation.NumericRightArrow" Command.Click="NextMap" />
+              </Children>
+		    </Widget>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
               <Children>
                 <TextWidget Text="player soldier count" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
@@ -41,8 +52,20 @@
             </Widget>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
               <Children>
-                <TextWidget Text="formation position" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
+                <TextWidget Text="formation position(x,y)" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
                 <EditableTextWidget Text="@FormationPosition" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
+              </Children>
+            </Widget>
+			<Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
+              <Children>
+                <TextWidget Text="Formation Direction(x,y)" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
+                <EditableTextWidget Text="@FormationDirection" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
+              </Children>
+            </Widget>
+			 <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
+              <Children>
+                <TextWidget Text="Sky Brightness" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
+                <EditableTextWidget Text="@SkyBrightness" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
               </Children>
             </Widget>
             <!-- <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">

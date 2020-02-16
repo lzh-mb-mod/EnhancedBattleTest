@@ -11,11 +11,19 @@ namespace Modbed
     [ViewCreatorModule]
     public class EnhancedBattleTestMissionViews
     {
-        [ViewMethod("EnhancedBattleTest")]
-        public static MissionView[] OpenTestMission(Mission mission)
+        [ViewMethod("EnhancedBattleTestSelection")]
+        public static MissionView[] OpenInitialMission(Mission mission)
         {
             var selectionView = new CharacterSelectionView();
-            var orderView = new EnhancedBattleTestMissionOrderUIHandler();
+            return new MissionView[]
+            {
+                selectionView,
+                new EnhancedBattleTestView(selectionView)
+            };
+        }
+        [ViewMethod("EnhancedBattleTestBattle")]
+        public static MissionView[] OpenTestMission(Mission mission)
+        {
             var missionViewList = new MissionView[]
             {
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
@@ -23,6 +31,7 @@ namespace Modbed
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
                 ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateMissionOrderUIHandler(mission),
                 ViewCreator.CreateOrderTroopPlacerView(mission),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
@@ -34,9 +43,6 @@ namespace Modbed
                 // missionViewList.Add((MissionView) new MissionBoundaryWallView());
                 //missionViewList.Add((MissionView) new SpectatorCameraView());
                 new EnhancedBattleTestMissionView(mission),
-                selectionView,
-                orderView,
-                new EnhancedBattleTestView(selectionView, orderView)
             };
             return missionViewList;
         }
@@ -52,12 +58,14 @@ namespace Modbed
         }
         public override void OnMissionScreenActivate()
         {
-            var battleTestMissionController = this.Mission.GetMissionBehaviour<EnhancedBattleTestMissionController>();
-            battleTestMissionController.freeCameraInitialPos = pos =>
+            foreach (var missionLogic in this._mission.MissionLogics)
             {
-                this.MissionScreen.CombatCamera.Position = pos;
-            };
-
+                if (missionLogic is EnhancedBattleTestMissionController missionController)
+                {
+                    this.MissionScreen.CombatCamera.LookAt(missionController.initialFreeCameraPos, missionController.initialFreeCameraTarget, TL.Vec3.Up);
+                    break;
+                }
+            }
         }
     }
 

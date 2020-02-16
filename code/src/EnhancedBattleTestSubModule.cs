@@ -35,8 +35,7 @@ namespace Modbed
               1,
               () =>
               {
-                  var gameManager = new EnhancedBattleTestGameManager();
-                  MBGameManager.StartNewGame(gameManager);
+                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager());
               },
               false
             ));

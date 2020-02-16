@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.7] - 2020-02-16
+
+## Added
+- Now player can choose different maps. Spawning positions are all elaborately choosed.
+
+- Now player can specify sky brightness.
+
+## Changed
+- Ending mission will return to battle test menu now.
+- Restore AI think time and apply time. Set them is useless because the engine will overwrite them.
+
+## Fixed
+- Fix more crashing cases.
+
 ## [0.3.6] - 2020-02-15
 
 ## Added

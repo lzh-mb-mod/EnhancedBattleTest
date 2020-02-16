@@ -70,27 +70,12 @@ namespace Modbed
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedSelfPercent(20);
             
-            //string scene = "mp_skirmish_map_001a";
-            //string scene = "mp_sergeant_map_001";
-            // string scene = "mp_test_bora";
-            // string scene = "battle_test";
-            // string scene = "mp_duel_001_winter";
-            // string scene = "mp_sergeant_map_001";
-            // string scene = "mp_tdm_map_001";
-            // string scene = "scn_world_map";
-            // string scene = "mp_compact";
             MissionState.OpenNew(
-                "EnhancedBattleTest",
-                new MissionInitializerRecord(EnhancedBattleTestParams.Get().scene),
+                "EnhancedBattleTestSelection",
+                new MissionInitializerRecord("mp_skirmish_map_001a"),
                 missionController => new MissionBehaviour[] {
-                    new EnhancedBattleTestMissionController(showSelectViewFirst:true),
                     // new BattleTeam1MissionController(),
                     // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
-                    new AgentBattleAILogic(),
-                    new AgentVictoryLogic(),
-                    new FieldBattleController(),
-                    new MissionOptionsComponent(),
-                    new EnhancedBattleTestMakeGruntLogic(),
                     // new MissionBoundaryPlacer(),
                 }
             );
