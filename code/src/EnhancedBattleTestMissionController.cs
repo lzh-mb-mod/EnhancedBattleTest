@@ -215,7 +215,6 @@ namespace Modbed
                 agent.WieldInitialWeapons();
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
-
             BasicCharacterObject enemyCharacter = this.BattleTestParams.EnemyTroopHeroClass.TroopCharacter;
             
             var enemyFormationClass = enemyCharacter.CurrentFormationClass;
@@ -310,6 +309,11 @@ namespace Modbed
                                 {
                                     formation.PlayerOwner = closestAllyAgent;
                                     playerTeam.PlayerOrderController.Owner = closestAllyAgent;
+                                }
+
+                                foreach (var missionBehaviour in Mission.Current.MissionBehaviours)
+                                {
+                                    missionBehaviour.OnAssignPlayerAsSergeantOfFormation(closestAllyAgent);
                                 }
                                 return;
                             }

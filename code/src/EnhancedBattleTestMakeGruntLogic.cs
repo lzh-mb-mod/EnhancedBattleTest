@@ -35,6 +35,8 @@ namespace Modbed
                 {
                     foreach (var agent in pair.formation.Units)
                     {
+                        if (agent == Mission.MainAgent)
+                            continue;
                         agent.MakeVoice(SkinVoiceManager.HardCodedSkinVoiceTypes.Grunt, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
                     }
 

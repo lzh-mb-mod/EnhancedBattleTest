@@ -8,6 +8,8 @@ using TaleWorlds.Core;
 using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions;
+using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
+using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace Modbed
 {
