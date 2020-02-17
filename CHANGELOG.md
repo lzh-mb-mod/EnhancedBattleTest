@@ -2,51 +2,51 @@
 
 ## [0.3.9] - 2020-02-17
 
-## Changed
+### Changed
 - Released file structure is adjusted to make it easier to install.
 
 ## [0.3.8] - 2020-02-17
 
-## Added
+### Added
 - Battle Config can be saved to file now. Save path is `(User Home)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\Param.xml`
 
 - Rain density can now be adjusted.
 
 ## [0.3.7] - 2020-02-16
 
-## Added
+### Added
 - Now player can choose different maps. Spawning positions are all elaborately choosed.
 
 - Now player can specify sky brightness.
 
-## Changed
+### Changed
 - Ending mission will return to battle test menu now.
 - Restore AI think time and apply time. Set them is useless because the engine will overwrite them.
 
-## Fixed
+### Fixed
 - Fix more crashing cases.
 
 ## [0.3.6] - 2020-02-15
 
-## Added
+### Added
 - Now troops will make grunt after being issued an order.
 
-## Changed
+### Changed
 - Set AI think time and apply time both to 0.
 
-## Fixed
+### Fixed
 - Fix crashing when player troop number is 0.
 
 ## [0.3.5] - 2020-02-15
 
-## Added
+### Added
 - Now player can control one of the troops by pressing `F` after being killed.
 
-## Changed
+### Changed
 - Change kill notification to single player style.
 - Use built-in way to leave mission.
 
-## Fixed
+### Fixed
 - Fix a bug that soldiers will not recover from victory celebration after player issueing an order when soldiers only have one weapon in slots.
 
 ## [0.3.4] - 2020-02-14
