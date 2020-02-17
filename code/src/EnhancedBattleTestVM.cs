@@ -12,6 +12,10 @@ namespace Modbed
 {
     public class EnhancedBattleTestVM : ViewModel
     {
+        private enum SaveParamResult
+        {
+            success, failed, notValid
+        }
         private EnhancedBattleTestParams currentParams;
         private Action<EnhancedBattleTestParams> startAction;
         private Action<EnhancedBattleTestParams> backAction;
@@ -20,16 +24,18 @@ namespace Modbed
         private List<MultiplayerClassDivisions.MPHeroClass> _allMpHeroClasses;
         private Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>>_allMpHeroClassesMap;
 
-        private string _selectedMapName;
         private int _selectedSceneIndex;
         private string _playerSoldierCount, _enemySoldierCount;
         private string _distance;
         private string _soldierXInterval, _soldierYInterval;
         private string _soldiersPerRow;
-        private string _playerName, _playerTroopName, _enemyTroopName;
         private string _formationPosition;
         private string _formationDirection;
         private string _skyBrightness;
+        private string _rainDensity;
+
+        private string _selectedMapName;
+        private string _playerName, _playerTroopName, _enemyTroopName;
 
         [DataSourceProperty]
         public string SelectedMapName
@@ -47,15 +53,12 @@ namespace Modbed
             get => this._selectedSceneIndex;
             set
             {
-                if (value < 0 || value >= EnhancedBattleTestParams.SceneList.Length || value == this._selectedSceneIndex)
+                if (value < 0 || value >= currentParams.sceneList.Length || value == this._selectedSceneIndex)
                     return;
+
+                this.currentParams.sceneIndex = value;
                 this._selectedSceneIndex = value;
-                EnhancedBattleTestParams.SceneInfo info = EnhancedBattleTestParams.SceneList[value];
-                this.SelectedMapName = info.name;
-                this.FormationPosition = Vec2ToString(info.defaultPosition);
-                this.FormationDirection = Vec2ToString(info.defaultDirection);
-                this.SkyBrightness = info.defaultBrightness.ToString();
-                this.SoldiersPerRow = info.defaultSoldiersPerRow.ToString();
+                UpdateSceneContent();
             }
         }
 
@@ -219,7 +222,18 @@ namespace Modbed
             }
         }
 
-        public string RainDensity => this.currentParams.rainDensity.ToString();
+        [DataSourceProperty]
+        public string RainDensity
+        {
+            get => _rainDensity;
+            set
+            {
+                if (this._rainDensity == value)
+                    return;
+                this._rainDensity = value;
+                this.OnPropertyChanged(nameof(RainDensity));
+            }
+        }
 
         [DataSourceProperty]
         public string FormationPosition
@@ -252,37 +266,17 @@ namespace Modbed
             set => this.currentParams.useFreeCamera = value;
         }
 
-
         public EnhancedBattleTestVM(CharacterSelectionView selectionView, Action<EnhancedBattleTestParams> startAction,
             Action<EnhancedBattleTestParams> backAction)
-            : base()
         {
             this._selectionView = selectionView;
             this.currentParams = EnhancedBattleTestParams.Get();
 
-            this.SelectedMapName = currentParams.SceneName;
-            this.SelectedSceneIndex = currentParams.sceneIndex; 
-            this._playerSoldierCount = currentParams.playerSoldierCount.ToString();
-            this._enemySoldierCount = currentParams.enemySoldierCount.ToString();
-            this._distance = currentParams.distance.ToString();
-            this._soldierXInterval = currentParams.soldierXInterval.ToString();
-            this._soldierYInterval = currentParams.soldierYInterval.ToString();
-            this._soldiersPerRow = currentParams.soldiersPerRow.ToString();
-            this.FormationPosition = Vec2ToString(currentParams.formationPosition);
-            this.FormationDirection = Vec2ToString(currentParams.formationDirection);
-            this.SkyBrightness = currentParams.skyBrightness.ToString();
+            InitializeContent();
 
-            this.PlayerName = this.PlayerHeroClass.HeroName.ToString();
-            this.PlayerTroopName = this.PlayerTroopHeroClass.TroopName.ToString();
-            this.EnemyTroopName = this.EnemyTroopHeroClass.TroopName.ToString();
             this.startAction = startAction;
             this.backAction = backAction;
             
-            this._allMpHeroClassesMap = GetHeroClassesMap();
-            this._allMpHeroClasses = GetHeroClasses().ToList();
-            if (this.PlayerHeroClass == null) this.PlayerHeroClass = this._allMpHeroClasses[0];
-            if (this.PlayerTroopHeroClass == null) this.PlayerTroopHeroClass = this._allMpHeroClasses[0];
-            if (this.EnemyTroopHeroClass == null) this.EnemyTroopHeroClass = this._allMpHeroClasses[0];
         }
 
         private void PreviousMap()
@@ -293,41 +287,29 @@ namespace Modbed
         }
         private void NextMap()
         {
-            if (this.SelectedSceneIndex + 1 >= EnhancedBattleTestParams.SceneList.Length)
+            if (this.SelectedSceneIndex + 1 >= currentParams.sceneList.Length)
                 return;
             this.SelectedSceneIndex++;
         }
 
         private void StartEnhancedBattleTest()
         {
-            try
-            {
-                currentParams.sceneIndex = this.SelectedSceneIndex;
-                currentParams.playerSoldierCount = System.Convert.ToInt32(this.PlayerSoldierCount);
-                currentParams.enemySoldierCount = System.Convert.ToInt32(this.EnemySoldierCount);
-                currentParams.distance = System.Convert.ToSingle(this.Distance);
-                currentParams.soldierXInterval = System.Convert.ToSingle(this.SoldierXInterval);
-                currentParams.soldierYInterval = System.Convert.ToSingle(this.SoldierYInterval);
-                currentParams.soldiersPerRow = System.Convert.ToInt32(this.SoldiersPerRow);
-                currentParams.formationPosition = StringToVec2(this.FormationPosition);
-                currentParams.formationDirection = StringToVec2(this.FormationDirection).Normalized();
-                currentParams.skyBrightness = System.Convert.ToSingle(this.SkyBrightness);
-                EnhancedBattleTestParams.SceneInfo info = EnhancedBattleTestParams.SceneList[this.SelectedSceneIndex];
-                info.defaultPosition = currentParams.formationPosition;
-                info.defaultDirection = currentParams.formationDirection;
-                info.defaultBrightness = currentParams.skyBrightness;
-                info.defaultSoldiersPerRow = currentParams.soldiersPerRow;
-            }
-            catch
-            {
+            if (SaveConfig() != SaveParamResult.success)
                 return;
-            }
-            if (!currentParams.validate()) {
-                return;
-            }
             ModuleLogger.Writer.WriteLine("StartEnhancedBattleTest");
-
             this.startAction(currentParams);
+        }
+
+        private void Save()
+        {
+            SaveConfig();
+        }
+
+        private void ResetToDefault()
+        {
+            this.currentParams.ResetToDefault();
+            this.InitializeContent();
+            EnhancedBattleTestUtility.DisplayMessage("Reset successfully");
         }
 
         private void GoBack()
@@ -384,6 +366,75 @@ namespace Modbed
                 }
             };
             _selectionView.Open(p);
+        }
+
+        private void InitializeContent()
+        {
+            this._selectedSceneIndex = currentParams.sceneIndex;
+            UpdateSceneContent();
+
+            this._playerSoldierCount = currentParams.playerSoldierCount.ToString();
+            this._enemySoldierCount = currentParams.enemySoldierCount.ToString();
+            this._distance = currentParams.distance.ToString();
+            this._soldierXInterval = currentParams.soldierXInterval.ToString();
+            this._soldierYInterval = currentParams.soldierYInterval.ToString();
+
+            this._allMpHeroClassesMap = GetHeroClassesMap();
+            this._allMpHeroClasses = GetHeroClasses().ToList();
+            if (this.PlayerHeroClass == null) this.PlayerHeroClass = this._allMpHeroClasses[0];
+            if (this.PlayerTroopHeroClass == null) this.PlayerTroopHeroClass = this._allMpHeroClasses[0];
+            if (this.EnemyTroopHeroClass == null) this.EnemyTroopHeroClass = this._allMpHeroClasses[0];
+
+            this.PlayerName = this.PlayerHeroClass.HeroName.ToString();
+            this.PlayerTroopName = this.PlayerTroopHeroClass.TroopName.ToString();
+            this.EnemyTroopName = this.EnemyTroopHeroClass.TroopName.ToString();
+        }
+
+        private void UpdateSceneContent()
+        {
+            this.SelectedMapName = currentParams.SceneName;
+            this.SoldiersPerRow = currentParams.SoldiersPerRow.ToString();
+            this.FormationPosition = Vec2ToString(currentParams.FormationPosition);
+            this.FormationDirection = Vec2ToString(currentParams.FormationDirection);
+            this.SkyBrightness = currentParams.SkyBrightness.ToString();
+            this.RainDensity = currentParams.RainDensity.ToString();
+        }
+
+        private SaveParamResult SaveConfig()
+        {
+            try
+            {
+                ApplyConfig();
+            }
+            catch
+            {
+                EnhancedBattleTestUtility.DisplayMessage("Content is illegal.");
+                return SaveParamResult.notValid;
+            }
+
+            if (!currentParams.validate())
+            {
+                EnhancedBattleTestUtility.DisplayMessage("Content is out of range.");
+                return SaveParamResult.notValid;
+            }
+            currentParams.Serialize();
+            return SaveParamResult.success;
+        }
+
+        private void ApplyConfig()
+        {
+            currentParams.sceneIndex = this.SelectedSceneIndex;
+            currentParams.SoldiersPerRow = System.Convert.ToInt32(this.SoldiersPerRow);
+            currentParams.FormationPosition = StringToVec2(this.FormationPosition);
+            currentParams.FormationDirection = StringToVec2(this.FormationDirection).Normalized();
+            currentParams.SkyBrightness = System.Convert.ToSingle(this.SkyBrightness);
+            currentParams.RainDensity = System.Convert.ToSingle(this.RainDensity);
+
+            currentParams.playerSoldierCount = System.Convert.ToInt32(this.PlayerSoldierCount);
+            currentParams.enemySoldierCount = System.Convert.ToInt32(this.EnemySoldierCount);
+            currentParams.distance = System.Convert.ToSingle(this.Distance);
+            currentParams.soldierXInterval = System.Convert.ToSingle(this.SoldierXInterval);
+            currentParams.soldierYInterval = System.Convert.ToSingle(this.SoldierYInterval);
         }
 
         private List<MultiplayerClassDivisions.MPHeroClass> GetHeroClasses()

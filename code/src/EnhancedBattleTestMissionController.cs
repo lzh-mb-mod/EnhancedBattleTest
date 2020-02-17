@@ -115,14 +115,14 @@ namespace Modbed
         {
             var scene = this.Mission.Scene;
 
-            if (this.BattleTestParams.skyBrightness >= 0)
+            if (this.BattleTestParams.SkyBrightness >= 0)
             {
-                scene.SetSkyBrightness(this.BattleTestParams.skyBrightness);
+                scene.SetSkyBrightness(this.BattleTestParams.SkyBrightness);
             }
 
-            if (this.BattleTestParams.rainDensity >= 0)
+            if (this.BattleTestParams.RainDensity >= 0)
             {
-                scene.SetRainDensity(this.BattleTestParams.rainDensity);
+                scene.SetRainDensity(this.BattleTestParams.RainDensity);
             }
         }
 
@@ -136,10 +136,10 @@ namespace Modbed
 
             var xInterval = this.BattleTestParams.soldierXInterval;
             var yInterval = this.BattleTestParams.soldierYInterval;
-            var soldiersPerRow = this.BattleTestParams.soldiersPerRow;
-            var startPos = this.BattleTestParams.formationPosition;
-            var xDir = this.BattleTestParams.formationDirection;
-            var yDir = this.BattleTestParams.formationDirection.LeftVec();
+            var soldiersPerRow = this.BattleTestParams.SoldiersPerRow;
+            var startPos = this.BattleTestParams.FormationPosition;
+            var xDir = this.BattleTestParams.FormationDirection;
+            var yDir = this.BattleTestParams.FormationDirection.LeftVec();
             var agentDefaultDir = new TL.Vec2(0, 1);
             var useFreeCamera = this.BattleTestParams.useFreeCamera;
 
@@ -194,7 +194,7 @@ namespace Modbed
                     initialFreeCameraTarget = p.ToVec3(height);
                 }
 
-                initialFreeCameraPos -= this._battleTestParams.formationDirection.ToVec3();
+                initialFreeCameraPos -= this._battleTestParams.FormationDirection.ToVec3();
             }
 
             {
@@ -244,10 +244,10 @@ namespace Modbed
 
             var xInterval = this.BattleTestParams.soldierXInterval;
             var yInterval = this.BattleTestParams.soldierYInterval;
-            var soldiersPerRow = this.BattleTestParams.soldiersPerRow;
-            var startPos = this.BattleTestParams.formationPosition;
-            var xDir = this.BattleTestParams.formationDirection;
-            var yDir = this.BattleTestParams.formationDirection.LeftVec();
+            var soldiersPerRow = this.BattleTestParams.SoldiersPerRow;
+            var startPos = this.BattleTestParams.FormationPosition;
+            var xDir = this.BattleTestParams.FormationDirection;
+            var yDir = this.BattleTestParams.FormationDirection.LeftVec();
             var agentDefaultDir = new TL.Vec2(0, 1);
 
             BasicCharacterObject enemyCharacter = this.BattleTestParams.EnemyTroopHeroClass.TroopCharacter;
@@ -306,7 +306,7 @@ namespace Modbed
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
             var unitSpacing = 1;
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
-            var actualSoldiersPerRow = System.Math.Min(bp.soldiersPerRow, team == playerTeam ? bp.playerSoldierCount : bp.enemySoldierCount);
+            var actualSoldiersPerRow = System.Math.Min(bp.SoldiersPerRow, team == playerTeam ? bp.playerSoldierCount : bp.enemySoldierCount);
             var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
             return width;
         }
@@ -323,7 +323,7 @@ namespace Modbed
                 Agent mainAgent = this.Mission.MainAgent;
                 TL.Vec3 position = mainAgent != null ? mainAgent.Position : this.Mission.Scene.LastFinalRenderCameraPosition;
                 string str = new WorldPosition(this.Mission.Scene, position).GetNavMesh().ToString() ?? "";
-                this.displayMessage(string.Format("Position: {0} | Navmesh: {1} | Time: {2}", (object)position, (object)str, (object)this.Mission.Time));
+                EnhancedBattleTestUtility.DisplayMessage(string.Format("Position: {0} | Navmesh: {1} | Time: {2}", (object)position, (object)str, (object)this.Mission.Time));
                 ModuleLogger.Log("INFO Position: {0}, Navigation Mesh: {1}", (object)position, (object)str);
             }
             if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F))
@@ -335,7 +335,7 @@ namespace Modbed
                         Agent closestAllyAgent = this.Mission.GetClosestAllyAgent(this.Mission.PlayerTeam, new WorldPosition(this.Mission.Scene, this.Mission.Scene.LastFinalRenderCameraPosition).GetGroundVec3(), 20f);
                         if (closestAllyAgent != null)
                         {
-                            this.displayMessage("Taking control of ally troops nearby.");
+                            EnhancedBattleTestUtility.DisplayMessage("Taking control of ally troops nearby.");
                             if (this._playerAgent != null && this._playerAgent.IsActive())
                                 this._playerAgent.Controller = Agent.ControllerType.AI;
                             closestAllyAgent.Controller = Agent.ControllerType.Player;
@@ -353,12 +353,12 @@ namespace Modbed
                             }
                             return;
                         }
-                        this.displayMessage("No ally troop nearby.");
+                        EnhancedBattleTestUtility.DisplayMessage("No ally troop nearby.");
                         return;
                     }
                     catch (Exception ex)
                     {
-                        this.displayMessage(ex.Message);
+                        EnhancedBattleTestUtility.DisplayMessage(ex.Message);
                         return;
                     }
                 }
@@ -418,14 +418,14 @@ namespace Modbed
             ModuleLogger.Log("SwitchCamera");
             if (this._playerAgent == null || !this._playerAgent.IsActive())
             {
-                this.displayMessage("no player agent");
+                EnhancedBattleTestUtility.DisplayMessage("no player agent");
                 return;
             }
             if (this.Mission.MainAgent == null)
             {
                 this._playerAgent.Controller = Agent.ControllerType.Player;
                 this.Mission.MainAgent = this._playerAgent;
-                this.displayMessage("switch to player agent");
+                EnhancedBattleTestUtility.DisplayMessage("switch to player agent");
             }
             else
             {
@@ -433,13 +433,8 @@ namespace Modbed
                 this._playerAgent.Controller = Agent.ControllerType.AI;
                 var wp = this._playerAgent.GetWorldPosition();
                 this._playerAgent.SetScriptedPosition(ref wp, Agent.AIScriptedFrameFlags.DoNotRun, "camera switch");
-                this.displayMessage("switch to free camera");
+                EnhancedBattleTestUtility.DisplayMessage("switch to free camera");
             }
-        }
-
-        void displayMessage(string msg)
-        {
-            InformationManager.DisplayMessage(new InformationMessage(new TaleWorlds.Localization.TextObject(msg, null).ToString()));
         }
     }
 }

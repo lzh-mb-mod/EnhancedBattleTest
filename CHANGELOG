@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.8] - 2020-02-17
+
+## Added
+- Battle Config can be saved to file now. Save path is `(User Home)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\Param.xml`
+
 ## [0.3.7] - 2020-02-16
 
 ## Added
