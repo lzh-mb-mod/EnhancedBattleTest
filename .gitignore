@@ -1,5 +1,5 @@
 .vs/
-bin/
-obj/
+source/bin/
+source/obj/
 *.DotSettings.user
 *.dll

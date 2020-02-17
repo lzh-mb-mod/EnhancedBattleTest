@@ -3,9 +3,7 @@
 A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 
 ## How to install
-1. put `EnhancedBattleTest.dll` and `EnhancedBattleTest.bat` into `bin\Win64_Shipping_Client`.
-2. put `EnhancedBattleTest` folder (which containing `GUI` folder) of the zip file into `Modules`, same level with `Native`.
-3. put `navmesh.bin` into `Modules\Native\SceneObj\mp_skirmish_map_001a` to enable formation order.
+1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
 
 ## How to use
 1. start the mod by clicking `EnhancedBattleTest.bat`.
@@ -13,8 +11,8 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 3. press `c` key to switch between free camera and main agent camera.
 4. press `f` key to control one of your troops after you being killed.
 
-
 ## Build from source:
+The source code is located in the `source` folder.
 1. install .net core sdk
 2. modify 6th line of `BattleTest.csproj`, change `Mb2Bin` property to your bannerlord installation location
 3. open a termial (powershell or cmd), run `dotnet msbuild -t:install`. This step will build `BattleTest.dll` and copy it to `bin\Win64_Shipping_Client`
@@ -31,7 +29,7 @@ If you find the cause of crash, please tell me.
 ## Contact with me:
 * Please mail to: lizhenhuan1019@qq.com
 
-* This mod is originated from mod "Battle Test" which is written by "Modbed", who does not maintain "Battle Test" anymore.
+* This mod is originated from mod "Battle Test" written by "Modbed", who does not maintain "Battle Test" anymore.
   
   Way to contact him:
   

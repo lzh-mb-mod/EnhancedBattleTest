@@ -1,9 +1,16 @@
 # Changelog
 
+## [0.3.9] - 2020-02-17
+
+## Changed
+- Released file structure is adjusted to make it easier to install.
+
 ## [0.3.8] - 2020-02-17
 
 ## Added
 - Battle Config can be saved to file now. Save path is `(User Home)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\Param.xml`
+
+- Rain density can now be adjusted.
 
 ## [0.3.7] - 2020-02-16
 
