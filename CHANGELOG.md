@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.10] - 2020-02-
+
+### Fixed
+- Fix the bug that Battle Config shown does not correctly reflect the actual change after clicking `Reset to Default`.
+
 ## [0.3.9] - 2020-02-17
 
 ### Changed

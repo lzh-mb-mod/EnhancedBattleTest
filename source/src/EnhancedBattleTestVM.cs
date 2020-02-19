@@ -373,11 +373,11 @@ namespace Modbed
             this._selectedSceneIndex = currentParams.sceneIndex;
             UpdateSceneContent();
 
-            this._playerSoldierCount = currentParams.playerSoldierCount.ToString();
-            this._enemySoldierCount = currentParams.enemySoldierCount.ToString();
-            this._distance = currentParams.distance.ToString();
-            this._soldierXInterval = currentParams.soldierXInterval.ToString();
-            this._soldierYInterval = currentParams.soldierYInterval.ToString();
+            this.PlayerSoldierCount = currentParams.playerSoldierCount.ToString();
+            this.EnemySoldierCount = currentParams.enemySoldierCount.ToString();
+            this.Distance = currentParams.distance.ToString();
+            this.SoldierXInterval = currentParams.soldierXInterval.ToString();
+            this.SoldierXInterval = currentParams.soldierYInterval.ToString();
 
             this._allMpHeroClassesMap = GetHeroClassesMap();
             this._allMpHeroClasses = GetHeroClasses().ToList();
