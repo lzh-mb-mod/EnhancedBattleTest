@@ -14,7 +14,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.Missions;
 using TaleWorlds.MountAndBlade.View.Screen;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
     public class CharacterSelectionView : MissionView
     {
@@ -122,12 +122,15 @@ namespace Modbed
             var culturesListPanel = this._movie.RootView.Target.FindChild("Cultures", true) as ListPanel;
             var groupsListPanel = this._movie.RootView.Target.FindChild("Groups", true) as ListPanel;
             var charactersListPanel = this._movie.RootView.Target.FindChild("Characters", true) as ListPanel;
-            var perkListPanel = this._movie.RootView.Target.FindChild("Perks", true) as ListPanel;
+            var firstPerkListPanel = this._movie.RootView.Target.FindChild("FirstPerks", true) as ListPanel;
+            var secondPerkListPanel = this._movie.RootView.Target.FindChild("SecondPerks", true) as ListPanel;
 
             culturesListPanel.IntValue = vm.SelectedCultureIndex;
             groupsListPanel.IntValue = vm.SelectedGroupIndex;
             charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-            perkListPanel.IntValue = vm.SelectedPerkIndex;
+            firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+            secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
+
             ModuleLogger.Log("vm.SelectedCharacterIndex {0}", vm.SelectedCharacterIndex);
 
 
@@ -135,21 +138,28 @@ namespace Modbed
                 vm.SelectedCultureChanged(w as ListPanel);
                 groupsListPanel.IntValue = vm.SelectedGroupIndex;
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                perkListPanel.IntValue = vm.SelectedPerkIndex;
+                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
             groupsListPanel.SelectEventHandlers.Add(w => {
                 vm.SelectedGroupChanged(w as ListPanel);
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                perkListPanel.IntValue = vm.SelectedPerkIndex;
+                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
             charactersListPanel.SelectEventHandlers.Add(w =>
             {
                 vm.SelectedCharacterChanged(w as ListPanel);
-                perkListPanel.IntValue = vm.SelectedPerkIndex;
+                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
-            perkListPanel.SelectEventHandlers.Add(w =>
+            firstPerkListPanel.SelectEventHandlers.Add(w =>
             {
-                vm.SelectedPerkChanged(w as ListPanel);
+                vm.SelectedFirstPerkChanged(w as ListPanel);
+            });
+            secondPerkListPanel.SelectEventHandlers.Add(w =>
+            {
+                vm.SelectedSecondPerkChanged(w as ListPanel);
             });
         }
     }

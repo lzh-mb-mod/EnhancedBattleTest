@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -6,7 +7,7 @@ using TaleWorlds.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
     public class CharacterSelectionVM : ViewModel
     {
@@ -16,7 +17,8 @@ namespace Modbed
         private MBBindingList<NameVM> _cultures;
         private MBBindingList<NameVM> _groups;
         private MBBindingList<CharacterVM> _characters;
-        private MBBindingList<PerkVM> _perks;
+        private MBBindingList<PerkVM> _firstPerks;
+        private MBBindingList<PerkVM> _secondPerks;
 
         public int SelectedCultureIndex { get; set; }
 
@@ -24,7 +26,9 @@ namespace Modbed
 
         public int SelectedCharacterIndex { get; set; }
 
-        public int SelectedPerkIndex { get; set; }
+        public int SelectedFirstPerkIndex { get; set; }
+
+        public int SelectedSecondPerkIndex { get; set; }
 
         [DataSourceProperty]
         public MBBindingList<NameVM> Cultures
@@ -74,18 +78,30 @@ namespace Modbed
         }
 
         [DataSourceProperty]
-        public MBBindingList<PerkVM> Perks
+        public MBBindingList<PerkVM> FirstPerks
         {
-            get => this._perks;
+            get => this._firstPerks;
             set
             {
-                if (value == this._perks)
+                if (value == this._firstPerks)
                     return;
-                this._perks = value;
-                this.OnPropertyChanged(nameof(Perks));
+                this._firstPerks = value;
+                this.OnPropertyChanged(nameof(FirstPerks));
             }
         }
-        
+        [DataSourceProperty]
+        public MBBindingList<PerkVM> SecondPerks
+        {
+            get => this._secondPerks;
+            set
+            {
+                if (value == this._secondPerks)
+                    return;
+                this._secondPerks = value;
+                this.OnPropertyChanged(nameof(SecondPerks));
+            }
+        }
+
 
         public CharacterSelectionVM(CharacterSelectionParams p)
             : base()
@@ -103,8 +119,10 @@ namespace Modbed
             FillCharacters();
             SelectedCharacterIndex = Characters.FindIndex(item => item.character.StringId == selectedCharacter.StringId);
 
-            FillPerks();
-            this.SelectedPerkIndex = Perks.FindIndex(item => item.perkIndex == this._params.selectedPerk);
+            FillFirstPerks();
+            FillSecondPerks();
+            this.SelectedFirstPerkIndex = FirstPerks.FindIndex(item => item.perkIndex == this._params.selectedFirstPerk);
+            this.SelectedSecondPerkIndex = SecondPerks.FindIndex(item => item.perkIndex == this._params.selectedSecondPerk);
 
             ModuleLogger.Log("end character selection vm construction");
         }
@@ -119,7 +137,8 @@ namespace Modbed
 
             FillGroups();
             FillCharacters();
-            FillPerks();
+            FillFirstPerks();
+            FillSecondPerks();
 
             this._inChange = false;
         }
@@ -134,7 +153,8 @@ namespace Modbed
             SelectedGroupIndex = index;
 
             FillCharacters();
-            FillPerks();
+            FillFirstPerks();
+            FillSecondPerks();
 
             this._inChange = false;
         }
@@ -147,24 +167,38 @@ namespace Modbed
             this._inChange = true;
 
             SelectedCharacterIndex = index;
-            FillPerks();
+            FillFirstPerks();
+            FillSecondPerks();
             this._inChange = false;
         }
 
-        public void SelectedPerkChanged(ListPanel listPanel)
+        public void SelectedFirstPerkChanged(ListPanel listPanel)
         {
             var index = listPanel.IntValue;
             if (index < 0 || this._inChange) return;
-            ModuleLogger.Log("SelectedPerkChanged {0}", index);
+            ModuleLogger.Log("SelectedFirstPerkChanged {0}", index);
             this._inChange = true;
-            SelectedPerkIndex = index;
+            SelectedFirstPerkIndex = index;
             this._inChange = false;
         }
 
+        public void SelectedSecondPerkChanged(ListPanel listPanel)
+        {
+            var index = listPanel.IntValue;
+            if (index < 0 || this._inChange) return;
+            ModuleLogger.Log("SelectedSecondPerkChanged {0}", index);
+            this._inChange = true;
+            SelectedSecondPerkIndex = index;
+            this._inChange = false;
+        }
+
+
         public void Done()
         {
-            var character = Characters[this.SelectedCharacterIndex].character;
-            this._params.selectAction(character, this.SelectedPerkIndex);
+            _params.selectedHeroClass = Characters[this.SelectedCharacterIndex].character;
+            _params.selectedFirstPerk = this.SelectedFirstPerkIndex;
+            _params.selectedSecondPerk = this.SelectedSecondPerkIndex;
+            this._params.selectAction(_params);
         }
 
         private void FillCultures()
@@ -208,20 +242,36 @@ namespace Modbed
             SelectedCharacterIndex = 0;
         }
 
-        private void FillPerks()
+        private void FillFirstPerks()
         {
             var character = this.Characters[SelectedCharacterIndex].character;
-            if (Perks != null)
-                Perks.Clear();
+            if (FirstPerks != null)
+                FirstPerks.Clear();
             else
-                Perks = new MBBindingList<PerkVM>();
+                FirstPerks = new MBBindingList<PerkVM>();
+            int index = 0;
+            foreach (var perk in character.GetAllAvailablePerksForListIndex(0))
+            {
+                FirstPerks.Add(new PerkVM { Name = perk.Name.ToString(), perkIndex = index++ });
+            }
+
+            SelectedFirstPerkIndex = 0;
+        }
+
+        private void FillSecondPerks()
+        {
+            var character = this.Characters[SelectedCharacterIndex].character;
+            if (SecondPerks != null)
+                SecondPerks.Clear();
+            else
+                SecondPerks = new MBBindingList<PerkVM>();
             int index = 0;
             foreach (var perk in character.GetAllAvailablePerksForListIndex(1))
             {
-                Perks.Add(new PerkVM { Name = perk.Name.ToString(), perkIndex = index++ });
+                SecondPerks.Add(new PerkVM { Name = perk.Name.ToString(), perkIndex = index++ });
             }
-
-            this.SelectedPerkIndex = 0;
+            
+            SelectedSecondPerkIndex = 0;
         }
     }
 
@@ -254,7 +304,22 @@ namespace Modbed
         public Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>> allMpHeroClassMap;
         public bool isTroop;
         public MultiplayerClassDivisions.MPHeroClass selectedHeroClass;
-        public int selectedPerk;
-        public System.Action<MultiplayerClassDivisions.MPHeroClass, int> selectAction;
+        public int selectedFirstPerk;
+        public int selectedSecondPerk;
+        public Action<CharacterSelectionParams> selectAction;
+
+
+        public static CharacterSelectionParams CharacterSelectionParamsFor(Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>> allMpHeroClassMap, ClassInfo classInfo, bool isTroop, Action<CharacterSelectionParams> selectionAction)
+        {
+            return new CharacterSelectionParams
+            {
+                allMpHeroClassMap = allMpHeroClassMap,
+                isTroop = isTroop,
+                selectedHeroClass = MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(classInfo.classStringId),
+                selectedFirstPerk = classInfo.selectedFirstPerk,
+                selectedSecondPerk = classInfo.selectedSecondPerk,
+                selectAction = selectionAction,
+            };
+        }
     } 
 }

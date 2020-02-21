@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TaleWorlds.MountAndBlade;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
-    class EnhancedBattleTestMakeGruntLogic : MissionLogic
+    class MakeGruntVoiceLogic : MissionLogic
     {
         class Pair
         {
@@ -37,7 +37,7 @@ namespace Modbed
                     {
                         if (agent == Mission.MainAgent)
                             continue;
-                        agent.MakeVoice(SkinVoiceManager.HardCodedSkinVoiceTypes.Grunt, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
+                        agent.MakeVoice(SkinVoiceManager.VoiceType.Grunt, SkinVoiceManager.CombatVoiceNetworkPredictionType.NoPrediction);
                     }
 
                     return true;

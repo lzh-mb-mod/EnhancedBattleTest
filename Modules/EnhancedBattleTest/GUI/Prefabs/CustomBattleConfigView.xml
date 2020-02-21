@@ -9,36 +9,18 @@
         <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Enhanced Battle Test 0.3" Brush="CenterAlignedLargeFont" />
         <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" SuggestedWidth="600" MarginTop="150">
           <Children>
-		    <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
-			  <Children>
+		        <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
+			        <Children>
                 <ButtonWidget Id="MapDown" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Creation.NumericLeftArrow" Command.Click="PreviousMap" />
                 <Widget Id="TextContainer" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="34" HorizontalAlignment="Center" VerticalAlignment="Center">
                   <Children>
-				    <TextWidget Text="@SelectedMapName" WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" />
+				            <TextWidget Text="@SelectedMapName" WidthSizePolicy="Fixed" SuggestedWidth="500" HeightSizePolicy="CoverChildren" />
                   </Children>
                 </Widget>
                 <ButtonWidget Id="MapUp" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="Creation.NumericRightArrow" Command.Click="NextMap" />
               </Children>
-		    </Widget>
-            <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
-              <Children>
-                <TextWidget Text="soldiers per row" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
-                <EditableTextWidget Text="@SoldiersPerRow" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
-              </Children>
-            </Widget>
-            <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
-              <Children>
-                <TextWidget Text="formation position(x,y)" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
-                <EditableTextWidget Text="@FormationPosition" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
-              </Children>
-            </Widget>
-			<Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
-              <Children>
-                <TextWidget Text="Formation Direction(x,y)" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
-                <EditableTextWidget Text="@FormationDirection" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
-              </Children>
-            </Widget>
-			 <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
+		        </Widget>
+			      <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
               <Children>
                 <TextWidget Text="Sky Brightness" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
                 <EditableTextWidget Text="@SkyBrightness" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
@@ -77,38 +59,32 @@
             </Widget> -->
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="50" MarginTop="10">
               <Children>
-                <TextWidget Text="player character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" />
-                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownButton" MarginLeft="300" Command.Click="SelectPlayerCharacter">
+                <TextWidget Text="player character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" />
+                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Popup.Done.Button" MarginLeft="300" Command.Click="SelectPlayerCharacter">
                   <Children>
-                    <TextWidget Text="@PlayerName" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush.FontSize="20"/>
+                    <TextWidget Text="@PlayerName" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text" Brush.FontSize="20"/>
                   </Children>
                 </ButtonWidget>
               </Children>
             </Widget>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="50" MarginTop="10">
               <Children>
-                <TextWidget Text="player soldier character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" />
-                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownButton" MarginLeft="300" Command.Click="SelectPlayerSoldierCharacter">
+                <TextWidget Text="player soldier character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" />
+                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Popup.Done.Button" MarginLeft="300" Command.Click="SelectPlayerTroopCharacter">
                   <Children>
-                    <TextWidget Text="@PlayerTroopName" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush.FontSize="20"/>
+                    <TextWidget Text="@PlayerTroopName" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text" Brush.FontSize="20"/>
                   </Children>
                 </ButtonWidget>
               </Children>
             </Widget>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="50" MarginTop="10">
               <Children>
-                <TextWidget Text="enemy soldier character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" />
-                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="MPLobby.CustomServer.CreateGamePanel.DropdownButton" MarginLeft="300" Command.Click="SelectEnemySoldierCharacter">
+                <TextWidget Text="enemy soldier character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="StretchToParent" VerticalAlignment="Center" />
+                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Left" VerticalAlignment="Top" Brush="Popup.Done.Button" MarginLeft="300" Command.Click="SelectEnemyTroopCharacter">
                   <Children>
-                    <TextWidget Text="@EnemyTroopName" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush.FontSize="20"/>
+                    <TextWidget Text="@EnemyTroopName" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text" Brush.FontSize="20"/>
                   </Children>
                 </ButtonWidget>
-              </Children>
-            </Widget>
-            <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "CoverChildren" MarginTop="10">
-              <Children>
-                <TextWidget Text="distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
-                <EditableTextWidget Text="@Distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
               </Children>
             </Widget>
             <Widget WidthSizePolicy = "StretchToParent" HeightSizePolicy = "Fixed" SuggestedHeight="50" MarginTop="10">
@@ -125,7 +101,7 @@
         </ListPanel>
         <ListPanel LayoutImp.LayoutMethod="HorizontalSpaced" WidthSizePolicy="Fixed" SuggestedWidth="1200" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" VerticalAlignment="Bottom" MarginBottom="200">
           <Children>
-            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="false" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" Command.Click="StartEnhancedBattleTest" Brush="ButtonBrush4">
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="false" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" Command.Click="Start" Brush="ButtonBrush4">
               <Children>
                 <TextWidget Text="Save And Start" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Children>
@@ -135,9 +111,9 @@
                 <TextWidget Text="Save" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Children>
             </ButtonWidget>
-            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" Command.Click="ResetToDefault" Brush="ButtonBrush4">
+            <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" Command.Click="LoadConfig" Brush="ButtonBrush4">
               <Children>
-                <TextWidget Text="Reset To Default" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <TextWidget Text="Load Config" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
               </Children>
             </ButtonWidget>
             <ButtonWidget DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" Command.Click="GoBack" Brush="ButtonBrush4">

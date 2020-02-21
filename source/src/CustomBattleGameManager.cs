@@ -1,4 +1,4 @@
-// Decompiled with JetBrains decompiler
+﻿// Decompiled with JetBrains decompiler
 // Type: TaleWorlds.MountAndBlade.CustomGameManager
 // Assembly: TaleWorlds.MountAndBlade, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 // MVID: D5D21862-28AB-45FC-8C12-16AF95A20751
@@ -13,13 +13,16 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestGameManager : MBGameManager
+    public class CustomBattleGameManager : MBGameManager
     {
+        public static bool isCustomGame;
+
         protected override void DoLoadingForGameManager(
             GameManagerLoadingSteps gameManagerLoadingStep,
             out GameManagerLoadingSteps nextStep)
         {
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.DoLoadingForGameManager {0}", gameManagerLoadingStep);
+            ModuleLogger.Writer.WriteLine("CustomBattleGameManager.DoLoadingForGameManager {0}",
+                gameManagerLoadingStep);
             ModuleLogger.Writer.Flush();
             nextStep = GameManagerLoadingSteps.None;
             switch (gameManagerLoadingStep)
@@ -34,14 +37,18 @@ namespace EnhancedBattleTest
                     bool flag = true;
                     foreach (MBSubModuleBase subModule in Module.CurrentModule.SubModules)
                         flag = flag && subModule.DoLoading(Game.Current);
-                    nextStep = flag ? GameManagerLoadingSteps.WaitSecondStep : GameManagerLoadingSteps.FirstInitializeFirstStep;
+                    nextStep = flag
+                        ? GameManagerLoadingSteps.WaitSecondStep
+                        : GameManagerLoadingSteps.FirstInitializeFirstStep;
                     break;
                 case GameManagerLoadingSteps.WaitSecondStep:
                     MBGameManager.StartNewGame();
                     nextStep = GameManagerLoadingSteps.SecondInitializeThirdState;
                     break;
                 case GameManagerLoadingSteps.SecondInitializeThirdState:
-                    nextStep = Game.Current.DoLoading() ? GameManagerLoadingSteps.PostInitializeFourthState : GameManagerLoadingSteps.SecondInitializeThirdState;
+                    nextStep = Game.Current.DoLoading()
+                        ? GameManagerLoadingSteps.PostInitializeFourthState
+                        : GameManagerLoadingSteps.SecondInitializeThirdState;
                     break;
                 case GameManagerLoadingSteps.PostInitializeFourthState:
                     nextStep = GameManagerLoadingSteps.FinishLoadingFifthStep;
@@ -55,7 +62,7 @@ namespace EnhancedBattleTest
 
         public override void OnLoadFinished()
         {
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.OnLoadFinished");
+            ModuleLogger.Writer.WriteLine("CustomBattleGameManager.OnLoadFinished");
             ModuleLogger.Writer.Flush();
 
             base.OnLoadFinished();
@@ -70,7 +77,7 @@ namespace EnhancedBattleTest
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedSelfPercent(20);
 
-            EnhancedBattleTestMissoins.OpenEnhancedBattleTestConfigMission();
+            CustomBattleMissions.OpenCustomBattleConfigMission();
         }
     }
 }

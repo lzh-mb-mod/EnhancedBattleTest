@@ -53,7 +53,7 @@
       <HintPath>$(Mb2Bin)/TaleWorlds.TwoDimension.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Target Name="Install" DependsOnTargets="build">
-    <Copy SourceFiles=".\bin\Debug\netstandard2.0\EnhancedBattleTest.dll" DestinationFolder="$(Mb2Bin)" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="Copy &quot;$(TargetPath)&quot; &quot;$(Mb2Bin)&quot;&#xD;&#xA;Copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;Copy &quot;$(SolutionDir)..\bin\Win64_Shipping_Client\EnhancedBattleTest.bat&quot; &quot;$(Mb2Bin)&quot;" />
   </Target>
 </Project>

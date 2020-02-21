@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Collections.Generic;
+using EnhancedBattleTest;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
@@ -10,14 +11,12 @@ using TaleWorlds.InputSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
-// using TaleWorlds.MountAndBlade.GauntletUI;
-// using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
 using TaleWorlds.MountAndBlade.View.Screen;
 using TL = TaleWorlds.Library;
 using TaleWorlds.TwoDimension;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestSubModule : TaleWorlds.MountAndBlade.MBSubModuleBase
     {
@@ -39,6 +38,15 @@ namespace Modbed
               },
               false
             ));
+            Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
+                "customebattle",
+                new TextObject("{=custombattle}Custom Battle"),
+                2,
+                () =>
+                {
+                    MBGameManager.StartNewGame(new CustomBattleGameManager());
+                },
+                false));
         }
 
         protected override void OnSubModuleUnloaded()

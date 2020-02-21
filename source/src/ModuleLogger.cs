@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
     internal static class ModuleLogger
     {

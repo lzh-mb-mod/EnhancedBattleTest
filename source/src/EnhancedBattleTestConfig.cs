@@ -1,16 +1,12 @@
 
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Xml;
 using System.Xml.Serialization;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 
-namespace Modbed
+namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestParams
+    public class EnhancedBattleTestConfig : BattleConfigBase<EnhancedBattleTestConfig>
     {
         public class SceneInfo
         {
@@ -21,14 +17,28 @@ namespace Modbed
             public int soldiersPerRow = 20;
             public float rainDensity = -1;
         }
-        private static EnhancedBattleTestParams _instance;
 
+        private static EnhancedBattleTestConfig _instance;
 
         public SceneInfo[] sceneList;
         public int sceneIndex;
-        public int playerSoldierCount, enemySoldierCount;
         public float distance;
         public float soldierXInterval, soldierYInterval;
+
+        protected static Version BinaryVersion => new Version(1, 0);
+
+        protected void UpgradeToCurrentVersion()
+        {
+            switch (ConfigVersion?.ToString())
+            {
+                case "1.0": break;
+                default:
+                    Utility.DisplayMessage("Config version not compatible.\nReset config.");
+                    ResetToDefault();
+                    Serialize();
+                    break;
+            }
+        }
 
         [XmlIgnore]
         public int SoldiersPerRow
@@ -64,40 +74,13 @@ namespace Modbed
             get => sceneList[sceneIndex].rainDensity;
             set => sceneList[sceneIndex].rainDensity = value;
         }
-
-        [XmlElement("PlayerStringId")]
-        public string playerHeroClassStringId;
-        public int playerSelectedPerk;
-        [XmlElement("PlayerTroopStringId")]
-        public string playerTroopHeroClassStringId;
-        public int playerTroopSelectedPerk;
-        [XmlElement("EnemyTroopStringId")]
-        public string enemyTroopHeroClassStringId;
-        public int enemyTroopSelectedPerk;
+        
         public bool useFreeCamera;
 
         [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
-        [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
-        {
-            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerHeroClassStringId);
-            set => playerHeroClassStringId = value.StringId;
-        }
-        [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass
-        {
-            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerTroopHeroClassStringId);
-            set => playerTroopHeroClassStringId = value.StringId;
-        }
-        [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass
-        {
-            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(enemyTroopHeroClassStringId);
-            set => enemyTroopHeroClassStringId = value.StringId;
-        }
 
-        private static EnhancedBattleTestParams CreateDefault()
+        private static EnhancedBattleTestConfig CreateDefault()
         {
             //string sceneIndex = "mp_skirmish_map_001a";
             //string sceneIndex = "mp_sergeant_map_001";
@@ -181,8 +164,9 @@ namespace Modbed
                 new SceneInfo{name = "mp_skirmish_map_battania_03", formationPosition = new Vec2(360,186), formationDirection = new Vec2(0.6f,-0.4f), soldiersPerRow = 10},
             };
             int defaultIndex = 0;
-            var p = new EnhancedBattleTestParams
+            var p = new EnhancedBattleTestConfig
             {
+                ConfigVersion = BinaryVersion.ToString(2),
                 sceneList = list,
                 sceneIndex = defaultIndex,
                 playerSoldierCount = 20,
@@ -190,96 +174,95 @@ namespace Modbed
                 distance = 50,
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
-                playerHeroClassStringId = "mp_light_cavalry_vlandia",
-                playerSelectedPerk = 0,
-                playerTroopHeroClassStringId = "mp_heavy_infantry_vlandia",
-                playerTroopSelectedPerk = 0,
-                enemyTroopHeroClassStringId = "mp_shock_infantry_vlandia",
-                enemyTroopSelectedPerk = 0,
+                playerClass = new ClassInfo{ classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0},
+                playerTroopClass = new ClassInfo{classStringId = "mp_heavy_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
+                enemyTroopClass = new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 useFreeCamera = false
             };
             return p;
         }
 
-        public static EnhancedBattleTestParams Get()
+        public static EnhancedBattleTestConfig Get()
         {
             if (_instance == null)
             {
-                _instance = CreateDefault();
-                if (File.Exists(SaveName))
-                    _instance.Deserialize();
-                else
-                    _instance.Serialize();
+                _instance = new EnhancedBattleTestConfig();
+                _instance.SyncWithSave();
             }
+
             return _instance;
         }
 
-        public bool validate() {
-            return this.sceneIndex >= 0 && this.sceneIndex < this.sceneList.Length
-                && this.playerSoldierCount >= 0
-                && this.enemySoldierCount >= 0
+        public override bool Validate() {
+            return base.Validate()
+                && this.sceneIndex >= 0 && this.sceneIndex < this.sceneList.Length
                 && this.distance > 0
                 && soldierXInterval > 0
                 && soldierYInterval > 0
                 && SoldiersPerRow > 0
-                && FormationDirection.Length > 0
-                && PlayerHeroClass != null
-                && PlayerTroopHeroClass != null
-                && EnemyTroopHeroClass != null
-            ;
+                && FormationDirection.Length > 0;
         }
 
-        public void Serialize()
+        public override bool Serialize()
         {
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedBattleTestParams));
+                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedBattleTestConfig));
                 using (TextWriter writer = new StreamWriter(SaveName))
                 {
                     serializer.Serialize(writer, this);
                 }
-                EnhancedBattleTestUtility.DisplayMessage("Save config succeeded.");
+                Utility.DisplayMessage("Config saved.");
+                return true;
             }
             catch (Exception e)
             {
-                EnhancedBattleTestUtility.DisplayMessage("Error: Save config failed.");
+                Utility.DisplayMessage("Error: Saving config failed.");
                 Console.WriteLine(e);
             }
+
+            return false;
         }
 
-        public void Deserialize()
+        public override bool Deserialize()
         {
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedBattleTestParams));
+                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedBattleTestConfig));
                 using (TextReader reader = new StreamReader(SaveName))
                 {
-                    var param = (EnhancedBattleTestParams)deserializer.Deserialize(reader);
-                    this.CopyFrom(param);
+                    var config = (EnhancedBattleTestConfig)deserializer.Deserialize(reader);
+                    this.CopyFrom(config);
                 }
-                EnhancedBattleTestUtility.DisplayMessage("Load config succeeded.");
+                Utility.DisplayMessage("Config loaded.");
+                UpgradeToCurrentVersion();
+                return true;
             }
             catch (Exception e)
             {
-                EnhancedBattleTestUtility.DisplayMessage("Error: Load config failed.");
+                Utility.DisplayMessage("Error: Loading config failed.");
                 Console.WriteLine(e);
             }
+
+            return false;
         }
 
-        public void ResetToDefault()
+        public override void ReloadSavedConfig()
         {
-            var defaultParam = CreateDefault();
-            CopyFrom(defaultParam);
+            var loadedConfig = CreateDefault();
+            if (loadedConfig.Deserialize())
+                CopyFrom(loadedConfig);
         }
 
-        private void EnsureSaveDirectory()
+        public override void ResetToDefault()
         {
-            Directory.CreateDirectory(SavePath);
+            CopyFrom(CreateDefault());
         }
 
-        private void CopyFrom(EnhancedBattleTestParams other)
+
+        protected override void CopyFrom(EnhancedBattleTestConfig other)
         {
             //public SceneInfo[] sceneList { get; set; }
             //public int sceneIndex;
@@ -301,29 +284,17 @@ namespace Modbed
             //public string enemyTroopHeroClassStringId;
             //public int enemyTroopSelectedPerk;
             //public bool useFreeCamera;
+            base.CopyFrom(other);
 
-            this.sceneList = other.sceneList;
+            if (other.sceneList != null)
+                this.sceneList = other.sceneList;
             this.sceneIndex = other.sceneIndex;
-            this.playerSoldierCount = other.playerSoldierCount;
-            this.enemySoldierCount = other.enemySoldierCount;
             this.distance = other.distance;
             this.soldierXInterval = other.soldierXInterval;
             this.soldierYInterval = other.soldierYInterval;
-            this.playerHeroClassStringId = other.playerHeroClassStringId;
-            this.playerSelectedPerk = other.playerSelectedPerk;
-            this.playerTroopHeroClassStringId = other.playerTroopHeroClassStringId;
-            this.playerTroopSelectedPerk = other.playerTroopSelectedPerk;
-            this.enemyTroopHeroClassStringId = other.enemyTroopHeroClassStringId;
-            this.enemyTroopSelectedPerk = other.enemyTroopSelectedPerk;
             this.useFreeCamera = other.useFreeCamera;
         }
-
-        private static string ApplicationName = "Mount and Blade II Bannerlord";
-        private static string ModuleName = "EnhancedBattleTest";
-
-        private static string SavePath => Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" +
-                                          ApplicationName + "\\Configs\\" + ModuleName + "\\";
-
-        private static string SaveName => SavePath + "Param.xml";
+        protected override string SaveName => SavePath + "EnhancedBattleTestConfig.xml";
+        protected override string[] OldNames { get; } = { SavePath + "Param.xml" };
     }
 }
