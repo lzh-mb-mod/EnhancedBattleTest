@@ -19,7 +19,7 @@ namespace EnhancedBattleTest
         {
             base.OnMissionTick(dt);
 
-            if (_thisLeader == null)
+            if (Utility.IsAgentDead(_thisLeader))
                 _thisLeader = Mission.MainAgent;
             if (this.Mission.InputManager.IsKeyPressed(InputKey.Numpad5))
                 this.SwapTeam();
@@ -35,6 +35,7 @@ namespace EnhancedBattleTest
             {
                 previousAgent = this.Mission.MainAgent;
                 this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
+                previousAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
             else
             {
@@ -45,7 +46,6 @@ namespace EnhancedBattleTest
             _targetAgent.Controller = Agent.ControllerType.Player;
             this.Mission.PlayerTeam = this.Mission.PlayerEnemyTeam;
             PostSwitchTeam?.Invoke();
-            previousAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             this._thisLeader = Mission.MainAgent;
             this.enemyLeader = previousAgent;
             Utility.SetPlayerAsCommander();
