@@ -11,13 +11,13 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestConfigView : MissionView
+    public class EnhancedCustomBattleConfigView : MissionView
     {
         private GauntletLayer _gauntletLayer;
-        private EnhancedBattleTestConfigVM _dataSource;
+        private EnhancedCustomBattleConfigVM _dataSource;
         private CharacterSelectionView _selectionView;
 
-        public EnhancedBattleTestConfigView(CharacterSelectionView selectionView)
+        public EnhancedCustomBattleConfigView(CharacterSelectionView selectionView)
         {
             this._selectionView = selectionView;
             this.ViewOrderPriorty = 22;
@@ -42,13 +42,16 @@ namespace EnhancedBattleTest
 
         public void Open()
         {
-            this._dataSource = new EnhancedBattleTestConfigVM(_selectionView, (config) =>
-                {
-                    EnhancedBattleTestMissoins.OpenEnhancedBattleTestMission(config);
-                }, (param) => { this.Mission.EndMission(); });
+            this._dataSource = new EnhancedCustomBattleConfigVM(_selectionView, config =>
+            {
+                EnhancedCustomBattleMissions.OpenCustomBattleMission(config);
+            }, (config) =>
+            {
+                this.Mission.EndMission();
+            });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
-            this._gauntletLayer.LoadMovie(nameof(EnhancedBattleTestConfigView), this._dataSource);
+            this._gauntletLayer.LoadMovie(nameof(EnhancedCustomBattleConfigView), this._dataSource);
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, TaleWorlds.Library.InputUsageMask.All);
             this.MissionScreen.AddLayer(this._gauntletLayer);
         }
@@ -67,6 +70,5 @@ namespace EnhancedBattleTest
                 this._dataSource = null;
             }
         }
-
     }
 }

@@ -2,38 +2,45 @@
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions;
+using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
 
 namespace EnhancedBattleTest
 {
-    public static class EnhancedBattleTestMissoins
+    public static class EnhancedTestBattleMissions
     {
-        public static Mission OpenEnhancedBattleTestConfigMission()
+        public static Mission OpenEnhancedTestBattleConfigMission()
         {
             return MissionState.OpenNew(
-                "EnhancedBattleTestConfig",
+                "EnhancedTestBattleConfig",
                 new MissionInitializerRecord("mp_skirmish_map_001a"),
                 missionController => new MissionBehaviour[] {
                 }
             , true, true, true);
         }
 
-        public static Mission OpenEnhancedBattleTestMission(EnhancedBattleTestConfig config)
+        public static Mission OpenEnhancedTestBattleMission(EnhancedTestBattleConfig config)
         {
             return MissionState.OpenNew(
                 "EnhancedBattleTestBattle",
                 new MissionInitializerRecord(config.SceneName),
                 missionController => new MissionBehaviour[] {
-                    new TestBattleMissionController(config),
+                    new EnhancedTestBattleMissionController(config),
                     new ControlTroopAfterPlayerDeadLogic(),
                     new SwitchTeamLogic(),
-                    new SwitchFreeCameraLogic(), 
+                    new SwitchFreeCameraLogic(),
+                    new MakeGruntVoiceLogic(),
                     // new BattleTeam1MissionController(),
                     // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
                     new AgentBattleAILogic(),
                     new AgentVictoryLogic(),
                     new FieldBattleController(),
                     new MissionOptionsComponent(),
-                    new MakeGruntVoiceLogic(),
+                    new MissionSimulationHandler(),
+                    new BattleMissionAgentInteractionLogic(),
+                    new AgentFadeOutLogic(),
+                    new AgentMoraleInteractionLogic(),
+                    new HighlightsController(),
+                    new BattleHighlightsController(),
                     // new MissionBoundaryPlacer(),
                 }
             );

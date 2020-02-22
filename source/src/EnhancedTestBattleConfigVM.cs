@@ -10,10 +10,10 @@ using Debug = System.Diagnostics.Debug;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestConfigVM : BattleConfigVMBase<EnhancedBattleTestConfig>
+    public class EnhancedTestBattleConfigVM : BattleConfigVMBase<EnhancedTestBattleConfig>
     {
-        private Action<EnhancedBattleTestConfig> startAction;
-        private Action<EnhancedBattleTestConfig> backAction;
+        private Action<EnhancedTestBattleConfig> startAction;
+        private Action<EnhancedTestBattleConfig> backAction;
 
         private int _selectedSceneIndex;
         private string _distance;
@@ -160,9 +160,9 @@ namespace EnhancedBattleTest
             set => this.CurrentConfig.useFreeCamera = value;
         }
 
-        public EnhancedBattleTestConfigVM(CharacterSelectionView selectionView, Action<EnhancedBattleTestConfig> startAction,
-            Action<EnhancedBattleTestConfig> backAction)
-            : base(selectionView, EnhancedBattleTestConfig.Get())
+        public EnhancedTestBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedTestBattleConfig> startAction,
+            Action<EnhancedTestBattleConfig> backAction)
+            : base(selectionView, EnhancedTestBattleConfig.Get())
         {
             InitializeContent();
 

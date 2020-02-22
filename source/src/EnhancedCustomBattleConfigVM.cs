@@ -10,10 +10,10 @@ using Debug = System.Diagnostics.Debug;
 
 namespace EnhancedBattleTest
 {
-    public class CustomBattleConfigVM : BattleConfigVMBase<CustomBattleConfig>
+    public class EnhancedCustomBattleConfigVM : BattleConfigVMBase<EnhancedCustomBattleConfig>
     {
-        private Action<CustomBattleConfig> startAction;
-        private Action<CustomBattleConfig> backAction;
+        private Action<EnhancedCustomBattleConfig> startAction;
+        private Action<EnhancedCustomBattleConfig> backAction;
         
         private int _selectedSceneIndex;
         private string _skyBrightness;
@@ -78,9 +78,9 @@ namespace EnhancedBattleTest
             set => this.CurrentConfig.useFreeCamera = value;
         }
 
-        public CustomBattleConfigVM(CharacterSelectionView selectionView, Action<CustomBattleConfig> startAction,
-            Action<CustomBattleConfig> backAction)
-            : base(selectionView, CustomBattleConfig.Get())
+        public EnhancedCustomBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedCustomBattleConfig> startAction,
+            Action<EnhancedCustomBattleConfig> backAction)
+            : base(selectionView, EnhancedCustomBattleConfig.Get())
         {
             InitializeContent();
 

@@ -13,7 +13,7 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class CustomBattleGameManager : MBGameManager
+    public class EnhancedCustomBattleGameManager : MBGameManager
     {
         public static bool isCustomGame;
 
@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
             GameManagerLoadingSteps gameManagerLoadingStep,
             out GameManagerLoadingSteps nextStep)
         {
-            ModuleLogger.Writer.WriteLine("CustomBattleGameManager.DoLoadingForGameManager {0}",
+            ModuleLogger.Writer.WriteLine("EnhancedCustomBattleGameManager.DoLoadingForGameManager {0}",
                 gameManagerLoadingStep);
             ModuleLogger.Writer.Flush();
             nextStep = GameManagerLoadingSteps.None;
@@ -30,7 +30,7 @@ namespace EnhancedBattleTest
                 case GameManagerLoadingSteps.PreInitializeZerothStep:
                     MBGameManager.LoadModuleData(false);
                     MBGlobals.InitializeReferences();
-                    new Game(new EnhancedBattleTestGame(), this).DoLoading();
+                    new Game(new EnhancedTestBattleGame(), this).DoLoading();
                     nextStep = GameManagerLoadingSteps.FirstInitializeFirstStep;
                     break;
                 case GameManagerLoadingSteps.FirstInitializeFirstStep:
@@ -62,7 +62,7 @@ namespace EnhancedBattleTest
 
         public override void OnLoadFinished()
         {
-            ModuleLogger.Writer.WriteLine("CustomBattleGameManager.OnLoadFinished");
+            ModuleLogger.Writer.WriteLine("EnhancedCustomBattleGameManager.OnLoadFinished");
             ModuleLogger.Writer.Flush();
 
             base.OnLoadFinished();
@@ -77,7 +77,7 @@ namespace EnhancedBattleTest
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedSelfPercent(20);
 
-            CustomBattleMissions.OpenCustomBattleConfigMission();
+            EnhancedCustomBattleMissions.OpenCustomBattleConfigMission();
         }
     }
 }

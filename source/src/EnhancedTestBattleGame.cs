@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: TaleWorlds.MountAndBlade.CustomGame
 // Assembly: TaleWorlds.MountAndBlade, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 // MVID: D5D21862-28AB-45FC-8C12-16AF95A20751
@@ -15,10 +15,10 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class CustomBattleGame : TaleWorlds.Core.GameType
+    public class EnhancedTestBattleGame : TaleWorlds.Core.GameType
     {
 
-        public static CustomBattleGame Current => Game.Current.GameType as CustomBattleGame;
+        public static EnhancedTestBattleGame Current => Game.Current.GameType as EnhancedTestBattleGame;
 
         protected override void OnInitialize()
         {
@@ -61,7 +61,7 @@ namespace EnhancedBattleTest
             GameTypeLoadingStates gameTypeLoadingState,
             out GameTypeLoadingStates nextState)
         {
-            // ModuleLogger.Writer.WriteLine("EnhancedBattleTestGame.DoLoadingForGameType {0}", gameTypeLoadingState);
+            // ModuleLogger.Writer.WriteLine("EnhancedTestBattleGame.DoLoadingForGameType {0}", gameTypeLoadingState);
             // ModuleLogger.Writer.Flush();
             nextState = GameTypeLoadingStates.None;
             switch (gameTypeLoadingState)
@@ -85,14 +85,14 @@ namespace EnhancedBattleTest
 
         private void AddGameModels(IGameStarter basicGameStarter)
         {
+
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new CustomBattleAgentStatCalculateModel());
-            basicGameStarter.AddModel(new CustomBattleApplyWeatherEffectsModel());
+            basicGameStarter.AddModel(new MultiplayerAgentStatCalculateModel());
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new DefaultRidingModel());
             basicGameStarter.AddModel(new DefaultStrikeMagnitudeModel());
-            basicGameStarter.AddModel(new CustomBattleSkillList());
-            basicGameStarter.AddModel(new CustomBattleMoraleModel());
+            basicGameStarter.AddModel(new EnhancedBattleTestSkillList());
+            basicGameStarter.AddModel(new MultiplayerBattleMoraleModel());
         }
 
         protected override void OnRegisterTypes()
@@ -112,8 +112,11 @@ namespace EnhancedBattleTest
         }
     }
 
-    class CustomBattleSkillList : SkillList
+    class EnhancedBattleTestSkillList : SkillList
     {
+        internal EnhancedBattleTestSkillList()
+        {
+        }
 
         public override IEnumerable<SkillObject> GetSkillList()
         {

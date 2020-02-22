@@ -36,10 +36,10 @@ namespace EnhancedBattleTest
 
             if (_controller != null)
             {
-                _controller.ReloadOrderUI += ChangedDelegate;
+                _controller.PostSwitchTeam += OnPostSwitchTeam;
             }
         }
-        private void ChangedDelegate()
+        private void OnPostSwitchTeam()
         {
             InitializeInADisgustingManner();
         }

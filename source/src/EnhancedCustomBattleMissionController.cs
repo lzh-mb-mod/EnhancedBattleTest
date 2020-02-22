@@ -9,17 +9,19 @@ using TaleWorlds.MountAndBlade.Source.Missions;
 
 namespace EnhancedBattleTest
 {
-    class CustomBattleMissionController : MissionLogic
+    class EnhancedCustomBattleMissionController : MissionLogic
     {
         protected readonly Game game;
         private BasicCharacterObject _player;
+        private BasicCharacterObject _enemyGeneral;
         private bool _spawned = false;
         protected bool IsDeploymentFinished => this.Mission.GetMissionBehaviour<DeploymentHandler>() == null;
 
-        public CustomBattleMissionController(BasicCharacterObject player)
+        public EnhancedCustomBattleMissionController(BasicCharacterObject player, BasicCharacterObject enemyGeneral)
         {
             this.game = Game.Current;
             _player = player;
+            _enemyGeneral = enemyGeneral;
         }
 
         public override void AfterStart()
@@ -31,27 +33,13 @@ namespace EnhancedBattleTest
             base.OnMissionTick(dt);
             if (!_spawned)
             {
-                Agent agent = this.Mission.SpawnAgent(
-                    new AgentBuildData(new BasicBattleAgentOrigin(_player))
-                        .Team(this.Mission.PlayerTeam)
-                        .Formation(this.Mission.PlayerTeam.GetFormation(_player.CurrentFormationClass))
-                        .InitialFrame(this.Mission.GetFormationSpawnFrame(this.Mission.PlayerTeam.Side, _player.CurrentFormationClass, false, -1, 0.0f, true).ToGroundMatrixFrame())
-                    , false, 0);
-                agent.Controller = Agent.ControllerType.Player;
-                agent.WieldInitialWeapons();
-                agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                this.Mission.MainAgent = agent;
+                _spawned = true;
+
+                Agent playerAgent = SpawnGenerals(this.Mission.PlayerTeam, _player, true);
                 Utility.SetPlayerAsCommander();
 
-                _spawned = true;
-                Agent enemyAgent = this.Mission.SpawnAgent(new AgentBuildData(new BasicBattleAgentOrigin(_player))
-                    .Team(this.Mission.PlayerEnemyTeam)
-                    .Formation(this.Mission.PlayerEnemyTeam.GetFormation(_player.CurrentFormationClass))
-                    .InitialFrame(this.Mission.GetFormationSpawnFrame(this.Mission.PlayerEnemyTeam.Side, _player.CurrentFormationClass, false, -1, 0.0f, true).ToGroundMatrixFrame())
-                    , false, 0);
-                enemyAgent.Controller = Agent.ControllerType.AI;
-                enemyAgent.WieldInitialWeapons();
-                enemyAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
+                Agent enemyAgent = SpawnGenerals(this.Mission.PlayerEnemyTeam, _enemyGeneral, false);
+
                 var switchTeamLogic = this.Mission.GetMissionBehaviour<SwitchTeamLogic>();
                 if (switchTeamLogic != null)
                     switchTeamLogic.enemyLeader = enemyAgent;
@@ -77,6 +65,20 @@ namespace EnhancedBattleTest
             return true;
         }
 
-        
+        private Agent SpawnGenerals(Team team, BasicCharacterObject character, bool isPlayer)
+        {
+            var agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(character))
+                .Team(team)
+                .Formation(team.GetFormation(character.CurrentFormationClass))
+                .Banner(team.Banner).ClothingColor1(team.Color).ClothingColor2(team.Color2)
+                .InitialFrame(this.Mission
+                    .GetFormationSpawnFrame(team.Side, character.CurrentFormationClass, false, -1, 0.0f, true)
+                    .ToGroundMatrixFrame());
+            Agent agent = this.Mission.SpawnAgent(agentBuildData, false, 0);
+            agent.WieldInitialWeapons();
+            agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
+            agent.Controller = isPlayer ? Agent.ControllerType.Player : Agent.ControllerType.AI;
+            return agent;
+        }
     }
 }

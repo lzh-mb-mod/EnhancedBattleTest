@@ -13,13 +13,13 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestGameManager : MBGameManager
+    public class EnhancedTestBattleGameManager : MBGameManager
     {
         protected override void DoLoadingForGameManager(
             GameManagerLoadingSteps gameManagerLoadingStep,
             out GameManagerLoadingSteps nextStep)
         {
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.DoLoadingForGameManager {0}", gameManagerLoadingStep);
+            ModuleLogger.Writer.WriteLine("EnhancedTestBattleGameManager.DoLoadingForGameManager {0}", gameManagerLoadingStep);
             ModuleLogger.Writer.Flush();
             nextStep = GameManagerLoadingSteps.None;
             switch (gameManagerLoadingStep)
@@ -27,7 +27,7 @@ namespace EnhancedBattleTest
                 case GameManagerLoadingSteps.PreInitializeZerothStep:
                     MBGameManager.LoadModuleData(false);
                     MBGlobals.InitializeReferences();
-                    new Game(new EnhancedBattleTestGame(), this).DoLoading();
+                    new Game(new EnhancedTestBattleGame(), this).DoLoading();
                     nextStep = GameManagerLoadingSteps.FirstInitializeFirstStep;
                     break;
                 case GameManagerLoadingSteps.FirstInitializeFirstStep:
@@ -55,7 +55,7 @@ namespace EnhancedBattleTest
 
         public override void OnLoadFinished()
         {
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.OnLoadFinished");
+            ModuleLogger.Writer.WriteLine("EnhancedTestBattleGameManager.OnLoadFinished");
             ModuleLogger.Writer.Flush();
 
             base.OnLoadFinished();
@@ -70,7 +70,7 @@ namespace EnhancedBattleTest
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedSelfPercent(20);
 
-            EnhancedBattleTestMissoins.OpenEnhancedBattleTestConfigMission();
+            EnhancedTestBattleMissions.OpenEnhancedTestBattleConfigMission();
         }
     }
 }

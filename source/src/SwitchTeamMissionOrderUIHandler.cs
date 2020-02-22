@@ -28,23 +28,30 @@ namespace EnhancedBattleTest
         private SwitchTeamLogic _controller;
         private void RegisterReload()
         {
-            foreach (var missionLogic in this.Mission.MissionLogics)
+            if (_controller == null)
             {
-                if (missionLogic is SwitchTeamLogic controller)
+                foreach (var missionLogic in this.Mission.MissionLogics)
                 {
-                    _controller = controller;
-                    break;
+                    if (missionLogic is SwitchTeamLogic controller)
+                    {
+                        _controller = controller;
+                        break;
+                    }
+                }
+                if (_controller != null)
+                {
+                    _controller.PreSwitchTeam += OnPreSwitchTeam;
+                    _controller.PostSwitchTeam += OnPostSwitchTeam;
                 }
             }
-
-            if (_controller != null)
-            {
-                _controller.ReloadOrderUI += ChangedDelegate;
-            }
         }
-        private void ChangedDelegate()
+        private void OnPreSwitchTeam()
         {
             this.OnMissionScreenFinalize();
+        }
+
+        private void OnPostSwitchTeam()
+        {
             this.OnMissionScreenInitialize();
             this.OnMissionScreenActivate();
         }
@@ -143,8 +150,6 @@ namespace EnhancedBattleTest
             this._dataSource = (MissionOrderVM)null;
             this._viewMovie = (GauntletMovie)null;
             this._siegeDeploymentHandler = (SiegeDeploymentHandler)null;
-            if (_controller != null)
-                _controller.ReloadOrderUI -= ChangedDelegate;
         }
 
         private void OnDeploymentFinish()

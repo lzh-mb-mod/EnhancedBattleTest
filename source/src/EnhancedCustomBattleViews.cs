@@ -1,33 +1,34 @@
-using System.Collections.Generic;
-using TaleWorlds.Engine;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
+﻿
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace EnhancedBattleTest
 {
     [ViewCreatorModule]
-    public class EnhancedBattleTestViews
+    public class EnhancedCustomBattleViews
     {
-        [ViewMethod("EnhancedBattleTestConfig")]
-        public static MissionView[] OpenInitialMission(Mission mission)
+        [ViewMethod("EnhancedCustomBattleConfig")]
+        public static MissionView[] OpenCustomBattleConfig(Mission mission)
         {
-            var selectionView = new CharacterSelectionView();
+            var selectionView = new CharacterSelectionView(false);
             return new MissionView[]
             {
                 selectionView,
-                new EnhancedBattleTestConfigView(selectionView),
+                new EnhancedCustomBattleConfigView(selectionView),
             };
         }
 
-        [ViewMethod("EnhancedBattleTestBattle")]
-        public static MissionView[] OpenTestMission(Mission mission)
+        [ViewMethod("EnhancedCustomBattle")]
+        public static MissionView[] OpenCustomBattleMission(Mission mission)
         {
-            var missionViewList = new MissionView[]
+            return new MissionView[]
             {
+                ViewCreator.CreateOptionsUIHandler(),
+                new MusicBattleMissionView(false), 
+                //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
+                ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
+
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
@@ -35,18 +36,16 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionOrderUIHandler(mission),
                 ViewCreator.CreateOrderTroopPlacerView(mission),
+                //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                //ViewCreator.CreateMissionFlagMarkerUIHandler(),
-                ViewCreator.CreateOptionsUIHandler(),
-                // missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
-                // missionViewList.Add((MissionView) new MissionBoundaryWallView());
+                ViewCreator.CreateMissionFlagMarkerUIHandler(),
+                ViewCreator.CreateMissionBoundaryCrossingView(),
+                new MissionBoundaryWallView(),
                 new SpectatorCameraView(),
-                new EnhancedBattleTestView(mission),
             };
-            return missionViewList;
         }
     }
 }

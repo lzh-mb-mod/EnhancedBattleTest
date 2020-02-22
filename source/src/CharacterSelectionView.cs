@@ -22,13 +22,15 @@ namespace EnhancedBattleTest
         private GauntletLayer _gauntletLayer;
         private GauntletMovie _movie;
         private CharacterSelectionParams _params;
+        private bool _withPerks;
         private bool _isOpen;
         private bool _toOpen;
 
-        public CharacterSelectionView()
+        public CharacterSelectionView(bool withPerks)
             : base()
         {
             this._params = null;
+            this._withPerks = withPerks;
             this.ViewOrderPriorty = 23;
             this._isOpen = this._toOpen = false;
         }
@@ -117,7 +119,7 @@ namespace EnhancedBattleTest
         private void HandleLoadMovie()
         {
             var vm = this._dataSource;
-            this._movie = this._gauntletLayer.LoadMovie("CharacterSelectionView", (ViewModel)this._dataSource);
+            this._movie = this._gauntletLayer.LoadMovie(_withPerks ? "CharacterSelectionViewWithPerks" : "CharacterSelectionViewWithoutPerks", (ViewModel)this._dataSource);
 
             var culturesListPanel = this._movie.RootView.Target.FindChild("Cultures", true) as ListPanel;
             var groupsListPanel = this._movie.RootView.Target.FindChild("Groups", true) as ListPanel;
@@ -128,39 +130,43 @@ namespace EnhancedBattleTest
             culturesListPanel.IntValue = vm.SelectedCultureIndex;
             groupsListPanel.IntValue = vm.SelectedGroupIndex;
             charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-            firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
-            secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
+            if (firstPerkListPanel != null)
+                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+            if (secondPerkListPanel != null)
+                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
 
             ModuleLogger.Log("vm.SelectedCharacterIndex {0}", vm.SelectedCharacterIndex);
 
 
-            culturesListPanel.SelectEventHandlers.Add(w => {
+            culturesListPanel.SelectEventHandlers.Add(w =>
+            {
                 vm.SelectedCultureChanged(w as ListPanel);
                 groupsListPanel.IntValue = vm.SelectedGroupIndex;
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
-                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
+                if (firstPerkListPanel != null)
+                    firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                if (secondPerkListPanel != null)
+                    secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
-            groupsListPanel.SelectEventHandlers.Add(w => {
+            groupsListPanel.SelectEventHandlers.Add(w =>
+            {
                 vm.SelectedGroupChanged(w as ListPanel);
                 charactersListPanel.IntValue = vm.SelectedCharacterIndex;
-                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
-                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
+                if (firstPerkListPanel != null)
+                    firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                if (secondPerkListPanel != null)
+                    secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
             charactersListPanel.SelectEventHandlers.Add(w =>
             {
                 vm.SelectedCharacterChanged(w as ListPanel);
-                firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
-                secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
+                if (firstPerkListPanel != null)
+                    firstPerkListPanel.IntValue = vm.SelectedFirstPerkIndex;
+                if (secondPerkListPanel != null)
+                    secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
             });
-            firstPerkListPanel.SelectEventHandlers.Add(w =>
-            {
-                vm.SelectedFirstPerkChanged(w as ListPanel);
-            });
-            secondPerkListPanel.SelectEventHandlers.Add(w =>
-            {
-                vm.SelectedSecondPerkChanged(w as ListPanel);
-            });
+            firstPerkListPanel?.SelectEventHandlers.Add(w => { vm.SelectedFirstPerkChanged(w as ListPanel); });
+            secondPerkListPanel?.SelectEventHandlers.Add(w => { vm.SelectedSecondPerkChanged(w as ListPanel); });
         }
     }
 }

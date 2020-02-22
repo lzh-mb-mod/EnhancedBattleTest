@@ -29,22 +29,22 @@ namespace EnhancedBattleTest
 
             EnhancedBattleTestSubModule._instance = this;
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-              "battletest",
-              new TextObject("{=battletest}Enhanced Battle Test", (Dictionary<string, TextObject>)null),
+              "EBTtestbattle",
+              new TextObject("{=EBTtestbattle}EBT Test Battle", (Dictionary<string, TextObject>)null),
               1,
               () =>
               {
-                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager());
+                  MBGameManager.StartNewGame(new EnhancedTestBattleGameManager());
               },
               false
             ));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-                "customebattle",
-                new TextObject("{=custombattle}Custom Battle"),
+                "EBTcustomebattle",
+                new TextObject("{=EBTcustomebattle}EBT Custom Battle"),
                 2,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new CustomBattleGameManager());
+                    MBGameManager.StartNewGame(new EnhancedCustomBattleGameManager());
                 },
                 false));
         }
