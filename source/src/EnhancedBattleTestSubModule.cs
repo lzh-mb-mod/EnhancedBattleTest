@@ -1,20 +1,6 @@
-using System;
-using System.ComponentModel;
-using System.IO;
 using System.Collections.Generic;
-using EnhancedBattleTest;
-using TaleWorlds.Core;
-using TaleWorlds.Engine;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
-using TaleWorlds.InputSystem;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
-using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.View.Screen;
-using TL = TaleWorlds.Library;
-using TaleWorlds.TwoDimension;
 
 namespace EnhancedBattleTest
 {

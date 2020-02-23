@@ -2,6 +2,7 @@
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
+using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace EnhancedBattleTest
 {
@@ -26,7 +27,6 @@ namespace EnhancedBattleTest
             {
                 ViewCreator.CreateOptionsUIHandler(),
                 new MusicBattleMissionView(false), 
-                //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
 
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
@@ -36,7 +36,7 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionOrderUIHandler(mission),
                 ViewCreator.CreateOrderTroopPlacerView(mission),
-                //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
+                // ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),

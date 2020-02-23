@@ -18,7 +18,10 @@ namespace EnhancedBattleTest
 
 
         public SceneInfo[] sceneList;
+
         public int sceneIndex;
+
+        public bool useFreeCamera;
 
         protected static Version BinaryVersion => new Version(1, 0);
 
@@ -47,8 +50,6 @@ namespace EnhancedBattleTest
             get => sceneList[sceneIndex].rainDensity;
             set => sceneList[sceneIndex].rainDensity = value;
         }
-        
-        public bool useFreeCamera;
 
         [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
@@ -147,7 +148,7 @@ namespace EnhancedBattleTest
                 playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 playerTroopClass = new ClassInfo { classStringId = "mp_heavy_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 enemyTroopClass = new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
-                useFreeCamera = false
+                useFreeCamera = false,
             };
             return p;
         }

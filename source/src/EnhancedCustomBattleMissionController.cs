@@ -11,15 +11,15 @@ namespace EnhancedBattleTest
 {
     class EnhancedCustomBattleMissionController : MissionLogic
     {
-        protected readonly Game game;
+        private bool _freeCamera;
         private BasicCharacterObject _player;
         private BasicCharacterObject _enemyGeneral;
         private bool _spawned = false;
         protected bool IsDeploymentFinished => this.Mission.GetMissionBehaviour<DeploymentHandler>() == null;
 
-        public EnhancedCustomBattleMissionController(BasicCharacterObject player, BasicCharacterObject enemyGeneral)
+        public EnhancedCustomBattleMissionController(bool freeCamera, BasicCharacterObject player, BasicCharacterObject enemyGeneral)
         {
-            this.game = Game.Current;
+            _freeCamera = freeCamera;
             _player = player;
             _enemyGeneral = enemyGeneral;
         }
@@ -31,7 +31,7 @@ namespace EnhancedBattleTest
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (!_spawned)
+            if (_freeCamera && !_spawned)
             {
                 _spawned = true;
 
@@ -69,10 +69,10 @@ namespace EnhancedBattleTest
         {
             var agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(character))
                 .Team(team)
-                .Formation(team.GetFormation(character.CurrentFormationClass))
+                .Formation(team.GetFormation(FormationClass.HeavyCavalry))
                 .Banner(team.Banner).ClothingColor1(team.Color).ClothingColor2(team.Color2)
                 .InitialFrame(this.Mission
-                    .GetFormationSpawnFrame(team.Side, character.CurrentFormationClass, false, -1, 0.0f, true)
+                    .GetFormationSpawnFrame(team.Side, FormationClass.HeavyCavalry, false, -1, 0.0f, true)
                     .ToGroundMatrixFrame());
             Agent agent = this.Mission.SpawnAgent(agentBuildData, false, 0);
             agent.WieldInitialWeapons();

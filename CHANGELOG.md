@@ -1,6 +1,10 @@
 # Changelog
 
-## [0.3.10] - 2020-02-
+## [0.4] - 2020-02-23
+
+### Added
+- Add custom battle: Spawn troops in built-in way.
+- Add switch team function.
 
 ### Fixed
 - Fix the bug that Battle Config shown does not correctly reflect the actual change after clicking `Reset to Default`.

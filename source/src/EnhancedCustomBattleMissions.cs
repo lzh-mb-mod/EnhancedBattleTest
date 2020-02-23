@@ -37,11 +37,11 @@ namespace EnhancedBattleTest
             };
             var enemyGeneral = config.PlayerHeroClass.HeroCharacter;
             enemyParty.AddCharacter(config.EnemyTroopHeroClass.TroopCharacter, config.enemySoldierCount);
-            return OpenCustomBattleMission(config.SceneName, player, enemyGeneral, playerParty, enemyParty, true, null,
-                "", "", 10f);
+            return OpenCustomBattleMission(config, player, enemyGeneral, playerParty, enemyParty, true, null,
+                "", "");
         }
         public static Mission OpenCustomBattleMission(
-     string scene,
+            EnhancedCustomBattleConfig config,
      BasicCharacterObject player,
      BasicCharacterObject enemyGeneral,
      CustomBattleCombatant playerParty,
@@ -71,7 +71,7 @@ namespace EnhancedBattleTest
             AtmosphereInfo atmosphereInfo2 = atmosphereInfo1;
             if (atmosphereInfo2 != null)
                 atmosphereInfo2.TimeInfo.TimeOfDay = timeOfDay;
-            return MissionState.OpenNew("EnhancedCustomBattle", new MissionInitializerRecord(scene)
+            return MissionState.OpenNew("EnhancedCustomBattle", new MissionInitializerRecord(config.SceneName)
             {
                 DoNotUseLoadingScreen = true,
                 PlayingInCampaignMode = false,
@@ -80,7 +80,7 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
-               new EnhancedCustomBattleMissionController(player, enemyGeneral),
+               new EnhancedCustomBattleMissionController(!config.useFreeCamera, player, enemyGeneral),
                new ControlTroopAfterPlayerDeadLogic(),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),

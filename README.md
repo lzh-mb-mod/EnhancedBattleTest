@@ -6,10 +6,11 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
 
 ## How to use
-1. start the mod by clicking `EnhancedBattleTest.bat`.
-2. press and hold `TAB` key for a while to exit the battle scene.
-3. press `c` key to switch between free camera and main agent camera.
-4. press `f` key to control one of your troops after you being killed.
+1. Start the mod by clicking `EnhancedBattleTest.bat`.
+2. Press and hold `TAB` key for a while to exit the battle scene.
+3. Press `numpad6` key to switch between free camera and main agent camera.
+4. Press `f` key to control one of your troops after you being killed.
+5. Press `numpad5` key to switch player team.
 
 ## Build from source:
 The source code is located in the `source` folder.
