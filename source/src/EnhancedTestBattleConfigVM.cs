@@ -218,7 +218,7 @@ namespace EnhancedBattleTest
             Utility.DisplayMessage("Reset successfully");
         }
 
-        private void GoBack()
+        public void GoBack()
         {
             backAction(this.CurrentConfig);
         }

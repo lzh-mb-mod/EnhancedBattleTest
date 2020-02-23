@@ -36,7 +36,7 @@ namespace EnhancedBattleTest
         public override bool OnEscape()
         {
             base.OnEscape();
-            this.Close();
+            this._dataSource.GoBack();
             return true;
         }
 

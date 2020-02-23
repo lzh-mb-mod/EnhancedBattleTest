@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1] - 2020-02-23
+
+### Changed
+- Only keeps sergeant map in custom battle.
+
+### Fixed
+- Fix bug that pressing `esc` in config view will not return to main menu.
+
 ## [0.4] - 2020-02-23
 
 ### Added

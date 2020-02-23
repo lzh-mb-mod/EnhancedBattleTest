@@ -23,17 +23,19 @@ namespace EnhancedBattleTest
 
         public bool useFreeCamera;
 
-        protected static Version BinaryVersion => new Version(1, 0);
+        protected static Version BinaryVersion => new Version(1, 1);
 
         protected void UpgradeToCurrentVersion()
         {
             switch (ConfigVersion?.ToString())
             {
-                case "1.0": break;
+                case "1.0":
                 default:
                     Utility.DisplayMessage("Config version not compatible.\nReset config.");
                     ResetToDefault();
                     Serialize();
+                    break;
+                case "1.1":
                     break;
             }
         }
@@ -68,16 +70,6 @@ namespace EnhancedBattleTest
             SceneInfo[] list = new[]
             {
                 //"mp_skirmish_map_001a",
-                //"mp_tdm_map_001",
-                //"mp_duel_001",
-                //"mp_duel_001_winter",
-                //"mp_duel_002",
-                //"mp_ruins_2",
-                new SceneInfo{name = "mp_skirmish_map_001a"},
-                new SceneInfo{name = "mp_tdm_map_001"},
-                new SceneInfo{name = "mp_duel_001"},
-                new SceneInfo{name = "mp_duel_001_winter"},
-                new SceneInfo{name = "mp_ruins_2"},
                 //"mp_sergeant_map_001"
                 //"mp_sergeant_map_005",
                 //"mp_sergeant_map_007",
@@ -95,47 +87,16 @@ namespace EnhancedBattleTest
                 //"mp_siege_map_004",
                 //"mp_siege_map_005",
                 new SceneInfo{name = "mp_sergeant_map_001"},
-                //new SceneInfo{name = "mp_sergeant_map_005", formationPosition = new Vec2(330, 439), formationDirection = new Vec2(1, 0)},
+                //new SceneInfo{name = "mp_sergeant_map_005"},
                 new SceneInfo{name = "mp_sergeant_map_007"},
                 new SceneInfo{name = "mp_sergeant_map_008"},
                 new SceneInfo{name = "mp_sergeant_map_009"},
-                //new SceneInfo{name = "mp_sergeant_map_010", formationPosition = new Vec2(391,376), formationDirection = new Vec2(0,1)},
+                new SceneInfo{name = "mp_sergeant_map_010"},
                 new SceneInfo{name = "mp_sergeant_map_011"},
                 new SceneInfo{name = "mp_sergeant_map_011s"},
-                //new SceneInfo{name = "mp_sergeant_map_012", formationPosition = new Vec2(580,576), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_sergeant_map_012"},
                 new SceneInfo{name = "mp_sergeant_map_013"},
                 new SceneInfo{name = "mp_sergeant_map_vlandia_01"},
-                //new SceneInfo{name = "mp_siege_map_001", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_siege_map_002", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //"mp_skirmish_map_002f",
-                //"mp_skirmish_map_002_winter",
-                //"mp_skirmish_map_004",
-                //"mp_skirmish_map_005",
-                //"mp_skirmish_map_006",
-                //"mp_skirmish_map_007",
-                //"mp_skirmish_map_007_winter",
-                //"mp_skirmish_map_008",
-                //"mp_skirmish_map_009",
-                //"mp_skirmish_map_010",
-                //"mp_skirmish_map_013",
-                //"mp_skirmish_map_battania_02",
-                //"mp_skirmish_map_battania_03"
-                new SceneInfo{name = "mp_skirmish_map_002f"},
-                new SceneInfo{name = "mp_skirmish_map_002_winter"},
-                new SceneInfo{name = "mp_skirmish_map_004"},
-                new SceneInfo{name = "mp_skirmish_map_005"},
-                new SceneInfo{name = "mp_skirmish_map_006"},
-                new SceneInfo{name = "mp_skirmish_map_007"},
-                new SceneInfo{name = "mp_skirmish_map_007_winter"},
-                //new SceneInfo{name = "mp_skirmish_map_008", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_skirmish_map_009", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_skirmish_map_010", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                new SceneInfo{name = "mp_skirmish_map_013"},
-                new SceneInfo{name = "mp_skirmish_map_battania_02"},
-                new SceneInfo{name = "mp_skirmish_map_battania_03"},
             };
             int defaultIndex = 0;
             var p = new EnhancedCustomBattleConfig

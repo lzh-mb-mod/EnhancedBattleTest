@@ -139,7 +139,7 @@ namespace EnhancedBattleTest
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                player.AllowFirstPersonWideRotation();
+                player.AllowFirstPersonWideRotation(); 
                 
                 Utility.SetPlayerAsCommander();
             }
