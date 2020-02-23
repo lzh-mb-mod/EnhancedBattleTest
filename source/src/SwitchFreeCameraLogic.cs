@@ -48,6 +48,7 @@ namespace EnhancedBattleTest
         {
             this.playerAgentBackup = this.Mission.MainAgent;
             this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
+            //this.Mission.MainAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             this.Mission.MainAgent = null;
             Utility.DisplayMessage("Switch to free camera.");
         }

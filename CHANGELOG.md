@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.2] - 2020-02
+
+### Fixed
+- Fix the bug that player agent is not alarmed after switch to free camera.
+
 ## [0.4.1] - 2020-02-23
 
 ### Changed

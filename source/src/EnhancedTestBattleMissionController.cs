@@ -136,9 +136,9 @@ namespace EnhancedBattleTest
                 Agent player = this.SpawnAgent(TestBattleConfig.playerClass,
                     TestBattleConfig.PlayerHeroClass.HeroCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, -1, playerMat);
+                player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
-                player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 player.AllowFirstPersonWideRotation(); 
                 
                 Utility.SetPlayerAsCommander();
