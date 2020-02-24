@@ -21,21 +21,21 @@ namespace EnhancedBattleTest
 
         public int sceneIndex;
 
-        public bool useFreeCamera;
-
-        protected static Version BinaryVersion => new Version(1, 1);
+        protected static Version BinaryVersion => new Version(1, 3);
 
         protected void UpgradeToCurrentVersion()
         {
             switch (ConfigVersion?.ToString())
             {
                 case "1.0":
+                case "1.1":
+                case "1.2":
                 default:
                     Utility.DisplayMessage("Config version not compatible.\nReset config.");
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.1":
+                case "1.3":
                     break;
             }
         }
@@ -104,11 +104,21 @@ namespace EnhancedBattleTest
                 ConfigVersion = BinaryVersion.ToString(2),
                 sceneList = list,
                 sceneIndex = defaultIndex,
-                playerSoldierCount = 20,
-                enemySoldierCount = 20,
-                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
-                playerTroopClass = new ClassInfo { classStringId = "mp_heavy_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
-                enemyTroopClass = new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
+                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0},
+                enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
+                spawnEnemyCommander = true,
+                playerTroops = new ClassInfo[3]
+                {
+                    new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_heavy_ranged_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_heavy_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                },
+                enemyTroops = new ClassInfo[3]
+                {
+                    new ClassInfo { classStringId = "mp_shock_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_heavy_ranged_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                },
                 useFreeCamera = false,
             };
             return p;
@@ -217,7 +227,6 @@ namespace EnhancedBattleTest
             if (other.sceneList != null)
                 this.sceneList = other.sceneList;
             this.sceneIndex = other.sceneIndex;
-            this.useFreeCamera = other.useFreeCamera;
         }
 
         protected override string SaveName => SavePath + nameof(EnhancedCustomBattleConfig) + ".xml";

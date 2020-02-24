@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -13,16 +14,19 @@ namespace EnhancedBattleTest
         public string classStringId;
         public int selectedFirstPerk;
         public int selectedSecondPerk;
+        public int troopCount;
     }
     public abstract class BattleConfigBase<T> where T : BattleConfigBase<T>
     {
         public string ConfigVersion { get; set; }
 
-        public int playerSoldierCount, enemySoldierCount;
 
         public ClassInfo playerClass;
-        public ClassInfo playerTroopClass;
-        public ClassInfo enemyTroopClass;
+        public ClassInfo enemyClass;
+        public bool spawnEnemyCommander;
+        public ClassInfo[] playerTroops;
+        public ClassInfo[] enemyTroops;
+        public bool useFreeCamera;
 
         [XmlIgnore]
         public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
@@ -31,26 +35,68 @@ namespace EnhancedBattleTest
             set => playerClass.classStringId = value.StringId;
         }
         [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass
+        public MultiplayerClassDivisions.MPHeroClass EnemyHeroClass
         {
-            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerTroopClass.classStringId);
-            set => playerTroopClass.classStringId = value.StringId;
-        }
-        [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass
-        {
-            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(enemyTroopClass.classStringId);
-            set => enemyTroopClass.classStringId = value.StringId;
+            get => MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(enemyClass.classStringId);
+            set => enemyClass.classStringId = value.StringId;
         }
 
+        public void SetPlayerTroopHeroClass(int i, MultiplayerClassDivisions.MPHeroClass heroClass)
+        {
+            playerTroops[i].classStringId = heroClass.StringId;
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass GetPlayerTroopHeroClass(int i)
+        {
+            return MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerTroops[i]
+                .classStringId);
+        }
+
+        public void SetEnemyTroopHeroClass(int i, MultiplayerClassDivisions.MPHeroClass heroClass)
+        {
+            enemyTroops[i].classStringId = heroClass.StringId;
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass GetEnemyTroopHeroClass(int i)
+        {
+            return MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(enemyTroops[i]
+                .classStringId);
+        }
+
+        public BasicCultureObject GetPlayerTeamCulture()
+        {
+            if (!useFreeCamera)
+                return PlayerHeroClass.Culture;
+            for (int i = 0; i < 3; ++i)
+            {
+                if (playerTroops[i].troopCount != 0)
+                    return GetPlayerTroopHeroClass(i).Culture;
+            }
+
+            return null;
+        }
+
+        public BasicCultureObject GetEnemyTeamCulture()
+        {
+            if (!useFreeCamera)
+                return EnemyHeroClass.Culture;
+            for (int i = 0; i < 3; ++i)
+            {
+                if (enemyTroops[i].troopCount != 0)
+                    return GetEnemyTroopHeroClass(i).Culture;
+            }
+
+            return null;
+        }
 
         public virtual bool Validate()
         {
-            return this.playerSoldierCount >= 0
-                   && this.enemySoldierCount >= 0
-                   && PlayerHeroClass != null
-                   && PlayerTroopHeroClass != null
-                   && EnemyTroopHeroClass != null;
+            return PlayerHeroClass != null && enemyClass != null
+                   && playerTroops.All(classInfo =>
+                       MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(
+                           classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
+                       classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
+                       classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2);
         }
 
 
@@ -65,15 +111,16 @@ namespace EnhancedBattleTest
         protected virtual void CopyFrom(T other)
         {
             ConfigVersion = other.ConfigVersion;
-            this.playerSoldierCount = other.playerSoldierCount;
-            this.enemySoldierCount = other.enemySoldierCount;
             if (other.playerClass != null)
                 this.playerClass = other.playerClass;
-            if (other.playerTroopClass != null)
-                this.playerTroopClass = other.playerTroopClass;
-            if (other.enemyTroopClass != null)
-                this.enemyTroopClass = other.enemyTroopClass;
-
+            if (other.enemyClass != null)
+                this.enemyClass = other.enemyClass;
+            this.spawnEnemyCommander = other.spawnEnemyCommander;
+            if (other.playerTroops != null)
+                this.playerTroops = other.playerTroops;
+            if (other.enemyTroops != null)
+                this.enemyTroops = other.enemyTroops;
+            this.useFreeCamera = other.useFreeCamera;
         }
 
         protected void EnsureSaveDirectory()

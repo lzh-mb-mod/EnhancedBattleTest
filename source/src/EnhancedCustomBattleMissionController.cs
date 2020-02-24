@@ -11,17 +11,17 @@ namespace EnhancedBattleTest
 {
     class EnhancedCustomBattleMissionController : MissionLogic
     {
-        private bool _freeCamera;
+        private EnhancedCustomBattleConfig _config;
         private BasicCharacterObject _player;
         private BasicCharacterObject _enemyGeneral;
         private bool _spawned = false;
         protected bool IsDeploymentFinished => this.Mission.GetMissionBehaviour<DeploymentHandler>() == null;
 
-        public EnhancedCustomBattleMissionController(bool freeCamera, BasicCharacterObject player, BasicCharacterObject enemyGeneral)
+        public EnhancedCustomBattleMissionController(EnhancedCustomBattleConfig config)
         {
-            _freeCamera = freeCamera;
-            _player = player;
-            _enemyGeneral = enemyGeneral;
+            _config = config;
+            _player = config.PlayerHeroClass.HeroCharacter;
+            _enemyGeneral = config.EnemyHeroClass.HeroCharacter;
         }
 
         public override void AfterStart()
@@ -31,18 +31,24 @@ namespace EnhancedBattleTest
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (_freeCamera && !_spawned)
+            if (!_spawned)
             {
                 _spawned = true;
-
-                Agent playerAgent = SpawnGenerals(this.Mission.PlayerTeam, _player, true);
-                Utility.SetPlayerAsCommander();
-
-                Agent enemyAgent = SpawnGenerals(this.Mission.PlayerEnemyTeam, _enemyGeneral, false);
+                if (!_config.useFreeCamera)
+                {
+                    Agent playerAgent = SpawnGenerals(this.Mission.PlayerTeam, _player, true, true);
+                    Utility.SetPlayerAsCommander();
+                }
 
                 var switchTeamLogic = this.Mission.GetMissionBehaviour<SwitchTeamLogic>();
-                if (switchTeamLogic != null)
-                    switchTeamLogic.enemyLeader = enemyAgent;
+                if (_config.spawnEnemyCommander)
+                {
+                    Agent enemyAgent = SpawnGenerals(this.Mission.PlayerEnemyTeam, _enemyGeneral, false, false);
+
+                    if (switchTeamLogic != null)
+                        switchTeamLogic.enemyLeader = enemyAgent;
+                }
+
             }
         }
         public override bool MissionEnded(ref MissionResult missionResult)
@@ -65,12 +71,12 @@ namespace EnhancedBattleTest
             return true;
         }
 
-        private Agent SpawnGenerals(Team team, BasicCharacterObject character, bool isPlayer)
+        private Agent SpawnGenerals(Team team, BasicCharacterObject character, bool isPlayer, bool isPlayerSide)
         {
             var agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(character))
                 .Team(team)
                 .Formation(team.GetFormation(FormationClass.HeavyCavalry))
-                .Banner(team.Banner).ClothingColor1(team.Color).ClothingColor2(team.Color2)
+                .Banner(team.Banner).ClothingColor1(isPlayerSide ? character.Culture.Color : character.Culture.ClothAlternativeColor).ClothingColor2(isPlayerSide ? character.Culture.Color2 : character.Culture.ClothAlternativeColor2)
                 .InitialFrame(this.Mission
                     .GetFormationSpawnFrame(team.Side, FormationClass.HeavyCavalry, false, -1, 0.0f, true)
                     .ToGroundMatrixFrame());

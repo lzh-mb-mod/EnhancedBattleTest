@@ -21,36 +21,40 @@ namespace EnhancedBattleTest
         }
         public static Mission OpenCustomBattleMission(EnhancedCustomBattleConfig config)
         {
-            var playerCulture = config.PlayerTroopHeroClass.Culture;
+            var playerCulture = config.GetPlayerTeamCulture();
             var playerParty = new CustomBattleCombatant(playerCulture.Name, playerCulture,
                 new Banner(playerCulture.BannerKey, playerCulture.BackgroundColor1, playerCulture.ForegroundColor1))
             {
                 Side = BattleSideEnum.Attacker
             };
             var player = config.PlayerHeroClass.HeroCharacter;
-            playerParty.AddCharacter(config.PlayerTroopHeroClass.TroopCharacter, config.playerSoldierCount);
-            var enemyCulture = config.EnemyTroopHeroClass.Culture;
+            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(0).TroopCharacter, config.playerTroops[0].troopCount);
+            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(1).TroopCharacter, config.playerTroops[1].troopCount);
+            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(2).TroopCharacter, config.playerTroops[2].troopCount);
+
+            var enemyCulture = config.GetEnemyTeamCulture();
             var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
                 new Banner(enemyCulture.BannerKey, enemyCulture.BackgroundColor2, enemyCulture.ForegroundColor2))
             {
                 Side = BattleSideEnum.Defender
             };
             var enemyGeneral = config.PlayerHeroClass.HeroCharacter;
-            enemyParty.AddCharacter(config.EnemyTroopHeroClass.TroopCharacter, config.enemySoldierCount);
-            return OpenCustomBattleMission(config, player, enemyGeneral, playerParty, enemyParty, true, null,
+            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(0).TroopCharacter, config.enemyTroops[0].troopCount);
+            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(1).TroopCharacter, config.enemyTroops[1].troopCount);
+            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(2).TroopCharacter, config.enemyTroops[2].troopCount);
+
+            return OpenCustomBattleMission(config, playerParty, enemyParty, true, null,
                 "", "");
         }
         public static Mission OpenCustomBattleMission(
             EnhancedCustomBattleConfig config,
-     BasicCharacterObject player,
-     BasicCharacterObject enemyGeneral,
-     CustomBattleCombatant playerParty,
-     CustomBattleCombatant enemyParty,
-     bool isPlayerGeneral,
-     BasicCharacterObject playerSideGeneralCharacter,
-     string sceneLevels = "",
-     string seasonString = "",
-     float timeOfDay = 6f)
+            CustomBattleCombatant playerParty,
+            CustomBattleCombatant enemyParty,
+            bool isPlayerGeneral,
+            BasicCharacterObject playerSideGeneralCharacter,
+            string sceneLevels = "",
+            string seasonString = "", 
+            float timeOfDay = 6f)
         {
             BattleSideEnum playerSide = playerParty.Side;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
@@ -71,6 +75,8 @@ namespace EnhancedBattleTest
             AtmosphereInfo atmosphereInfo2 = atmosphereInfo1;
             if (atmosphereInfo2 != null)
                 atmosphereInfo2.TimeInfo.TimeOfDay = timeOfDay;
+            var player = config.PlayerHeroClass.HeroCharacter;
+            var enemyCharacter = config.EnemyHeroClass.HeroCharacter;
             return MissionState.OpenNew("EnhancedCustomBattle", new MissionInitializerRecord(config.SceneName)
             {
                 DoNotUseLoadingScreen = true,
@@ -80,7 +86,7 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
-               new EnhancedCustomBattleMissionController(!config.useFreeCamera, player, enemyGeneral),
+               new EnhancedCustomBattleMissionController(config),
                new ControlTroopAfterPlayerDeadLogic(),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),
@@ -101,7 +107,7 @@ namespace EnhancedBattleTest
                new AgentFadeOutLogic(),
                new AgentMoraleInteractionLogic(),
                new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false, isPlayerSergeant ? Enumerable.Repeat<string>(player.StringId, 1).ToList<string>() : new List<string>(), FormationClass.NumberOfRegularFormations),
-               new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : (string) null), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : (string) null), (string) null, (string) null, true),
+               new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), (string) null, (string) null, true),
                new HighlightsController(),
                new BattleHighlightsController(),
            }), true, true, true);

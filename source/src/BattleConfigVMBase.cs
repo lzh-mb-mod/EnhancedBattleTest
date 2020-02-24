@@ -12,41 +12,109 @@ namespace EnhancedBattleTest
         {
             success, failed, notValid
         }
+
+        struct TroopInfo
+        {
+            public string name;
+            public string count;
+        }
         // ViewModel does not allow property to be virtual or abstract.
         // Because there would be two property with the same name, which will cause exception thrown in constructor of ViewModel
         protected T CurrentConfig { get; set; }
         private CharacterSelectionView _selectionView;
         private List<MultiplayerClassDivisions.MPHeroClass> _allMpHeroClasses;
         private Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>> _allMpHeroClassesMap;
-
-        private string _playerSoldierCount, _enemySoldierCount;
-        private string _playerName, _playerTroopName, _enemyTroopName;
+        
+        private string _playerName, _enemyName;
+        private TroopInfo[] _playerTroopInfos, _enemyTroopInfos;
 
 
         [DataSourceProperty]
-        public string PlayerSoldierCount
+        public string PlayerTroopCount1
         {
-            get => this._playerSoldierCount;
+            get => this._playerTroopInfos[0].count;
             set
             {
-                if (value == this._playerSoldierCount)
+                if (value == this._playerTroopInfos[0].count)
                     return;
-                this._playerSoldierCount = value;
-                this.OnPropertyChanged(nameof(PlayerSoldierCount));
+                this._playerTroopInfos[0].count = value;
+                this.OnPropertyChanged(nameof(PlayerTroopCount1));
+            }
+        }
+        [DataSourceProperty]
+        public string PlayerTroopCount2
+        {
+            get => this._playerTroopInfos[1].count;
+            set
+            {
+                if (value == this._playerTroopInfos[1].count)
+                    return;
+                this._playerTroopInfos[1].count = value;
+                this.OnPropertyChanged(nameof(PlayerTroopCount2));
+            }
+        }
+        [DataSourceProperty]
+        public string PlayerTroopCount3
+        {
+            get => this._playerTroopInfos[2].count;
+            set
+            {
+                if (value == this._playerTroopInfos[2].count)
+                    return;
+                this._playerTroopInfos[2].count = value;
+                this.OnPropertyChanged(nameof(PlayerTroopCount3));
             }
         }
 
-        [DataSourceProperty]
-        public string EnemySoldierCount
+        void UpdatePlayerSoldierCount()
         {
-            get => this._enemySoldierCount;
+            PlayerTroopCount1 = CurrentConfig.playerTroops[0].troopCount.ToString();
+            PlayerTroopCount2 = CurrentConfig.playerTroops[1].troopCount.ToString();
+            PlayerTroopCount3 = CurrentConfig.playerTroops[2].troopCount.ToString();
+        }
+
+        [DataSourceProperty]
+        public string EnemyTroopCount1
+        {
+            get => this._enemyTroopInfos[0].count;
             set
             {
-                if (value == this._enemySoldierCount)
+                if (value == this._enemyTroopInfos[0].count)
                     return;
-                this._enemySoldierCount = value;
-                this.OnPropertyChanged(nameof(EnemySoldierCount));
+                this._enemyTroopInfos[0].count = value;
+                this.OnPropertyChanged(nameof(EnemyTroopCount1));
             }
+        }
+        [DataSourceProperty]
+        public string EnemyTroopCount2
+        {
+            get => this._enemyTroopInfos[1].count;
+            set
+            {
+                if (value == this._enemyTroopInfos[1].count)
+                    return;
+                this._enemyTroopInfos[1].count = value;
+                this.OnPropertyChanged(nameof(EnemyTroopCount2));
+            }
+        }
+        [DataSourceProperty]
+        public string EnemyTroopCount3
+        {
+            get => this._enemyTroopInfos[2].count;
+            set
+            {
+                if (value == this._enemyTroopInfos[2].count)
+                    return;
+                this._enemyTroopInfos[2].count = value;
+                this.OnPropertyChanged(nameof(EnemyTroopCount3));
+            }
+        }
+
+        void UpdateEnemySoldierCount()
+        {
+            EnemyTroopCount1 = CurrentConfig.enemyTroops[0].troopCount.ToString();
+            EnemyTroopCount2 = CurrentConfig.enemyTroops[1].troopCount.ToString();
+            EnemyTroopCount3 = CurrentConfig.enemyTroops[2].troopCount.ToString();
         }
 
         [DataSourceProperty]
@@ -73,74 +141,220 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public string PlayerTroopName
+        public string EnemyName
         {
-            get => this._playerTroopName;
+            get => this._enemyName;
             set
             {
-                if (this._playerTroopName == value)
+                if (this._enemyName == value)
                     return;
-                this._playerTroopName = value;
-                this.OnPropertyChanged(nameof(PlayerTroopName));
+                this._enemyName = value;
+                this.OnPropertyChanged(nameof(EnemyName));
             }
         }
 
-        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass
+        public MultiplayerClassDivisions.MPHeroClass EnemyHeroClass
         {
-            get => this.CurrentConfig.PlayerTroopHeroClass;
+            get => this.CurrentConfig.EnemyHeroClass;
             set
             {
-                this.CurrentConfig.PlayerTroopHeroClass = value;
-                this.PlayerTroopName = value?.TroopName.ToString();
+                this.CurrentConfig.EnemyHeroClass = value;
+                this.EnemyName = value?.HeroName.ToString();
+            }
+        }
+
+        public bool SpawnEnemyCommander
+        {
+            get => this.CurrentConfig.spawnEnemyCommander;
+            set
+            {
+                this.CurrentConfig.spawnEnemyCommander = value;
+                this.OnPropertyChanged(nameof(SpawnEnemyCommander));
             }
         }
 
         [DataSourceProperty]
-        public string EnemyTroopName
+        public string PlayerTroopName1
         {
-            get => this._enemyTroopName;
+            get => this._playerTroopInfos[0].name;
             set
             {
-                if (this._enemyTroopName == value)
+                if (this._playerTroopInfos[0].name == value)
                     return;
-                this._enemyTroopName = value;
-                this.OnPropertyChanged(nameof(EnemyTroopName));
+                this._playerTroopInfos[0].name = value;
+                this.OnPropertyChanged(nameof(PlayerTroopName1));
             }
         }
 
-        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass
+        [DataSourceProperty]
+        public string PlayerTroopName2
         {
-            get => this.CurrentConfig.EnemyTroopHeroClass;
+            get => this._playerTroopInfos[1].name;
             set
             {
-                this.CurrentConfig.EnemyTroopHeroClass = value;
-                this.EnemyTroopName = value?.TroopName.ToString();
+                if (this._playerTroopInfos[1].name == value)
+                    return;
+                this._playerTroopInfos[1].name = value;
+                this.OnPropertyChanged(nameof(PlayerTroopName2));
             }
         }
 
-        public BattleConfigVMBase(CharacterSelectionView selectionView, T currentConfig)
+        [DataSourceProperty]
+        public string PlayerTroopName3
+        {
+            get => this._playerTroopInfos[2].name;
+            set
+            {
+                if (this._playerTroopInfos[2].name == value)
+                    return;
+                this._playerTroopInfos[2].name = value;
+                this.OnPropertyChanged(nameof(PlayerTroopName3));
+            }
+        }
+
+        private void UpdatePlayerTroopName()
+        {
+            this.PlayerTroopName1 = this.PlayerTroopHeroClass1.TroopName.ToString();
+            this.PlayerTroopName2 = this.PlayerTroopHeroClass2.TroopName.ToString();
+            this.PlayerTroopName3 = this.PlayerTroopHeroClass3.TroopName.ToString();
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass1
+        {
+            get => this.CurrentConfig.GetPlayerTroopHeroClass(0);
+            set
+            {
+                this.CurrentConfig.SetPlayerTroopHeroClass(0, value);
+                this.PlayerTroopName1 = value?.TroopName.ToString();
+            }
+        }
+        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass2
+        {
+            get => this.CurrentConfig.GetPlayerTroopHeroClass(1);
+            set
+            {
+                this.CurrentConfig.SetPlayerTroopHeroClass(1, value);
+                this.PlayerTroopName2 = value?.TroopName.ToString();
+            }
+        }
+        public MultiplayerClassDivisions.MPHeroClass PlayerTroopHeroClass3
+        {
+            get => this.CurrentConfig.GetPlayerTroopHeroClass(2);
+            set
+            {
+                this.CurrentConfig.SetPlayerTroopHeroClass(2, value);
+                this.PlayerTroopName3 = value?.TroopName.ToString();
+            }
+        }
+
+        [DataSourceProperty]
+        public string EnemyTroopName1
+        {
+            get => this._enemyTroopInfos[0].name;
+            set
+            {
+                if (this._enemyTroopInfos[0].name == value)
+                    return;
+                this._enemyTroopInfos[0].name = value;
+                this.OnPropertyChanged(nameof(EnemyTroopName1));
+            }
+        }
+
+        [DataSourceProperty]
+        public string EnemyTroopName2
+        {
+            get => this._enemyTroopInfos[1].name;
+            set
+            {
+                if (this._enemyTroopInfos[1].name == value)
+                    return;
+                this._enemyTroopInfos[1].name = value;
+                this.OnPropertyChanged(nameof(EnemyTroopName2));
+            }
+        }
+
+        [DataSourceProperty]
+        public string EnemyTroopName3
+        {
+            get => this._enemyTroopInfos[2].name;
+            set
+            {
+                if (this._enemyTroopInfos[2].name == value)
+                    return;
+                this._enemyTroopInfos[2].name = value;
+                this.OnPropertyChanged(nameof(EnemyTroopName3));
+            }
+        }
+
+        private void UpdateEnemyTroopName()
+        {
+            this.EnemyTroopName1 = EnemyTroopHeroClass1.TroopName.ToString();
+            this.EnemyTroopName2 = EnemyTroopHeroClass2.TroopName.ToString();
+            this.EnemyTroopName3 = EnemyTroopHeroClass3.TroopName.ToString();
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass1
+        {
+            get => this.CurrentConfig.GetEnemyTroopHeroClass(0);
+            set
+            {
+                this.CurrentConfig.SetEnemyTroopHeroClass(0, value);
+                this.EnemyTroopName1 = value?.TroopName.ToString();
+            }
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass2
+        {
+            get => this.CurrentConfig.GetEnemyTroopHeroClass(1);
+            set
+            {
+                this.CurrentConfig.SetEnemyTroopHeroClass(1, value);
+                this.EnemyTroopName2 = value?.TroopName.ToString();
+            }
+        }
+
+        public MultiplayerClassDivisions.MPHeroClass EnemyTroopHeroClass3
+        {
+            get => this.CurrentConfig.GetEnemyTroopHeroClass(2);
+            set
+            {
+                this.CurrentConfig.SetEnemyTroopHeroClass(2, value);
+                this.EnemyTroopName3 = value?.TroopName.ToString();
+            }
+        }
+
+        protected BattleConfigVMBase(CharacterSelectionView selectionView, T currentConfig)
         {
             this._selectionView = selectionView;
             this.CurrentConfig = currentConfig;
+            this._playerTroopInfos = new TroopInfo[3];
+            this._enemyTroopInfos = new TroopInfo[3];
             InitializeCharactersContent();
         }
 
         private void InitializeCharactersContent()
         {
-            this.PlayerSoldierCount = CurrentConfig.playerSoldierCount.ToString();
-            this.EnemySoldierCount = CurrentConfig.enemySoldierCount.ToString();
+            UpdatePlayerSoldierCount();
+            UpdateEnemySoldierCount();
 
             this._allMpHeroClassesMap = GetHeroClassesMap();
             this._allMpHeroClasses = GetHeroClasses().ToList();
 
             if (this.PlayerHeroClass == null) this.PlayerHeroClass = this._allMpHeroClasses[0];
-            if (this.PlayerTroopHeroClass == null) this.PlayerTroopHeroClass = this._allMpHeroClasses[0];
-            if (this.EnemyTroopHeroClass == null) this.EnemyTroopHeroClass = this._allMpHeroClasses[0];
+            if (this.EnemyHeroClass == null) this.EnemyHeroClass = this._allMpHeroClasses[0];
+            if (this.PlayerTroopHeroClass1 == null) this.PlayerTroopHeroClass1 = this._allMpHeroClasses[0];
+            if (this.PlayerTroopHeroClass2 == null) this.PlayerTroopHeroClass2 = this._allMpHeroClasses[0];
+            if (this.PlayerTroopHeroClass3 == null) this.PlayerTroopHeroClass3 = this._allMpHeroClasses[0];
+            if (this.EnemyTroopHeroClass1 == null) this.EnemyTroopHeroClass1 = this._allMpHeroClasses[0];
+            if (this.EnemyTroopHeroClass2 == null) this.EnemyTroopHeroClass2 = this._allMpHeroClasses[0];
+            if (this.EnemyTroopHeroClass3 == null) this.EnemyTroopHeroClass3 = this._allMpHeroClasses[0];
 
             this.PlayerName = this.PlayerHeroClass.HeroName.ToString();
-            this.PlayerTroopName = this.PlayerTroopHeroClass.TroopName.ToString();
-            this.EnemyTroopName = this.EnemyTroopHeroClass.TroopName.ToString();
+            this.EnemyName = this.EnemyHeroClass.HeroName.ToString();
+            UpdatePlayerTroopName();
+            UpdateEnemyTroopName();
         }
+
         private List<MultiplayerClassDivisions.MPHeroClass> GetHeroClasses()
         {
             return MultiplayerClassDivisions.GetMPHeroClasses().ToList();
@@ -154,22 +368,24 @@ namespace EnhancedBattleTest
             Debug.Assert(MultiplayerClassDivisions.AvailableCultures != null, "Available Cultures should not be null");
             var heroesInCulture =
                 new Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>>();
-            foreach (var eachCulture in MultiplayerClassDivisions.AvailableCultures)
-            {
-                var heroesInGroup = new Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>();
-                foreach (var mpHeroClass in MultiplayerClassDivisions.GetMPHeroClasses(eachCulture))
+            if (MultiplayerClassDivisions.AvailableCultures != null)
+                foreach (var eachCulture in MultiplayerClassDivisions.AvailableCultures)
                 {
-                    List<MultiplayerClassDivisions.MPHeroClass> heroList = null;
-                    if (!heroesInGroup.TryGetValue(mpHeroClass.ClassGroup.StringId, out heroList))
+                    var heroesInGroup = new Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>();
+                    foreach (var mpHeroClass in MultiplayerClassDivisions.GetMPHeroClasses(eachCulture))
                     {
-                        heroesInGroup[mpHeroClass.ClassGroup.StringId] = heroList = new List<MultiplayerClassDivisions.MPHeroClass>();
+                        List<MultiplayerClassDivisions.MPHeroClass> heroList = null;
+                        if (!heroesInGroup.TryGetValue(mpHeroClass.ClassGroup.StringId, out heroList))
+                        {
+                            heroesInGroup[mpHeroClass.ClassGroup.StringId] =
+                                heroList = new List<MultiplayerClassDivisions.MPHeroClass>();
+                        }
+
+                        heroList.Add(mpHeroClass);
                     }
 
-                    heroList.Add(mpHeroClass);
+                    heroesInCulture.Add(eachCulture.StringId, heroesInGroup);
                 }
-
-                heroesInCulture.Add(eachCulture.StringId, heroesInGroup);
-            }
 
             return heroesInCulture;
         }
@@ -187,29 +403,96 @@ namespace EnhancedBattleTest
                 }));
         }
 
-        protected void SelectPlayerTroopCharacter()
+        protected void SelectEnemyCharacter()
         {
-            ModuleLogger.Log("SelectPlayerTroopCharacter");
+            ModuleLogger.Log("SelectEnemyCharacter");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
-                this.CurrentConfig.playerTroopClass, true, (param) =>
+                this.CurrentConfig.playerClass, false, (param) =>
                 {
-                    this.PlayerTroopHeroClass = param.selectedHeroClass;
-                    this.CurrentConfig.playerTroopClass.selectedFirstPerk = param.selectedFirstPerk;
-                    this.CurrentConfig.playerTroopClass.selectedSecondPerk = param.selectedSecondPerk;
+                    this.EnemyHeroClass = param.selectedHeroClass;
+                    this.CurrentConfig.enemyClass.selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.enemyClass.selectedSecondPerk = param.selectedSecondPerk;
                     _selectionView.OnClose();
                 }));
         }
 
-        protected void SelectEnemyTroopCharacter()
+        protected void SelectPlayerTroopCharacter1()
         {
-            ModuleLogger.Log("SelectEnemyTroopCharacter");
+            ModuleLogger.Log("SelectPlayerTroopCharacter1");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
-                this.CurrentConfig.enemyTroopClass,
+                this.CurrentConfig.playerTroops[0], true, (param) =>
+                {
+                    this.PlayerTroopHeroClass1 = param.selectedHeroClass;
+                    this.CurrentConfig.playerTroops[0].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.playerTroops[0].selectedSecondPerk = param.selectedSecondPerk;
+                    _selectionView.OnClose();
+                }));
+        }
+
+        protected void SelectPlayerTroopCharacter2()
+        {
+            ModuleLogger.Log("SelectPlayerTroopCharacter2");
+            _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
+                this.CurrentConfig.playerTroops[1], true, (param) =>
+                {
+                    this.PlayerTroopHeroClass2 = param.selectedHeroClass;
+                    this.CurrentConfig.playerTroops[1].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.playerTroops[1].selectedSecondPerk = param.selectedSecondPerk;
+                    _selectionView.OnClose();
+                }));
+        }
+
+        protected void SelectPlayerTroopCharacter3()
+        {
+            ModuleLogger.Log("SelectPlayerTroopCharacter3");
+            _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
+                this.CurrentConfig.playerTroops[2], true, (param) =>
+                {
+                    this.PlayerTroopHeroClass3 = param.selectedHeroClass;
+                    this.CurrentConfig.playerTroops[2].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.playerTroops[2].selectedSecondPerk = param.selectedSecondPerk;
+                    _selectionView.OnClose();
+                }));
+        }
+
+        protected void SelectEnemyTroopCharacter1()
+        {
+            ModuleLogger.Log("SelectEnemyTroopCharacter1");
+            _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
+                this.CurrentConfig.enemyTroops[0],
                 true, (param) =>
                 {
-                    this.EnemyTroopHeroClass = param.selectedHeroClass;
-                    this.CurrentConfig.enemyTroopClass.selectedFirstPerk = param.selectedFirstPerk;
-                    this.CurrentConfig.enemyTroopClass.selectedSecondPerk = param.selectedSecondPerk;
+                    this.EnemyTroopHeroClass1 = param.selectedHeroClass;
+                    this.CurrentConfig.enemyTroops[0].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.enemyTroops[0].selectedSecondPerk = param.selectedSecondPerk;
+                    _selectionView.OnClose();
+                }));
+        }
+
+        protected void SelectEnemyTroopCharacter2()
+        {
+            ModuleLogger.Log("SelectEnemyTroopCharacter2");
+            _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
+                this.CurrentConfig.enemyTroops[1],
+                true, (param) =>
+                {
+                    this.EnemyTroopHeroClass2 = param.selectedHeroClass;
+                    this.CurrentConfig.enemyTroops[1].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.enemyTroops[1].selectedSecondPerk = param.selectedSecondPerk;
+                    _selectionView.OnClose();
+                }));
+        }
+
+        protected void SelectEnemyTroopCharacter3()
+        {
+            ModuleLogger.Log("SelectEnemyTroopCharacter3");
+            _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
+                this.CurrentConfig.enemyTroops[2],
+                true, (param) =>
+                {
+                    this.EnemyTroopHeroClass3 = param.selectedHeroClass;
+                    this.CurrentConfig.enemyTroops[2].selectedFirstPerk = param.selectedFirstPerk;
+                    this.CurrentConfig.enemyTroops[2].selectedSecondPerk = param.selectedSecondPerk;
                     _selectionView.OnClose();
                 }));
         }
@@ -236,8 +519,10 @@ namespace EnhancedBattleTest
 
         protected virtual void ApplyConfig()
         {
-            CurrentConfig.playerSoldierCount = System.Convert.ToInt32(this.PlayerSoldierCount);
-            CurrentConfig.enemySoldierCount = System.Convert.ToInt32(this.EnemySoldierCount);
+            CurrentConfig.playerTroops.Zip(this._playerTroopInfos,
+                (classInfo, troopInfo) => classInfo.troopCount = System.Convert.ToInt32(troopInfo.count));
+            CurrentConfig.enemyTroops.Zip(this._enemyTroopInfos,
+                (classInfo, troopInfo) => classInfo.troopCount = System.Convert.ToInt32(troopInfo.count));
         }
     }
 }

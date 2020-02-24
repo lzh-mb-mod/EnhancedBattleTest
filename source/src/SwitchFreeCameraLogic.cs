@@ -36,7 +36,8 @@ namespace EnhancedBattleTest
         {
             if (Utility.IsAgentDead(playerAgentBackup))
             {
-                Utility.DisplayMessage("No player agent.");
+                Utility.DisplayMessage("Player agent is dead.");
+                this.Mission.GetMissionBehaviour<ControlTroopAfterPlayerDeadLogic>()?.ControlTroopAfterDead();
                 return;
             }
 

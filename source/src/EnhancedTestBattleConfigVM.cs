@@ -157,7 +157,11 @@ namespace EnhancedBattleTest
         public bool UseFreeCamera
         {
             get => this.CurrentConfig.useFreeCamera;
-            set => this.CurrentConfig.useFreeCamera = value;
+            set
+            {
+                this.CurrentConfig.useFreeCamera = value;
+                this.OnPropertyChanged(nameof(UseFreeCamera));
+            }
         }
 
         public EnhancedTestBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedTestBattleConfig> startAction,
@@ -188,14 +192,19 @@ namespace EnhancedBattleTest
             base.SelectPlayerCharacter();
         }
 
-        private new void SelectPlayerTroopCharacter()
+        private new void SelectEnemyCharacter()
         {
-            base.SelectPlayerTroopCharacter();
+            base.SelectEnemyCharacter();
         }
 
-        private new void SelectEnemyTroopCharacter()
+        private new void SelectPlayerTroopCharacter1()
         {
-            base.SelectEnemyTroopCharacter();
+            base.SelectPlayerTroopCharacter1();
+        }
+
+        private new void SelectEnemyTroopCharacter1()
+        {
+            base.SelectEnemyTroopCharacter1();
         }
 
         private void Start()

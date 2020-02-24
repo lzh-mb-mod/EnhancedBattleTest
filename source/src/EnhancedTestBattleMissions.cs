@@ -41,7 +41,9 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    // new MissionBoundaryPlacer(),
+                    new MissionHardBorderPlacer(),
+                    new MissionBoundaryPlacer(),
+                    new MissionBoundaryCrossingHandler(),
                 }
             );
         }

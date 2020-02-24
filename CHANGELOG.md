@@ -2,6 +2,16 @@
 
 ## [0.4.2] - 2020-02
 
+### Added
+- Now each team has three formations.
+
+- Add enemy team commander.
+
+### Changed
+- Now Numpad6 can also let player control troop after dead.
+
+- Changed banner and cloth color choosing logic.
+
 ### Fixed
 - Fix the bug that player agent is not alarmed after switch to free camera.
 

@@ -45,6 +45,8 @@ namespace EnhancedBattleTest
                 // missionViewList.Add((MissionView) new MissionBoundaryWallView());
                 new SpectatorCameraView(),
                 new EnhancedTestBattleView(mission),
+                ViewCreator.CreateMissionBoundaryCrossingView(),
+                new MissionBoundaryWallView(),
             };
             return missionViewList;
         }

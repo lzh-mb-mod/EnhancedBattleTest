@@ -65,6 +65,7 @@ namespace EnhancedBattleTest
 
         public void NewMission()
         {
+            // melee friend damage not work now.
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageMeleeFriendPercent(90);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageMeleeSelfPercent(50);
             MBMultiplayerOptionsAccessor.SetFriendlyFireDamageRangedFriendPercent(50);
