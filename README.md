@@ -38,6 +38,6 @@ If you find the cause of crash, please tell me.
   
   youtube: modbed
   
-  bilibili: 月光暖大床
+  bilibili: modbed帅
   
   website: modbed.cn
