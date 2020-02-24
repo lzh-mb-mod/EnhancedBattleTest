@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.4.2] - 2020-02
+## [0.4.2] - 2020-02-25
 
 ### Added
 - Now each team has three formations.
