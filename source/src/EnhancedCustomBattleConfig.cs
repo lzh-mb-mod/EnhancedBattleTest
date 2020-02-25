@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
 
         public int sceneIndex;
 
-        protected static Version BinaryVersion => new Version(1, 3);
+        protected static Version BinaryVersion => new Version(1, 4);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -30,12 +30,13 @@ namespace EnhancedBattleTest
                 case "1.0":
                 case "1.1":
                 case "1.2":
+                case "1.3":
                 default:
                     Utility.DisplayMessage("Config version not compatible.\nReset config.");
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.3":
+                case "1.4":
                     break;
             }
         }
@@ -104,9 +105,9 @@ namespace EnhancedBattleTest
                 ConfigVersion = BinaryVersion.ToString(2),
                 sceneList = list,
                 sceneIndex = defaultIndex,
-                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0},
-                enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
-                spawnEnemyCommander = true,
+                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 1},
+                enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 1 },
+                SpawnEnemyCommander = true,
                 playerTroops = new ClassInfo[3]
                 {
                     new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
@@ -119,7 +120,7 @@ namespace EnhancedBattleTest
                     new ClassInfo { classStringId = "mp_heavy_ranged_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                     new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
-                useFreeCamera = false,
+                UseFreeCamera = false,
             };
             return p;
         }

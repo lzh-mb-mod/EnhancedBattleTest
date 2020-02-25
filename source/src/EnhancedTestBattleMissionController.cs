@@ -20,12 +20,12 @@ namespace EnhancedBattleTest
             set
             {
                 _testBattleConfig = value;
-                int playerNumber = this.TestBattleConfig.useFreeCamera ? 0 : 1;
+                int playerNumber = this.TestBattleConfig.UseFreeCamera ? 0 : 1;
                 _shouldCelebrateVictory = (playerNumber + this.TestBattleConfig.playerTroops.Sum(classInfo => classInfo.troopCount)) != 0 &&
                                           this.TestBattleConfig.enemyTroops.Sum(classInfo => classInfo.troopCount) != 0;
             }
         }
-        
+
         private bool _shouldCelebrateVictory;
         private bool _ended = false;
         public TL.Vec3 initialFreeCameraPos;
@@ -66,7 +66,7 @@ namespace EnhancedBattleTest
                 scene.SetRainDensity(this.TestBattleConfig.RainDensity);
             }
         }
-        
+
         public void AddTeams(BasicCultureObject playerTeamCulture, BasicCultureObject enemyTeamCulture)
         {
             // see TaleWorlds.MountAndBlade.dll/MissionMultiplayerFlagDomination.cs : TaleWorlds.MountAndBlade.MissionMultiplayerFlagDomination.AfterStart();
@@ -109,25 +109,25 @@ namespace EnhancedBattleTest
             var startPos = this.TestBattleConfig.FormationPosition;
             var xDir = this.TestBattleConfig.FormationDirection;
             var yDir = this.TestBattleConfig.FormationDirection.LeftVec();
-            var useFreeCamera = this.TestBattleConfig.useFreeCamera;
+            var useFreeCamera = this.TestBattleConfig.UseFreeCamera;
 
             var playerTeam = this.Mission.PlayerTeam;
-            
+
             if (!useFreeCamera)
             {
                 var playerMat = GetFormationMatrixFrame(0, true);
                 playerMat.origin += (xDir * 2).ToVec3();
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
                 BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
-                var playerFormation = playerTeam.GetFormation(FormationClass.HeavyCavalry);
+                var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
                 Agent player = this.SpawnAgent(TestBattleConfig.playerClass,
                     playerCharacter, true, playerFormation, playerTeam,
-                    playerTeamCombatant, playerTeamCulture, true, 1,0, playerMat);
+                    playerTeamCombatant, playerTeamCulture, true, 1, 0, playerMat);
                 player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
-                player.AllowFirstPersonWideRotation(); 
-                
+                player.AllowFirstPersonWideRotation();
+
                 Utility.SetPlayerAsCommander();
             }
             else
@@ -158,7 +158,7 @@ namespace EnhancedBattleTest
                 var playerTroopFormationClass = (FormationClass)formationIndex;
                 var playerTroopFormation = playerTeam.GetFormation(playerTroopFormationClass);
                 playerTroopFormation.FormOrder =
-                    FormOrder.FormOrderCustom(this.GetInitialFormationWidth(playerTeam, playerTroopFormationClass));
+                    FormOrder.FormOrderCustom(this.GetInitialFormationWidth(playerTeam, playerTroopCharacter.CurrentFormationClass));
                 playerTroopFormation.SetPositioning(agentFrame.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection, 1);
                 int playerTroopCount = TestBattleConfig.playerTroops[formationIndex].troopCount;
                 BasicCultureObject troopCulture = !useFreeCamera ? playerTeamCulture : playerTroopCharacter.Culture;
@@ -177,22 +177,22 @@ namespace EnhancedBattleTest
         public void SpawnEnemyTeamAgents(BasicCultureObject enemyTeamCulture)
         {
             var scene = this.Mission.Scene;
-            
+
             var enemyTeamCombatant = CreateBattleCombatant(enemyTeamCulture, BattleSideEnum.Defender);
 
             var enemyTeam = this.Mission.PlayerEnemyTeam;
-            
+
             var xDir = this.TestBattleConfig.FormationDirection;
 
-            if (TestBattleConfig.spawnEnemyCommander)
+            if (TestBattleConfig.SpawnEnemyCommander)
             {
                 var agentMatrixFrame = GetFormationMatrixFrame(0, false);
                 agentMatrixFrame.origin += ((-xDir) * 2).ToVec3();
-                MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
-                BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
-                var formation = enemyTeam.GetFormation(FormationClass.HeavyCavalry);
-                Agent agent = this.SpawnAgent(TestBattleConfig.playerClass,
-                    playerCharacter, true, formation, enemyTeam,
+                MultiplayerClassDivisions.MPHeroClass enemyHeroClass = this.TestBattleConfig.EnemyHeroClass;
+                BasicCharacterObject enemyCharacter = enemyHeroClass.HeroCharacter;
+                var formation = enemyTeam.GetFormation(Utility.CommanderFormationClass());
+                Agent agent = this.SpawnAgent(TestBattleConfig.enemyClass,
+                    enemyCharacter, true, formation, enemyTeam,
                     enemyTeamCombatant, enemyTeamCulture, false, 1, 0, agentMatrixFrame);
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 agent.Controller = Agent.ControllerType.AI;
@@ -209,7 +209,7 @@ namespace EnhancedBattleTest
                 enemyTroopFormation.FormOrder =
                     FormOrder.FormOrderCustom(this.GetInitialFormationWidth(enemyTeam, enemyFormationClass));
                 int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
-                var troopCulture = this.TestBattleConfig.spawnEnemyCommander
+                var troopCulture = this.TestBattleConfig.SpawnEnemyCommander
                     ? enemyTeamCulture
                     : enemyTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < enemySoldierCount; ++troopIndex)
@@ -245,7 +245,7 @@ namespace EnhancedBattleTest
                 TL.Vec3 position = mainAgent != null ? mainAgent.Position : this.Mission.Scene.LastFinalRenderCameraPosition;
                 string str = new WorldPosition(this.Mission.Scene, position).GetNavMesh().ToString() ?? "";
                 Utility.DisplayMessage(
-                    $"Position: {(object) position} | Navmesh: {(object) str} | Time: {(object) this.Mission.Time}");
+                    $"Position: {(object)position} | Navmesh: {(object)str} | Time: {(object)this.Mission.Time}");
                 ModuleLogger.Log("INFO Position: {0}, Navigation Mesh: {1}", (object)position, (object)str);
             }
         }
@@ -332,7 +332,7 @@ namespace EnhancedBattleTest
                 uniqueNo);
         }
 
-        private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isPlayer, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix)
+        private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isPlayer, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame matrix)
         {
             Equipment equipment = Utility.GetNewEquipmentsForPerks(classInfo, isPlayer);
             AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide, -1))
@@ -344,27 +344,26 @@ namespace EnhancedBattleTest
                 .ClothingColor2(isPlayerSide ? culture.Color2 : culture.ClothAlternativeColor2)
                 .IsFemale(false)
                 .Equipment(equipment)
-                .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item, character.GetMountKeySeed()));
-            if (matrix.HasValue)
-                agentBuildData.InitialFrame(matrix.Value);
+                .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item, character.GetMountKeySeed()))
+                .InitialFrame(matrix);
             return this.Mission.SpawnAgent(agentBuildData, false, 0);
         }
 
         private TL.MatrixFrame GetFormationMatrixFrame(int formationIndex, bool isPlayerSide)
         {
-                var agentDefaultDir = new TL.Vec2(0, 1);
-                var xDir = this.TestBattleConfig.FormationDirection;
-                var mat = TL.Mat3.Identity;
-                mat.RotateAboutUp(agentDefaultDir.AngleBetween(isPlayerSide ? xDir : -xDir));
-                var pos = GetFormationPosition(formationIndex, isPlayerSide);
-                return new TL.MatrixFrame(mat, pos);
+            var agentDefaultDir = new TL.Vec2(0, 1);
+            var xDir = this.TestBattleConfig.FormationDirection;
+            var mat = TL.Mat3.Identity;
+            mat.RotateAboutUp(agentDefaultDir.AngleBetween(isPlayerSide ? xDir : -xDir));
+            var pos = GetFormationPosition(formationIndex, isPlayerSide);
+            return new TL.MatrixFrame(mat, pos);
         }
 
-        private TL.Vec3 GetFormationPosition(int formationIndex,bool isPlayerSide)
+        private TL.Vec3 GetFormationPosition(int formationIndex, bool isPlayerSide)
         {
             var xDir = this.TestBattleConfig.FormationDirection;
-            var pos = this.TestBattleConfig.FormationPosition -
-                      formationIndex * 2 * (isPlayerSide ? this.TestBattleConfig.FormationDirection : -this.TestBattleConfig.FormationDirection);
+            var pos = this.TestBattleConfig.FormationPosition
+                      + formationIndex * xDir.LeftVec();
             if (!isPlayerSide)
                 pos += xDir * this.TestBattleConfig.distance;
             return pos.ToVec3(GetSceneHeightForAgent(pos));

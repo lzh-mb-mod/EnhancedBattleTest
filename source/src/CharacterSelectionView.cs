@@ -95,8 +95,7 @@ namespace EnhancedBattleTest
             this._isOpen = true;
 
             this._dataSource = new CharacterSelectionVM(this._params);
-            this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
-            this._gauntletLayer.IsFocusLayer = true;
+            this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer") {IsFocusLayer = true};
             this.MissionScreen.AddLayer(this._gauntletLayer);
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             ScreenManager.TrySetFocus((ScreenLayer)this._gauntletLayer);

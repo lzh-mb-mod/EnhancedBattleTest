@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.3] - 2020-02-25
+
+### Added
+- Add perks to Custom Battle mode.
+
+### Changed
+
+- Now player and enemy general are added to formation 4.
+
 ## [0.4.2] - 2020-02-25
 
 ### Added

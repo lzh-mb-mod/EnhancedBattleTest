@@ -25,7 +25,7 @@ namespace EnhancedBattleTest
         public float distance;
         public float soldierXInterval, soldierYInterval;
 
-        protected static Version BinaryVersion => new Version(1, 3);
+        protected static Version BinaryVersion => new Version(1, 4);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -34,12 +34,13 @@ namespace EnhancedBattleTest
                 case "1.0":
                 case "1.1":
                 case "1.2":
+                case "1.3":
                 default:
                     Utility.DisplayMessage("Config version not compatible.\nReset config.");
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.3": break;
+                case "1.4": break;
 
             }
         }
@@ -173,7 +174,7 @@ namespace EnhancedBattleTest
                 sceneIndex = defaultIndex,
                 playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
-                spawnEnemyCommander = true,
+                SpawnEnemyCommander = true,
                 playerTroops = new ClassInfo[3]
                 {
                     new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
@@ -189,7 +190,7 @@ namespace EnhancedBattleTest
                 distance = 50,
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
-                useFreeCamera = false
+                UseFreeCamera = false
             };
             return p;
         }

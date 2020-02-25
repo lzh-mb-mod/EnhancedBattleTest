@@ -12,16 +12,12 @@ namespace EnhancedBattleTest
     class EnhancedCustomBattleMissionController : MissionLogic
     {
         private EnhancedCustomBattleConfig _config;
-        private BasicCharacterObject _player;
-        private BasicCharacterObject _enemyGeneral;
         private bool _spawned = false;
         protected bool IsDeploymentFinished => this.Mission.GetMissionBehaviour<DeploymentHandler>() == null;
 
         public EnhancedCustomBattleMissionController(EnhancedCustomBattleConfig config)
         {
             _config = config;
-            _player = config.PlayerHeroClass.HeroCharacter;
-            _enemyGeneral = config.EnemyHeroClass.HeroCharacter;
         }
 
         public override void AfterStart()
@@ -34,16 +30,16 @@ namespace EnhancedBattleTest
             if (!_spawned)
             {
                 _spawned = true;
-                if (!_config.useFreeCamera)
+                if (!_config.UseFreeCamera)
                 {
-                    Agent playerAgent = SpawnGenerals(this.Mission.PlayerTeam, _player, true, true);
+                    Agent playerAgent = SpawnCommander(this.Mission.PlayerTeam, _config.playerClass, true, true);
                     Utility.SetPlayerAsCommander();
                 }
 
                 var switchTeamLogic = this.Mission.GetMissionBehaviour<SwitchTeamLogic>();
-                if (_config.spawnEnemyCommander)
+                if (_config.SpawnEnemyCommander)
                 {
-                    Agent enemyAgent = SpawnGenerals(this.Mission.PlayerEnemyTeam, _enemyGeneral, false, false);
+                    Agent enemyAgent = SpawnCommander(this.Mission.PlayerEnemyTeam, _config.enemyClass, false, false);
 
                     if (switchTeamLogic != null)
                         switchTeamLogic.enemyLeader = enemyAgent;
@@ -71,15 +67,19 @@ namespace EnhancedBattleTest
             return true;
         }
 
-        private Agent SpawnGenerals(Team team, BasicCharacterObject character, bool isPlayer, bool isPlayerSide)
+        private Agent SpawnCommander(Team team, ClassInfo classInfo, bool isPlayer, bool isPlayerSide)
         {
-            var agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(character))
+            MultiplayerClassDivisions.MPHeroClass mpHeroClass =
+                MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(classInfo.classStringId);
+            BasicCharacterObject character = mpHeroClass.HeroCharacter;
+            var agentBuildData = new AgentBuildData(new BasicBattleAgentOrigin(mpHeroClass.HeroCharacter))
                 .Team(team)
-                .Formation(team.GetFormation(FormationClass.HeavyCavalry))
+                .Formation(team.GetFormation(Utility.CommanderFormationClass()))
                 .Banner(team.Banner).ClothingColor1(isPlayerSide ? character.Culture.Color : character.Culture.ClothAlternativeColor).ClothingColor2(isPlayerSide ? character.Culture.Color2 : character.Culture.ClothAlternativeColor2)
                 .InitialFrame(this.Mission
                     .GetFormationSpawnFrame(team.Side, FormationClass.HeavyCavalry, false, -1, 0.0f, true)
-                    .ToGroundMatrixFrame());
+                    .ToGroundMatrixFrame())
+                .Equipment(Utility.GetNewEquipmentsForPerks(classInfo, true));
             Agent agent = this.Mission.SpawnAgent(agentBuildData, false, 0);
             agent.WieldInitialWeapons();
             agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);

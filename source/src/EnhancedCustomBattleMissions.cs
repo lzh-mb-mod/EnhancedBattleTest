@@ -22,34 +22,34 @@ namespace EnhancedBattleTest
         public static Mission OpenCustomBattleMission(EnhancedCustomBattleConfig config)
         {
             var playerCulture = config.GetPlayerTeamCulture();
-            var playerParty = new CustomBattleCombatant(playerCulture.Name, playerCulture,
+            var playerParty = new EnhancedCustomBattleCombatant(playerCulture.Name, playerCulture,
                 new Banner(playerCulture.BannerKey, playerCulture.BackgroundColor1, playerCulture.ForegroundColor1))
             {
                 Side = BattleSideEnum.Attacker
             };
             var player = config.PlayerHeroClass.HeroCharacter;
-            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(0).TroopCharacter, config.playerTroops[0].troopCount);
-            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(1).TroopCharacter, config.playerTroops[1].troopCount);
-            playerParty.AddCharacter(config.GetPlayerTroopHeroClass(2).TroopCharacter, config.playerTroops[2].troopCount);
+            playerParty.AddCharacter(config.playerTroops[0], false, FormationClass.Infantry);
+            playerParty.AddCharacter(config.playerTroops[1], false, FormationClass.Ranged);
+            playerParty.AddCharacter(config.playerTroops[2], false, FormationClass.Cavalry);
 
             var enemyCulture = config.GetEnemyTeamCulture();
-            var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
+            var enemyParty = new EnhancedCustomBattleCombatant(enemyCulture.Name, enemyCulture,
                 new Banner(enemyCulture.BannerKey, enemyCulture.BackgroundColor2, enemyCulture.ForegroundColor2))
             {
                 Side = BattleSideEnum.Defender
             };
             var enemyGeneral = config.PlayerHeroClass.HeroCharacter;
-            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(0).TroopCharacter, config.enemyTroops[0].troopCount);
-            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(1).TroopCharacter, config.enemyTroops[1].troopCount);
-            enemyParty.AddCharacter(config.GetEnemyTroopHeroClass(2).TroopCharacter, config.enemyTroops[2].troopCount);
+            enemyParty.AddCharacter(config.enemyTroops[0], false, FormationClass.Infantry);
+            enemyParty.AddCharacter(config.enemyTroops[1], false, FormationClass.Ranged);
+            enemyParty.AddCharacter(config.enemyTroops[2], false, FormationClass.Cavalry);
 
             return OpenCustomBattleMission(config, playerParty, enemyParty, true, null,
                 "", "");
         }
         public static Mission OpenCustomBattleMission(
             EnhancedCustomBattleConfig config,
-            CustomBattleCombatant playerParty,
-            CustomBattleCombatant enemyParty,
+            EnhancedCustomBattleCombatant playerParty,
+            EnhancedCustomBattleCombatant enemyParty,
             bool isPlayerGeneral,
             BasicCharacterObject playerSideGeneralCharacter,
             string sceneLevels = "",
@@ -59,9 +59,9 @@ namespace EnhancedBattleTest
             BattleSideEnum playerSide = playerParty.Side;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
-            CustomBattleTroopSupplier battleTroopSupplier1 = new CustomBattleTroopSupplier(playerParty, true);
+            EnhancedCustomBattleTroopSupplier battleTroopSupplier1 = new EnhancedCustomBattleTroopSupplier(playerParty, true);
             troopSuppliers[(int)playerParty.Side] = (IMissionTroopSupplier)battleTroopSupplier1;
-            CustomBattleTroopSupplier battleTroopSupplier2 = new CustomBattleTroopSupplier(enemyParty, false);
+            EnhancedCustomBattleTroopSupplier battleTroopSupplier2 = new EnhancedCustomBattleTroopSupplier(enemyParty, false);
             troopSuppliers[(int)enemyParty.Side] = (IMissionTroopSupplier)battleTroopSupplier2;
             bool isPlayerSergeant = !isPlayerGeneral;
             AtmosphereInfo atmosphereInfo1;
@@ -96,7 +96,7 @@ namespace EnhancedBattleTest
                //new BattleObserverMissionLogic(),
                new CustomBattleAgentLogic(),
                new MissionAgentSpawnLogic(troopSuppliers, playerSide),
-               new CustomBattleMissionSpawnHandler(!isPlayerAttacker ? playerParty : enemyParty, isPlayerAttacker ? playerParty : enemyParty),
+               new EnhancedCustomBattleMissionSpawnHandler(!isPlayerAttacker ? playerParty : enemyParty, isPlayerAttacker ? playerParty : enemyParty),
                new AgentBattleAILogic(),
                new AgentVictoryLogic(),
                new MissionHardBorderPlacer(),

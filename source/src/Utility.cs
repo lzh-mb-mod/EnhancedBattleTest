@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -50,6 +49,34 @@ namespace EnhancedBattleTest
             foreach (PerkEffect perkEffectsForPerk in MPPerkObject.SelectRandomPerkEffectsForPerks(isPlayer, PerkType.PerkAlternativeEquipment, selectedPerkList))
                 equipment[perkEffectsForPerk.NewItemIndex] = perkEffectsForPerk.NewItem.EquipmentElement;
             return equipment;
+        }
+
+        public static BasicCharacterObject ApplyPerks(ClassInfo info, bool isPlayer)
+        {
+            MultiplayerClassDivisions.MPHeroClass mpHeroClass =
+                MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
+            BasicCharacterObject sourceCharacter = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
+            var character = NewCharacter(sourceCharacter);
+            character.InitializeEquipmentsOnLoad(new List<Equipment>{GetNewEquipmentsForPerks(info, isPlayer)});
+            character.StringId = sourceCharacter.StringId + "_customized";
+            character.Name = sourceCharacter.Name;
+            return character;
+        }
+
+        public static BasicCharacterObject NewCharacter(BasicCharacterObject sourceCharacter)
+        {
+            BasicCharacterObject character = new BasicCharacterObject();
+            character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
+            character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
+            character.StringId = sourceCharacter.StringId + "_customized";
+            character.Age = sourceCharacter.Age;
+            character.FaceDirtAmount = sourceCharacter.FaceDirtAmount;
+            character.Level = sourceCharacter.Level;
+            return character;
+        }
+        public static FormationClass CommanderFormationClass()
+        {
+            return FormationClass.HorseArcher;
         }
     }
 }

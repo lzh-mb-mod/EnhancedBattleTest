@@ -75,10 +75,10 @@ namespace EnhancedBattleTest
 
         public bool UseFreeCamera
         {
-            get => this.CurrentConfig.useFreeCamera;
+            get => this.CurrentConfig.UseFreeCamera;
             set
             {
-                this.CurrentConfig.useFreeCamera = value;
+                this.CurrentConfig.UseFreeCamera = value;
                 this.OnPropertyChanged(nameof(UseFreeCamera));
             }
         }

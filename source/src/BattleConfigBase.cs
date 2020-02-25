@@ -22,11 +22,11 @@ namespace EnhancedBattleTest
 
 
         public ClassInfo playerClass;
+        protected bool _useFreeCamera;
         public ClassInfo enemyClass;
-        public bool spawnEnemyCommander;
+        protected bool _spawnEnemyCommander;
         public ClassInfo[] playerTroops;
         public ClassInfo[] enemyTroops;
-        public bool useFreeCamera;
 
         [XmlIgnore]
         public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
@@ -51,6 +51,15 @@ namespace EnhancedBattleTest
             return MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerTroops[i]
                 .classStringId);
         }
+        public bool UseFreeCamera
+        {
+            get => _useFreeCamera;
+            set
+            {
+                _useFreeCamera = value;
+                playerClass.troopCount = value ? 0 : 1;
+            }
+        }
 
         public void SetEnemyTroopHeroClass(int i, MultiplayerClassDivisions.MPHeroClass heroClass)
         {
@@ -62,10 +71,19 @@ namespace EnhancedBattleTest
             return MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(enemyTroops[i]
                 .classStringId);
         }
+        public bool SpawnEnemyCommander
+        {
+            get => _spawnEnemyCommander;
+            set
+            {
+                _spawnEnemyCommander = value;
+                enemyClass.troopCount = value ? 1 : 0;
+            }
+        }
 
         public BasicCultureObject GetPlayerTeamCulture()
         {
-            if (!useFreeCamera)
+            if (!UseFreeCamera)
                 return PlayerHeroClass.Culture;
             for (int i = 0; i < 3; ++i)
             {
@@ -78,7 +96,7 @@ namespace EnhancedBattleTest
 
         public BasicCultureObject GetEnemyTeamCulture()
         {
-            if (!useFreeCamera)
+            if (SpawnEnemyCommander)
                 return EnemyHeroClass.Culture;
             for (int i = 0; i < 3; ++i)
             {
@@ -115,12 +133,12 @@ namespace EnhancedBattleTest
                 this.playerClass = other.playerClass;
             if (other.enemyClass != null)
                 this.enemyClass = other.enemyClass;
-            this.spawnEnemyCommander = other.spawnEnemyCommander;
+            this.SpawnEnemyCommander = other.SpawnEnemyCommander;
             if (other.playerTroops != null)
                 this.playerTroops = other.playerTroops;
             if (other.enemyTroops != null)
                 this.enemyTroops = other.enemyTroops;
-            this.useFreeCamera = other.useFreeCamera;
+            this.UseFreeCamera = other.UseFreeCamera;
         }
 
         protected void EnsureSaveDirectory()
@@ -178,5 +196,6 @@ namespace EnhancedBattleTest
 
         protected abstract string SaveName { get; }
         protected abstract string[] OldNames { get; }
+
     }
 }

@@ -12,7 +12,7 @@ namespace EnhancedBattleTest
         [ViewMethod("EnhancedCustomBattleConfig")]
         public static MissionView[] OpenCustomBattleConfig(Mission mission)
         {
-            var selectionView = new CharacterSelectionView(false);
+            var selectionView = new CharacterSelectionView(true);
             return new MissionView[]
             {
                 selectionView,

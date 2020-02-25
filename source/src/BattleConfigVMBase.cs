@@ -165,10 +165,10 @@ namespace EnhancedBattleTest
 
         public bool SpawnEnemyCommander
         {
-            get => this.CurrentConfig.spawnEnemyCommander;
+            get => this.CurrentConfig.SpawnEnemyCommander;
             set
             {
-                this.CurrentConfig.spawnEnemyCommander = value;
+                this.CurrentConfig.SpawnEnemyCommander = value;
                 this.OnPropertyChanged(nameof(SpawnEnemyCommander));
             }
         }

@@ -41,8 +41,6 @@ namespace EnhancedBattleTest
                 new MissionAgentContourControllerView(),
                 //ViewCreator.CreateMissionFlagMarkerUIHandler(),
                 ViewCreator.CreateOptionsUIHandler(),
-                // missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
-                // missionViewList.Add((MissionView) new MissionBoundaryWallView());
                 new SpectatorCameraView(),
                 new EnhancedTestBattleView(mission),
                 ViewCreator.CreateMissionBoundaryCrossingView(),
