@@ -407,7 +407,7 @@ namespace EnhancedBattleTest
         {
             ModuleLogger.Log("SelectEnemyCharacter");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
-                this.CurrentConfig.playerClass, false, (param) =>
+                this.CurrentConfig.enemyClass, false, (param) =>
                 {
                     this.EnemyHeroClass = param.selectedHeroClass;
                     this.CurrentConfig.enemyClass.selectedFirstPerk = param.selectedFirstPerk;

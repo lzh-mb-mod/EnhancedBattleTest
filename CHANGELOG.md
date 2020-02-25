@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.5] - 2020-02-26
+
+## Fixed
+- Fix a bug in config UI;
+
+- fix wrong spawning behaviour of calvary in test battle mode.
+
 ## [0.4.4] - 2020-02-25
 
 ### Changed

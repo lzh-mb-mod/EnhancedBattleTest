@@ -379,7 +379,7 @@ namespace EnhancedBattleTest
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
             var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
-            float length = ((int)Math.Ceiling(troopCount / width) - 1) * (unitDiameter + interval);
+            float length = ((int)Math.Ceiling((float)troopCount / config.SoldiersPerRow) - 1) * (unitDiameter + interval);
             return new Tuple<float, float>(width, length);
         }
 
