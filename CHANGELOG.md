@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.4] - 2020-02-25
+
+### Changed
+- Troops will not charge at the begining in test battle mode.
+
+### Fixed
+- Fix spawning behaviour in test battle mode.
+
+
 ## [0.4.3] - 2020-02-25
 
 ### Added
