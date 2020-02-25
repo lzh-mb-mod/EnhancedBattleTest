@@ -50,6 +50,9 @@ namespace EnhancedBattleTest
             AddTeams(playerTeamCulture, enemyTeamCulture);
             SpawnPlayerTeamAgents(playerTeamCulture);
             SpawnEnemyTeamAgents(enemyTeamCulture);
+            // To fix bug that initial distance between enemy formations is too large.
+            this.Mission.GetMissionBehaviour<SwitchTeamLogic>()?.SwapTeam();
+            this.Mission.GetMissionBehaviour<SwitchTeamLogic>()?.SwapTeam();
         }
 
         public void AdjustScene()
@@ -120,6 +123,8 @@ namespace EnhancedBattleTest
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
                 BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
                 var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
+                playerFormation.SetPositioning(playerMat.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection);
+                playerFormation.FormOrder = FormOrder.FormOrderCustom(1);
                 Agent player = this.SpawnAgent(TestBattleConfig.playerClass,
                     playerCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, 1, 0, playerMat);
@@ -155,9 +160,9 @@ namespace EnhancedBattleTest
                 TL.MatrixFrame agentFrame = GetFormationMatrixFrame(formationIndex, true);
                 var playerTroopFormationClass = (FormationClass)formationIndex;
                 var playerTroopFormation = playerTeam.GetFormation(playerTroopFormationClass);
+                playerTroopFormation.SetPositioning(agentFrame.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection);
                 playerTroopFormation.FormOrder =
-                    FormOrder.FormOrderCustom(this.GetInitialFormationWidth(playerTeam, playerTroopCharacter.CurrentFormationClass));
-                playerTroopFormation.SetPositioning(agentFrame.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection, 1);
+                    FormOrder.FormOrderCustom(this.GetInitialFormationWidth(playerTeam, formationIndex, playerTroopCharacter.CurrentFormationClass));
                 int playerTroopCount = TestBattleConfig.playerTroops[formationIndex].troopCount;
                 BasicCultureObject troopCulture = !useFreeCamera ? playerTeamCulture : playerTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < playerTroopCount; ++troopIndex)
@@ -189,6 +194,8 @@ namespace EnhancedBattleTest
                 MultiplayerClassDivisions.MPHeroClass enemyHeroClass = this.TestBattleConfig.EnemyHeroClass;
                 BasicCharacterObject enemyCharacter = enemyHeroClass.HeroCharacter;
                 var formation = enemyTeam.GetFormation(Utility.CommanderFormationClass());
+                formation.SetPositioning(agentMatrixFrame.origin.ToWorldPosition(scene), -this.TestBattleConfig.FormationDirection);
+                formation.FormOrder = FormOrder.FormOrderCustom(1);
                 Agent agent = this.SpawnAgent(TestBattleConfig.enemyClass,
                     enemyCharacter, true, formation, enemyTeam,
                     enemyTeamCombatant, enemyTeamCulture, false, 1, 0, agentMatrixFrame);
@@ -203,9 +210,10 @@ namespace EnhancedBattleTest
                 TL.MatrixFrame agentFrame = GetFormationMatrixFrame(formationIndex, false);
                 var enemyFormationClass = (FormationClass)formationIndex;
                 var enemyTroopFormation = enemyTeam.GetFormation(enemyFormationClass);
-                enemyTroopFormation.SetPositioning(agentFrame.origin.ToWorldPosition(scene), -this.TestBattleConfig.FormationDirection, 1);
+                enemyTroopFormation.SetPositioning(agentFrame.origin.ToWorldPosition(scene), -this.TestBattleConfig.FormationDirection);
                 enemyTroopFormation.FormOrder =
-                    FormOrder.FormOrderCustom(this.GetInitialFormationWidth(enemyTeam, enemyFormationClass));
+                    FormOrder.FormOrderCustom(1);
+                    /*FormOrder.FormOrderCustom(this.GetInitialFormationWidth(enemyTeam, formationIndex, enemyTroopCharacter.CurrentFormationClass))*/;
                 int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
                 var troopCulture = this.TestBattleConfig.SpawnEnemyCommander
                     ? enemyTeamCulture
@@ -221,15 +229,15 @@ namespace EnhancedBattleTest
             }
         }
 
-        private float GetInitialFormationWidth(Team team, FormationClass fc)
+        private float GetInitialFormationWidth(Team team, int formationIndex, FormationClass fc)
         {
-            var bp = this.TestBattleConfig;
+            var config = this.TestBattleConfig;
             var formation = team.GetFormation(fc);
             var mounted = fc == FormationClass.Cavalry || fc == FormationClass.HorseArcher;
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
             var unitSpacing = 1;
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
-            var actualSoldiersPerRow = System.Math.Min(bp.SoldiersPerRow, team == this.Mission.PlayerTeam ? bp.playerTroops[0].troopCount : bp.enemyTroops[0].troopCount);
+            var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, team == this.Mission.PlayerTeam ? config.playerTroops[formationIndex].troopCount : config.enemyTroops[formationIndex].troopCount);
             var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
             return width;
         }
@@ -330,9 +338,9 @@ namespace EnhancedBattleTest
                 uniqueNo);
         }
 
-        private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isPlayer, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame matrix)
+        private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame matrix)
         {
-            Equipment equipment = Utility.GetNewEquipmentsForPerks(classInfo, isPlayer);
+            Equipment equipment = Utility.GetNewEquipmentsForPerks(classInfo, isHero);
             AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide, -1))
                 .Team(team)
                 .Formation(formation)

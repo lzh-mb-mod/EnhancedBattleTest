@@ -25,7 +25,7 @@ namespace EnhancedBattleTest
                 this.SwapTeam();
         }
 
-        private void SwapTeam()
+        public void SwapTeam()
         {
             _targetAgent = !Utility.IsAgentDead(this.enemyLeader) ? this.enemyLeader : this.Mission.PlayerEnemyTeam.Leader;
             if (_targetAgent == null)
