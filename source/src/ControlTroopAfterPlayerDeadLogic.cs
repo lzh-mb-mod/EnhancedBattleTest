@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Engine;
+﻿using System.ComponentModel;
+using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -11,6 +12,17 @@ namespace EnhancedBattleTest
         {
             base.OnBehaviourInitialize();
             _switchFreeCameraLogic = this.Mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
+            this.Mission.OnMainAgentChanged += OnMainAgentChanged;
+        }
+
+        public override void OnRemoveBehaviour()
+        {
+            this.Mission.OnMainAgentChanged -= OnMainAgentChanged;
+        }
+        private void OnMainAgentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (this.Mission.MainAgent != null)
+                Utility.SetPlayerAsCommander();
         }
 
         public void ControlTroopAfterDead()
@@ -23,12 +35,7 @@ namespace EnhancedBattleTest
                 if (closestAllyAgent != null)
                 {
                     Utility.DisplayMessage("Taking control of an ally troop.");
-                    //if (this._playerAgent != null && this._playerAgent.IsActive())
-                    //    this._playerAgent.Controller = Agent.ControllerType.AI;
                     closestAllyAgent.Controller = Agent.ControllerType.Player;
-                    this.Mission.MainAgent = closestAllyAgent;
-                    //this._playerAgent = closestAllyAgent;
-                    Utility.SetPlayerAsCommander();
                 }
                 else
                     Utility.DisplayMessage("No ally troop to control.");

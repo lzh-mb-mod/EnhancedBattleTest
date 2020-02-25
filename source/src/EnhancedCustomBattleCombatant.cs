@@ -67,12 +67,14 @@ namespace EnhancedBattleTest
             this._characters = new List<BasicCharacterObject>();
         }
 
-        public void AddCharacter(ClassInfo info, bool isHero, FormationClass formationClass)
+        public void AddCharacter(ClassInfo info, bool isHero, FormationClass formationClass, bool isPlayer = false)
         {
             for (int index = 0; index < info.troopCount; ++index)
             {
                 BasicCharacterObject character = Utility.ApplyPerks(info, isHero);
                 character.CurrentFormationClass = formationClass;
+                if (isPlayer)
+                    Game.Current.PlayerTroop = character;
                 this._characters.Add(character);
             }
             this.NumberOfAllMembers += info.troopCount;

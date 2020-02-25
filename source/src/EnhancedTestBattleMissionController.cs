@@ -127,8 +127,6 @@ namespace EnhancedBattleTest
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
-
-                Utility.SetPlayerAsCommander();
             }
             else
             {

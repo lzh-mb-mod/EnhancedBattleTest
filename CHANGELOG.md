@@ -6,8 +6,12 @@
 - Add perks to Custom Battle mode.
 
 ### Changed
-
 - Now player and enemy general are added to formation 4.
+
+### Fixed
+- Fix the bug that adjusting troop count does not work.
+
+- Fix the bug that battle ends when only player is alive in player team in custom battle mode.
 
 ## [0.4.2] - 2020-02-25
 

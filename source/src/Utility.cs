@@ -51,21 +51,22 @@ namespace EnhancedBattleTest
             return equipment;
         }
 
-        public static BasicCharacterObject ApplyPerks(ClassInfo info, bool isPlayer)
+        public static BasicCharacterObject ApplyPerks(ClassInfo info, bool isHero)
         {
             MultiplayerClassDivisions.MPHeroClass mpHeroClass =
                 MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
-            BasicCharacterObject sourceCharacter = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
+            BasicCharacterObject sourceCharacter = isHero ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
             var character = NewCharacter(sourceCharacter);
-            character.InitializeEquipmentsOnLoad(new List<Equipment>{GetNewEquipmentsForPerks(info, isPlayer)});
+            character.InitializeEquipmentsOnLoad(new List<Equipment>{GetNewEquipmentsForPerks(info, isHero)});
             character.StringId = sourceCharacter.StringId + "_customized";
             character.Name = sourceCharacter.Name;
+            character.SetIsHero(isHero);
             return character;
         }
 
-        public static BasicCharacterObject NewCharacter(BasicCharacterObject sourceCharacter)
+        public static EnhancedBattleTestCharacter NewCharacter(BasicCharacterObject sourceCharacter)
         {
-            BasicCharacterObject character = new BasicCharacterObject();
+            var character = new EnhancedBattleTestCharacter();
             character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
             character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
             character.StringId = sourceCharacter.StringId + "_customized";

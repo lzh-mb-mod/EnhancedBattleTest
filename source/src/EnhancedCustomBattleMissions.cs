@@ -27,7 +27,7 @@ namespace EnhancedBattleTest
             {
                 Side = BattleSideEnum.Attacker
             };
-            var player = config.PlayerHeroClass.HeroCharacter;
+            playerParty.AddCharacter(config.playerClass, true, Utility.CommanderFormationClass(), true);
             playerParty.AddCharacter(config.playerTroops[0], false, FormationClass.Infantry);
             playerParty.AddCharacter(config.playerTroops[1], false, FormationClass.Ranged);
             playerParty.AddCharacter(config.playerTroops[2], false, FormationClass.Cavalry);
@@ -38,7 +38,7 @@ namespace EnhancedBattleTest
             {
                 Side = BattleSideEnum.Defender
             };
-            var enemyGeneral = config.PlayerHeroClass.HeroCharacter;
+            enemyParty.AddCharacter(config.enemyClass, true, Utility.CommanderFormationClass());
             enemyParty.AddCharacter(config.enemyTroops[0], false, FormationClass.Infantry);
             enemyParty.AddCharacter(config.enemyTroops[1], false, FormationClass.Ranged);
             enemyParty.AddCharacter(config.enemyTroops[2], false, FormationClass.Cavalry);
@@ -86,7 +86,7 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
-               new EnhancedCustomBattleMissionController(config),
+               new EnhancedCustomBattleMissionController(),
                new ControlTroopAfterPlayerDeadLogic(),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),

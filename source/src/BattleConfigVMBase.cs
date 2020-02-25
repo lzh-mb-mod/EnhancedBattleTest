@@ -519,10 +519,14 @@ namespace EnhancedBattleTest
 
         protected virtual void ApplyConfig()
         {
-            CurrentConfig.playerTroops.Zip(this._playerTroopInfos,
-                (classInfo, troopInfo) => classInfo.troopCount = System.Convert.ToInt32(troopInfo.count));
-            CurrentConfig.enemyTroops.Zip(this._enemyTroopInfos,
-                (classInfo, troopInfo) => classInfo.troopCount = System.Convert.ToInt32(troopInfo.count));
+            for (int i = 0; i < CurrentConfig.playerTroops.Length; ++i)
+            {
+                CurrentConfig.playerTroops[i].troopCount = System.Convert.ToInt32(this._playerTroopInfos[i].count);
+            }
+            for (int i = 0; i < CurrentConfig.enemyTroops.Length; ++i)
+            {
+                CurrentConfig.enemyTroops[i].troopCount = System.Convert.ToInt32(this._enemyTroopInfos[i].count);
+            }
         }
     }
 }
