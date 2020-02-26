@@ -122,6 +122,7 @@ namespace EnhancedBattleTest
                 var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
                 playerFormation.SetPositioning(agentMatrixFrame.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection);
                 playerFormation.FormOrder = FormOrder.FormOrderCustom(1);
+                playerFormation.MovementOrder = MovementOrder.MovementOrderMove(agentMatrixFrame.origin.ToWorldPosition());
                 Agent player = this.SpawnAgent(TestBattleConfig.playerClass,
                     playerCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, 1, 0, agentMatrixFrame);
@@ -129,6 +130,7 @@ namespace EnhancedBattleTest
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
+
                 playerTeam.MasterOrderController.ClearSelectedFormations();
                 playerTeam.MasterOrderController.SelectFormation(playerFormation);
                 playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
@@ -138,17 +140,14 @@ namespace EnhancedBattleTest
                 var c = this.TestBattleConfig.playerTroops[0].troopCount;
                 if (c <= 0)
                 {
-                    float height = GetSceneHeightForAgent(startPos);
-                    initialFreeCameraPos = startPos.ToVec3(height + 5);
-                    initialFreeCameraTarget = startPos.ToVec3(height);
+                    initialFreeCameraTarget = startPos.ToVec3().ToWorldPosition(scene).GetGroundVec3();
                 }
                 else
                 {
                     var rowCount = (c + soldiersPerRow - 1) / soldiersPerRow;
                     var p = startPos + (System.Math.Min(soldiersPerRow, c) - 1) / 2 * yInterval * yDir - rowCount * xInterval * xDir;
-                    float height = GetSceneHeightForAgent(p);
-                    initialFreeCameraPos = p.ToVec3(height + 5);
-                    initialFreeCameraTarget = p.ToVec3(height);
+                    initialFreeCameraTarget = p.ToVec3().ToWorldPosition(scene).GetGroundVec3();
+                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 5);
                 }
 
                 initialFreeCameraPos -= this._testBattleConfig.FormationDirection.ToVec3();
@@ -233,7 +232,6 @@ namespace EnhancedBattleTest
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
-
                 enemyTeam.MasterOrderController.ClearSelectedFormations();
                 enemyTeam.MasterOrderController.SelectFormation(enemyTroopFormation);
                 enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, formationMatrixFrame.origin.ToWorldPosition());
@@ -304,17 +302,6 @@ namespace EnhancedBattleTest
                 _makeGruntVoiceLogic?.AddFormation(formation, 1f);
             }
         }
-        private float GetSceneHeightForAgent(TL.Vec2 pos)
-        {
-            float result = 0;
-            //if (this.Mission.Scene.IsAtmosphereIndoor)
-            //    result = this.Mission.Scene.GetTerrainHeight(pos);
-            //else
-            //    this.Mission.Scene.GetHeightAtPoint(pos, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref result);
-
-            this.Mission.Scene.GetHeightAtPoint(pos, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref result);
-            return result;
-        }
 
         private CustomBattleCombatant CreateBattleCombatant(BasicCultureObject culture, BattleSideEnum side)
         {
@@ -350,8 +337,7 @@ namespace EnhancedBattleTest
                 .Equipment(equipment)
                 .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item, character.GetMountKeySeed()));
             if (matrix.HasValue)
-                agentBuildData
-                .InitialFrame(matrix.Value);
+                agentBuildData.InitialFrame(matrix.Value);
             return this.Mission.SpawnAgent(agentBuildData, false, 0);
         }
 
@@ -364,6 +350,7 @@ namespace EnhancedBattleTest
                 : -this.TestBattleConfig.FormationDirection;
             formation.SetPositioning(matrixFrame.origin.ToWorldPosition(this.Mission.Scene), direction);
             formation.FormOrder = FormOrder.FormOrderCustom(area.Item1);
+            formation.MovementOrder = MovementOrder.MovementOrderMove(matrixFrame.origin.ToWorldPosition());
             return area;
         }
 
@@ -379,7 +366,7 @@ namespace EnhancedBattleTest
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
             var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
-            float length = ((int)Math.Ceiling((float)troopCount / config.SoldiersPerRow) - 1) * (unitDiameter + interval);
+            float length = ((int)Math.Ceiling((float)troopCount / config.SoldiersPerRow)) * (unitDiameter + interval) + 2;
             return new Tuple<float, float>(width, length);
         }
 
@@ -400,7 +387,7 @@ namespace EnhancedBattleTest
                       + formationIndex * distanceToPreviousFormation * (isPlayerSide ? -xDir : xDir);
             if (!isPlayerSide)
                 pos += xDir * this.TestBattleConfig.distance;
-            return pos.ToVec3(GetSceneHeightForAgent(pos));
+            return pos.ToVec3().ToWorldPosition(this.Mission.Scene).GetGroundVec3();
         }
     }
 }

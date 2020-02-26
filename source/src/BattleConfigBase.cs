@@ -91,7 +91,7 @@ namespace EnhancedBattleTest
                     return GetPlayerTroopHeroClass(i).Culture;
             }
 
-            return null;
+            return MultiplayerClassDivisions.AvailableCultures.FirstOrDefault();
         }
 
         public BasicCultureObject GetEnemyTeamCulture()
@@ -104,7 +104,7 @@ namespace EnhancedBattleTest
                     return GetEnemyTroopHeroClass(i).Culture;
             }
 
-            return null;
+            return MultiplayerClassDivisions.AvailableCultures.FirstOrDefault();
         }
 
         public virtual bool Validate()

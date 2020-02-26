@@ -25,10 +25,12 @@ namespace EnhancedBattleTest
                 new MissionInitializerRecord(config.SceneName),
                 missionController => new MissionBehaviour[] {
                     new EnhancedTestBattleMissionController(config),
+                    new CommanderLogic(),
                     new ControlTroopAfterPlayerDeadLogic(),
                     new SwitchTeamLogic(),
                     new SwitchFreeCameraLogic(),
                     new MakeGruntVoiceLogic(),
+                    new TeleportPlayerLogic(),
                     // new BattleTeam1MissionController(),
                     // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
                     new AgentBattleAILogic(),

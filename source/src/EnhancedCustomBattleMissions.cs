@@ -87,9 +87,11 @@ namespace EnhancedBattleTest
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
                new EnhancedCustomBattleMissionController(),
+               new CommanderLogic(),
                new ControlTroopAfterPlayerDeadLogic(),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),
+               new TeleportPlayerLogic(),
                new MissionOptionsComponent(),
                new BattleEndLogic(),
                new MissionCombatantsLogic(new IBattleCombatant[]{playerParty, enemyParty}, (IBattleCombatant) playerParty, !isPlayerAttacker ? playerParty : enemyParty, isPlayerAttacker ? playerParty : enemyParty, Mission.MissionTeamAITypeEnum.FieldBattle, isPlayerSergeant),

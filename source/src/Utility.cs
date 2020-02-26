@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -25,7 +26,6 @@ namespace EnhancedBattleTest
         {
             Mission.Current.PlayerTeam.PlayerOrderController.Owner = Mission.Current.MainAgent;
             // the team will no longer issue command by ai after setting this.
-            Mission.Current.PlayerTeam.SetPlayerRole(true, false);
             foreach (var formation in Mission.Current.PlayerTeam.FormationsIncludingEmpty)
             {
                 formation.PlayerOwner = Mission.Current.MainAgent;
@@ -33,6 +33,11 @@ namespace EnhancedBattleTest
             // see Mission.AssignPlayerAsSergeantOfFormation
             foreach (MissionBehaviour missionBehaviour in Mission.Current.MissionBehaviours)
                 missionBehaviour.OnAssignPlayerAsSergeantOfFormation(Mission.Current.MainAgent);
+        }
+
+        public static void CancelPlayerCommander()
+        {
+            // Try to fix the problem that the agent which player previously controlled wanders around.
         }
 
         public static Equipment GetNewEquipmentsForPerks(ClassInfo info, bool isPlayer)

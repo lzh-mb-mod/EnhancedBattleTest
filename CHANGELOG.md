@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.6] - 2020-02-26
+### Added
+- Press L can teleport in battle test mode now.
+
+### Fixed
+- Fix crash when number of troops is 0.
+
+- Fix wrong spawning interval between calvary and infrantry.
+
 ## [0.4.5] - 2020-02-26
 
 ## Fixed

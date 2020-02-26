@@ -10,45 +10,33 @@ namespace EnhancedBattleTest
         
         public event SwitchTeamDelegate PreSwitchTeam;
         public event SwitchTeamDelegate PostSwitchTeam;
-
-        public Agent enemyLeader;
-        private Agent _thisLeader;
-        private Agent _targetAgent;
+        
 
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-
-            if (Utility.IsAgentDead(_thisLeader))
-                _thisLeader = Mission.MainAgent;
+            
             if (this.Mission.InputManager.IsKeyPressed(InputKey.Numpad5))
                 this.SwapTeam();
         }
 
         public void SwapTeam()
         {
-            _targetAgent = !Utility.IsAgentDead(this.enemyLeader) ? this.enemyLeader : this.Mission.PlayerEnemyTeam.Leader;
-            if (_targetAgent == null)
+            var targetAgent = !Utility.IsAgentDead(this.Mission.PlayerEnemyTeam.PlayerOrderController.Owner)
+                ? this.Mission.PlayerEnemyTeam.PlayerOrderController.Owner
+                : this.Mission.PlayerEnemyTeam.Leader;
+            if (targetAgent == null)
                 return;
-            Agent previousAgent;
             if (!Utility.IsPlayerDead()) // MainAgent may be null because of free camera mode.
             {
-                previousAgent = this.Mission.MainAgent;
                 this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
-                previousAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-            }
-            else
-            {
-                previousAgent = _thisLeader;
+                this.Mission.MainAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
 
             PreSwitchTeam?.Invoke();
-            _targetAgent.Controller = Agent.ControllerType.Player;
             this.Mission.PlayerTeam = this.Mission.PlayerEnemyTeam;
+            targetAgent.Controller = Agent.ControllerType.Player;
             PostSwitchTeam?.Invoke();
-            this._thisLeader = Mission.MainAgent;
-            this.enemyLeader = previousAgent;
-            Utility.SetPlayerAsCommander();
         }
     }
 }

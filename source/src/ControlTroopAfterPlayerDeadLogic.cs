@@ -12,17 +12,6 @@ namespace EnhancedBattleTest
         {
             base.OnBehaviourInitialize();
             _switchFreeCameraLogic = this.Mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
-            this.Mission.OnMainAgentChanged += OnMainAgentChanged;
-        }
-
-        public override void OnRemoveBehaviour()
-        {
-            this.Mission.OnMainAgentChanged -= OnMainAgentChanged;
-        }
-        private void OnMainAgentChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (this.Mission.MainAgent != null)
-                Utility.SetPlayerAsCommander();
         }
 
         public void ControlTroopAfterDead()
