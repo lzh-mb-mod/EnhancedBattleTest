@@ -147,7 +147,7 @@ namespace EnhancedBattleTest
                     var rowCount = (c + soldiersPerRow - 1) / soldiersPerRow;
                     var p = startPos + (System.Math.Min(soldiersPerRow, c) - 1) / 2 * yInterval * yDir - rowCount * xInterval * xDir;
                     initialFreeCameraTarget = p.ToVec3().ToWorldPosition(scene).GetGroundVec3();
-                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 5);
+                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10);
                 }
 
                 initialFreeCameraPos -= this._testBattleConfig.FormationDirection.ToVec3();
@@ -365,20 +365,22 @@ namespace EnhancedBattleTest
             var mounted = fc == FormationClass.Cavalry || fc == FormationClass.HorseArcher;
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
             var unitSpacing = 1;
-            var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
+            var interval = mounted ? Formation.CavalryInterval(unitSpacing): Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
             var width = (actualSoldiersPerRow) * (unitDiameter + interval);
+            if (mounted)
+                unitDiameter *= 1.8f;
             float length = ((int)Math.Ceiling((float)troopCount / actualSoldiersPerRow)) * (unitDiameter + interval) + 1.5f;
             return new Tuple<float, float>(width, length);
         }
 
-        private TL.MatrixFrame GetFormationMatrixFrame(bool isPlayerSide, float distanceToPreviousFormation)
+        private TL.MatrixFrame GetFormationMatrixFrame(bool isPlayerSide, float distanceToInitialPosition)
         {
             var agentDefaultDir = new TL.Vec2(0, 1);
             var xDir = this.TestBattleConfig.FormationDirection;
             var mat = TL.Mat3.Identity;
             mat.RotateAboutUp(agentDefaultDir.AngleBetween(isPlayerSide ? xDir : -xDir));
-            var pos = GetFormationPosition(isPlayerSide, distanceToPreviousFormation);
+            var pos = GetFormationPosition(isPlayerSide, distanceToInitialPosition);
             return new TL.MatrixFrame(mat, pos);
         }
 
