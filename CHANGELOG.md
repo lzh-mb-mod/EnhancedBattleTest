@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 2020-02-28
+### Added
+- Add no dying mode: enable by pressing `numpad 7`.
+
+- Add support for customizing character. Please read `README.md` first before modifying.
+
 ## [0.4.7] - 2020-02-27
 ### Fixed
 - Fix the bug that player can not run initially in test battle mode.
