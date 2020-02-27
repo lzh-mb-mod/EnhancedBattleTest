@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.7] - 2020-02-27
+### Fixed
+- Fix the bug that player can not run initially in test battle mode.
+
 ## [0.4.6] - 2020-02-26
 ### Added
 - Press L can teleport in battle test mode now.

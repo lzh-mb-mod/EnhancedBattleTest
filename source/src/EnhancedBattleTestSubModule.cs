@@ -20,7 +20,8 @@ namespace EnhancedBattleTest
               1,
               () =>
               {
-                  MBGameManager.StartNewGame(new EnhancedTestBattleGameManager());
+                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(),
+                      () => EnhancedTestBattleMissions.OpenEnhancedTestBattleConfigMission()));
               },
               false
             ));
@@ -30,7 +31,8 @@ namespace EnhancedBattleTest
                 2,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedCustomBattleGameManager());
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedCustomBattleGame(),
+                        () => EnhancedCustomBattleMissions.OpenCustomBattleConfigMission()));
                 },
                 false));
         }

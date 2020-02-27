@@ -1,7 +1,8 @@
 # Enhanced Battle Test
 
 A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
-### Features
+
+## Features
 - Test Battle Mode: You can choose where to spawn troops and they will be all spawned instantly.
 - Custom Battle Mode: Use built-in mechanism to spawn troops. Troops that exceeds the battle size limit will be spawned later.
 - Map selection. Including sergeant maps, skirmish maps, tdm map, etc.
@@ -21,8 +22,6 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 ## How to use
 - Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder.
 - You can select troops for each side of teams.
-- Test Battle Mode: You can choose where to spawn troops and they will be all spawned instantly.
-- Custom Battle Mode: Use built-in mechanism to spawn troops. Troops that exceeds the battle size limit will be spawned later.
 - Press and hold `TAB` key for a while to exit the battle scene.
 - Press `numpad5` key to switch your team.
 - Press `numpad6` key to switch between free camera and main agent camera.

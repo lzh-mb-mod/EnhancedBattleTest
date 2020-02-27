@@ -127,13 +127,14 @@ namespace EnhancedBattleTest
                     playerCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, 1, 0, agentMatrixFrame);
                 player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                player.Controller = Agent.ControllerType.Player;
-                player.WieldInitialWeapons();
-                player.AllowFirstPersonWideRotation();
 
                 playerTeam.MasterOrderController.ClearSelectedFormations();
                 playerTeam.MasterOrderController.SelectFormation(playerFormation);
                 playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
+
+                player.Controller = Agent.ControllerType.Player;
+                player.WieldInitialWeapons();
+                player.AllowFirstPersonWideRotation();
             }
             else
             {
