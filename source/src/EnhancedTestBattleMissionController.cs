@@ -115,8 +115,7 @@ namespace EnhancedBattleTest
 
             if (!useFreeCamera)
             {
-                var agentMatrixFrame = GetFormationMatrixFrame(0, true, 0);
-                agentMatrixFrame.origin += (xDir * 2).ToVec3();
+                var agentMatrixFrame = GetFormationMatrixFrame(true, -2);
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
                 BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
                 var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
@@ -154,17 +153,19 @@ namespace EnhancedBattleTest
                 initialFreeCameraPos -= this._testBattleConfig.FormationDirection.ToVec3();
             }
 
-            float distanceToPreviousFormaiton = 0;
+            float distanceToInitialPosition = 0;
 
             for (var formationIndex = 0; formationIndex < 3; ++formationIndex)
             {
+                int playerTroopCount = TestBattleConfig.playerTroops[formationIndex].troopCount;
+                if (playerTroopCount <= 0)
+                    continue;
                 BasicCharacterObject playerTroopCharacter = this.TestBattleConfig.GetPlayerTroopHeroClass(formationIndex).TroopCharacter;
-                TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(formationIndex, true, distanceToPreviousFormaiton);
+                TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(true, distanceToInitialPosition);
                 var playerTroopFormation = playerTeam.GetFormation((FormationClass)formationIndex);
                 var tuple = SetFormationRegion(playerTroopFormation, formationIndex, true, playerTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
-                distanceToPreviousFormaiton = tuple.Item2;
-                int playerTroopCount = TestBattleConfig.playerTroops[formationIndex].troopCount;
+                distanceToInitialPosition += tuple.Item2;
                 BasicCultureObject troopCulture = !useFreeCamera ? playerTeamCulture : playerTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < playerTroopCount; ++troopIndex)
                 {
@@ -193,8 +194,7 @@ namespace EnhancedBattleTest
 
             if (TestBattleConfig.SpawnEnemyCommander)
             {
-                var agentMatrixFrame = GetFormationMatrixFrame(0, false, 0);
-                agentMatrixFrame.origin += ((-xDir) * 2).ToVec3();
+                var agentMatrixFrame = GetFormationMatrixFrame(false, -2);
                 MultiplayerClassDivisions.MPHeroClass enemyHeroClass = this.TestBattleConfig.EnemyHeroClass;
                 BasicCharacterObject enemyCharacter = enemyHeroClass.HeroCharacter;
                 var formation = enemyTeam.GetFormation(Utility.CommanderFormationClass());
@@ -212,16 +212,18 @@ namespace EnhancedBattleTest
                 enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
             }
 
-            float distanceToPreviousFormation = 0;
+            float distanceToInitialPosition = 0;
             for (var formationIndex = 0; formationIndex < 3; ++formationIndex)
             {
                 BasicCharacterObject enemyTroopCharacter = this.TestBattleConfig.GetEnemyTroopHeroClass(formationIndex).TroopCharacter;
-                TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(formationIndex, false, distanceToPreviousFormation);
+                TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(false, distanceToInitialPosition);
                 var enemyTroopFormation = enemyTeam.GetFormation((FormationClass)formationIndex);
                 var tuple = SetFormationRegion(enemyTroopFormation, formationIndex, false, enemyTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
-                distanceToPreviousFormation = tuple.Item2;
+                distanceToInitialPosition += tuple.Item2;
                 int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
+                if (enemySoldierCount <= 0)
+                    continue;
                 var troopCulture = this.TestBattleConfig.SpawnEnemyCommander
                     ? enemyTeamCulture
                     : enemyTroopCharacter.Culture;
@@ -345,7 +347,7 @@ namespace EnhancedBattleTest
 
         private Tuple<float, float> SetFormationRegion(Formation formation, int formationIndex, bool isPlayerSide, FormationClass formationClass, TL.MatrixFrame matrixFrame)
         {
-            var area = this.GetInitialFormationArea(formationIndex, isPlayerSide, formationClass);
+            var area = this.GetInitialFormationRegion(formationIndex, isPlayerSide, formationClass);
             var direction = isPlayerSide
                 ? this.TestBattleConfig.FormationDirection
                 : -this.TestBattleConfig.FormationDirection;
@@ -354,7 +356,7 @@ namespace EnhancedBattleTest
             return area;
         }
 
-        private Tuple<float, float> GetInitialFormationArea(int formationIndex, bool isPlayerSide, FormationClass fc)
+        private Tuple<float, float> GetInitialFormationRegion(int formationIndex, bool isPlayerSide, FormationClass fc)
         {
             var config = this.TestBattleConfig;
             int troopCount = isPlayerSide
@@ -370,21 +372,21 @@ namespace EnhancedBattleTest
             return new Tuple<float, float>(width, length);
         }
 
-        private TL.MatrixFrame GetFormationMatrixFrame(int formationIndex, bool isPlayerSide, float distanceToPreviousFormation)
+        private TL.MatrixFrame GetFormationMatrixFrame(bool isPlayerSide, float distanceToPreviousFormation)
         {
             var agentDefaultDir = new TL.Vec2(0, 1);
             var xDir = this.TestBattleConfig.FormationDirection;
             var mat = TL.Mat3.Identity;
             mat.RotateAboutUp(agentDefaultDir.AngleBetween(isPlayerSide ? xDir : -xDir));
-            var pos = GetFormationPosition(formationIndex, isPlayerSide, distanceToPreviousFormation);
+            var pos = GetFormationPosition(isPlayerSide, distanceToPreviousFormation);
             return new TL.MatrixFrame(mat, pos);
         }
 
-        private TL.Vec3 GetFormationPosition(int formationIndex, bool isPlayerSide, float distanceToPreviousFormation)
+        private TL.Vec3 GetFormationPosition(bool isPlayerSide, float distanceToInitialPosition)
         {
             var xDir = this.TestBattleConfig.FormationDirection;
             var pos = this.TestBattleConfig.FormationPosition
-                      + formationIndex * distanceToPreviousFormation * (isPlayerSide ? -xDir : xDir);
+                      + distanceToInitialPosition * (isPlayerSide ? -xDir : xDir);
             if (!isPlayerSide)
                 pos += xDir * this.TestBattleConfig.distance;
             return pos.ToVec3().ToWorldPosition(this.Mission.Scene).GetGroundVec3();
