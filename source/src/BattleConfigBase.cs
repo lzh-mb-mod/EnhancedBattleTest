@@ -16,17 +16,22 @@ namespace EnhancedBattleTest
         public int selectedSecondPerk;
         public int troopCount;
     }
-    public abstract class BattleConfigBase<T> where T : BattleConfigBase<T>
+
+    public abstract class BattleConfigBase
     {
         public string ConfigVersion { get; set; }
 
 
         public ClassInfo playerClass;
-        protected bool _useFreeCamera;
+        private bool _useFreeCamera;
         public ClassInfo enemyClass;
-        protected bool _spawnEnemyCommander;
+        private bool _spawnEnemyCommander;
         public ClassInfo[] playerTroops;
         public ClassInfo[] enemyTroops;
+
+        public bool disableDying;
+        public bool changeCombatAI;
+        public int combatAI;
 
         [XmlIgnore]
         public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
@@ -110,11 +115,19 @@ namespace EnhancedBattleTest
         public virtual bool Validate()
         {
             return PlayerHeroClass != null && enemyClass != null
-                   && playerTroops.All(classInfo =>
-                       MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(
-                           classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
-                       classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
-                       classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2);
+                                           && playerTroops.All(classInfo =>
+                                               MBObjectManager.Instance
+                                                   .GetObject<MultiplayerClassDivisions.MPHeroClass>(
+                                                       classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
+                                               classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
+                                               classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2)
+                                           && enemyTroops.All(classInfo =>
+                                               MBObjectManager.Instance
+                                                   .GetObject<MultiplayerClassDivisions.MPHeroClass>(
+                                                       classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
+                                               classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
+                                               classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2)
+                                           && combatAI >= 0 && combatAI <= 100;
         }
 
 
@@ -125,21 +138,6 @@ namespace EnhancedBattleTest
         public abstract void ReloadSavedConfig();
 
         public abstract void ResetToDefault();
-
-        protected virtual void CopyFrom(T other)
-        {
-            ConfigVersion = other.ConfigVersion;
-            if (other.playerClass != null)
-                this.playerClass = other.playerClass;
-            if (other.enemyClass != null)
-                this.enemyClass = other.enemyClass;
-            this.SpawnEnemyCommander = other.SpawnEnemyCommander;
-            if (other.playerTroops != null)
-                this.playerTroops = other.playerTroops;
-            if (other.enemyTroops != null)
-                this.enemyTroops = other.enemyTroops;
-            this.UseFreeCamera = other.UseFreeCamera;
-        }
 
         protected void EnsureSaveDirectory()
         {
@@ -192,10 +190,30 @@ namespace EnhancedBattleTest
         private static string ModuleName = "EnhancedBattleTest";
 
         protected static string SavePath => Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" +
-                                          ApplicationName + "\\Configs\\" + ModuleName + "\\";
+                                            ApplicationName + "\\Configs\\" + ModuleName + "\\";
 
         protected abstract string SaveName { get; }
         protected abstract string[] OldNames { get; }
+    }
 
+    public abstract class BattleConfigBase<T> : BattleConfigBase where T : BattleConfigBase<T>
+    {
+        protected virtual void CopyFrom(T other)
+        {
+            ConfigVersion = other.ConfigVersion;
+            if (other.playerClass != null)
+                this.playerClass = other.playerClass;
+            if (other.enemyClass != null)
+                this.enemyClass = other.enemyClass;
+            this.SpawnEnemyCommander = other.SpawnEnemyCommander;
+            if (other.playerTroops != null)
+                this.playerTroops = other.playerTroops;
+            if (other.enemyTroops != null)
+                this.enemyTroops = other.enemyTroops;
+            this.UseFreeCamera = other.UseFreeCamera;
+            this.disableDying = other.disableDying;
+            this.changeCombatAI = other.changeCombatAI;
+            this.combatAI = other.combatAI;
+        }
     }
 }

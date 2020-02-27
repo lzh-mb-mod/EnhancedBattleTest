@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Module>
 	<Name value = "EnhancedBattleTest"/>
 	<Id value = "EnhancedBattleTest"/>
@@ -18,6 +18,16 @@
 			</Tags>
 		</SubModule>
 	</SubModules>
-	
-	<Xmls></Xmls>
+
+	<Xmls>
+		<XmlNode>
+			<XmlName id="MPCharacters" path="mpcharacters"/>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="BasicCultures" path="mpcultures"/>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
+		</XmlNode>
+	</Xmls>
 </Module>

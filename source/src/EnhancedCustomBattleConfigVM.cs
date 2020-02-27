@@ -73,16 +73,6 @@ namespace EnhancedBattleTest
             }
         }
 
-        public bool UseFreeCamera
-        {
-            get => this.CurrentConfig.UseFreeCamera;
-            set
-            {
-                this.CurrentConfig.UseFreeCamera = value;
-                this.OnPropertyChanged(nameof(UseFreeCamera));
-            }
-        }
-
         public EnhancedCustomBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedCustomBattleConfig> startAction,
             Action<EnhancedCustomBattleConfig> backAction)
             : base(selectionView, EnhancedCustomBattleConfig.Get())

@@ -27,6 +27,7 @@ namespace EnhancedBattleTest
         
         private string _playerName, _enemyName;
         private TroopInfo[] _playerTroopInfos, _enemyTroopInfos;
+        private string _combatAI;
 
 
         [DataSourceProperty]
@@ -323,16 +324,67 @@ namespace EnhancedBattleTest
             }
         }
 
+        [DataSourceProperty]
+        public bool DisableDying
+        {
+            get => this.CurrentConfig.disableDying;
+            set
+            {
+                if (this.CurrentConfig.disableDying == value)
+                    return;
+                this.CurrentConfig.disableDying = value;
+                this.OnPropertyChanged(nameof(DisableDying));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ChangeCombatAI
+        {
+            get => this.CurrentConfig.changeCombatAI;
+            set
+            {
+                if (this.CurrentConfig.changeCombatAI == value)
+                    return;
+                this.CurrentConfig.changeCombatAI = value;
+                this.OnPropertyChanged(nameof(ChangeCombatAI));
+            }
+        }
+
+        [DataSourceProperty]
+        public string CombatAI
+        {
+            get => this._combatAI;
+            set
+            {
+                if (this._combatAI == value)
+                    return;
+                this._combatAI = value;
+                this.OnPropertyChanged(nameof(CombatAI));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool UseFreeCamera
+        {
+            get => this.CurrentConfig.UseFreeCamera;
+            set
+            {
+                this.CurrentConfig.UseFreeCamera = value;
+                this.OnPropertyChanged(nameof(UseFreeCamera));
+            }
+        }
+
         protected BattleConfigVMBase(CharacterSelectionView selectionView, T currentConfig)
         {
             this._selectionView = selectionView;
             this.CurrentConfig = currentConfig;
             this._playerTroopInfos = new TroopInfo[3];
             this._enemyTroopInfos = new TroopInfo[3];
-            InitializeCharactersContent();
+
+            InitializeContent();
         }
 
-        private void InitializeCharactersContent()
+        private void InitializeContent()
         {
             UpdatePlayerSoldierCount();
             UpdateEnemySoldierCount();
@@ -353,6 +405,10 @@ namespace EnhancedBattleTest
             this.EnemyName = this.EnemyHeroClass.HeroName.ToString();
             UpdatePlayerTroopName();
             UpdateEnemyTroopName();
+
+            this.DisableDying = this.CurrentConfig.disableDying;
+            this.ChangeCombatAI = this.CurrentConfig.changeCombatAI;
+            this.CombatAI = this.CurrentConfig.combatAI.ToString();
         }
 
         private List<MultiplayerClassDivisions.MPHeroClass> GetHeroClasses()
@@ -527,6 +583,8 @@ namespace EnhancedBattleTest
             {
                 CurrentConfig.enemyTroops[i].troopCount = System.Convert.ToInt32(this._enemyTroopInfos[i].count);
             }
+
+            CurrentConfig.combatAI = System.Convert.ToInt32(this._combatAI);
         }
     }
 }

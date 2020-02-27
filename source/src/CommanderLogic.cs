@@ -9,7 +9,7 @@ namespace EnhancedBattleTest
     {
         protected override void OnAgentControllerChanged(Agent agent)
         {
-            if (agent == Agent.Main)
+            if (agent == this.Mission.MainAgent)
             {
                 if (agent.Controller == Agent.ControllerType.Player)
                     Utility.SetPlayerAsCommander();

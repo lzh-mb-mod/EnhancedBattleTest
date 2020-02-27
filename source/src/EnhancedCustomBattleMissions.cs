@@ -89,6 +89,7 @@ namespace EnhancedBattleTest
                new EnhancedCustomBattleMissionController(),
                new CommanderLogic(),
                new ControlTroopAfterPlayerDeadLogic(),
+               new TrainingLogic(EnhancedCustomBattleConfig.Get()),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),
                new TeleportPlayerLogic(),

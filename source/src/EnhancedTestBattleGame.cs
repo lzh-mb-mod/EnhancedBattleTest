@@ -87,7 +87,7 @@ namespace EnhancedBattleTest
         {
 
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new MultiplayerAgentStatCalculateModel());
+            basicGameStarter.AddModel(new EnhhancedMPAgentStatCalculateModel());
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new DefaultRidingModel());
             basicGameStarter.AddModel(new DefaultStrikeMagnitudeModel());

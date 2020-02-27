@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
 
         public int sceneIndex;
 
-        protected static Version BinaryVersion => new Version(1, 4);
+        protected static Version BinaryVersion => new Version(1, 5);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -37,6 +37,14 @@ namespace EnhancedBattleTest
                     Serialize();
                     break;
                 case "1.4":
+                    Utility.DisplayMessage("Upgrade config version.");
+                    this.disableDying = false;
+                    this.changeCombatAI = false;
+                    this.combatAI = 100;
+                    goto case "1.5";
+                case "1.5":
+                    ConfigVersion = BinaryVersion.ToString();
+                    Serialize();
                     break;
             }
         }
@@ -121,6 +129,9 @@ namespace EnhancedBattleTest
                     new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
                 UseFreeCamera = false,
+                disableDying = false,
+                changeCombatAI = false,
+                combatAI = 100,
             };
             return p;
         }

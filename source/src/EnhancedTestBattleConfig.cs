@@ -25,7 +25,9 @@ namespace EnhancedBattleTest
         public float distance;
         public float soldierXInterval, soldierYInterval;
 
-        protected static Version BinaryVersion => new Version(1, 4);
+        public bool enemyCharge;
+
+        protected static Version BinaryVersion => new Version(1, 5);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -40,7 +42,17 @@ namespace EnhancedBattleTest
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.4": break;
+                case "1.4":
+                    Utility.DisplayMessage("Upgrade config version.");
+                    this.enemyCharge = false;
+                    this.disableDying = false;
+                    this.changeCombatAI = false;
+                    this.combatAI = 100;
+                    goto case "1.5";
+                case "1.5":
+                    ConfigVersion = BinaryVersion.ToString();
+                    Serialize();
+                    break;
 
             }
         }
@@ -102,7 +114,7 @@ namespace EnhancedBattleTest
                 //"mp_duel_001_winter",
                 //"mp_duel_002",
                 //"mp_ruins_2",
-                new SceneInfo{name = "mp_skirmish_map_001a", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_skirmish_map_001a", formationPosition = new Vec2(200, 200), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_tdm_map_001", formationPosition = new Vec2(385, 570), formationDirection = new Vec2(0.7f, -0.3f).Normalized()},
                 new SceneInfo{name = "mp_duel_001", formationPosition = new Vec2(567, 600), formationDirection = new Vec2(0, 10)},
                 new SceneInfo{name = "mp_duel_001_winter", formationPosition = new Vec2(567, 600), formationDirection = new Vec2(0, 1)},
@@ -190,7 +202,11 @@ namespace EnhancedBattleTest
                 distance = 50,
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
-                UseFreeCamera = false
+                UseFreeCamera = false,
+                enemyCharge = false,
+                disableDying = false,
+                changeCombatAI = false,
+                combatAI = 100,
             };
             return p;
         }
@@ -307,6 +323,7 @@ namespace EnhancedBattleTest
             this.distance = other.distance;
             this.soldierXInterval = other.soldierXInterval;
             this.soldierYInterval = other.soldierYInterval;
+            this.enemyCharge = other.enemyCharge;
         }
         protected override string SaveName => SavePath + nameof(EnhancedTestBattleConfig) +".xml";
         protected override string[] OldNames { get; } = { SavePath + "Param.xml" };

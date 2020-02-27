@@ -14,8 +14,8 @@ namespace EnhancedBattleTest
                 "EnhancedTestBattleConfig",
                 new MissionInitializerRecord("mp_skirmish_map_001a"),
                 missionController => new MissionBehaviour[] {
-                }
-            , true, true, true);
+                },
+                true, true, true);
         }
 
         public static Mission OpenEnhancedTestBattleMission(EnhancedTestBattleConfig config)
@@ -27,6 +27,7 @@ namespace EnhancedBattleTest
                     new EnhancedTestBattleMissionController(config),
                     new CommanderLogic(),
                     new ControlTroopAfterPlayerDeadLogic(),
+                    new TrainingLogic(EnhancedTestBattleConfig.Get()),
                     new SwitchTeamLogic(),
                     new SwitchFreeCameraLogic(),
                     new MakeGruntVoiceLogic(),

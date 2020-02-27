@@ -183,7 +183,7 @@
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
               <Children>
                 <TextWidget Text="Spawn Enemy Commander" WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Widget WidthSizePolicy="Fixed" SuggestedWidth="400" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                <Widget WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
                   <Children>
                     <ButtonWidget ButtonType = "Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@SpawnEnemyCommander">
                       <Children>
@@ -196,16 +196,40 @@
             </ListPanel>
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
               <Children>
-                <TextWidget Text="free camera" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Widget WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                <TextWidget Text="free camera" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Widget WidthSizePolicy="Fixed" SuggestedWidth="200" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
                   <Children>
-                    <ButtonWidget ButtonType = "Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@UseFreeCamera">
+                    <ButtonWidget ButtonType = "Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@UseFreeCamera">
                       <Children>
                         <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
                       </Children>
                     </ButtonWidget>
                   </Children>
                 </Widget>
+
+                <TextWidget Text="Disable Dying" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                  <Children>
+                    <ButtonWidget ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@DisableDying">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </Widget>
+                <!-- Customize Combat AI -->
+                <TextWidget Text="Change Combat AI" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                  <Children>
+                    <ButtonWidget ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@ChangeCombatAI">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </Widget>
+                <TextWidget Text="Combat AI(0-100)" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                <EditableTextWidget Text="@CombatAI" WidthSizePolicy="Fixed" SuggestedWidth="200" HeightSizePolicy="Fixed" SuggestedHeight="30" HorizontalAlignment="Right" VerticalAlignment="Center" />
               </Children>
             </ListPanel>
           </Children>

@@ -141,13 +141,14 @@ namespace EnhancedBattleTest
                 if (c <= 0)
                 {
                     initialFreeCameraTarget = startPos.ToVec3().ToWorldPosition(scene).GetGroundVec3();
+                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
                 else
                 {
                     var rowCount = (c + soldiersPerRow - 1) / soldiersPerRow;
                     var p = startPos + (System.Math.Min(soldiersPerRow, c) - 1) / 2 * yInterval * yDir - rowCount * xInterval * xDir;
                     initialFreeCameraTarget = p.ToVec3().ToWorldPosition(scene).GetGroundVec3();
-                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10);
+                    initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
 
                 initialFreeCameraPos -= this._testBattleConfig.FormationDirection.ToVec3();
@@ -207,23 +208,26 @@ namespace EnhancedBattleTest
                 agent.Controller = Agent.ControllerType.AI;
                 agent.WieldInitialWeapons();
 
-                enemyTeam.MasterOrderController.ClearSelectedFormations();
-                enemyTeam.MasterOrderController.SelectFormation(formation);
-                enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
+                if (!TestBattleConfig.enemyCharge)
+                {
+                    enemyTeam.MasterOrderController.ClearSelectedFormations();
+                    enemyTeam.MasterOrderController.SelectFormation(formation);
+                    enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
+                }
             }
 
             float distanceToInitialPosition = 0;
             for (var formationIndex = 0; formationIndex < 3; ++formationIndex)
             {
+                int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
+                if (enemySoldierCount <= 0)
+                    continue;
                 BasicCharacterObject enemyTroopCharacter = this.TestBattleConfig.GetEnemyTroopHeroClass(formationIndex).TroopCharacter;
                 TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(false, distanceToInitialPosition);
                 var enemyTroopFormation = enemyTeam.GetFormation((FormationClass)formationIndex);
                 var tuple = SetFormationRegion(enemyTroopFormation, formationIndex, false, enemyTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
                 distanceToInitialPosition += tuple.Item2;
-                int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
-                if (enemySoldierCount <= 0)
-                    continue;
                 var troopCulture = this.TestBattleConfig.SpawnEnemyCommander
                     ? enemyTeamCulture
                     : enemyTroopCharacter.Culture;
@@ -235,9 +239,13 @@ namespace EnhancedBattleTest
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
-                enemyTeam.MasterOrderController.ClearSelectedFormations();
-                enemyTeam.MasterOrderController.SelectFormation(enemyTroopFormation);
-                enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, formationMatrixFrame.origin.ToWorldPosition());
+
+                if (!TestBattleConfig.enemyCharge)
+                {
+                    enemyTeam.MasterOrderController.ClearSelectedFormations();
+                    enemyTeam.MasterOrderController.SelectFormation(enemyTroopFormation);
+                    enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, formationMatrixFrame.origin.ToWorldPosition());
+                }
             }
         }
 
@@ -328,17 +336,15 @@ namespace EnhancedBattleTest
 
         private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
         {
-            Equipment equipment = Utility.GetNewEquipmentsForPerks(classInfo, isHero);
-            AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide, -1))
+            AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide, formationTroopIndex))
                 .Team(team)
                 .Formation(formation)
                 .FormationTroopCount(formationTroopCount).FormationTroopIndex(formationTroopIndex)
                 .Banner(team.Banner)
                 .ClothingColor1(isPlayerSide ? culture.Color : culture.ClothAlternativeColor)
                 .ClothingColor2(isPlayerSide ? culture.Color2 : culture.ClothAlternativeColor2)
-                .IsFemale(false)
-                .Equipment(equipment)
-                .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item, character.GetMountKeySeed()));
+                .IsFemale(false);
+            Utility.OverrideEquipment(agentBuildData, classInfo, isHero);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
             return this.Mission.SpawnAgent(agentBuildData, false, 0);
@@ -365,7 +371,7 @@ namespace EnhancedBattleTest
             var mounted = fc == FormationClass.Cavalry || fc == FormationClass.HorseArcher;
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
             var unitSpacing = 1;
-            var interval = mounted ? Formation.CavalryInterval(unitSpacing): Formation.InfantryInterval(unitSpacing);
+            var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
             var width = (actualSoldiersPerRow) * (unitDiameter + interval);
             if (mounted)

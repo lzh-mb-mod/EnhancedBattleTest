@@ -26,6 +26,7 @@ namespace EnhancedBattleTest
         {
             Mission.Current.PlayerTeam.PlayerOrderController.Owner = Mission.Current.MainAgent;
             // the team will no longer issue command by ai after setting this.
+            Mission.Current.PlayerTeam.SetPlayerRole(true, false);
             foreach (var formation in Mission.Current.PlayerTeam.FormationsIncludingEmpty)
             {
                 formation.PlayerOwner = Mission.Current.MainAgent;
@@ -40,10 +41,8 @@ namespace EnhancedBattleTest
             // Try to fix the problem that the agent which player previously controlled wanders around.
         }
 
-        public static Equipment GetNewEquipmentsForPerks(ClassInfo info, bool isPlayer)
+        public static Equipment GetNewEquipmentsForPerks(MultiplayerClassDivisions.MPHeroClass mpHeroClass, ClassInfo info, bool isPlayer)
         {
-            MultiplayerClassDivisions.MPHeroClass mpHeroClass =
-                MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
             BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
             List<MPPerkObject> selectedPerkList = new List<MPPerkObject>
             {
@@ -56,13 +55,34 @@ namespace EnhancedBattleTest
             return equipment;
         }
 
+        public static void OverrideEquipment(AgentBuildData buildData, ClassInfo info, bool isPlayer)
+        {
+            MultiplayerClassDivisions.MPHeroClass mpHeroClass =
+                MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
+            BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
+            if (mpHeroClass.GetAllAvailablePerksForListIndex(0).IsEmpty() ||
+                mpHeroClass.GetAllAvailablePerksForListIndex(1).IsEmpty())
+                return ;
+            var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isPlayer);
+            buildData
+                .Equipment(equipment)
+                .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item,
+                    character.GetMountKeySeed()));
+        }
+
         public static BasicCharacterObject ApplyPerks(ClassInfo info, bool isHero)
         {
             MultiplayerClassDivisions.MPHeroClass mpHeroClass =
                 MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
             BasicCharacterObject sourceCharacter = isHero ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
+            if (mpHeroClass.GetAllAvailablePerksForListIndex(0).IsEmpty() ||
+                mpHeroClass.GetAllAvailablePerksForListIndex(1).IsEmpty())
+                return sourceCharacter;
+            var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isHero);
+            if (equipment == null)
+                return sourceCharacter;
             var character = NewCharacter(sourceCharacter);
-            character.InitializeEquipmentsOnLoad(new List<Equipment>{GetNewEquipmentsForPerks(info, isHero)});
+            character.InitializeEquipmentsOnLoad(new List<Equipment>{equipment});
             character.StringId = sourceCharacter.StringId + "_customized";
             character.Name = sourceCharacter.Name;
             character.SetIsHero(isHero);

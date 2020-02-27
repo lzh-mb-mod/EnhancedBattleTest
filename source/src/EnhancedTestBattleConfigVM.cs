@@ -154,13 +154,16 @@ namespace EnhancedBattleTest
             }
         }
 
-        public bool UseFreeCamera
+        [DataSourceProperty]
+        public bool EnemyCharge
         {
-            get => this.CurrentConfig.UseFreeCamera;
+            get => this.CurrentConfig.enemyCharge;
             set
             {
-                this.CurrentConfig.UseFreeCamera = value;
-                this.OnPropertyChanged(nameof(UseFreeCamera));
+                if (this.CurrentConfig.enemyCharge == value)
+                    return;
+                this.CurrentConfig.enemyCharge = value;
+                this.OnPropertyChanged(nameof(EnemyCharge));
             }
         }
 
@@ -224,7 +227,7 @@ namespace EnhancedBattleTest
         {
             this.CurrentConfig.ReloadSavedConfig();
             this.InitializeContent();
-            Utility.DisplayMessage("Reset successfully");
+            Utility.DisplayMessage("Load config successfully");
         }
 
         public void GoBack()
@@ -240,6 +243,8 @@ namespace EnhancedBattleTest
             this.Distance = CurrentConfig.distance.ToString();
             this.SoldierXInterval = CurrentConfig.soldierXInterval.ToString();
             this.SoldierYInterval = CurrentConfig.soldierYInterval.ToString();
+
+            this.EnemyCharge = this.CurrentConfig.enemyCharge;
         }
 
         private void UpdateSceneContent()

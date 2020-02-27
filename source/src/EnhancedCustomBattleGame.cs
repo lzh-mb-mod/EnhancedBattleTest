@@ -86,7 +86,7 @@ namespace EnhancedBattleTest
         private void AddGameModels(IGameStarter basicGameStarter)
         {
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new CustomBattleAgentStatCalculateModel());
+            basicGameStarter.AddModel(new EnhancedSPAgentStatCalculateModel());
             basicGameStarter.AddModel(new CustomBattleApplyWeatherEffectsModel());
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new DefaultRidingModel());
