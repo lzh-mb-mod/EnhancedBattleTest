@@ -35,7 +35,6 @@ namespace EnhancedBattleTest
                     // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
                     new AgentBattleAILogic(),
                     new AgentVictoryLogic(),
-                    new FieldBattleController(),
                     new MissionOptionsComponent(),
                     new MissionSimulationHandler(),
                     new BattleMissionAgentInteractionLogic(),
