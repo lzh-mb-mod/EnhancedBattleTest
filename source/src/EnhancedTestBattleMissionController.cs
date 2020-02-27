@@ -161,7 +161,7 @@ namespace EnhancedBattleTest
                 BasicCharacterObject playerTroopCharacter = this.TestBattleConfig.GetPlayerTroopHeroClass(formationIndex).TroopCharacter;
                 TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(formationIndex, true, distanceToPreviousFormaiton);
                 var playerTroopFormation = playerTeam.GetFormation((FormationClass)formationIndex);
-                var tuple = SetFormationArea(playerTroopFormation, formationIndex, true, playerTroopCharacter.CurrentFormationClass,
+                var tuple = SetFormationRegion(playerTroopFormation, formationIndex, true, playerTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
                 distanceToPreviousFormaiton = tuple.Item2;
                 int playerTroopCount = TestBattleConfig.playerTroops[formationIndex].troopCount;
@@ -218,7 +218,7 @@ namespace EnhancedBattleTest
                 BasicCharacterObject enemyTroopCharacter = this.TestBattleConfig.GetEnemyTroopHeroClass(formationIndex).TroopCharacter;
                 TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(formationIndex, false, distanceToPreviousFormation);
                 var enemyTroopFormation = enemyTeam.GetFormation((FormationClass)formationIndex);
-                var tuple = SetFormationArea(enemyTroopFormation, formationIndex, false, enemyTroopCharacter.CurrentFormationClass,
+                var tuple = SetFormationRegion(enemyTroopFormation, formationIndex, false, enemyTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
                 distanceToPreviousFormation = tuple.Item2;
                 int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
@@ -343,7 +343,7 @@ namespace EnhancedBattleTest
         }
 
 
-        private Tuple<float, float> SetFormationArea(Formation formation, int formationIndex, bool isPlayerSide, FormationClass formationClass, TL.MatrixFrame matrixFrame)
+        private Tuple<float, float> SetFormationRegion(Formation formation, int formationIndex, bool isPlayerSide, FormationClass formationClass, TL.MatrixFrame matrixFrame)
         {
             var area = this.GetInitialFormationArea(formationIndex, isPlayerSide, formationClass);
             var direction = isPlayerSide
@@ -351,7 +351,6 @@ namespace EnhancedBattleTest
                 : -this.TestBattleConfig.FormationDirection;
             formation.SetPositioning(matrixFrame.origin.ToWorldPosition(this.Mission.Scene), direction);
             formation.FormOrder = FormOrder.FormOrderCustom(area.Item1);
-            formation.MovementOrder = MovementOrder.MovementOrderMove(matrixFrame.origin.ToWorldPosition());
             return area;
         }
 
@@ -366,8 +365,8 @@ namespace EnhancedBattleTest
             var unitSpacing = 1;
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
-            var width = (actualSoldiersPerRow - 1) * (unitDiameter + interval) + unitDiameter + 0.1f;
-            float length = ((int)Math.Ceiling((float)troopCount / config.SoldiersPerRow)) * (unitDiameter + interval) + 2;
+            var width = (actualSoldiersPerRow) * (unitDiameter + interval);
+            float length = ((int)Math.Ceiling((float)troopCount / actualSoldiersPerRow)) * (unitDiameter + interval) + 1.5f;
             return new Tuple<float, float>(width, length);
         }
 
