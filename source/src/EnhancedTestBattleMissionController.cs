@@ -219,8 +219,8 @@ namespace EnhancedBattleTest
             float distanceToInitialPosition = 0;
             for (var formationIndex = 0; formationIndex < 3; ++formationIndex)
             {
-                int enemySoldierCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
-                if (enemySoldierCount <= 0)
+                int enemyTroopCount = this.TestBattleConfig.enemyTroops[formationIndex].troopCount;
+                if (enemyTroopCount <= 0)
                     continue;
                 BasicCharacterObject enemyTroopCharacter = this.TestBattleConfig.GetEnemyTroopHeroClass(formationIndex).TroopCharacter;
                 TL.MatrixFrame formationMatrixFrame = GetFormationMatrixFrame(false, distanceToInitialPosition);
@@ -231,10 +231,10 @@ namespace EnhancedBattleTest
                 var troopCulture = this.TestBattleConfig.SpawnEnemyCommander
                     ? enemyTeamCulture
                     : enemyTroopCharacter.Culture;
-                for (var troopIndex = 0; troopIndex < enemySoldierCount; ++troopIndex)
+                for (var troopIndex = 0; troopIndex < enemyTroopCount; ++troopIndex)
                 {
                     var agent = SpawnAgent(TestBattleConfig.enemyTroops[formationIndex], enemyTroopCharacter, false, enemyTroopFormation,
-                        enemyTeam, enemyTeamCombatant, troopCulture, false, enemySoldierCount, troopIndex);
+                        enemyTeam, enemyTeamCombatant, troopCulture, false, enemyTroopCount, troopIndex);
                     agent.Controller = Agent.ControllerType.AI;
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
@@ -373,7 +373,7 @@ namespace EnhancedBattleTest
             var unitSpacing = 1;
             var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
             var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
-            var width = (actualSoldiersPerRow) * (unitDiameter + interval);
+            var width = (actualSoldiersPerRow) * (unitDiameter + interval) - interval;
             if (mounted)
                 unitDiameter *= 1.8f;
             float length = ((int)Math.Ceiling((float)troopCount / actualSoldiersPerRow)) * (unitDiameter + interval) + 1.5f;
