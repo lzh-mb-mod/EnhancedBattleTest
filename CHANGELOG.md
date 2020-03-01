@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.5.2] - 2020-02-
+## [0.5.2] - 2020-03-01
 ### Added
 - Add readme file for Chinese.
 
@@ -9,6 +9,9 @@
 
 ### Fixed
 - Fix wrong default spawning position in map `mp_skirmish_map_005` and `mp_skirmish_map_008`.
+
+## Removed
+- Removed mission boundary in Test Battle mode.
 
 ## [0.5.1] - 2020-02-28
 ### Removed
