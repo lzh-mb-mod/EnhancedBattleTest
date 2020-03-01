@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -119,12 +117,14 @@ namespace EnhancedBattleTest
                                                MBObjectManager.Instance
                                                    .GetObject<MultiplayerClassDivisions.MPHeroClass>(
                                                        classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
+                                               classInfo.troopCount <= 5000 &&
                                                classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
                                                classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2)
                                            && enemyTroops.All(classInfo =>
                                                MBObjectManager.Instance
                                                    .GetObject<MultiplayerClassDivisions.MPHeroClass>(
                                                        classInfo.classStringId) != null && classInfo.troopCount >= 0 &&
+                                               classInfo.troopCount <= 5000 &&
                                                classInfo.selectedFirstPerk >= 0 && classInfo.selectedFirstPerk <= 2 &&
                                                classInfo.selectedSecondPerk >= 0 && classInfo.selectedSecondPerk <= 2)
                                            && combatAI >= 0 && combatAI <= 100;

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
-using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.Screen;
 using TL = TaleWorlds.Library;
 
 namespace EnhancedBattleTest
@@ -140,14 +138,14 @@ namespace EnhancedBattleTest
                 var c = this.TestBattleConfig.playerTroops[0].troopCount;
                 if (c <= 0)
                 {
-                    initialFreeCameraTarget = startPos.ToVec3().ToWorldPosition(scene).GetGroundVec3();
+                    initialFreeCameraTarget = startPos.ToVec3(GetSceneHeightForAgent(startPos));
                     initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
                 else
                 {
                     var rowCount = (c + soldiersPerRow - 1) / soldiersPerRow;
                     var p = startPos + (System.Math.Min(soldiersPerRow, c) - 1) / 2 * yInterval * yDir - rowCount * xInterval * xDir;
-                    initialFreeCameraTarget = p.ToVec3().ToWorldPosition(scene).GetGroundVec3();
+                    initialFreeCameraTarget = p.ToVec3(GetSceneHeightForAgent(p));
                     initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
 
@@ -336,7 +334,7 @@ namespace EnhancedBattleTest
 
         private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
         {
-            AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide, formationTroopIndex))
+            AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide))
                 .Team(team)
                 .Formation(formation)
                 .FormationTroopCount(formationTroopCount).FormationTroopIndex(formationTroopIndex)
@@ -397,7 +395,14 @@ namespace EnhancedBattleTest
                       + distanceToInitialPosition * (isPlayerSide ? -xDir : xDir);
             if (!isPlayerSide)
                 pos += xDir * this.TestBattleConfig.distance;
-            return pos.ToVec3().ToWorldPosition(this.Mission.Scene).GetGroundVec3();
+            return pos.ToVec3(GetSceneHeightForAgent(pos));
         }
+        private float GetSceneHeightForAgent(TL.Vec2 pos)
+        {
+            float result = 0;
+            this.Mission.Scene.GetHeightAtPoint(pos, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref result);
+            return result;
+        }
+
     }
 }

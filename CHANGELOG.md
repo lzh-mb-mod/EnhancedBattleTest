@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.2] - 2020-02-
+### Added
+- Add readme file for Chinese.
+
+### Changed
+- Changed some UI texts to make them more consistent.
+
+### Fixed
+- Fix wrong default spawning position in map `mp_skirmish_map_005` and `mp_skirmish_map_008`.
+
+## [0.5.1] - 2020-02-28
+### Removed
+- Remove map boundary in test battle mode as suggested.
+
+### Fixed
+- Fix calvary spawning bug.
+
 ## [0.5.0] - 2020-02-28
 ### Added
 - Add no dying mode: enable by pressing `numpad 7`.

@@ -1,4 +1,3 @@
-
 using System;
 using System.IO;
 using System.Xml.Serialization;
@@ -48,10 +47,10 @@ namespace EnhancedBattleTest
                     this.disableDying = false;
                     this.changeCombatAI = false;
                     this.combatAI = 100;
-                    goto case "1.5";
-                case "1.5":
                     ConfigVersion = BinaryVersion.ToString();
                     Serialize();
+                    break;
+                case "1.5":
                     break;
 
             }
@@ -169,8 +168,8 @@ namespace EnhancedBattleTest
                 new SceneInfo{name = "mp_skirmish_map_004", formationPosition = new Vec2(320,288), formationDirection = new Vec2(0,1), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_005", formationPosition = new Vec2(477,496), formationDirection = new Vec2(1, 0), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_006", formationPosition = new Vec2(480,561), formationDirection = new Vec2(1, 0), skyBrightness = 0},
-                new SceneInfo{name = "mp_skirmish_map_007", formationPosition = new Vec2(192,185), formationDirection = new Vec2(0, 1)},
-                new SceneInfo{name = "mp_skirmish_map_007_winter", formationPosition = new Vec2(192,185), formationDirection = new Vec2(0, 1)},
+                new SceneInfo{name = "mp_skirmish_map_007", formationPosition = new Vec2(190,154), formationDirection = new Vec2(0, 1)},
+                new SceneInfo{name = "mp_skirmish_map_007_winter", formationPosition = new Vec2(190,154), formationDirection = new Vec2(0, 1)},
                 //new SceneInfo{name = "mp_skirmish_map_008", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_skirmish_map_009", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_skirmish_map_010", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},

@@ -1,11 +1,6 @@
-using System.Collections.Generic;
-using TaleWorlds.Engine;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace EnhancedBattleTest
 {
@@ -43,8 +38,6 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateOptionsUIHandler(),
                 new SpectatorCameraView(),
                 new EnhancedTestBattleView(mission),
-                ViewCreator.CreateMissionBoundaryCrossingView(),
-                new MissionBoundaryWallView(),
             };
             return missionViewList;
         }

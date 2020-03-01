@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: TaleWorlds.MountAndBlade.CustomBattleAgentOrigin
-// Assembly: TaleWorlds.MountAndBlade, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: 1C1377A6-BA3A-430D-8B6D-C61C1B8CB575
-// Assembly location: C:\game\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord - Beta\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll
-
-using System;
+﻿using System;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 

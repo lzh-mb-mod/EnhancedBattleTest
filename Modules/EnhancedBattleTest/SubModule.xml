@@ -4,7 +4,7 @@
 	<Id value = "EnhancedBattleTest"/>
 	<Version value = "0.5"/>
 	<SingleplayerModule value="true"/>
-	<MultiplayerModule value="true"/>
+	<MultiplayerModule value="false"/>
 	<DependedModules/>
 	<SubModules>
 		<SubModule>

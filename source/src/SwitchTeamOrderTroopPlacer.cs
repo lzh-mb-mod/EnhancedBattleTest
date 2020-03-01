@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: TaleWorlds.MountAndBlade.View.Missions.SwitchTeamOrderTroopPlacer
-// Assembly: TaleWorlds.MountAndBlade.View, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: CC8E8C6D-717B-4F6D-8F96-682219952E3A
-// Assembly location: C:\game\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord - Beta\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.View.dll
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

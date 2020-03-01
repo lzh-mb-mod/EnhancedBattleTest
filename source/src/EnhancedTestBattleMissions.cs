@@ -1,5 +1,4 @@
-﻿
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
@@ -43,9 +42,6 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new MissionHardBorderPlacer(),
-                    new MissionBoundaryPlacer(),
-                    new MissionBoundaryCrossingHandler(),
                 }
             );
         }

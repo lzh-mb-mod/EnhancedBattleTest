@@ -41,10 +41,10 @@ namespace EnhancedBattleTest
                     this.disableDying = false;
                     this.changeCombatAI = false;
                     this.combatAI = 100;
-                    goto case "1.5";
-                case "1.5":
                     ConfigVersion = BinaryVersion.ToString();
                     Serialize();
+                    break;
+                case "1.5":
                     break;
             }
         }

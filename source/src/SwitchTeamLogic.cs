@@ -1,5 +1,4 @@
-﻿using TaleWorlds.Engine;
-using TaleWorlds.InputSystem;
+﻿using TaleWorlds.InputSystem;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -26,9 +25,13 @@ namespace EnhancedBattleTest
                 ? this.Mission.PlayerEnemyTeam.PlayerOrderController.Owner
                 : this.Mission.PlayerEnemyTeam.Leader;
             if (targetAgent == null)
+            {
+                Utility.DisplayMessage("Enemy has been wiped out.");
                 return;
+            }
             if (!Utility.IsPlayerDead()) // MainAgent may be null because of free camera mode.
             {
+                Utility.DisplayMessage("Switched to the enemy team.");
                 this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
                 this.Mission.MainAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }

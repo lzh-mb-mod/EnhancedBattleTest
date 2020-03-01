@@ -1,16 +1,7 @@
-// Decompiled with JetBrains decompiler
-// Type: TaleWorlds.MountAndBlade.CustomGame
-// Assembly: TaleWorlds.MountAndBlade, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-// MVID: D5D21862-28AB-45FC-8C12-16AF95A20751
-// Assembly location: D:\SteamLibrary\steamapps\common\Mount & Blade II Bannerlord - Beta\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.dll
-
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -36,10 +27,10 @@ namespace EnhancedBattleTest
             currentGame.CreateObjects();
             currentGame.InitializeDefaultGameObjects();
             currentGame.LoadBasicFiles(false);
-            this.ObjectManager.LoadXML("Items", (Type)null);
-            this.ObjectManager.LoadXML("MPCharacters", (Type)null);
-            this.ObjectManager.LoadXML("BasicCultures", (Type)null);
-            this.ObjectManager.LoadXML("MPClassDivisions", (Type)null);
+            this.ObjectManager.LoadXML("Items");
+            this.ObjectManager.LoadXML("MPCharacters");
+            this.ObjectManager.LoadXML("BasicCultures");
+            this.ObjectManager.LoadXML("MPClassDivisions");
             this.ObjectManager.ClearEmptyObjects();
             MultiplayerClassDivisions.Initialize();
             currentGame.SetDefaultEquipments((IReadOnlyDictionary<string, Equipment>)new Dictionary<string, Equipment>());
@@ -47,7 +38,7 @@ namespace EnhancedBattleTest
             ModuleLogger.Writer.Flush();
             if (currentGame.BasicModels.SkillList == null)
             {
-                throw new Exception("haha");
+                throw new Exception("Error: No Skill List");
             }
             currentGame.CreateLists();
             this.ObjectManager.ClearEmptyObjects();

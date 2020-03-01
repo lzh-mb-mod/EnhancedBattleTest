@@ -57,7 +57,7 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 
 
 ### How to customizing characters
-- You can customize your characters by modifying the xml element with id `player_character` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.
+- You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.
 
 - This character is referred in another file `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, in which armors, movement speed and other properties of the character are defined.
 
@@ -88,8 +88,11 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 
 ## Build from source:
 The source code is located in the `source` folder or available at https://gitlab.com/lzh_mb_mod/enhancedbattletest.
+
 1. install .net core sdk
+
 2. modify 6th line of `EnhancedBattleTest.csproj`, change `Mb2Bin` property to your bannerlord installation location
+
 3. open a termial (powershell or cmd), run `dotnet msbuild -t:install`. This step will build `EnhancedBattleTest.dll` and copy it to `bin\Win64_Shipping_Client`
 
 ## Bug:

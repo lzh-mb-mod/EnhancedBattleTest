@@ -1,12 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using TaleWorlds.Core;
-using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.MissionSpawnHandlers;
-using TaleWorlds.MountAndBlade.Source.Missions;
-using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
+﻿using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
