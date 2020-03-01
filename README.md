@@ -1,6 +1,6 @@
 # Enhanced Battle Test
 
-A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
+A mod for Mount&Blade Bannerlord that can test battle locally.
 
 ## Features
 - Test Battle Mode: You can choose where to spawn troops and they will be all spawned instantly.
@@ -31,6 +31,10 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 
 - Switching free camera.
 
+- Undead mode. Any agent will not die after switched on.
+
+- Adjusting combat AI between 0 and 100.
+
 - Customizing player characters, details below.
 
 ## How to install
@@ -54,7 +58,6 @@ A mod for Mount&Blade Bannerlord that can test Caption mode battle locally.
 - Press `numpad7` to disable dying.
 
 - Press `L` key to teleport player when in free camera mode.
-
 
 ### How to customizing characters
 - You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.

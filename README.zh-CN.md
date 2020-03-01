@@ -104,6 +104,19 @@
 
   - Exit：退出，返回到标题画面。
 
+- 局内操作：
+  - 按住`TAB`键来退出战斗。
+
+  - 按小键盘5键来切换队伍。
+
+  - 按小键盘6键来切换自由视角。
+
+  - 按`F`键或小键盘6键来在玩家死后控制其小兵。
+
+  - 按小键盘7键来切换不死模式。
+
+  - 按`L`键在自由视角下让玩家瞬移到镜头位置。
+
 ### 如何自定义角色
 - 你可以通过修改`Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`文件中，id为`player_character_1`，`player_character_2`和`player_character_3`的xml元素来自定义角色。
 
