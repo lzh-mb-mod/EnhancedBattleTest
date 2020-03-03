@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.3] - 2020-03-04
+### Added
+- Add more maps.
+
+### Fixed
+- Keep compatible with b0.8.1.
+
+- Fix a bug of order UI.
+
 ## [0.5.2] - 2020-03-01
 ### Added
 - Add readme file for Chinese.

@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
 
         public int sceneIndex;
 
-        protected static Version BinaryVersion => new Version(1, 5);
+        protected static Version BinaryVersion => new Version(1, 6);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -45,6 +45,7 @@ namespace EnhancedBattleTest
                     Serialize();
                     break;
                 case "1.5":
+                case "1.6":
                     break;
             }
         }
@@ -96,7 +97,7 @@ namespace EnhancedBattleTest
                 //"mp_siege_map_004",
                 //"mp_siege_map_005",
                 new SceneInfo{name = "mp_sergeant_map_001"},
-                //new SceneInfo{name = "mp_sergeant_map_005"},
+                new SceneInfo{name = "mp_sergeant_map_005"},
                 new SceneInfo{name = "mp_sergeant_map_007"},
                 new SceneInfo{name = "mp_sergeant_map_008"},
                 new SceneInfo{name = "mp_sergeant_map_009"},

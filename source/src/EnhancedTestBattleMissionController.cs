@@ -394,7 +394,7 @@ namespace EnhancedBattleTest
             var pos = this.TestBattleConfig.FormationPosition
                       + distanceToInitialPosition * (isPlayerSide ? -xDir : xDir);
             if (!isPlayerSide)
-                pos += xDir * this.TestBattleConfig.distance;
+                pos += xDir * this.TestBattleConfig.Distance;
             return pos.ToVec3(GetSceneHeightForAgent(pos));
         }
         private float GetSceneHeightForAgent(TL.Vec2 pos)

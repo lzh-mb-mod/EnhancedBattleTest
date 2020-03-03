@@ -50,7 +50,7 @@
 
   - Formation Position(x, y)：玩家队伍出生位置。
 
-  - formation direction(x, y)：玩家队伍朝向。
+  - Formation Direction(x, y)：玩家队伍朝向。
 
   - Sky Brightness：天空亮度。-1表示不做修改，采用场景的默认设置。
 
@@ -122,11 +122,11 @@
 
 - 这个角色在`Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`中被引用，该文件定义了角色的护甲、移速和其它属性。
 
-- **然而**，在当前的砍二b0.8.0版本中，将第三方mod中的`mpclassdivisions.xml`和`Native`中的`mpclassdivisions.xml`合并，并解析读取，实现得**不正确**：
+- **然而**，在当前的砍二b0.8.0和0.8.1版本中，将第三方mod中的`mpclassdivisions.xml`和`Native`中的`mpclassdivisions.xml`合并，并解析读取，实现得**不正确**：
 
   xml元素间的空格未被忽略，游戏会因此崩溃。
 
-  这是截至目前砍二b0.8.0版本的bug，临时的解决方案是移除`Native`和本mod中的两个`mpclassdivisions.xml`文件里，xml元素间的所有换行和空格。
+  这是截至目前砍二b0.8.0/0.8.1版本的bug，临时的解决方案是移除`Native`和本mod中的两个`mpclassdivisions.xml`文件里，xml元素间的所有换行和空格。
 
   我已经帮你把这些做好了。所以如果你不修改这两个文件，你不需要关心这些。
 

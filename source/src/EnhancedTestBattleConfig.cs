@@ -10,10 +10,11 @@ namespace EnhancedBattleTest
         public class SceneInfo
         {
             public string name;
+            public int soldiersPerRow = 20;
             public Vec2 formationPosition;
             public Vec2 formationDirection;
+            public float distance = 50;
             public float skyBrightness = -1;
-            public int soldiersPerRow = 20;
             public float rainDensity = -1;
         }
 
@@ -21,12 +22,11 @@ namespace EnhancedBattleTest
 
         public SceneInfo[] sceneList;
         public int sceneIndex;
-        public float distance;
         public float soldierXInterval, soldierYInterval;
 
         public bool enemyCharge;
 
-        protected static Version BinaryVersion => new Version(1, 5);
+        protected static Version BinaryVersion => new Version(1, 6);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -36,6 +36,7 @@ namespace EnhancedBattleTest
                 case "1.1":
                 case "1.2":
                 case "1.3":
+                case "1.5":
                 default:
                     Utility.DisplayMessage("Config version not compatible.\nReset config.");
                     ResetToDefault();
@@ -50,7 +51,7 @@ namespace EnhancedBattleTest
                     ConfigVersion = BinaryVersion.ToString();
                     Serialize();
                     break;
-                case "1.5":
+                case "1.6":
                     break;
 
             }
@@ -92,6 +93,13 @@ namespace EnhancedBattleTest
         }
 
         [XmlIgnore]
+        public float Distance
+        {
+            get => sceneList[sceneIndex].distance;
+            set => sceneList[sceneIndex].distance = value;
+        }
+
+        [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
 
         private static EnhancedTestBattleConfig CreateDefault()
@@ -115,6 +123,7 @@ namespace EnhancedBattleTest
                 //"mp_ruins_2",
                 new SceneInfo{name = "mp_skirmish_map_001a", formationPosition = new Vec2(200, 200), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_tdm_map_001", formationPosition = new Vec2(385, 570), formationDirection = new Vec2(0.7f, -0.3f).Normalized()},
+                new SceneInfo{name = "mp_tdm_map_001_spring", formationPosition = new Vec2(385, 570), formationDirection = new Vec2(0.7f, -0.3f).Normalized()},
                 new SceneInfo{name = "mp_duel_001", formationPosition = new Vec2(567, 600), formationDirection = new Vec2(0, 10)},
                 new SceneInfo{name = "mp_duel_001_winter", formationPosition = new Vec2(567, 600), formationDirection = new Vec2(0, 1)},
                 new SceneInfo{name = "mp_ruins_2", formationPosition = new Vec2(514, 470), formationDirection = new Vec2(1, 0)},
@@ -135,19 +144,19 @@ namespace EnhancedBattleTest
                 //"mp_siege_map_004",
                 //"mp_siege_map_005",
                 new SceneInfo{name = "mp_sergeant_map_001", formationPosition = new Vec2(250, 500), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_sergeant_map_005", formationPosition = new Vec2(330, 439), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_sergeant_map_005", formationPosition = new Vec2(330, 439), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_sergeant_map_007", formationPosition = new Vec2(330, 439), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_sergeant_map_008", formationPosition = new Vec2(471,505), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_sergeant_map_009", formationPosition = new Vec2(530,503), formationDirection = new Vec2(0,1)},
-                //new SceneInfo{name = "mp_sergeant_map_010", formationPosition = new Vec2(391,376), formationDirection = new Vec2(0,1)},
+                new SceneInfo{name = "mp_sergeant_map_010", formationPosition = new Vec2(391,376), formationDirection = new Vec2(0,1)},
                 new SceneInfo{name = "mp_sergeant_map_011", formationPosition = new Vec2(485,364), formationDirection = new Vec2(0.4f,0.6f)},
                 new SceneInfo{name = "mp_sergeant_map_011s", formationPosition = new Vec2(485,364), formationDirection = new Vec2(0.4f,0.6f)},
-                //new SceneInfo{name = "mp_sergeant_map_012", formationPosition = new Vec2(580,576), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_sergeant_map_012", formationPosition = new Vec2(493,312), formationDirection = new Vec2(0.2f, 0.8f).Normalized()},
                 new SceneInfo{name = "mp_sergeant_map_013", formationPosition = new Vec2(580,576), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_sergeant_map_vlandia_01", formationPosition = new Vec2(485,364), formationDirection = new Vec2(0.4f,0.6f)},
                 //new SceneInfo{name = "mp_siege_map_001", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_siege_map_002", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
-                //new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(461,634), formationDirection = new Vec2(0.55f,0.45f).Normalized(), distance = 180},
                 //new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //"mp_skirmish_map_002f",
@@ -164,13 +173,16 @@ namespace EnhancedBattleTest
                 //"mp_skirmish_map_battania_02",
                 //"mp_skirmish_map_battania_03"
                 new SceneInfo{name = "mp_skirmish_map_002f", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f).Normalized(), soldiersPerRow = 10},
-                new SceneInfo{name = "mp_skirmish_map_002_winter", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f), soldiersPerRow = 10},
+                new SceneInfo{name = "mp_skirmish_map_002_winter", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f).Normalized(), soldiersPerRow = 10},
+                new SceneInfo{name = "mp_skirmish_map_003_skinc", formationPosition = new Vec2(650,675), formationDirection = new Vec2(-0.7f,0.3f).Normalized(), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_004", formationPosition = new Vec2(320,288), formationDirection = new Vec2(0,1), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_005", formationPosition = new Vec2(477,496), formationDirection = new Vec2(1, 0), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_006", formationPosition = new Vec2(480,561), formationDirection = new Vec2(1, 0), skyBrightness = 0},
+                new SceneInfo{name = "mp_skirmish_map_006_nowater", formationPosition = new Vec2(480,561), formationDirection = new Vec2(1, 0), skyBrightness = 0},
                 new SceneInfo{name = "mp_skirmish_map_007", formationPosition = new Vec2(190,154), formationDirection = new Vec2(0, 1)},
                 new SceneInfo{name = "mp_skirmish_map_007_winter", formationPosition = new Vec2(190,154), formationDirection = new Vec2(0, 1)},
-                //new SceneInfo{name = "mp_skirmish_map_008", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
+                //new SceneInfo{name = "mp_skirmish_map_008", formationPosition = new Vec2(495,500), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_skirmish_map_008_skin", formationPosition = new Vec2(495,500), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_skirmish_map_009", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_skirmish_map_010", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_skirmish_map_013", formationPosition = new Vec2(250, 500), formationDirection = new Vec2(1, 0)},
@@ -198,7 +210,6 @@ namespace EnhancedBattleTest
                     new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                     new ClassInfo { classStringId = "mp_heavy_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
-                distance = 50,
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
                 UseFreeCamera = false,
@@ -224,7 +235,7 @@ namespace EnhancedBattleTest
         public override bool Validate() {
             return base.Validate()
                 && this.sceneIndex >= 0 && this.sceneIndex < this.sceneList.Length
-                && this.distance > 0
+                && this.Distance > 0
                 && soldierXInterval > 0
                 && soldierYInterval > 0
                 && SoldiersPerRow > 0
@@ -319,7 +330,6 @@ namespace EnhancedBattleTest
             if (other.sceneList != null)
                 this.sceneList = other.sceneList;
             this.sceneIndex = other.sceneIndex;
-            this.distance = other.distance;
             this.soldierXInterval = other.soldierXInterval;
             this.soldierYInterval = other.soldierYInterval;
             this.enemyCharge = other.enemyCharge;

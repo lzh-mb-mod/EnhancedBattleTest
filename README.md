@@ -59,14 +59,29 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Press `L` key to teleport player when in free camera mode.
 
-### How to customizing characters
+### How to add more maps
+- You can go to `Modules\Native\SceneObj` to find available maps.
+
+- To add more maps, you need to edit the configuartion file(in folder "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\").
+
+- The maps available in mod are under the xml element `sceneList`.
+
+  The element `SceneInfo` represents a map and related config.
+
+  So you need to add a `SceneInfo` element as a child of `sceneList`, just like the other maps.
+
+  For example you can copy the text between `<SceneInfo>` and `</SceneInfo>`, then replace the text between `<name>` and `</name>` with the folder name of the map you want to add.
+
+  The other config like formation positions can be configured in the game.
+
+### How to customize characters
 - You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.
 
 - This character is referred in another file `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, in which armors, movement speed and other properties of the character are defined.
 
-- **However**, currently in Bannerlord b0.8.0, merging those two `mpclassdivisions.xml` files (one in `native` and one in this mod), and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
+- **However**, currently in Bannerlord b0.8.0 (also in b0.8.1), merging those two `mpclassdivisions.xml` files (one in `native` and one in this mod), and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
 
-  This is a bug in Bannerlord b0.8.0, and the work-around is to remove all the spaces between xml elements in both files.
+  This is a bug in Bannerlord b0.8.0/b0.8.1, and the work-around is to remove all the spaces between xml elements in both files.
   
   I have done this for you. So you don't need to worry about it if you don't modify those two `mpclassdivisions.xml` files.
 

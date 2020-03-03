@@ -46,6 +46,7 @@ namespace EnhancedBattleTest
         }
         private void OnPreSwitchTeam()
         {
+            this._dataSource.CloseToggleOrder();
             this.OnMissionScreenFinalize();
         }
 

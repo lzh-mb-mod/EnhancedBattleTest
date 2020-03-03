@@ -233,7 +233,6 @@ namespace EnhancedBattleTest
             this._selectedSceneIndex = CurrentConfig.sceneIndex;
             UpdateSceneContent();
 
-            this.Distance = CurrentConfig.distance.ToString();
             this.SoldierXInterval = CurrentConfig.soldierXInterval.ToString();
             this.SoldierYInterval = CurrentConfig.soldierYInterval.ToString();
 
@@ -246,6 +245,7 @@ namespace EnhancedBattleTest
             this.SoldiersPerRow = CurrentConfig.SoldiersPerRow.ToString();
             this.FormationPosition = Vec2ToString(CurrentConfig.FormationPosition);
             this.FormationDirection = Vec2ToString(CurrentConfig.FormationDirection);
+            this.Distance = CurrentConfig.Distance.ToString();
             this.SkyBrightness = CurrentConfig.SkyBrightness.ToString();
             this.RainDensity = CurrentConfig.RainDensity.ToString();
         }
@@ -261,7 +261,7 @@ namespace EnhancedBattleTest
             CurrentConfig.SkyBrightness = System.Convert.ToSingle(this.SkyBrightness);
             CurrentConfig.RainDensity = System.Convert.ToSingle(this.RainDensity);
             
-            CurrentConfig.distance = System.Convert.ToSingle(this.Distance);
+            CurrentConfig.Distance = System.Convert.ToSingle(this.Distance);
             CurrentConfig.soldierXInterval = System.Convert.ToSingle(this.SoldierXInterval);
             CurrentConfig.soldierYInterval = System.Convert.ToSingle(this.SoldierYInterval);
         }

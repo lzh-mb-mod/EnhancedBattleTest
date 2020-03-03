@@ -48,6 +48,12 @@
                 <EditableTextWidget Text="@FormationDirection" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" MarginLeft="300" />
               </Children>
             </Widget>
+            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
+              <Children>
+                <TextWidget Text="Distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" />
+                <EditableTextWidget Text="@Distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" />
+              </Children>
+            </ListPanel>
             <Widget WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
               <Children>
                 <TextWidget Text="Sky Brightness" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" />
@@ -223,12 +229,6 @@
                     </ButtonWidget>
                   </Children>
                 </Widget>
-              </Children>
-            </ListPanel>
-            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
-              <Children>
-                <TextWidget Text="Distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" />
-                <EditableTextWidget Text="@Distance" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" />
               </Children>
             </ListPanel>
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
