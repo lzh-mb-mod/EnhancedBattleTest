@@ -7,9 +7,7 @@
 
 - Custom Battle Mode：该模式采用砍二内建的生成部队方式：部队在场景中固定的地点生成。超出人数限制的部队会作为援军稍后加入战场。
 
-- 地图选择：包括领军地图，冲突地图，死斗地图等。
-
-  但是移除了攻城地图，因为攻城图目前不稳定，容易出bug。
+- 地图选择：包括领军地图，冲突地图，死斗地图和部分攻城图。攻城图目前不稳定，容易崩溃。
 
   Custom Battle Mode只包含领军地图，因为只有领军地图有该模式要求的军队出生点信息。
 
@@ -72,6 +70,8 @@
 
     - 选择完成后，点击界面下方的done确认。
 
+  - Spawn Player：开局是否生成玩家角色。若不生成玩家角色，玩家仍可按F键控制下属士兵。
+
   - Player Troop 1/2/3：玩家的一至三号部队的角色。
 
   - Player Troop 1/2/3 Count：玩家的一至三号部队的人数。
@@ -85,8 +85,6 @@
   - Spawn Enemy Commaner：是否生成敌军将领。
 
   - Distance：敌军部队和己方部队的距离。
-
-  - Free Camera：开局是否自由视角，若是则不会生成玩家角色。玩家仍可按F键控制下属士兵。
 
   - Enemy Charge：敌军是否开局冲锋。
 
@@ -117,16 +115,16 @@
 
   - 按`L`键在自由视角下让玩家瞬移到镜头位置。
 
-### 如何自定义角色
+## 如何自定义角色
 - 你可以通过修改`Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`文件中，id为`player_character_1`，`player_character_2`和`player_character_3`的xml元素来自定义角色。
 
 - 这个角色在`Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`中被引用，该文件定义了角色的护甲、移速和其它属性。
 
-- **然而**，在当前的砍二b0.8.0和0.8.1版本中，将第三方mod中的`mpclassdivisions.xml`和`Native`中的`mpclassdivisions.xml`合并，并解析读取，实现得**不正确**：
+- **然而**，自从砍二b0.8.0版本开始（也许更早），将第三方mod中的`mpclassdivisions.xml`和`Native`中的`mpclassdivisions.xml`合并，并解析读取，实现得**不正确**：
 
   xml元素间的空格未被忽略，游戏会因此崩溃。
 
-  这是截至目前砍二b0.8.0/0.8.1版本的bug，临时的解决方案是移除`Native`和本mod中的两个`mpclassdivisions.xml`文件里，xml元素间的所有换行和空格。
+  这是砍二自身的bug，临时的解决方案是移除`Native`和本mod中的两个`mpclassdivisions.xml`文件里的xml元素间的所有换行和空格。
 
   我已经帮你把这些做好了。所以如果你不修改这两个文件，你不需要关心这些。
 
@@ -134,7 +132,7 @@
 
   我用的是vscode的xml插件来自动删除空格。
 
-- 因此如果你修改了其中的文件，或者游戏更新了，若mod不能启动了，请尝试重装mod。
+- 因此如果你修改了其中的文件，或者游戏更新了（从而更新了Native中的`mpclassdivisions.xml`），若mod不能启动了，请尝试重装mod。
 
   若重装不起作用，你可以尝试在`Modules\EnhancedBattleTest\SubModule.xml`文件中移除下面的内容：
   ```
@@ -151,13 +149,38 @@
 - 希望这个bug早日被TaleWorlds修复。
 
 ## 从源代码构建
-源代码位于`source`文件夹下，在https://gitlab.com/lzh_mb_mod/enhancedbattletest 中也可以获得源代码。
+源代码位于`source`文件夹下，在[https://gitlab.com/lzh_mb_mod/enhancedbattletest](https://gitlab.com/lzh_mb_mod/enhancedbattletest) 中也可以获得源代码。
 
 1. 安装.NET core sdk。
 
 2. 将`EnhancedBattleTest.csproj`中第6行的`Mb2Bin`属性修改为你的砍二安装位置。
 
 3. 打开一个终端shell(powershell或者cmd)，运行`dotnet msbuild -t:install`。这一步会构建`EnhancedBattleTest.dll`并将它复制到`bin\Win64_Shipping_Client`中。
+
+## 解决问题
+- 若遇到无法进入mod的情况，首先请在steam中校验文件完整性，之后再**重新安装**mod。
+  
+  - 注意每次游戏更新后（尤其是校验文件完整性之后的游戏更新后），若你想启动mod，你都应当先重新安装mod。
+
+- 若在没有进入主菜单的情况下崩溃：
+  
+  - mod很可能没有正确安装，请重新安装mod。若没用：
+
+  - 尝试将`EnhancedBattleTest.bat`中的`ManagedStarter.exe`替换为`NativeStarter.exe`。
+
+    这个方法已知对一部分无法启动mod的情况有用。
+
+- 如果在点击主菜单中的按钮时崩溃：
+
+  - 重装mod。请阅读`如何自定义角色`小节以了解原因。
+
+- 如果在战斗配置界面中，选择数字时崩溃：
+
+  - 这是由砍二的bug导致。你能做的是避免触发这个bug。
+
+- 若除攻城图之外的战斗中mod崩溃
+
+  - 请把崩溃报告通过下面的邮箱发给我。
 
 ## 联系我
 * 请发邮件到：lizhenhuan1019@qq.com

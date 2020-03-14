@@ -2,4 +2,5 @@
 source/bin/
 source/obj/
 *.DotSettings.user
+*.csproj.user
 *.dll

@@ -104,7 +104,6 @@ namespace EnhancedBattleTest
                new MissionHardBorderPlacer(),
                new MissionBoundaryPlacer(),
                new MissionBoundaryCrossingHandler(),
-               new MissionSimulationHandler(),
                new BattleMissionAgentInteractionLogic(),
                new AgentFadeOutLogic(),
                new AgentMoraleInteractionLogic(),

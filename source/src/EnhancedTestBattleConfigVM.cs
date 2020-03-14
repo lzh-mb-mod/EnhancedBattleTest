@@ -148,15 +148,15 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public bool EnemyCharge
+        public bool Charge
         {
-            get => this.CurrentConfig.enemyCharge;
+            get => this.CurrentConfig.charge;
             set
             {
-                if (this.CurrentConfig.enemyCharge == value)
+                if (this.CurrentConfig.charge == value)
                     return;
-                this.CurrentConfig.enemyCharge = value;
-                this.OnPropertyChanged(nameof(EnemyCharge));
+                this.CurrentConfig.charge = value;
+                this.OnPropertyChanged(nameof(Charge));
             }
         }
 
@@ -236,7 +236,7 @@ namespace EnhancedBattleTest
             this.SoldierXInterval = CurrentConfig.soldierXInterval.ToString();
             this.SoldierYInterval = CurrentConfig.soldierYInterval.ToString();
 
-            this.EnemyCharge = this.CurrentConfig.enemyCharge;
+            this.Charge = this.CurrentConfig.charge;
         }
 
         private void UpdateSceneContent()
@@ -278,5 +278,4 @@ namespace EnhancedBattleTest
             return new Vec2(System.Convert.ToSingle(posParts[0]), System.Convert.ToSingle(posParts[1]));
         }
     }
-    
 }

@@ -7,9 +7,9 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Custom Battle Mode: Use built-in mechanism to spawn troops. Troops that exceeds the battle size limit will be spawned later.
 
-- Map selection. Including sergeant maps, skirmish maps, tdm map, etc.
+- Map selection. Including sergeant maps, skirmish maps, tdm maps and some siege maps.
 
-  However, I removed siege maps because they are buggy.
+  Siege maps may crash.
 
   Custom battle mode contains sergeant maps only, because only sergeant maps contains corrrect spawning positions that custom battle mode requires.
 
@@ -59,7 +59,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Press `L` key to teleport player when in free camera mode.
 
-### How to add more maps
+## How to add more maps
 - You can go to `Modules\Native\SceneObj` to find available maps.
 
 - To add more maps, you need to edit the configuartion file(in folder "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\").
@@ -74,14 +74,14 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
   The other config like formation positions can be configured in the game.
 
-### How to customize characters
+## How to customize characters
 - You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.
 
-- This character is referred in another file `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, in which armors, movement speed and other properties of the character are defined.
+- These characters are referred in another file `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, in which armors, movement speed, perks and other properties of the character are defined.
 
-- **However**, currently in Bannerlord b0.8.0 (also in b0.8.1), merging those two `mpclassdivisions.xml` files (one in `native` and one in this mod), and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
+- **However**, since Bannerlord b0.8.0(maybe since earlier version, I don't know), merging those two `mpclassdivisions.xml` files (one in `native` and one in this mod), and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
 
-  This is a bug in Bannerlord b0.8.0/b0.8.1, and the work-around is to remove all the spaces between xml elements in both files.
+  This is a bug in Bannerlord, and the work-around is to remove all the spaces between xml elements in both files.
   
   I have done this for you. So you don't need to worry about it if you don't modify those two `mpclassdivisions.xml` files.
 
@@ -89,7 +89,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
   I use vscode with xml extension to remove spaces automatically.
 
-- If you modified those files or the game updated, and the mod could not start, try to reinstall the mod.
+- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, try to reinstall the mod.
 
   If it does not work, then try to remove the following content in `Modules\EnhancedBattleTest\SubModule.xml`:
   ```
@@ -104,8 +104,8 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 - Hope to see this bug fixed soon.
 
 
-## Build from source:
-The source code is located in the `source` folder or available at https://gitlab.com/lzh_mb_mod/enhancedbattletest.
+## Build from source
+The source code is located in the `source` folder or available at [https://gitlab.com/lzh_mb_mod/enhancedbattletest](https://gitlab.com/lzh_mb_mod/enhancedbattletest).
 
 1. install .net core sdk
 
@@ -113,16 +113,32 @@ The source code is located in the `source` folder or available at https://gitlab
 
 3. open a termial (powershell or cmd), run `dotnet msbuild -t:install`. This step will build `EnhancedBattleTest.dll` and copy it to `bin\Win64_Shipping_Client`
 
-## Bug:
-Some people say they can't launch the mod, if you are among them, try building from source code.
+## Troubleshoot
+- First of all, please try checking file integrity from Steam and then **reinstall** the mod.
 
-I guess there will be compilation error, If you are a programmer, it's not difficult to fix.
+  - Note that you should reinstall the mod everytime after game update (especially the update after checking file integrity) if you want to launch the mod.
 
-If you are a normal user, google the compilation error or post it to forum to ask for help.
+- If the mod crashed without entering Main menu:
 
-If you find the cause of crash, please tell me.
+  - Reinstall the mod. if not working:
 
-## Contact with me:
+  - Try to replace `ManagedStarter.exe` with `NativeStarter.exe` in `EnhancedBattleTest.bat`.
+
+    This works for some people.
+
+- If the mod crashed when clicking buttons in main menu:
+  
+  - Reinstall the mod. See `How to customize characters` section above for reasons.
+
+- If the mod crashed when selecting numbers in battle config UI:
+  
+  - This is caused by bugs in Bannerlord. Maybe you can avoid to trigger this bug.
+
+- If the mod crashed in battle (except in siege map):
+
+  - Please send the crash report to me via email below.
+
+## Contact with me
 * Please mail to: lizhenhuan1019@qq.com
 
 * This mod is originated from mod "Battle Test" written by "Modbed", who does not maintain "Battle Test" anymore.

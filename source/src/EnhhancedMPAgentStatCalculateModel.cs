@@ -38,7 +38,10 @@ namespace EnhancedBattleTest
         {
             MultiplayerClassDivisions.MPHeroClass classForCharacter = MultiplayerClassDivisions.GetMPHeroClassForCharacter(agent.Character);
             if (classForCharacter != null)
+            {
                 this.FillAgentStatsFromData(ref agentDrivenProperties, classForCharacter, agent, agentBuildData?.AgentMissionPeer);
+                agentDrivenProperties.SetStat(DrivenProperty.UseAnimationProgressDependentBlocking, MBMultiplayerOptionsAccessor.GetUseAnimationProgressDependentBlocking(MBMultiplayerOptionsAccessor.MultiplayerOptionsAccessMode.CurrentMapOptions) ? 1f : -1f);
+            }
             float num1 = 0.5f;
             float num2 = 0.5f;
             var config = EnhancedTestBattleConfig.Get();

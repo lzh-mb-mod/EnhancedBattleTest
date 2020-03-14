@@ -36,7 +36,6 @@ namespace EnhancedBattleTest
                     new AgentBattleAILogic(),
                     new AgentVictoryLogic(),
                     new MissionOptionsComponent(),
-                    new MissionSimulationHandler(),
                     new BattleMissionAgentInteractionLogic(),
                     new AgentFadeOutLogic(),
                     new AgentMoraleInteractionLogic(),

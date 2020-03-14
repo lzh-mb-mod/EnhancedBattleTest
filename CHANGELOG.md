@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.4] - 2020-03-15
+### Fixed
+- Keep compatible with b0.8.5.
+
+### Added
+- Add more maps.
+
+- Add html page for README.
+
+### Changed
+- Change "Enemy Charge" to "Charge" that let both sides to charge.
+
+- Change UI text.
+
 ## [0.5.3] - 2020-03-04
 ### Added
 - Add more maps.

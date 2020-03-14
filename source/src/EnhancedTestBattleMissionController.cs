@@ -18,7 +18,7 @@ namespace EnhancedBattleTest
             set
             {
                 _testBattleConfig = value;
-                int playerNumber = this.TestBattleConfig.UseFreeCamera ? 0 : 1;
+                int playerNumber = this.TestBattleConfig.SpawnPlayer ? 1 : 0;
                 _shouldCelebrateVictory = (playerNumber + this.TestBattleConfig.playerTroops.Sum(classInfo => classInfo.troopCount)) != 0 &&
                                           this.TestBattleConfig.enemyTroops.Sum(classInfo => classInfo.troopCount) != 0;
             }
@@ -107,11 +107,11 @@ namespace EnhancedBattleTest
             var startPos = this.TestBattleConfig.FormationPosition;
             var xDir = this.TestBattleConfig.FormationDirection;
             var yDir = this.TestBattleConfig.FormationDirection.LeftVec();
-            var useFreeCamera = this.TestBattleConfig.UseFreeCamera;
+            var spawnPlayer = this.TestBattleConfig.SpawnPlayer;
 
             var playerTeam = this.Mission.PlayerTeam;
 
-            if (!useFreeCamera)
+            if (spawnPlayer)
             {
                 var agentMatrixFrame = GetFormationMatrixFrame(true, -2);
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
@@ -127,7 +127,15 @@ namespace EnhancedBattleTest
 
                 playerTeam.MasterOrderController.ClearSelectedFormations();
                 playerTeam.MasterOrderController.SelectFormation(playerFormation);
-                playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
+                if (!TestBattleConfig.charge)
+                {
+                    playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move,
+                        agentMatrixFrame.origin.ToWorldPosition());
+                }
+                else
+                {
+                    playerTeam.MasterOrderController.SetOrder(OrderType.Charge);
+                }
 
                 player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
@@ -165,7 +173,7 @@ namespace EnhancedBattleTest
                 var tuple = SetFormationRegion(playerTroopFormation, formationIndex, true, playerTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
                 distanceToInitialPosition += tuple.Item2;
-                BasicCultureObject troopCulture = !useFreeCamera ? playerTeamCulture : playerTroopCharacter.Culture;
+                BasicCultureObject troopCulture = !spawnPlayer ? playerTeamCulture : playerTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < playerTroopCount; ++troopIndex)
                 {
                     var agent = this.SpawnAgent(TestBattleConfig.playerTroops[formationIndex], playerTroopCharacter, false,
@@ -175,9 +183,18 @@ namespace EnhancedBattleTest
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
+
                 playerTeam.MasterOrderController.ClearSelectedFormations();
                 playerTeam.MasterOrderController.SelectFormation(playerTroopFormation);
-                playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, formationMatrixFrame.origin.ToWorldPosition());
+                if (!TestBattleConfig.charge)
+                {
+                    playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move,
+                        formationMatrixFrame.origin.ToWorldPosition());
+                }
+                else
+                {
+                    playerTeam.MasterOrderController.SetOrder(OrderType.Charge);
+                }
             }
         }
 
@@ -206,7 +223,7 @@ namespace EnhancedBattleTest
                 agent.Controller = Agent.ControllerType.AI;
                 agent.WieldInitialWeapons();
 
-                if (!TestBattleConfig.enemyCharge)
+                if (!TestBattleConfig.charge)
                 {
                     enemyTeam.MasterOrderController.ClearSelectedFormations();
                     enemyTeam.MasterOrderController.SelectFormation(formation);
@@ -238,7 +255,7 @@ namespace EnhancedBattleTest
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
 
-                if (!TestBattleConfig.enemyCharge)
+                if (!TestBattleConfig.charge)
                 {
                     enemyTeam.MasterOrderController.ClearSelectedFormations();
                     enemyTeam.MasterOrderController.SelectFormation(enemyTroopFormation);

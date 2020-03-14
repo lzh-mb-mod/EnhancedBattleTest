@@ -4,7 +4,14 @@
       "commandName": "Executable",
       "executablePath": "$(MB2Bin)\\ManagedStarter.exe",
       "commandLineArgs": "_MODULES_*Native*EnhancedBattleTest*_MODULES_ /singleplayer",
-      "workingDirectory": "$(MB2Bin)"
+      "workingDirectory": "$(MB2Bin)",
+      "nativeDebugging": true
+    },
+    "Multiplayer": {
+      "commandName": "Executable",
+      "executablePath": "C:\\game\\SteamLibrary\\steamapps\\common\\Mount & Blade II Bannerlord - Beta\\bin\\Win64_Shipping_Client\\TaleWorlds.MountAndBlade.Launcher.exe",
+      "workingDirectory": "$(MB2Bin)",
+      "nativeDebugging": true
     }
   }
 }

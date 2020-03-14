@@ -364,13 +364,13 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public bool UseFreeCamera
+        public bool SpawnPlayer
         {
-            get => this.CurrentConfig.UseFreeCamera;
+            get => this.CurrentConfig.SpawnPlayer;
             set
             {
-                this.CurrentConfig.UseFreeCamera = value;
-                this.OnPropertyChanged(nameof(UseFreeCamera));
+                this.CurrentConfig.SpawnPlayer = value;
+                this.OnPropertyChanged(nameof(SpawnPlayer));
             }
         }
 

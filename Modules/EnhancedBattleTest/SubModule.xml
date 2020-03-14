@@ -2,14 +2,13 @@
 <Module>
 	<Name value = "EnhancedBattleTest"/>
 	<Id value = "EnhancedBattleTest"/>
-	<Version value = "0.5"/>
+	<Version value = "e0.5.4"/>
 	<SingleplayerModule value="true"/>
 	<MultiplayerModule value="false"/>
 	<DependedModules/>
 	<SubModules>
 		<SubModule>
 			<Name value = "EnhancedBattleTestSubModule"/>
-			<Version value = "0.5"/>
 			<DLLName value = "EnhancedBattleTest.dll"/>
 			<SubModuleClassType value = "EnhancedBattleTest.EnhancedBattleTestSubModule"/>
 			<Tags>

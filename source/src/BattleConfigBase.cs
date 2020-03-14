@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
 
 
         public ClassInfo playerClass;
-        private bool _useFreeCamera;
+        private bool _spawnPlayer;
         public ClassInfo enemyClass;
         private bool _spawnEnemyCommander;
         public ClassInfo[] playerTroops;
@@ -54,13 +54,13 @@ namespace EnhancedBattleTest
             return MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(playerTroops[i]
                 .classStringId);
         }
-        public bool UseFreeCamera
+        public bool SpawnPlayer
         {
-            get => _useFreeCamera;
+            get => _spawnPlayer;
             set
             {
-                _useFreeCamera = value;
-                playerClass.troopCount = value ? 0 : 1;
+                _spawnPlayer = value;
+                playerClass.troopCount = value ? 1 : 0;
             }
         }
 
@@ -86,7 +86,7 @@ namespace EnhancedBattleTest
 
         public BasicCultureObject GetPlayerTeamCulture()
         {
-            if (!UseFreeCamera)
+            if (!SpawnPlayer)
                 return PlayerHeroClass.Culture;
             for (int i = 0; i < 3; ++i)
             {
@@ -155,7 +155,7 @@ namespace EnhancedBattleTest
             MoveOldConfig();
             if (File.Exists(SaveName) && Deserialize())
                 return;
-            Utility.DisplayMessage("No config file found.\nCreate default config.");
+            Utility.DisplayMessage("Create default config.");
             ResetToDefault();
             Serialize();
         }
@@ -203,6 +203,7 @@ namespace EnhancedBattleTest
             ConfigVersion = other.ConfigVersion;
             if (other.playerClass != null)
                 this.playerClass = other.playerClass;
+            this.SpawnPlayer = other.SpawnPlayer;
             if (other.enemyClass != null)
                 this.enemyClass = other.enemyClass;
             this.SpawnEnemyCommander = other.SpawnEnemyCommander;
@@ -210,7 +211,6 @@ namespace EnhancedBattleTest
                 this.playerTroops = other.playerTroops;
             if (other.enemyTroops != null)
                 this.enemyTroops = other.enemyTroops;
-            this.UseFreeCamera = other.UseFreeCamera;
             this.disableDying = other.disableDying;
             this.changeCombatAI = other.changeCombatAI;
             this.combatAI = other.combatAI;
