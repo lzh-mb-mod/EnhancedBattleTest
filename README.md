@@ -140,7 +140,7 @@ The source code is located in the `source` folder or available at [https://gitla
 
 - If the mod crashed in battle (except in siege map):
 
-  - Please send the crash report to me via email below.
+  - Please pack and send the crash report in folder `bin\Win64_Shipping_Client\(crash time)` to me via email below.
 
 ## Contact with me
 * Please mail to: lizhenhuan1019@qq.com

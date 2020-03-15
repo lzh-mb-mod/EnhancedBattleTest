@@ -149,7 +149,7 @@ namespace EnhancedBattleTest
                 new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
                 new SceneInfo{name = "mp_siege_map_004_bat", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
                 //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(0, 1)},
-                new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(1, 0), distance = 220},
+                new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(0,1), distance = 220},
                 //"mp_skirmish_map_002f",
                 //"mp_skirmish_map_002_winter",
                 //"mp_skirmish_map_004",
