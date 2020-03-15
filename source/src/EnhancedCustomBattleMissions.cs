@@ -14,7 +14,7 @@ namespace EnhancedBattleTest
         {
             return MissionState.OpenNew(
                 "EnhancedCustomBattleConfig",
-                new MissionInitializerRecord("mp_skirmish_map_001a"),
+                new MissionInitializerRecord("scn_character_creation_scene"),
                 missionController => new MissionBehaviour[] {
                 }, true, true, true);
         }

@@ -39,7 +39,6 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                ViewCreator.CreateMissionFlagMarkerUIHandler(),
                 ViewCreator.CreateMissionBoundaryCrossingView(),
                 new MissionBoundaryWallView(),
                 new SpectatorCameraView(),

@@ -86,7 +86,7 @@ namespace EnhancedBattleTest
 
         public BasicCultureObject GetPlayerTeamCulture()
         {
-            if (!SpawnPlayer)
+            if (SpawnPlayer)
                 return PlayerHeroClass.Culture;
             for (int i = 0; i < 3; ++i)
             {

@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.5] - 2020-03-15
+## Added
+- Add map boundary switch feature.
+
+### Fixed
+- Fix wrong cloth color.
+
+- Remove redundant maps.
+
+- Remove redundant UI elements.
+
 ## [0.5.4] - 2020-03-15
 ### Fixed
 - Keep compatible with b0.8.5.

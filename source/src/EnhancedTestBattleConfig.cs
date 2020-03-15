@@ -26,7 +26,9 @@ namespace EnhancedBattleTest
 
         public bool charge;
 
-        protected static Version BinaryVersion => new Version(1, 7);
+        public bool hasBoundary;
+
+        protected static Version BinaryVersion => new Version(1, 8);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -37,7 +39,7 @@ namespace EnhancedBattleTest
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.7":
+                case "1.8":
                     break;
             }
         }
@@ -144,7 +146,9 @@ namespace EnhancedBattleTest
                 //new SceneInfo{name = "mp_siege_map_001", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 //new SceneInfo{name = "mp_siege_map_002", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
                 new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(461,634), formationDirection = new Vec2(0.55f,0.45f).Normalized(), distance = 180},
-                //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
+                new SceneInfo{name = "mp_siege_map_004_bat", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
+                //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(0, 1)},
                 new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(1, 0), distance = 220},
                 //"mp_skirmish_map_002f",
                 //"mp_skirmish_map_002_winter",
@@ -161,7 +165,6 @@ namespace EnhancedBattleTest
                 //"mp_skirmish_map_battania_03"
                 new SceneInfo{name = "mp_skirmish_map_002_winter", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f).Normalized(), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_002f", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f).Normalized(), soldiersPerRow = 10},
-                new SceneInfo{name = "mp_skirmish_map_002_winter", formationPosition = new Vec2(415,490), formationDirection = new Vec2(0.3f, 0.7f).Normalized(), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_003_skinc", formationPosition = new Vec2(650,675), formationDirection = new Vec2(-0.7f,0.3f).Normalized(), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_004", formationPosition = new Vec2(320,288), formationDirection = new Vec2(0,1), soldiersPerRow = 10},
                 new SceneInfo{name = "mp_skirmish_map_005", formationPosition = new Vec2(477,496), formationDirection = new Vec2(1, 0), soldiersPerRow = 10},
@@ -202,6 +205,7 @@ namespace EnhancedBattleTest
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
                 charge = false,
+                hasBoundary = true,
                 disableDying = false,
                 changeCombatAI = false,
                 combatAI = 100,
@@ -321,6 +325,7 @@ namespace EnhancedBattleTest
             this.soldierXInterval = other.soldierXInterval;
             this.soldierYInterval = other.soldierYInterval;
             this.charge = other.charge;
+            this.hasBoundary = other.hasBoundary;
         }
         protected override string SaveName => SavePath + nameof(EnhancedTestBattleConfig) +".xml";
         protected override string[] OldNames { get; } = { SavePath + "Param.xml" };

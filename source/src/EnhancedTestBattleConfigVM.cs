@@ -160,6 +160,19 @@ namespace EnhancedBattleTest
             }
         }
 
+        [DataSourceProperty]
+        public bool HasBoundary
+        {
+            get => this.CurrentConfig.hasBoundary;
+            set
+            {
+                if (this.CurrentConfig.hasBoundary == value)
+                    return;
+                this.CurrentConfig.hasBoundary = value;
+                this.OnPropertyChanged(nameof(HasBoundary));
+            }
+        }
+
         public EnhancedTestBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedTestBattleConfig> startAction,
             Action<EnhancedTestBattleConfig> backAction)
             : base(selectionView, EnhancedTestBattleConfig.Get())
@@ -235,8 +248,6 @@ namespace EnhancedBattleTest
 
             this.SoldierXInterval = CurrentConfig.soldierXInterval.ToString();
             this.SoldierYInterval = CurrentConfig.soldierYInterval.ToString();
-
-            this.Charge = this.CurrentConfig.charge;
         }
 
         private void UpdateSceneContent()
@@ -249,7 +260,6 @@ namespace EnhancedBattleTest
             this.SkyBrightness = CurrentConfig.SkyBrightness.ToString();
             this.RainDensity = CurrentConfig.RainDensity.ToString();
         }
-
 
         protected override void ApplyConfig()
         {

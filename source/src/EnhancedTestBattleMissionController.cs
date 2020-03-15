@@ -173,7 +173,7 @@ namespace EnhancedBattleTest
                 var tuple = SetFormationRegion(playerTroopFormation, formationIndex, true, playerTroopCharacter.CurrentFormationClass,
                     formationMatrixFrame);
                 distanceToInitialPosition += tuple.Item2;
-                BasicCultureObject troopCulture = !spawnPlayer ? playerTeamCulture : playerTroopCharacter.Culture;
+                BasicCultureObject troopCulture = spawnPlayer ? playerTeamCulture : playerTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < playerTroopCount; ++troopIndex)
                 {
                     var agent = this.SpawnAgent(TestBattleConfig.playerTroops[formationIndex], playerTroopCharacter, false,

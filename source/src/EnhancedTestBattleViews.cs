@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
@@ -21,7 +22,7 @@ namespace EnhancedBattleTest
         [ViewMethod("EnhancedBattleTestBattle")]
         public static MissionView[] OpenTestMission(Mission mission)
         {
-            var missionViewList = new MissionView[]
+            var missionViewList = new List<MissionView>
             {
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
@@ -30,16 +31,19 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionOrderUIHandler(mission),
                 ViewCreator.CreateOrderTroopPlacerView(mission),
-                // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                //ViewCreator.CreateMissionFlagMarkerUIHandler(),
                 ViewCreator.CreateOptionsUIHandler(),
                 new SpectatorCameraView(),
                 new EnhancedTestBattleView(mission),
             };
-            return missionViewList;
+            if (EnhancedTestBattleConfig.Get().hasBoundary)
+            {
+                missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
+                missionViewList.Add(new MissionBoundaryWallView());
+            }
+            return missionViewList.ToArray();
         }
     }
 }

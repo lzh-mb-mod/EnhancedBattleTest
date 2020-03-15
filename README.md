@@ -118,9 +118,13 @@ The source code is located in the `source` folder or available at [https://gitla
 
   - Note that you should reinstall the mod everytime after game update (especially the update after checking file integrity) if you want to launch the mod.
 
+- If it shows "Unable to initialize Steam API":
+
+  - Please start steam first, and make sure that Bannerlord is in your steam account.
+
 - If the mod crashed without entering Main menu:
 
-  - Reinstall the mod. if not working:
+  - Reinstall the mod. If not working:
 
   - Try to replace `ManagedStarter.exe` with `NativeStarter.exe` in `EnhancedBattleTest.bat`.
 

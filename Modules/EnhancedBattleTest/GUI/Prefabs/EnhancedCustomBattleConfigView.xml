@@ -45,13 +45,13 @@
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginTop="10" MarginBottom="20">
               <Children>
                 <TextWidget Text="Player Character" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" />
-                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Popup.Done.Button" Command.Click="SelectPlayerCharacter">
+                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Popup.Done.Button" Command.Click="SelectPlayerCharacter" MarginTop="10">
                   <Children>
                     <TextWidget Text="@PlayerName" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
                   </Children>
                 </ButtonWidget>
                 <TextWidget Text="Spawn Player" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
                   <Children>
                     <ButtonWidget ButtonType = "Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@SpawnPlayer">
                       <Children>
@@ -183,13 +183,13 @@
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" MarginTop="10">
               <Children>
                 <TextWidget Text="Enemy Commander" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" />
-                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Popup.Cancel.Button" Command.Click="SelectEnemyCharacter">
+                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="Popup.Cancel.Button" Command.Click="SelectEnemyCharacter" MarginTop="10">
                   <Children>
                     <TextWidget Text="@EnemyName" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
                   </Children>
                 </ButtonWidget>
-                <TextWidget Text="Spawn Enemy Commander" WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                <Widget WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                <TextWidget Text="Spawn Enemy Commander" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Widget WidthSizePolicy="Fixed" SuggestedWidth="100" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
                   <Children>
                     <ButtonWidget ButtonType = "Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button" IsSelected="@SpawnEnemyCommander">
                       <Children>

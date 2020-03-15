@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Core;
+﻿using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
@@ -11,7 +12,7 @@ namespace EnhancedBattleTest
         {
             return MissionState.OpenNew(
                 "EnhancedTestBattleConfig",
-                new MissionInitializerRecord("mp_skirmish_map_001a"),
+                new MissionInitializerRecord("scn_character_creation_scene"),
                 missionController => new MissionBehaviour[] {
                 },
                 true, true, true);
@@ -22,27 +23,35 @@ namespace EnhancedBattleTest
             return MissionState.OpenNew(
                 "EnhancedBattleTestBattle",
                 new MissionInitializerRecord(config.SceneName),
-                missionController => new MissionBehaviour[] {
-                    new EnhancedTestBattleMissionController(config),
-                    new CommanderLogic(),
-                    new ControlTroopAfterPlayerDeadLogic(),
-                    new TrainingLogic(EnhancedTestBattleConfig.Get()),
-                    new SwitchTeamLogic(),
-                    new SwitchFreeCameraLogic(),
-                    new MakeGruntVoiceLogic(),
-                    new TeleportPlayerLogic(),
-                    // new BattleTeam1MissionController(),
-                    // new TaleWorlds.MountAndBlade.Source.Missions.SimpleMountedPlayerMissionController(),
-                    new AgentBattleAILogic(),
-                    new AgentVictoryLogic(),
-                    new MissionOptionsComponent(),
-                    new BattleMissionAgentInteractionLogic(),
-                    new AgentFadeOutLogic(),
-                    new AgentMoraleInteractionLogic(),
-                    new HighlightsController(),
-                    new BattleHighlightsController(),
-                }
-            );
+                missionController =>
+                {
+                    var behaviors = new List<MissionBehaviour>
+                    {
+                        new EnhancedTestBattleMissionController(config),
+                        new CommanderLogic(),
+                        new ControlTroopAfterPlayerDeadLogic(),
+                        new TrainingLogic(EnhancedTestBattleConfig.Get()),
+                        new SwitchTeamLogic(),
+                        new SwitchFreeCameraLogic(),
+                        new MakeGruntVoiceLogic(),
+                        new TeleportPlayerLogic(),
+                        new AgentBattleAILogic(),
+                        new AgentVictoryLogic(),
+                        new MissionOptionsComponent(),
+                        new BattleMissionAgentInteractionLogic(),
+                        new AgentFadeOutLogic(),
+                        new AgentMoraleInteractionLogic(),
+                        new HighlightsController(),
+                        new BattleHighlightsController(),
+                    };
+                    if (config.hasBoundary)
+                    {
+                        behaviors.Add(new MissionBoundaryPlacer());
+                        behaviors.Add(new MissionHardBorderPlacer());
+                        behaviors.Add(new MissionBoundaryCrossingHandler());
+                    }
+                    return behaviors;
+                });
         }
     }
 }
