@@ -8,7 +8,7 @@ using TaleWorlds.MountAndBlade.ComponentInterfaces;
 
 namespace EnhancedBattleTest
 {
-    class EnhhancedMPAgentStatCalculateModel : AgentStatCalculateModel
+    class EnhancedMPAgentStatCalculateModel : AgentStatCalculateModel
     {
         public override void InitializeAgentStats(
           Agent agent,
@@ -18,12 +18,12 @@ namespace EnhancedBattleTest
         {
             agentDrivenProperties.ArmorEncumbrance = spawnEquipment.GetTotalWeightOfArmor(agent.IsHuman);
             if (!agent.IsHuman)
-                EnhhancedMPAgentStatCalculateModel.InitializeHorseAgentStats(agent, spawnEquipment, agentDrivenProperties);
+                EnhancedMPAgentStatCalculateModel.InitializeHorseAgentStats(agent, spawnEquipment, agentDrivenProperties);
             else
                 agentDrivenProperties = this.InitializeHumanAgentStats(agent, agentDrivenProperties, agentBuildData);
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 54))
+                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
                 {
                     float num = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num);
@@ -36,11 +36,11 @@ namespace EnhancedBattleTest
           AgentDrivenProperties agentDrivenProperties,
           AgentBuildData agentBuildData)
         {
-            MultiplayerClassDivisions.MPHeroClass classForCharacter = MultiplayerClassDivisions.GetMPHeroClassForCharacter(agent.Character);
+            MultiplayerClassDivisions.MPHeroClass classForCharacter = Utility.GetMPHeroClassForCharacter(agent.Character);
             if (classForCharacter != null)
             {
                 this.FillAgentStatsFromData(ref agentDrivenProperties, classForCharacter, agent, agentBuildData?.AgentMissionPeer);
-                agentDrivenProperties.SetStat(DrivenProperty.UseAnimationProgressDependentBlocking, MBMultiplayerOptionsAccessor.GetUseAnimationProgressDependentBlocking(MBMultiplayerOptionsAccessor.MultiplayerOptionsAccessMode.CurrentMapOptions) ? 1f : -1f);
+                agentDrivenProperties.SetStat(DrivenProperty.UseRealisticBlocking, MBMultiplayerOptionsAccessor.GetUseAnimationProgressDependentBlocking(MBMultiplayerOptionsAccessor.MultiplayerOptionsAccessMode.CurrentMapOptions) ? 1f : 0.0f);
             }
             float num1 = 0.5f;
             float num2 = 0.5f;
@@ -102,9 +102,9 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AiHearingDistanceFactor = 1f + amount;
             agentDrivenProperties.AiChargeHorsebackTargetDistFactor = (float)(1.5 * (3.0 - (double)amount));
             float num4 = 1f - MBMath.ClampFloat(0.004f * (float)agent.Character.GetSkillValue(DefaultSkills.Bow), 0.0f, 0.99f);
-            agentDrivenProperties.AiRangerLeadErrorMin = num4 * -0.4f;
-            agentDrivenProperties.AiRangerLeadErrorMax = num4 * 0.4f;
-            agentDrivenProperties.AiRangerVerticalErrorMultiplier = num4 * 0.2f;
+            agentDrivenProperties.AiRangerLeadErrorMin = num4 * 0.2f;
+            agentDrivenProperties.AiRangerLeadErrorMax = num4 * 0.3f;
+            agentDrivenProperties.AiRangerVerticalErrorMultiplier = num4 * 0.1f;
             agentDrivenProperties.AIAttackOnDecideChance = 0.96f;
             agent.HealthLimit = classForCharacter == null ? 100f : (float)classForCharacter.Health;
             agent.Health = agent.HealthLimit;
@@ -187,7 +187,7 @@ namespace EnhancedBattleTest
             agentDrivenProperties.ReloadSpeed = (float)(0.930000007152557 + 0.000699999975040555 * (double)this.GetSkillValueForItem(character, weaponComponentData?.Item));
             agentDrivenProperties.WeaponInaccuracy = 0.0f;
             int weight = agent.Monster.Weight;
-            MultiplayerClassDivisions.MPHeroClass classForCharacter = MultiplayerClassDivisions.GetMPHeroClassForCharacter(agent.Character);
+            MultiplayerClassDivisions.MPHeroClass classForCharacter = Utility.GetMPHeroClassForCharacter(agent.Character);
             agentDrivenProperties.MaxSpeedMultiplier = (float)(1.04999995231628 * ((double)classForCharacter.MovementSpeedMultiplier * (100.0 / (100.0 + (double)totalWeightOfWeapons))));
             if (weaponComponentData != null)
             {
@@ -233,7 +233,7 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AttributeHorseArchery = Game.Current.BasicModels.StrikeMagnitudeModel.CalculateHorseArcheryFactor(character);
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 54))
+                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
                 {
                     float num2 = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num2);
@@ -253,8 +253,19 @@ namespace EnhancedBattleTest
           MissionPeer missionPeer)
         {
             float num = 0.0f;
-            if (missionPeer != null)
-                num = MPPerkObject.GetArmorBonusFromPerks(true, (IEnumerable<MPPerkObject>)MultiplayerClassDivisions.GetAllSelectedPerksForPeer(missionPeer, heroClass));
+            var config = EnhancedTestBattleConfig.Get();
+            bool isGeneral = agent.Formation.FormationIndex == Utility.CommanderFormationClass();
+            bool isPlayerTeam = agent.Team.IsPlayerTeam;
+            ClassInfo info;
+            if (isGeneral)
+            {
+                info = isPlayerTeam ? config.playerClass : config.enemyClass;
+            }
+            else
+            {
+                info = isPlayerTeam ? config.playerTroops[agent.Formation.Index] : config.enemyTroops[agent.Formation.Index];
+            }
+            num = MPPerkObject.GetArmorBonusFromPerks(isGeneral, Utility.GetAllSelectedPerks(heroClass, new[] { info.selectedFirstPerk, info.selectedSecondPerk }));
             agentDrivenProperties.ArmorHead = (float)heroClass.ArmorValue + num;
             agentDrivenProperties.ArmorTorso = (float)heroClass.ArmorValue + num;
             agentDrivenProperties.ArmorLegs = (float)heroClass.ArmorValue + num;
@@ -272,7 +283,7 @@ namespace EnhancedBattleTest
 
         public static float CalculateMaximumSpeedMultiplier(Agent agent)
         {
-            return MultiplayerClassDivisions.GetMPHeroClassForCharacter(agent.Character).MovementSpeedMultiplier;
+            return Utility.GetMPHeroClassForCharacter(agent.Character).MovementSpeedMultiplier;
         }
     }
 }

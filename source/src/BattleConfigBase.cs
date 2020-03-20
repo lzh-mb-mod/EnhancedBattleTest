@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -15,10 +16,32 @@ namespace EnhancedBattleTest
         public int troopCount;
     }
 
+    public enum BattleType
+    {
+        FieldBattle,
+        SiegeBattle
+    }
+
+    public enum AIEnableType
+    {
+        None,
+        EnemyOnly,
+        PlayerOnly,
+        Both
+    }
+
+    public class TacticOptionInfo
+    {
+        public TacticOptionEnum tacticOption { get; set; } = TacticOptionEnum.Charge;
+        public bool isEnabled = true;
+    }
+
     public abstract class BattleConfigBase
     {
         public string ConfigVersion { get; set; }
 
+        [XmlIgnore]
+        public BattleType battleType;
 
         public ClassInfo playerClass;
         private bool _spawnPlayer;
@@ -27,9 +50,55 @@ namespace EnhancedBattleTest
         public ClassInfo[] playerTroops;
         public ClassInfo[] enemyTroops;
 
+        public TacticOptionInfo[] attackerTacticOptions;
+        public TacticOptionInfo[] defenderTacticOptions;
+
+        public AIEnableType aiEnableType = AIEnableType.EnemyOnly;
+
         public bool disableDying;
+
+        public bool noAgentLabel = false;
+
         public bool changeCombatAI;
         public int combatAI;
+
+        public void ToPreviousAIEnableType()
+        {
+            switch (aiEnableType)
+            {
+                case AIEnableType.None:
+                    aiEnableType = AIEnableType.Both;
+                    break;
+                case AIEnableType.EnemyOnly:
+                    aiEnableType = AIEnableType.None;
+                    break;
+                case AIEnableType.PlayerOnly:
+                    aiEnableType = AIEnableType.EnemyOnly;
+                    break;
+                case AIEnableType.Both:
+                    aiEnableType = AIEnableType.PlayerOnly;
+                    break;
+            }
+        }
+
+        public void ToNextAIEnableType()
+        {
+            switch (aiEnableType)
+            {
+                case AIEnableType.None:
+                    aiEnableType = AIEnableType.EnemyOnly;
+                    break;
+                case AIEnableType.EnemyOnly:
+                    aiEnableType = AIEnableType.PlayerOnly;
+                    break;
+                case AIEnableType.PlayerOnly:
+                    aiEnableType = AIEnableType.Both;
+                    break;
+                case AIEnableType.Both:
+                    aiEnableType = AIEnableType.None;
+                    break;
+            }
+        }
 
         [XmlIgnore]
         public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
@@ -108,6 +177,56 @@ namespace EnhancedBattleTest
             }
 
             return MultiplayerClassDivisions.AvailableCultures.FirstOrDefault();
+        }
+
+        protected BattleConfigBase(BattleType t)
+        {
+            this.battleType = t;
+            switch (t)
+            {
+                case BattleType.FieldBattle:
+                    attackerTacticOptions = new[]
+                    {
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.Charge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.FullScaleAttack},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveEngagement},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveLine},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveRing},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.HoldTheHill},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.HoldChokePoint},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.ArchersOnTheHill},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.RangedHarassmentOffensive},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.FrontalCavalryCharge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.CoordinatedRetreat},
+                    };
+                    defenderTacticOptions = new[]
+                    {
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.Charge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.FullScaleAttack},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveEngagement},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveLine},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefensiveRing},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.HoldTheHill},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.HoldChokePoint},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.ArchersOnTheHill},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.RangedHarassmentOffensive},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.FrontalCavalryCharge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.CoordinatedRetreat},
+                    }; ;
+                    break;
+                case BattleType.SiegeBattle:
+                    attackerTacticOptions = new[]
+                    {
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.Charge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.BreachWalls},
+                    };
+                    defenderTacticOptions = new[]
+                    {
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.Charge},
+                        new TacticOptionInfo{tacticOption = TacticOptionEnum.DefendCastle},
+                    };
+                    break;
+            }
         }
 
         public virtual bool Validate()
@@ -198,6 +317,9 @@ namespace EnhancedBattleTest
 
     public abstract class BattleConfigBase<T> : BattleConfigBase where T : BattleConfigBase<T>
     {
+        protected BattleConfigBase(BattleType t)
+            : base(t)
+        { }
         protected virtual void CopyFrom(T other)
         {
             ConfigVersion = other.ConfigVersion;
@@ -211,7 +333,11 @@ namespace EnhancedBattleTest
                 this.playerTroops = other.playerTroops;
             if (other.enemyTroops != null)
                 this.enemyTroops = other.enemyTroops;
+            this.attackerTacticOptions = other.attackerTacticOptions;
+            this.defenderTacticOptions = other.defenderTacticOptions;
+            this.aiEnableType = other.aiEnableType;
             this.disableDying = other.disableDying;
+            this.noAgentLabel = other.noAgentLabel;
             this.changeCombatAI = other.changeCombatAI;
             this.combatAI = other.combatAI;
         }

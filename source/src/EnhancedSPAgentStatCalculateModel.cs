@@ -120,14 +120,14 @@ namespace EnhancedBattleTest
                 agentDrivenProperties.AiHearingDistanceFactor = 1f + aiLevel;
                 agentDrivenProperties.AiChargeHorsebackTargetDistFactor = (float)(1.5 * (3.0 - (double)aiLevel));
                 float num = 1f - MBMath.ClampFloat(0.004f * (float)agent.Character.GetSkillValue(DefaultSkills.Bow), 0.0f, 0.99f);
-                agentDrivenProperties.AiRangerLeadErrorMin = num * -0.4f;
-                agentDrivenProperties.AiRangerLeadErrorMax = num * 0.4f;
-                agentDrivenProperties.AiRangerVerticalErrorMultiplier = num * 0.2f;
+                agentDrivenProperties.AiRangerLeadErrorMin = num * 0.2f;
+                agentDrivenProperties.AiRangerLeadErrorMax = num * 0.3f;
+                agentDrivenProperties.AiRangerVerticalErrorMultiplier = num * 0.1f;
                 agentDrivenProperties.AIAttackOnDecideChance = 0.96f;
             }
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 54))
+                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
                 {
                     float num = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num);
@@ -221,7 +221,7 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AttributeHorseArchery = Game.Current.BasicModels.StrikeMagnitudeModel.CalculateHorseArcheryFactor(character);
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 54))
+                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
                 {
                     float num4 = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num4);

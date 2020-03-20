@@ -23,9 +23,14 @@ namespace EnhancedBattleTest
             base.OnMissionTick(dt);
             if (this.Mission.InputManager.IsKeyPressed(InputKey.Numpad7))
             {
-                Mission.DisableDying = !Mission.DisableDying;
-                PrintDyingStatus();
+                SetDisableDying(!Mission.DisableDying);
             }
+        }
+
+        public void SetDisableDying(bool disableDying)
+        {
+            Mission.DisableDying = disableDying;
+            PrintDyingStatus();
         }
 
         private void PrintDyingStatus()

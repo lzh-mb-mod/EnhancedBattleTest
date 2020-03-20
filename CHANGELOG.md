@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.0] - 2020-03-16
+
+### Added
+- New siege battle mode: more suitable AI for siege battle and with deployment stage.
+
+- Press numpad 8 to open more options.
+
+- Press P to pause game.
+
+- AI tactic option: Player can choose to enable and disable tactic options.
+
+- Enable/Disable AI: Player can enable/disable AI for enemy and player team.
+
+- Player can choose to disable agent label and soldier's making grunt voice behaviour.
+
+### Fixed
+- Fix the bug that customzied character gender is always male.
+
+- Fix the bug that armor bonus of improved armor perks is not applied.
+
 ## [0.5.5] - 2020-03-15
 ## Added
 - Add map boundary switch feature.

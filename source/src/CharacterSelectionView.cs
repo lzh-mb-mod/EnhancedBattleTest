@@ -19,7 +19,6 @@ namespace EnhancedBattleTest
         private bool _toOpen;
 
         public CharacterSelectionView(bool withPerks)
-            : base()
         {
             this._params = null;
             this._withPerks = withPerks;

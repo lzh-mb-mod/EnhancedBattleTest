@@ -1,0 +1,66 @@
+<Prefab>
+  <Variables>
+  </Variables>
+  <VisualDefinitions>
+  </VisualDefinitions>
+  <Window>
+    <ButtonWidget Command.Click="CloseMenu" WidthSizePolicy = "StretchToParent" HeightSizePolicy = "StretchToParent" Brush="EnhancedBattleTest.TransparentBrush">
+      <Children>
+        <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10" Brush="EnhancedBattleTest.MissionMenuBrush">
+          <Children>
+
+            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
+              <Children>
+                <TextWidget Text="Enable AI For" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ButtonWidget WidthSizePolicy="Fixed" Command.Click="PreviousAIEnableType" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Right" VerticalAlignment="Center" Brush="Creation.NumericLeftArrow" />
+                <TextWidget Text="@CurrentAIEnableType" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="34" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ButtonWidget WidthSizePolicy="Fixed" Command.Click="NextAIEnableType" HeightSizePolicy="Fixed" SuggestedWidth="29" SuggestedHeight="32" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="Creation.NumericRightArrow" />
+              </Children>
+            </ListPanel>
+
+            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
+              <Children>
+                <TextWidget Text="Attacker Tactic Options" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ListPanel DataSource="{AttackerAvailableTactics}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="10" MarginLeft="10">
+                  <ItemTemplate>
+                    <ButtonWidget Command.Click="OnSelect" IsSelected="@IsSelected" DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginLeft="14" MarginRight="14" Brush="Standard.DropdownItem">
+                      <Children>
+                        <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Standard.DropdownItem.Text"/>
+                      </Children>
+                    </ButtonWidget>
+                  </ItemTemplate>
+                </ListPanel>
+                <TextWidget Text="Defender Tactic Options" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ListPanel DataSource="{DefenderAvailableTactics}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="10" MarginLeft="10">
+                  <ItemTemplate>
+                    <ButtonWidget Command.Click="OnSelect" IsSelected="@IsSelected" DoNotPassEventsToChildren="true" UpdateChildrenStates="true" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Bottom" MarginLeft="14" MarginRight="14" Brush="Standard.DropdownItem">
+                      <Children>
+                        <RichTextWidget Text="@Name" HeightSizePolicy="StretchToParent" WidthSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Standard.DropdownItem.Text"/>
+                      </Children>
+                    </ButtonWidget>
+                  </ItemTemplate>
+                </ListPanel>
+              </Children>
+            </ListPanel>
+
+            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
+              <Children>
+                <TextWidget Text="Disable Dying" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
+                  <Children>
+                    <ButtonWidget IsSelected="@DisableDying" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy = "Fixed" HeightSizePolicy = "Fixed" SuggestedWidth = "50" SuggestedHeight = "50" Brush = "SPOptions.Checkbox.Empty.Button">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </Widget>
+
+              </Children>
+            </ListPanel>
+          </Children>
+        </ListPanel>
+      </Children>
+    </ButtonWidget>
+  </Window>
+</Prefab>

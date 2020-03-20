@@ -99,7 +99,7 @@ namespace EnhancedBattleTest
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/multiplayer_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
-            // this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/EnhancedBattleTest/ModuleData/module_strings.xml");
+            this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
         }
     }
 

@@ -34,9 +34,9 @@ namespace EnhancedBattleTest
 
         public void Open()
         {
-            this._dataSource = new EnhancedCustomBattleConfigVM(_selectionView, config =>
+            this._dataSource = new EnhancedCustomBattleConfigVM(_selectionView, Mission.GetMissionBehaviour<MissionMenuView>(), config =>
             {
-                EnhancedCustomBattleMissions.OpenCustomBattleMission(config);
+                EnhancedBattleTestMissions.OpenCustomBattleMission(config);
             }, (config) =>
             {
                 this.Mission.EndMission();

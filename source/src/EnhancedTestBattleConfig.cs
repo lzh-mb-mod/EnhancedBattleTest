@@ -24,11 +24,11 @@ namespace EnhancedBattleTest
         public int sceneIndex;
         public float soldierXInterval, soldierYInterval;
 
-        public bool charge;
+        public bool makeGruntVoice = true;
 
         public bool hasBoundary;
 
-        protected static Version BinaryVersion => new Version(1, 8);
+        protected static Version BinaryVersion => new Version(1, 9);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -39,7 +39,7 @@ namespace EnhancedBattleTest
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.8":
+                case "1.9":
                     break;
             }
         }
@@ -89,6 +89,9 @@ namespace EnhancedBattleTest
         [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
 
+        public EnhancedTestBattleConfig()
+            : base(BattleType.FieldBattle)
+        { }
         private static EnhancedTestBattleConfig CreateDefault()
         {
             //string sceneIndex = "mp_skirmish_map_001a";
@@ -150,6 +153,7 @@ namespace EnhancedBattleTest
                 new SceneInfo{name = "mp_siege_map_004_bat", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
                 //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(0, 1)},
                 new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(0,1), distance = 220},
+                new SceneInfo{name = "mp_siege_map_007_battania", formationPosition = new Vec2(614,612), formationDirection = new Vec2(0.65f, 0.35f), distance = 140},
                 //"mp_skirmish_map_002f",
                 //"mp_skirmish_map_002_winter",
                 //"mp_skirmish_map_004",
@@ -204,7 +208,6 @@ namespace EnhancedBattleTest
                 },
                 soldierXInterval = 1.5f,
                 soldierYInterval = 1f,
-                charge = false,
                 hasBoundary = true,
                 disableDying = false,
                 changeCombatAI = false,
@@ -297,26 +300,6 @@ namespace EnhancedBattleTest
 
         protected override void CopyFrom(EnhancedTestBattleConfig other)
         {
-            //public SceneInfo[] sceneList { get; set; }
-            //public int sceneIndex;
-            //public int playerSoldierCount, enemySoldierCount;
-            //public float distance;
-            //public float soldierXInterval, soldierYInterval;
-            ////public int soldiersPerRow;
-            ////public Vec2 formationPosition;
-            ////public Vec2 formationDirection;
-            ////public float skyBrightness;
-            ////public float rainDensity;
-            //[XmlElement("PlayerStringId")]
-            //public string playerHeroClassStringId;
-            //public int playerSelectedPerk;
-            //[XmlElement("PlayerTroopStringId")]
-            //public string playerTroopHeroClassStringId;
-            //public int playerTroopSelectedPerk;
-            //[XmlElement("EnemyTroopStringId")]
-            //public string enemyTroopHeroClassStringId;
-            //public int enemyTroopSelectedPerk;
-            //public bool useFreeCamera;
             base.CopyFrom(other);
 
             if (other.sceneList != null)
@@ -324,7 +307,7 @@ namespace EnhancedBattleTest
             this.sceneIndex = other.sceneIndex;
             this.soldierXInterval = other.soldierXInterval;
             this.soldierYInterval = other.soldierYInterval;
-            this.charge = other.charge;
+            this.makeGruntVoice = other.makeGruntVoice;
             this.hasBoundary = other.hasBoundary;
         }
         protected override string SaveName => SavePath + nameof(EnhancedTestBattleConfig) +".xml";

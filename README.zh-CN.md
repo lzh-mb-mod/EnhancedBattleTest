@@ -7,6 +7,8 @@
 
 - Custom Battle Mode：该模式采用砍二内建的生成部队方式：部队在场景中固定的地点生成。超出人数限制的部队会作为援军稍后加入战场。
 
+- Siege Battle Mode: 该模式中AI为攻城战的AI；加入了部署阶段。
+
 - 地图选择：包括领军地图，冲突地图，死斗地图和部分攻城图。攻城图目前不稳定，容易崩溃。
 
   Custom Battle Mode只包含领军地图，因为只有领军地图有该模式要求的军队出生点信息。
@@ -29,6 +31,8 @@
 
 - 不死模式：开启后任何单位都不会掉血和死亡。
 
+- 改变AI的战术选项。
+
 - 调整战斗AI：你可以将战斗ai在0-100间调整。
 
 - 自定义玩家角色，详细内容如下。
@@ -36,7 +40,16 @@
 ## 如何安装
 1. 复制`bin`和`Modules`两个文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)。
 
-2. 游戏更新后如果mod出现问题，请尝试重装mod。若得不到解决，可以联系我并/或等待mod更新。
+### 注意
+- 游戏更新后可尝试重装mod，这可能可以解决一部分进不了mod的问题。
+
+- **然而**，若该游戏更新更新了联机perk，（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），若你想进入联机模式，则应该避免重装mod。
+
+- 若你重装了mod，验证游戏文件完整性可以解决进入不了联机模式和/或一部分情况下的联机模式崩溃的问题。
+
+- 若你想玩联机并且也想玩mod，你应等待mod更新。
+
+- 请阅读“如何自定义角色”小节以了解原因。
 
 ## 如何使用
 - 当前联机测试中，官方的加载器禁用了单机模式，所以需要通过点击砍二安装目录下，`bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`来启动。
@@ -49,6 +62,8 @@
   - Formation Position(x, y)：玩家队伍出生位置。
 
   - Formation Direction(x, y)：玩家队伍朝向。
+
+  - Distance：敌军部队和己方部队的距离。
 
   - Sky Brightness：天空亮度。-1表示不做修改，采用场景的默认设置。
 
@@ -84,15 +99,17 @@
 
   - Spawn Enemy Commaner：是否生成敌军将领。
 
-  - Distance：敌军部队和己方部队的距离。
-
-  - Enemy Charge：敌军是否开局冲锋。
-
   - Disable Dying：是否禁用死亡。若是则所有角色不掉血。
 
   - Change Combat AI：是否改变战斗AI。若是则右侧的数值对所有单位生效，若否则所有单位的战斗AI为各自默认的设置。
 
   - Comabt AI(0-100)：要改变的战斗AI的数值，只有左侧的Change Combat AI选中才生效。有效范围在0-100。
+
+  - NoAgentLabel：关闭队友标识
+
+  - MakeGruntVoice：玩家下令后部下是否出声回应。
+
+  - Has Boundary: 地图是否设置边界。
 
   - Save And Start：保存配置并开始战斗。
 
@@ -112,6 +129,10 @@
   - 按`F`键或小键盘6键来在玩家死后控制其小兵。
 
   - 按小键盘7键来切换不死模式。
+
+  - 按小键盘8键来打开更多设置，如战术AI选项。
+
+  - 按`P`键来暂停游戏。
 
   - 按`L`键在自由视角下让玩家瞬移到镜头位置。
 

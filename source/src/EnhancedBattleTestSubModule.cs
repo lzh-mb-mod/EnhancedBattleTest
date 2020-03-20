@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
               () =>
               {
                   MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(),
-                      () => EnhancedTestBattleMissions.OpenEnhancedTestBattleConfigMission()));
+                      () => EnhancedBattleTestMissions.OpenTestBattleConfigMission()));
               },
               false
             ));
@@ -32,7 +32,17 @@ namespace EnhancedBattleTest
                 () =>
                 {
                     MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedCustomBattleGame(),
-                        () => EnhancedCustomBattleMissions.OpenCustomBattleConfigMission()));
+                        () => EnhancedBattleTestMissions.OpenCustomBattleConfigMission()));
+                },
+                false));
+            Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
+                "EBTsiegebattle",
+                new TextObject("{=EBTsiegebattle}EBT Siege Battle"),
+                2,
+                () =>
+                {
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(),
+                        () => EnhancedBattleTestMissions.OpenSiegeBattleConfigMission()));
                 },
                 false));
         }

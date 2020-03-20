@@ -65,9 +65,9 @@ namespace EnhancedBattleTest
             }
         }
 
-        public EnhancedCustomBattleConfigVM(CharacterSelectionView selectionView, Action<EnhancedCustomBattleConfig> startAction,
+        public EnhancedCustomBattleConfigVM(CharacterSelectionView selectionView, MissionMenuView missionMenuView, Action<EnhancedCustomBattleConfig> startAction,
             Action<EnhancedCustomBattleConfig> backAction)
-            : base(selectionView, EnhancedCustomBattleConfig.Get())
+            : base(selectionView, missionMenuView, EnhancedCustomBattleConfig.Get())
         {
             InitializeContent();
 
@@ -126,6 +126,11 @@ namespace EnhancedBattleTest
         private new void SelectEnemyTroopCharacter3()
         {
             base.SelectEnemyTroopCharacter3();
+        }
+
+        protected new void OpenMissionMenu()
+        {
+            base.OpenMissionMenu();
         }
 
         private void Start()

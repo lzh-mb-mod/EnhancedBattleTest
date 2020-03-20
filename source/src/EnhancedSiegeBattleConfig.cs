@@ -1,25 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
-
+using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedCustomBattleConfig : BattleConfigBase<EnhancedCustomBattleConfig>
+    public class EnhancedSiegeBattleConfig : BattleConfigBase<EnhancedSiegeBattleConfig>
     {
         public class SceneInfo
         {
             public string name;
+            public int soldiersPerRow = 20;
+            public Vec2 formationPosition;
+            public Vec2 formationDirection;
+            public float distance = 50;
             public float skyBrightness = -1;
             public float rainDensity = -1;
         }
 
-        private static EnhancedCustomBattleConfig _instance;
-
+        private static EnhancedSiegeBattleConfig _instance;
 
         public SceneInfo[] sceneList;
-
         public int sceneIndex;
+        public float soldierXInterval, soldierYInterval;
+
+        public bool charge;
+
+        public bool hasBoundary;
 
         protected static Version BinaryVersion => new Version(1, 9);
 
@@ -36,6 +45,28 @@ namespace EnhancedBattleTest
                     break;
             }
         }
+
+        [XmlIgnore]
+        public int SoldiersPerRow
+        {
+            get => sceneList[sceneIndex].soldiersPerRow;
+            set => sceneList[sceneIndex].soldiersPerRow = value;
+        }
+
+        [XmlIgnore]
+        public Vec2 FormationPosition
+        {
+            get => sceneList[sceneIndex].formationPosition;
+            set => sceneList[sceneIndex].formationPosition = value;
+        }
+
+        [XmlIgnore]
+        public Vec2 FormationDirection
+        {
+            get => sceneList[sceneIndex].formationDirection;
+            set => sceneList[sceneIndex].formationDirection = value;
+        }
+
         [XmlIgnore]
         public float SkyBrightness
         {
@@ -51,76 +82,62 @@ namespace EnhancedBattleTest
         }
 
         [XmlIgnore]
+        public float Distance
+        {
+            get => sceneList[sceneIndex].distance;
+            set => sceneList[sceneIndex].distance = value;
+        }
+
+        [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
 
-        public EnhancedCustomBattleConfig()
-            : base(BattleType.FieldBattle)
+        [XmlIgnore]
+        public bool IsSiegeMission => SceneName.Contains("siege");
+
+        public EnhancedSiegeBattleConfig()
+            : base(BattleType.SiegeBattle)
         { }
 
-        private static EnhancedCustomBattleConfig CreateDefault()
+        private static EnhancedSiegeBattleConfig CreateDefault()
         {
-            //string sceneIndex = "mp_skirmish_map_001a";
-            //string sceneIndex = "mp_sergeant_map_001";
-            // string sceneIndex = "mp_test_bora";
-            // string sceneIndex = "battle_test";
-            // string sceneIndex = "mp_duel_001_winter";
-            // string sceneIndex = "mp_sergeant_map_001";
-            // string sceneIndex = "mp_tdm_map_001";
-            // string sceneIndex = "scn_world_map";
-            // string sceneIndex = "mp_compact";
             SceneInfo[] list = new[]
             {
-                //"mp_skirmish_map_001a",
-                //"mp_sergeant_map_001"
-                //"mp_sergeant_map_005",
-                //"mp_sergeant_map_007",
-                //"mp_sergeant_map_008",
-                //"mp_sergeant_map_009",
-                //"mp_sergeant_map_010",
-                //"mp_sergeant_map_011",
-                //"mp_sergeant_map_011s",
-                //"mp_sergeant_map_012",
-                //"mp_sergeant_map_013",
-                //"mp_sergeant_map_vlandia_01",
-                //"mp_siege_map_001",
-                //"mp_siege_map_002",
-                //"mp_siege_map_003",
-                //"mp_siege_map_004",
-                //"mp_siege_map_005",
-                new SceneInfo{name = "mp_sergeant_map_001"},
-                new SceneInfo{name = "mp_sergeant_map_005"},
-                new SceneInfo{name = "mp_sergeant_map_007"},
-                new SceneInfo{name = "mp_sergeant_map_008"},
-                new SceneInfo{name = "mp_sergeant_map_009"},
-                new SceneInfo{name = "mp_sergeant_map_010"},
-                new SceneInfo{name = "mp_sergeant_map_011"},
-                new SceneInfo{name = "mp_sergeant_map_011s"},
-                new SceneInfo{name = "mp_sergeant_map_012"},
-                new SceneInfo{name = "mp_sergeant_map_013"},
-                new SceneInfo{name = "mp_sergeant_map_vlandia_01"},
+                //new SceneInfo{name = "mp_siege_map_001", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
+                //new SceneInfo{name = "mp_siege_map_002", formationPosition = new Vec2(100, 100), formationDirection = new Vec2(1, 0)},
+                new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(461,634), formationDirection = new Vec2(0.55f,0.45f).Normalized(), distance = 180},
+                //new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
+                //new SceneInfo{name = "mp_siege_map_004_bat", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
+                //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(0, 1)},
+                new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(0,1), distance = 220},
+                //new SceneInfo{name = "mp_siege_map_006", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(0,1), distance = 220},
+                new SceneInfo{name = "mp_siege_map_007_battania", formationPosition = new Vec2(614,612), formationDirection = new Vec2(0.65f, 0.35f), distance = 140},
             };
             int defaultIndex = 0;
-            var p = new EnhancedCustomBattleConfig
+            var p = new EnhancedSiegeBattleConfig
             {
                 ConfigVersion = BinaryVersion.ToString(2),
                 sceneList = list,
                 sceneIndex = defaultIndex,
-                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 1},
+                playerClass = new ClassInfo { classStringId = "mp_light_cavalry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 SpawnPlayer = true,
-                enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 1 },
+                enemyClass = new ClassInfo { classStringId = "mp_light_cavalry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0 },
                 SpawnEnemyCommander = true,
                 playerTroops = new ClassInfo[3]
                 {
                     new ClassInfo { classStringId = "mp_shock_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
-                    new ClassInfo { classStringId = "mp_heavy_ranged_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_light_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                     new ClassInfo { classStringId = "mp_heavy_infantry_vlandia", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
                 enemyTroops = new ClassInfo[3]
                 {
                     new ClassInfo { classStringId = "mp_shock_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
-                    new ClassInfo { classStringId = "mp_heavy_ranged_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                     new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_heavy_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
+                soldierXInterval = 1.5f,
+                soldierYInterval = 1f,
+                charge = false,
+                hasBoundary = true,
                 disableDying = false,
                 changeCombatAI = false,
                 combatAI = 100,
@@ -128,20 +145,26 @@ namespace EnhancedBattleTest
             return p;
         }
 
-        public static EnhancedCustomBattleConfig Get()
+        public static EnhancedSiegeBattleConfig Get()
         {
             if (_instance == null)
             {
-                _instance = new EnhancedCustomBattleConfig();
+                _instance = new EnhancedSiegeBattleConfig();
                 _instance.SyncWithSave();
             }
+
             return _instance;
         }
 
         public override bool Validate()
         {
             return base.Validate()
-                && this.sceneIndex >= 0 && this.sceneIndex < this.sceneList.Length;
+                && this.sceneIndex >= 0 && this.sceneIndex < this.sceneList.Length
+                && this.Distance > 0
+                && soldierXInterval > 0
+                && soldierYInterval > 0
+                && SoldiersPerRow > 0
+                && FormationDirection.Length > 0;
         }
 
         public override bool Serialize()
@@ -149,17 +172,17 @@ namespace EnhancedBattleTest
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedCustomBattleConfig));
+                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedSiegeBattleConfig));
                 using (TextWriter writer = new StreamWriter(SaveName))
                 {
                     serializer.Serialize(writer, this);
                 }
-                Utility.DisplayMessage("Save config succeeded.");
+                Utility.DisplayMessage("Config saved.");
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Save config failed.");
+                Utility.DisplayMessage("Error: Saving config failed.");
                 Utility.DisplayMessage("Exception caught: " + e.ToString());
                 Console.WriteLine(e);
             }
@@ -172,19 +195,19 @@ namespace EnhancedBattleTest
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedCustomBattleConfig));
+                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedSiegeBattleConfig));
                 using (TextReader reader = new StreamReader(SaveName))
                 {
-                    var config = (EnhancedCustomBattleConfig)deserializer.Deserialize(reader);
+                    var config = (EnhancedSiegeBattleConfig)deserializer.Deserialize(reader);
                     this.CopyFrom(config);
                 }
-                Utility.DisplayMessage("Load config succeeded.");
+                Utility.DisplayMessage("Config loaded.");
                 UpgradeToCurrentVersion();
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Load config failed.");
+                Utility.DisplayMessage("Error: Loading config failed.");
                 Utility.DisplayMessage("Exception caught: " + e.ToString());
                 Console.WriteLine(e);
             }
@@ -204,7 +227,8 @@ namespace EnhancedBattleTest
             CopyFrom(CreateDefault());
         }
 
-        protected override void CopyFrom(EnhancedCustomBattleConfig other)
+
+        protected override void CopyFrom(EnhancedSiegeBattleConfig other)
         {
             //public SceneInfo[] sceneList { get; set; }
             //public int sceneIndex;
@@ -231,9 +255,12 @@ namespace EnhancedBattleTest
             if (other.sceneList != null)
                 this.sceneList = other.sceneList;
             this.sceneIndex = other.sceneIndex;
+            this.soldierXInterval = other.soldierXInterval;
+            this.soldierYInterval = other.soldierYInterval;
+            this.charge = other.charge;
+            this.hasBoundary = other.hasBoundary;
         }
-
-        protected override string SaveName => SavePath + nameof(EnhancedCustomBattleConfig) + ".xml";
-        protected override string[] OldNames { get; } = { };
+        protected override string SaveName => SavePath + nameof(EnhancedSiegeBattleConfig) + ".xml";
+        protected override string[] OldNames { get; } = {};
     }
 }

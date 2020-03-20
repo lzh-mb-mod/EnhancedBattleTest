@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -24,6 +25,7 @@ namespace EnhancedBattleTest
             }
         }
 
+        private bool _initialized = false;
         private bool _shouldCelebrateVictory;
         private bool _ended = false;
         public TL.Vec3 initialFreeCameraPos;
@@ -37,7 +39,7 @@ namespace EnhancedBattleTest
             _victoryLogic = null;
         }
 
-        public override void AfterStart()
+        public override void EarlyStart()
         {
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
@@ -46,8 +48,14 @@ namespace EnhancedBattleTest
             var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
             var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
             AddTeams(playerTeamCulture, enemyTeamCulture);
-            SpawnPlayerTeamAgents(playerTeamCulture);
-            SpawnEnemyTeamAgents(enemyTeamCulture);
+        }
+
+        public override void AfterStart()
+        {
+            //var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
+            //var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
+            //SpawnPlayerTeamAgents(playerTeamCulture);
+            //SpawnEnemyTeamAgents(enemyTeamCulture);
         }
 
         public void AdjustScene()
@@ -78,20 +86,53 @@ namespace EnhancedBattleTest
             var enemyTeam = this.Mission.Teams.Add(BattleSideEnum.Defender, color: enemyTeamCulture.BackgroundColor2, color2: enemyTeamCulture.ForegroundColor2, banner: enemyTeamBanner);
 
             playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
-            playerTeam.AddTacticOption(new TacticCharge(playerTeam));
-            playerTeam.ExpireAIQuerySystem();
-            playerTeam.ResetTactic();
-            playerTeam.OnOrderIssued += OrderIssuedDelegate;
-
             enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
-            enemyTeam.AddTacticOption(new TacticCharge(enemyTeam));
-            enemyTeam.ExpireAIQuerySystem();
-            enemyTeam.ResetTactic();
-            enemyTeam.OnOrderIssued += OrderIssuedDelegate;
+            using (IEnumerator<Team> enumerator = Mission.Teams.Where<Team>((Func<Team, bool>)(t => t.HasTeamAi)).GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    Team team = enumerator.Current;
+                    if (team.Side == BattleSideEnum.Defender)
+                    {
+                        bool flag = false;
+                        foreach (var defenderTacticOption in _testBattleConfig.defenderTacticOptions)
+                        {
+                            if (defenderTacticOption.isEnabled)
+                            {
+                                flag = true;
+                                TacticOptionHelper.AddTacticComponent(team, defenderTacticOption.tacticOption);
+                            }
+                        }
+                        if (!flag)
+                            team.AddTacticOption(new TacticCharge(team));
+                    }
 
-            enemyTeam.SetIsEnemyOf(playerTeam, true);
-            playerTeam.SetIsEnemyOf(enemyTeam, true);
+                    if (team.Side == BattleSideEnum.Attacker)
+                    {
+                        bool flag = false;
+                        foreach (var attackerTacticOption in _testBattleConfig.attackerTacticOptions)
+                        {
+                            if (attackerTacticOption.isEnabled)
+                            {
+                                flag = true;
+                                TacticOptionHelper.AddTacticComponent(team, attackerTacticOption.tacticOption);
+                            }
+                        }
+                        if (!flag)
+                            team.AddTacticOption(new TacticCharge(team));
+                    }
+                }
+            }
+
+            foreach (Team team in (ReadOnlyCollection<Team>)this.Mission.Teams)
+            {
+                team.ExpireAIQuerySystem();
+                team.ResetTactic();
+                team.OnOrderIssued += OrderIssuedDelegate;
+            }
+
             this.Mission.PlayerTeam = playerTeam;
+            Utility.ApplyTeamAIEnabled(TestBattleConfig);
         }
 
         public void SpawnPlayerTeamAgents(BasicCultureObject playerTeamCulture)
@@ -116,28 +157,14 @@ namespace EnhancedBattleTest
                 var agentMatrixFrame = GetFormationMatrixFrame(true, -2);
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.TestBattleConfig.PlayerHeroClass;
                 BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
+                Game.Current.PlayerTroop = playerCharacter;
                 var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
                 playerFormation.SetPositioning(agentMatrixFrame.origin.ToWorldPosition(scene), this.TestBattleConfig.FormationDirection);
                 playerFormation.FormOrder = FormOrder.FormOrderCustom(1);
-                playerFormation.MovementOrder = MovementOrder.MovementOrderMove(agentMatrixFrame.origin.ToWorldPosition());
-                Agent player = this.SpawnAgent(TestBattleConfig.playerClass,
+                Agent player = this.SpawnAgent(TestBattleConfig.playerClass, true,
                     playerCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, 1, 0, agentMatrixFrame);
-                player.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
 
-                playerTeam.MasterOrderController.ClearSelectedFormations();
-                playerTeam.MasterOrderController.SelectFormation(playerFormation);
-                if (!TestBattleConfig.charge)
-                {
-                    playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move,
-                        agentMatrixFrame.origin.ToWorldPosition());
-                }
-                else
-                {
-                    playerTeam.MasterOrderController.SetOrder(OrderType.Charge);
-                }
-
-                player.Controller = Agent.ControllerType.Player;
                 player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
             }
@@ -146,14 +173,14 @@ namespace EnhancedBattleTest
                 var c = this.TestBattleConfig.playerTroops[0].troopCount;
                 if (c <= 0)
                 {
-                    initialFreeCameraTarget = startPos.ToVec3(GetSceneHeightForAgent(startPos));
+                    initialFreeCameraTarget = startPos.ToVec3(Utility.GetSceneHeightForAgent(Mission.Scene, startPos));
                     initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
                 else
                 {
                     var rowCount = (c + soldiersPerRow - 1) / soldiersPerRow;
                     var p = startPos + (System.Math.Min(soldiersPerRow, c) - 1) / 2 * yInterval * yDir - rowCount * xInterval * xDir;
-                    initialFreeCameraTarget = p.ToVec3(GetSceneHeightForAgent(p));
+                    initialFreeCameraTarget = p.ToVec3(Utility.GetSceneHeightForAgent(Mission.Scene, p));
                     initialFreeCameraPos = initialFreeCameraTarget + new TL.Vec3(0, 0, 10) - xDir.ToVec3();
                 }
 
@@ -176,24 +203,11 @@ namespace EnhancedBattleTest
                 BasicCultureObject troopCulture = spawnPlayer ? playerTeamCulture : playerTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < playerTroopCount; ++troopIndex)
                 {
-                    var agent = this.SpawnAgent(TestBattleConfig.playerTroops[formationIndex], playerTroopCharacter, false,
+                    var agent = this.SpawnAgent(TestBattleConfig.playerTroops[formationIndex], false, playerTroopCharacter, false,
                         playerTroopFormation, playerTeam, playerTeamCombatant, troopCulture, true, playerTroopCount,
                         troopIndex);
-                    agent.Controller = Agent.ControllerType.AI;
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                }
-
-                playerTeam.MasterOrderController.ClearSelectedFormations();
-                playerTeam.MasterOrderController.SelectFormation(playerTroopFormation);
-                if (!TestBattleConfig.charge)
-                {
-                    playerTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move,
-                        formationMatrixFrame.origin.ToWorldPosition());
-                }
-                else
-                {
-                    playerTeam.MasterOrderController.SetOrder(OrderType.Charge);
                 }
             }
         }
@@ -216,19 +230,11 @@ namespace EnhancedBattleTest
                 var formation = enemyTeam.GetFormation(Utility.CommanderFormationClass());
                 formation.SetPositioning(agentMatrixFrame.origin.ToWorldPosition(scene), -this.TestBattleConfig.FormationDirection);
                 formation.FormOrder = FormOrder.FormOrderCustom(1);
-                Agent agent = this.SpawnAgent(TestBattleConfig.enemyClass,
+                Agent agent = this.SpawnAgent(TestBattleConfig.enemyClass, false,
                     enemyCharacter, true, formation, enemyTeam,
                     enemyTeamCombatant, enemyTeamCulture, false, 1, 0, agentMatrixFrame);
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                agent.Controller = Agent.ControllerType.AI;
                 agent.WieldInitialWeapons();
-
-                if (!TestBattleConfig.charge)
-                {
-                    enemyTeam.MasterOrderController.ClearSelectedFormations();
-                    enemyTeam.MasterOrderController.SelectFormation(formation);
-                    enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, agentMatrixFrame.origin.ToWorldPosition());
-                }
             }
 
             float distanceToInitialPosition = 0;
@@ -248,34 +254,25 @@ namespace EnhancedBattleTest
                     : enemyTroopCharacter.Culture;
                 for (var troopIndex = 0; troopIndex < enemyTroopCount; ++troopIndex)
                 {
-                    var agent = SpawnAgent(TestBattleConfig.enemyTroops[formationIndex], enemyTroopCharacter, false, enemyTroopFormation,
+                    var agent = SpawnAgent(TestBattleConfig.enemyTroops[formationIndex], false, enemyTroopCharacter, false, enemyTroopFormation,
                         enemyTeam, enemyTeamCombatant, troopCulture, false, enemyTroopCount, troopIndex);
-                    agent.Controller = Agent.ControllerType.AI;
                     agent.WieldInitialWeapons();
                     agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                }
-
-                if (!TestBattleConfig.charge)
-                {
-                    enemyTeam.MasterOrderController.ClearSelectedFormations();
-                    enemyTeam.MasterOrderController.SelectFormation(enemyTroopFormation);
-                    enemyTeam.MasterOrderController.SetOrderWithPosition(OrderType.Move, formationMatrixFrame.origin.ToWorldPosition());
                 }
             }
         }
 
         public override void OnMissionTick(float dt)
         {
-            CheckVictory();
-            if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.I))
+            if (!_initialized)
             {
-                Agent mainAgent = this.Mission.MainAgent;
-                TL.Vec3 position = mainAgent != null ? mainAgent.Position : this.Mission.Scene.LastFinalRenderCameraPosition;
-                string str = new WorldPosition(this.Mission.Scene, position).GetNavMesh().ToString() ?? "";
-                Utility.DisplayMessage(
-                    $"Position: {(object)position} | Navmesh: {(object)str} | Time: {(object)this.Mission.Time}");
-                ModuleLogger.Log("INFO Position: {0}, Navigation Mesh: {1}", (object)position, (object)str);
+                _initialized = true;
+                var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
+                var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
+                SpawnPlayerTeamAgents(playerTeamCulture);
+                SpawnEnemyTeamAgents(enemyTeamCulture);
             }
+            CheckVictory();
         }
 
         private void CheckVictory()
@@ -349,7 +346,7 @@ namespace EnhancedBattleTest
                 uniqueNo);
         }
 
-        private Agent SpawnAgent(ClassInfo classInfo, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
+        private Agent SpawnAgent(ClassInfo classInfo, bool isPlayer, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
         {
             AgentBuildData agentBuildData = new AgentBuildData(CreateOrigin(combatant, character, isPlayerSide))
                 .Team(team)
@@ -357,8 +354,10 @@ namespace EnhancedBattleTest
                 .FormationTroopCount(formationTroopCount).FormationTroopIndex(formationTroopIndex)
                 .Banner(team.Banner)
                 .ClothingColor1(isPlayerSide ? culture.Color : culture.ClothAlternativeColor)
-                .ClothingColor2(isPlayerSide ? culture.Color2 : culture.ClothAlternativeColor2)
-                .IsFemale(false);
+                .ClothingColor2(isPlayerSide ? culture.Color2 : culture.ClothAlternativeColor2);
+            agentBuildData.Controller(isPlayer
+                ? Agent.ControllerType.Player
+                : Agent.ControllerType.AI);
             Utility.OverrideEquipment(agentBuildData, classInfo, isHero);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
@@ -383,42 +382,23 @@ namespace EnhancedBattleTest
             int troopCount = isPlayerSide
                 ? config.playerTroops[formationIndex].troopCount
                 : config.enemyTroops[formationIndex].troopCount;
-            var mounted = fc == FormationClass.Cavalry || fc == FormationClass.HorseArcher;
-            var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
-            var unitSpacing = 1;
-            var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
-            var actualSoldiersPerRow = System.Math.Min(config.SoldiersPerRow, troopCount);
-            var width = (actualSoldiersPerRow) * (unitDiameter + interval) - interval;
-            if (mounted)
-                unitDiameter *= 1.8f;
-            float length = ((int)Math.Ceiling((float)troopCount / actualSoldiersPerRow)) * (unitDiameter + interval) + 1.5f;
-            return new Tuple<float, float>(width, length);
+            return Utility.GetFormationRegion(fc, troopCount, config.SoldiersPerRow);
         }
 
         private TL.MatrixFrame GetFormationMatrixFrame(bool isPlayerSide, float distanceToInitialPosition)
         {
-            var agentDefaultDir = new TL.Vec2(0, 1);
-            var xDir = this.TestBattleConfig.FormationDirection;
-            var mat = TL.Mat3.Identity;
-            mat.RotateAboutUp(agentDefaultDir.AngleBetween(isPlayerSide ? xDir : -xDir));
-            var pos = GetFormationPosition(isPlayerSide, distanceToInitialPosition);
-            return new TL.MatrixFrame(mat, pos);
+            return Utility.ToMatrixFrame(Mission.Scene, GetFormationPosition(isPlayerSide, distanceToInitialPosition),
+                isPlayerSide ? TestBattleConfig.FormationDirection : -TestBattleConfig.FormationDirection);
         }
 
-        private TL.Vec3 GetFormationPosition(bool isPlayerSide, float distanceToInitialPosition)
+        private TL.Vec2 GetFormationPosition(bool isPlayerSide, float distanceToInitialPosition)
         {
             var xDir = this.TestBattleConfig.FormationDirection;
             var pos = this.TestBattleConfig.FormationPosition
                       + distanceToInitialPosition * (isPlayerSide ? -xDir : xDir);
             if (!isPlayerSide)
                 pos += xDir * this.TestBattleConfig.Distance;
-            return pos.ToVec3(GetSceneHeightForAgent(pos));
-        }
-        private float GetSceneHeightForAgent(TL.Vec2 pos)
-        {
-            float result = 0;
-            this.Mission.Scene.GetHeightAtPoint(pos, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref result);
-            return result;
+            return pos;
         }
 
     }

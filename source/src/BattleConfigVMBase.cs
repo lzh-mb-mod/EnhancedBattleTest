@@ -6,7 +6,7 @@ using Debug = System.Diagnostics.Debug;
 
 namespace EnhancedBattleTest
 {
-    public abstract class BattleConfigVMBase<T>: ViewModel where T : BattleConfigBase<T>
+    public abstract class BattleConfigVMBase<T> : ViewModel where T : BattleConfigBase<T>
     {
         protected enum SaveParamResult
         {
@@ -22,13 +22,13 @@ namespace EnhancedBattleTest
         // Because there would be two property with the same name, which will cause exception thrown in constructor of ViewModel
         protected T CurrentConfig { get; set; }
         private CharacterSelectionView _selectionView;
+        private MissionMenuView _missionMenuView;
         private List<MultiplayerClassDivisions.MPHeroClass> _allMpHeroClasses;
         private Dictionary<string, Dictionary<string, List<MultiplayerClassDivisions.MPHeroClass>>> _allMpHeroClassesMap;
-        
+
         private string _playerName, _enemyName;
         private TroopInfo[] _playerTroopInfos, _enemyTroopInfos;
         private string _combatAI;
-
 
         [DataSourceProperty]
         public string PlayerTroopCount1
@@ -325,15 +325,15 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public bool DisableDying
+        public bool NoAgentLabel
         {
-            get => this.CurrentConfig.disableDying;
+            get => this.CurrentConfig.noAgentLabel;
             set
             {
-                if (this.CurrentConfig.disableDying == value)
+                if (this.CurrentConfig.noAgentLabel == value)
                     return;
-                this.CurrentConfig.disableDying = value;
-                this.OnPropertyChanged(nameof(DisableDying));
+                this.CurrentConfig.noAgentLabel = value;
+                this.OnPropertyChanged(nameof(NoAgentLabel));
             }
         }
 
@@ -374,9 +374,12 @@ namespace EnhancedBattleTest
             }
         }
 
-        protected BattleConfigVMBase(CharacterSelectionView selectionView, T currentConfig)
+        protected BattleConfigVMBase(CharacterSelectionView selectionView, MissionMenuView missionMenuView, T currentConfig)
         {
             this._selectionView = selectionView;
+            this._missionMenuView = missionMenuView;
+            this._missionMenuView.OnMissionMenuViewActivated += this.OnMissionMenuViewActivated;
+            this._missionMenuView.OnMissionMenuViewDeactivated += this.OnMissionMenuViewDeactivated;
             this.CurrentConfig = currentConfig;
             this._playerTroopInfos = new TroopInfo[3];
             this._enemyTroopInfos = new TroopInfo[3];
@@ -406,7 +409,6 @@ namespace EnhancedBattleTest
             UpdatePlayerTroopName();
             UpdateEnemyTroopName();
 
-            this.DisableDying = this.CurrentConfig.disableDying;
             this.ChangeCombatAI = this.CurrentConfig.changeCombatAI;
             this.CombatAI = this.CurrentConfig.combatAI.ToString();
         }
@@ -552,6 +554,12 @@ namespace EnhancedBattleTest
                     _selectionView.OnClose();
                 }));
         }
+
+        protected void OpenMissionMenu()
+        {
+            this._missionMenuView.ActivateMenu();
+        }
+
         protected SaveParamResult SaveConfig()
         {
             try
@@ -585,6 +593,16 @@ namespace EnhancedBattleTest
             }
 
             CurrentConfig.combatAI = System.Convert.ToInt32(this._combatAI);
+        }
+
+        private void OnMissionMenuViewActivated()
+        {
+            //this.BlockEvents = true;
+        }
+
+        private void OnMissionMenuViewDeactivated()
+        {
+            //this.BlockEvents = false;
         }
     }
 }

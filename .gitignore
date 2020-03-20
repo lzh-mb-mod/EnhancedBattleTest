@@ -4,3 +4,4 @@ source/obj/
 *.DotSettings.user
 *.csproj.user
 *.dll
+*.html

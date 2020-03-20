@@ -1,17 +1,18 @@
-﻿using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleConfigView : MissionView
+    class EnhancedSiegeBattleConfigView : MissionView
     {
         private GauntletLayer _gauntletLayer;
-        private EnhancedTestBattleConfigVM _dataSource;
+        private EnhancedSiegeBattleConfigVM _dataSource;
         private CharacterSelectionView _selectionView;
-        private MissionMenuView _missionMenuView;
 
-        public EnhancedTestBattleConfigView(CharacterSelectionView selectionView)
+        public EnhancedSiegeBattleConfigView(CharacterSelectionView selectionView)
         {
             this._selectionView = selectionView;
             this.ViewOrderPriorty = 22;
@@ -19,7 +20,6 @@ namespace EnhancedBattleTest
 
         public override void OnMissionScreenInitialize()
         {
-            _missionMenuView = Mission.GetMissionBehaviour<MissionMenuView>();
             base.OnMissionScreenInitialize();
             Open();
         }
@@ -37,13 +37,13 @@ namespace EnhancedBattleTest
 
         public void Open()
         {
-            this._dataSource = new EnhancedTestBattleConfigVM(_selectionView, _missionMenuView, (config) =>
-                {
-                    EnhancedBattleTestMissions.OpenTestBattleMission(config);
-                }, (param) => { this.Mission.EndMission(); });
+            this._dataSource = new EnhancedSiegeBattleConfigVM(_selectionView, Mission.GetMissionBehaviour<MissionMenuView>(), (config) =>
+            {
+                EnhancedBattleTestMissions.OpenSiegeBattleMission(config);
+            }, (param) => { this.Mission.EndMission(); });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
-            this._gauntletLayer.LoadMovie(nameof(EnhancedTestBattleConfigView), this._dataSource);
+            this._gauntletLayer.LoadMovie(nameof(EnhancedSiegeBattleConfigView), this._dataSource);
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, TaleWorlds.Library.InputUsageMask.All);
             this.MissionScreen.AddLayer(this._gauntletLayer);
         }

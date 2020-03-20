@@ -20,9 +20,9 @@ namespace EnhancedBattleTest
 
         public bool IsUnderPlayersCommand { get; }
 
-        public uint FactionColor => this.CustomBattleCombatant.Culture.Color;
+        public uint FactionColor => this.CustomBattleCombatant.BasicCulture.Color;
 
-        public uint FactionColor2 => this.CustomBattleCombatant.Culture.Color2;
+        public uint FactionColor2 => this.CustomBattleCombatant.BasicCulture.Color2;
 
         public int Seed => this.Troop.GetDefaultFaceSeed(this.Rank);
 
@@ -74,7 +74,6 @@ namespace EnhancedBattleTest
 
         public void SetBanner(Banner banner)
         {
-            throw new NotImplementedException();
         }
     }
 }

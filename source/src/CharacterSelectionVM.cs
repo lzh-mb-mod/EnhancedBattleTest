@@ -31,10 +31,7 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public MBBindingList<NameVM> Cultures
         {
-            get
-            {
-                return this._cultures;
-            }
+            get => this._cultures;
             set
             {
                 if (value == this._cultures)
@@ -47,10 +44,7 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public MBBindingList<NameVM> Groups
         {
-            get
-            {
-                return this._groups;
-            }
+            get => this._groups;
             set
             {
                 if (value == this._groups)
@@ -62,10 +56,7 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public MBBindingList<CharacterVM> Characters
         {
-            get
-            {
-                return this._characters;
-            }
+            get => this._characters;
             set
             {
                 if (value == this._characters)

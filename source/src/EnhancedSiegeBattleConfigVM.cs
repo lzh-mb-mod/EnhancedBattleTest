@@ -1,12 +1,14 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleConfigVM : BattleConfigVMBase<EnhancedTestBattleConfig>
+    class EnhancedSiegeBattleConfigVM : BattleConfigVMBase<EnhancedSiegeBattleConfig>
     {
-        private Action<EnhancedTestBattleConfig> startAction;
-        private Action<EnhancedTestBattleConfig> backAction;
+        private Action<EnhancedSiegeBattleConfig> startAction;
+        private Action<EnhancedSiegeBattleConfig> backAction;
 
         private int _selectedSceneIndex;
         private string _distance;
@@ -82,7 +84,7 @@ namespace EnhancedBattleTest
                 this.OnPropertyChanged(nameof(SoldierYInterval));
             }
         }
-    
+
         [DataSourceProperty]
         public string SoldiersPerRow
         {
@@ -148,19 +150,6 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public bool MakeGruntVoice
-        {
-            get => this.CurrentConfig.makeGruntVoice;
-            set
-            {
-                if (this.CurrentConfig.makeGruntVoice == value)
-                    return;
-                this.CurrentConfig.makeGruntVoice = value;
-                this.OnPropertyChanged(nameof(MakeGruntVoice));
-            }
-        }
-
-        [DataSourceProperty]
         public bool HasBoundary
         {
             get => this.CurrentConfig.hasBoundary;
@@ -173,9 +162,9 @@ namespace EnhancedBattleTest
             }
         }
 
-        public EnhancedTestBattleConfigVM(CharacterSelectionView selectionView, MissionMenuView missionMenuView, Action<EnhancedTestBattleConfig> startAction,
-            Action<EnhancedTestBattleConfig> backAction)
-            : base(selectionView, missionMenuView, EnhancedTestBattleConfig.Get())
+        public EnhancedSiegeBattleConfigVM(CharacterSelectionView selectionView, MissionMenuView missionMenuView,Action<EnhancedSiegeBattleConfig> startAction,
+            Action<EnhancedSiegeBattleConfig> backAction)
+            : base(selectionView, missionMenuView, EnhancedSiegeBattleConfig.Get())
         {
             InitializeContent();
 
@@ -275,7 +264,7 @@ namespace EnhancedBattleTest
             CurrentConfig.FormationDirection = StringToVec2(this.FormationDirection).Normalized();
             CurrentConfig.SkyBrightness = System.Convert.ToSingle(this.SkyBrightness);
             CurrentConfig.RainDensity = System.Convert.ToSingle(this.RainDensity);
-            
+
             CurrentConfig.Distance = System.Convert.ToSingle(this.Distance);
             CurrentConfig.soldierXInterval = System.Convert.ToSingle(this.SoldierXInterval);
             CurrentConfig.soldierYInterval = System.Convert.ToSingle(this.SoldierYInterval);

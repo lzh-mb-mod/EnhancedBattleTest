@@ -1,11 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
     class Utility
     {
+        public static Mission CurrentMission()
+        {
+            GameState state = GameStateManager.Current.ActiveState;
+            if (state.IsMission)
+            {
+                MissionState missionState = state as MissionState;
+                return missionState?.CurrentMission;
+            }
+
+            return null;
+        }
+
         public static void DisplayMessage(string msg)
         {
             InformationManager.DisplayMessage(new InformationMessage(new TaleWorlds.Localization.TextObject(msg).ToString()));
@@ -18,38 +34,109 @@ namespace EnhancedBattleTest
 
         public static bool IsPlayerDead()
         {
-            return IsAgentDead(Mission.Current.MainAgent);
+            return IsAgentDead(CurrentMission().MainAgent);
         }
 
         public static void SetPlayerAsCommander()
         {
-            Mission.Current.PlayerTeam.PlayerOrderController.Owner = Mission.Current.MainAgent;
-            // the team will no longer issue command by ai after setting this.
-            Mission.Current.PlayerTeam.SetPlayerRole(true, false);
-            foreach (var formation in Mission.Current.PlayerTeam.FormationsIncludingEmpty)
+            var mission = CurrentMission();
+            if (mission == null)
+                return;
+            mission.PlayerTeam.PlayerOrderController.Owner = mission.MainAgent;
+            foreach (var formation in mission.PlayerTeam.FormationsIncludingEmpty)
             {
-                formation.PlayerOwner = Mission.Current.MainAgent;
+                bool isAIControlled = formation.IsAIControlled;
+                formation.PlayerOwner = mission.MainAgent;
+                formation.IsAIControlled = isAIControlled;
             }
-            // see Mission.AssignPlayerAsSergeantOfFormation
-            foreach (MissionBehaviour missionBehaviour in Mission.Current.MissionBehaviours)
-                missionBehaviour.OnAssignPlayerAsSergeantOfFormation(Mission.Current.MainAgent);
+            DisplayMessage("Set player as commander");
+            foreach (var formation in mission.PlayerTeam.Formations)
+            {
+                DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
+                               formation.IsAIControlled.ToString());
+            }
         }
 
         public static void CancelPlayerCommander()
         {
-            // Try to fix the problem that the agent which player previously controlled wanders around.
+            var mission = CurrentMission();
+            if (mission == null)
+                return;
+            DisplayMessage("Cancel player commander:");
+            foreach (var formation in mission.PlayerTeam.Formations)
+            {
+                DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
+                               formation.IsAIControlled.ToString());
+            }
+        }
+
+        public static void ApplyTeamAIEnabled(BattleConfigBase config)
+        {
+            var mission = CurrentMission();
+            if (mission == null)
+                return;
+            switch (config.aiEnableType)
+            {
+                case AIEnableType.None:
+                    Utility.DisplayMessage("Team AI is disabled.");
+                    Utility.SetTeamAIEnabled(mission.PlayerTeam, false);
+                    Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, false);
+                    break;
+                case AIEnableType.EnemyOnly:
+                    Utility.DisplayMessage("Team AI is enabled for enemy only");
+                    Utility.SetTeamAIEnabled(mission.PlayerTeam, false);
+                    Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, true);
+                    break;
+                case AIEnableType.PlayerOnly:
+                    Utility.DisplayMessage("Team AI is enabled for player team only");
+                    Utility.SetTeamAIEnabled(mission.PlayerTeam, true);
+                    Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, false);
+                    break;
+                case AIEnableType.Both:
+                    Utility.DisplayMessage("Team AI is enabled for both sides");
+                    Utility.SetTeamAIEnabled(mission.PlayerTeam, true);
+                    Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, true);
+                    break;
+            }
+        }
+
+        public static void SetTeamAIEnabled(Team team, bool enabled)
+        {
+            if (team == null)
+                return;
+            foreach (var formation in team.FormationsIncludingEmpty)
+            {
+                formation.IsAIControlled = enabled;
+            }
+        }
+
+        public static List<MPPerkObject> GetAllSelectedPerks(MultiplayerClassDivisions.MPHeroClass mpHeroClass,
+            int[] selectedPerks)
+        {
+            List<MPPerkObject> selectedPerkList = new List<MPPerkObject>();
+            for (int i = 0; i < selectedPerks.Length; ++i)
+            {
+                var perks = mpHeroClass.GetAllAvailablePerksForListIndex(i);
+                if (perks.IsEmpty())
+                    continue;
+                selectedPerkList.Add(perks[selectedPerks[i]]);
+            }
+
+            return selectedPerkList;
+        }
+
+        public static IEnumerable<PerkEffect> SelectRandomPerkEffectsForPerks(MultiplayerClassDivisions.MPHeroClass mpHeroClass, bool isPlayer, PerkType perkType, int[] selectedPerks)
+        {
+            var selectedPerkList = GetAllSelectedPerks(mpHeroClass, selectedPerks);
+            return MPPerkObject.SelectRandomPerkEffectsForPerks(isPlayer, perkType, selectedPerkList);
         }
 
         public static Equipment GetNewEquipmentsForPerks(MultiplayerClassDivisions.MPHeroClass mpHeroClass, ClassInfo info, bool isPlayer)
         {
             BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
-            List<MPPerkObject> selectedPerkList = new List<MPPerkObject>
-            {
-                mpHeroClass.GetAllAvailablePerksForListIndex(0)[info.selectedFirstPerk],
-                mpHeroClass.GetAllAvailablePerksForListIndex(1)[info.selectedSecondPerk]
-            };
             Equipment equipment = isPlayer ? character.Equipment.Clone() : Equipment.GetRandomEquipmentElements(character, true, false, MBRandom.RandomInt());
-            foreach (PerkEffect perkEffectsForPerk in MPPerkObject.SelectRandomPerkEffectsForPerks(isPlayer, PerkType.PerkAlternativeEquipment, selectedPerkList))
+            foreach (PerkEffect perkEffectsForPerk in SelectRandomPerkEffectsForPerks(mpHeroClass, isPlayer,
+                PerkType.PerkAlternativeEquipment, new[] {info.selectedFirstPerk, info.selectedSecondPerk}))
                 equipment[perkEffectsForPerk.NewItemIndex] = perkEffectsForPerk.NewItem.EquipmentElement;
             return equipment;
         }
@@ -59,9 +146,6 @@ namespace EnhancedBattleTest
             MultiplayerClassDivisions.MPHeroClass mpHeroClass =
                 MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
             BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
-            if (mpHeroClass.GetAllAvailablePerksForListIndex(0).IsEmpty() ||
-                mpHeroClass.GetAllAvailablePerksForListIndex(1).IsEmpty())
-                return ;
             var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isPlayer);
             buildData
                 .Equipment(equipment)
@@ -82,18 +166,28 @@ namespace EnhancedBattleTest
                 return sourceCharacter;
             var character = NewCharacter(sourceCharacter);
             character.InitializeEquipmentsOnLoad(new List<Equipment>{equipment});
-            character.StringId = sourceCharacter.StringId + "_customized";
-            character.Name = sourceCharacter.Name;
             character.SetIsHero(isHero);
             return character;
+        }
+
+        public static MultiplayerClassDivisions.MPHeroClass GetMPHeroClassForCharacter(BasicCharacterObject character)
+        {
+            string id = character.StringId;
+            string suffix = "_WithPerkApplied";
+            if (id.EndsWith(suffix))
+                id = id.Substring(0, id.Length - suffix.Length);
+            BasicCharacterObject originalCharacter = MBObjectManager.Instance.GetObject<BasicCharacterObject>(id);
+            return MultiplayerClassDivisions.GetMPHeroClassForCharacter(originalCharacter);
         }
 
         public static EnhancedBattleTestCharacter NewCharacter(BasicCharacterObject sourceCharacter)
         {
             var character = new EnhancedBattleTestCharacter();
+            
             character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
             character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
-            character.StringId = sourceCharacter.StringId + "_customized";
+            character.StringId = sourceCharacter.StringId + "_WithPerkApplied";
+            character.Name = sourceCharacter.Name;
             character.Age = sourceCharacter.Age;
             character.FaceDirtAmount = sourceCharacter.FaceDirtAmount;
             character.Level = sourceCharacter.Level;
@@ -102,6 +196,67 @@ namespace EnhancedBattleTest
         public static FormationClass CommanderFormationClass()
         {
             return FormationClass.HorseArcher;
+        }
+
+        public static void AddCharacter(CustomBattleCombatant combatant, ClassInfo info, bool isHero,
+            FormationClass formationClass, bool isPlayer = false)
+        {
+
+            BasicCharacterObject character = Utility.ApplyPerks(info, isHero);
+            character.CurrentFormationClass = formationClass;
+            if (isPlayer)
+                Game.Current.PlayerTroop = character;
+            combatant.AddCharacter(character, info.troopCount);
+        }
+
+        public static MatrixFrame ToMatrixFrame(Scene scene, Vec2 position, Vec2 direction)
+        {
+            var defaultDir = new Vec2(0, 1);
+            var mat = Mat3.Identity;
+            mat.RotateAboutUp(defaultDir.AngleBetween(direction));
+            return new MatrixFrame(mat, position.ToVec3(GetSceneHeightForAgent(scene, position)));
+        }
+        public static float GetSceneHeightForAgent(Scene scene, Vec2 pos)
+        {
+            float result = 0;
+            scene.GetHeightAtPoint(pos, BodyFlags.CommonCollisionExcludeFlagsForAgent, ref result);
+            return result;
+        }
+
+        public static Tuple<float, float> GetFormationRegion(FormationClass formationClass, int troopCount, int soldiersPerRow)
+        {
+            var mounted = formationClass == FormationClass.Cavalry || formationClass == FormationClass.HorseArcher;
+            var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
+            var unitSpacing = 1;
+            var interval = mounted ? Formation.CavalryInterval(unitSpacing) : Formation.InfantryInterval(unitSpacing);
+            var actualSoldiersPerRow = System.Math.Min(soldiersPerRow, troopCount);
+            var width = (actualSoldiersPerRow) * (unitDiameter + interval) - interval;
+            if (mounted)
+                unitDiameter *= 1.8f;
+            float length = ((int)Math.Ceiling((float)troopCount / actualSoldiersPerRow)) * (unitDiameter + interval) + 1.5f;
+            return new Tuple<float, float>(width, length);
+        }
+
+        public static void SetInitialCameraPos(Camera camera, Vec2 formationPosition, Vec2 formationDirection)
+        {
+            Vec3 position = formationPosition.ToVec3(GetSceneHeightForAgent(CurrentMission().Scene, formationPosition) + 5);
+            Vec3 direction = formationPosition.ToVec3(-1).NormalizedCopy();
+            camera.LookAt(position, position + direction, Vec3.Up);
+        }
+
+        private static bool _oldGameStatusDisabledStatus = false;
+
+        public static void PauseGame()
+        {
+            MBCommon.PauseGameEngine();
+            _oldGameStatusDisabledStatus = Game.Current.GameStateManager.ActiveStateDisabledByUser;
+            Game.Current.GameStateManager.ActiveStateDisabledByUser = true;
+        }
+
+        public static void UnpauseGame()
+        {
+            MBCommon.UnPauseGameEngine();
+            Game.Current.GameStateManager.ActiveStateDisabledByUser = _oldGameStatusDisabledStatus;
         }
     }
 }

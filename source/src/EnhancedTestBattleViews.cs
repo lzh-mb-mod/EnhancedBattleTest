@@ -16,16 +16,20 @@ namespace EnhancedBattleTest
             {
                 selectionView,
                 new EnhancedTestBattleConfigView(selectionView),
+                new MissionMenuView(EnhancedTestBattleConfig.Get()),
             };
         }
 
-        [ViewMethod("EnhancedBattleTestBattle")]
+        [ViewMethod("EnhancedTestBattle")]
         public static MissionView[] OpenTestMission(Mission mission)
         {
+            var config = EnhancedTestBattleConfig.Get();
             var missionViewList = new List<MissionView>
             {
+                new MissionMenuView(config),
+                new MissionTestBattlePreloadView(config),
+                new PauseView(),
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
-                ViewCreator.CreateMissionAgentLabelUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
                 ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
@@ -36,12 +40,17 @@ namespace EnhancedBattleTest
                 new MissionAgentContourControllerView(),
                 ViewCreator.CreateOptionsUIHandler(),
                 new SpectatorCameraView(),
-                new EnhancedTestBattleView(mission),
+                new InitializeCameraPosView(config.FormationPosition, config.FormationDirection),
             };
-            if (EnhancedTestBattleConfig.Get().hasBoundary)
+            if (config.hasBoundary)
             {
                 missionViewList.Add(ViewCreator.CreateMissionBoundaryCrossingView());
                 missionViewList.Add(new MissionBoundaryWallView());
+            }
+
+            if (!config.noAgentLabel)
+            {
+                missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
             }
             return missionViewList.ToArray();
         }

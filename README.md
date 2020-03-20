@@ -7,6 +7,8 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Custom Battle Mode: Use built-in mechanism to spawn troops. Troops that exceeds the battle size limit will be spawned later.
 
+- Siege Battle Mode: Use AI for siege battle. Add deployment stage.
+
 - Map selection. Including sergeant maps, skirmish maps, tdm maps and some siege maps.
 
   Siege maps may crash.
@@ -33,6 +35,8 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Undead mode. Any agent will not die after switched on.
 
+- Changing AI tactic options.
+
 - Adjusting combat AI between 0 and 100.
 
 - Customizing player characters, details below.
@@ -40,7 +44,16 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 ## How to install
 1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
 
-2. Remember to reinstall the mod after game updating. This may solve some problems.
+### Note
+- Try to reinstall the mod after game update. This may solve some problems.
+
+- **However**, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), you should avoid reinstalling the mod if you want to play multiplayer mode.
+
+- If you did so, verifying game file integrity can solve problems that you cannot enter multiplayer mode and/or some crashes in multiplayer mode.
+  
+- You should waiting for mod update if you want to playing multiplayer mode as well as playing this mod.
+
+- Please read `How to customizing characters` section for reasons.
 
 ## How to use
 - Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder.
@@ -56,6 +69,10 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 - Press `f` key or `numpad6` key to control one of your troops after you being killed.
 
 - Press `numpad7` to disable dying.
+
+- Press `numpad8` to adjust more settings including team AI tactic options, etc.
+
+- Press `P` key to pause game.
 
 - Press `L` key to teleport player when in free camera mode.
 

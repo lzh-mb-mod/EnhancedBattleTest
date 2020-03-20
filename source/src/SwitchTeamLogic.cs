@@ -9,7 +9,6 @@ namespace EnhancedBattleTest
         
         public event SwitchTeamDelegate PreSwitchTeam;
         public event SwitchTeamDelegate PostSwitchTeam;
-        
 
         public override void OnMissionTick(float dt)
         {
@@ -31,10 +30,10 @@ namespace EnhancedBattleTest
             }
             if (!Utility.IsPlayerDead()) // MainAgent may be null because of free camera mode.
             {
-                Utility.DisplayMessage("Switched to the enemy team.");
                 this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
                 this.Mission.MainAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
+            Utility.DisplayMessage("Switched to the enemy team.");
 
             PreSwitchTeam?.Invoke();
             this.Mission.PlayerTeam = this.Mission.PlayerEnemyTeam;

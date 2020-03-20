@@ -10,7 +10,6 @@ using TaleWorlds.GauntletUI.Data;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.GauntletUI;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions.Order;
 using TaleWorlds.MountAndBlade.Missions.Handlers;
 using TaleWorlds.MountAndBlade.View;
@@ -317,10 +316,10 @@ namespace EnhancedBattleTest
                             }
                             break;
                         case MissionOrderVM.CursorState.Face:
-                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.LookAtDirection, new WorldPosition(Mission.Current.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
+                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.LookAtDirection, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
                             break;
                         case MissionOrderVM.CursorState.Form:
-                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.FormCustom, new WorldPosition(Mission.Current.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
+                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.FormCustom, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
                             break;
                     }
                 }
