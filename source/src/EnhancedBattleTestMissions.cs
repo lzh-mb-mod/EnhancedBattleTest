@@ -35,6 +35,7 @@ namespace EnhancedBattleTest
                     var behaviors = new List<MissionBehaviour>
                     {
                         new EnhancedTestBattleMissionController(config),
+                        new EnhancedEndMissionLogic(),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
                         new TeamAIEnableLogic(config),
@@ -144,7 +145,6 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
-               new EnhancedCustomBattleMissionController(),
                new ControlTroopAfterPlayerDeadLogic(),
                new CommanderLogic(),
                new TeamAIEnableLogic(config),

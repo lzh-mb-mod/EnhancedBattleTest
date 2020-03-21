@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.1] - 2020-03-16
+### Added
+- Add mission result in test battle mode.
+
+### Changed
+- Adjust margin in mission menu UI.
+
+### Fixed
+- Fix the bug that player agent is not controlled by AI after switched to free camera.
+
 ## [0.6.0] - 2020-03-16
 
 ### Added

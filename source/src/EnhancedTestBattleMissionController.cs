@@ -25,7 +25,6 @@ namespace EnhancedBattleTest
             }
         }
 
-        private bool _initialized = false;
         private bool _shouldCelebrateVictory;
         private bool _ended = false;
         public TL.Vec3 initialFreeCameraPos;
@@ -52,10 +51,10 @@ namespace EnhancedBattleTest
 
         public override void AfterStart()
         {
-            //var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
-            //var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
-            //SpawnPlayerTeamAgents(playerTeamCulture);
-            //SpawnEnemyTeamAgents(enemyTeamCulture);
+            var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
+            var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
+            SpawnPlayerTeamAgents(playerTeamCulture);
+            SpawnEnemyTeamAgents(enemyTeamCulture);
         }
 
         public void AdjustScene()
@@ -165,7 +164,6 @@ namespace EnhancedBattleTest
                     playerCharacter, true, playerFormation, playerTeam,
                     playerTeamCombatant, playerTeamCulture, true, 1, 0, agentMatrixFrame);
 
-                player.WieldInitialWeapons();
                 player.AllowFirstPersonWideRotation();
             }
             else
@@ -206,8 +204,6 @@ namespace EnhancedBattleTest
                     var agent = this.SpawnAgent(TestBattleConfig.playerTroops[formationIndex], false, playerTroopCharacter, false,
                         playerTroopFormation, playerTeam, playerTeamCombatant, troopCulture, true, playerTroopCount,
                         troopIndex);
-                    agent.WieldInitialWeapons();
-                    agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
             }
         }
@@ -233,8 +229,6 @@ namespace EnhancedBattleTest
                 Agent agent = this.SpawnAgent(TestBattleConfig.enemyClass, false,
                     enemyCharacter, true, formation, enemyTeam,
                     enemyTeamCombatant, enemyTeamCulture, false, 1, 0, agentMatrixFrame);
-                agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
-                agent.WieldInitialWeapons();
             }
 
             float distanceToInitialPosition = 0;
@@ -256,22 +250,12 @@ namespace EnhancedBattleTest
                 {
                     var agent = SpawnAgent(TestBattleConfig.enemyTroops[formationIndex], false, enemyTroopCharacter, false, enemyTroopFormation,
                         enemyTeam, enemyTeamCombatant, troopCulture, false, enemyTroopCount, troopIndex);
-                    agent.WieldInitialWeapons();
-                    agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
                 }
             }
         }
 
         public override void OnMissionTick(float dt)
         {
-            if (!_initialized)
-            {
-                _initialized = true;
-                var playerTeamCulture = this.TestBattleConfig.GetPlayerTeamCulture();
-                var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
-                SpawnPlayerTeamAgents(playerTeamCulture);
-                SpawnEnemyTeamAgents(enemyTeamCulture);
-            }
             CheckVictory();
         }
 
@@ -355,13 +339,14 @@ namespace EnhancedBattleTest
                 .Banner(team.Banner)
                 .ClothingColor1(isPlayerSide ? culture.Color : culture.ClothAlternativeColor)
                 .ClothingColor2(isPlayerSide ? culture.Color2 : culture.ClothAlternativeColor2);
-            agentBuildData.Controller(isPlayer
-                ? Agent.ControllerType.Player
-                : Agent.ControllerType.AI);
             Utility.OverrideEquipment(agentBuildData, classInfo, isHero);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
-            return this.Mission.SpawnAgent(agentBuildData, false, 0);
+            var agent = this.Mission.SpawnAgent(agentBuildData, false, 0);
+            agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
+            agent.WieldInitialWeapons();
+            agent.Controller = isPlayer ? Agent.ControllerType.Player : Agent.ControllerType.AI;
+            return agent;
         }
 
 
