@@ -27,7 +27,6 @@
 - Fix the bug that player agent is not controlled by AI after switched to free camera.
 
 ## [0.6.0] - 2020-03-16
-
 ### Added
 - New siege battle mode: more suitable AI for siege battle and with deployment stage.
 

@@ -43,9 +43,9 @@
 1. 复制`bin`和`Modules`两个文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)。
 
 ### 注意
-- 游戏更新后可尝试重装mod，这可能可以解决一部分进不了mod的问题。
+- 由于官方代码的一个bug，若游戏本体更新了联机perk（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），mod会崩溃。
 
-- **然而**，若该游戏更新更新了联机perk（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），你应当移除其中的xml elements间的所有空格（我用vscode和`XML Tools`扩展来自动移除空格）并备份它，并在重装mod时用备份覆盖该文件。
+- 你可以等待mod更新或去玩联机模式。若你想立即玩mod，你应当移除`mpclassdivisions.xml`中的xml elements间的所有空格（我用vscode和`XML Tools`扩展来自动移除空格）并备份它，然后重装mod并用备份覆盖该文件。
 
 - 请阅读“如何自定义角色”小节以了解更多细节和原因。
 
@@ -204,9 +204,11 @@
 
   你可用安装vscode，然后用vscode打开该文件，安装`XML tools`扩展，在文件中打开右键菜单并选择`Minify xml`来移除所有空格。
 
-- 因此如果你修改了其中的文件，或者游戏更新了（从而更新了Native中的`mpclassdivisions.xml`），若mod不能启动了，请尝试重装mod。
+- 因此如果你修改了其中的文件，或者游戏更新了（从而更新了Native中的`mpclassdivisions.xml`），若mod不能启动了，你可以等待mod更新或玩联机模式。
+  
+  若你想立即玩这个mod，你可以移除`mpclassdivisions.xml`中的所有空格，备份修改后的该文件，重装mod，然后用该备份覆盖该文件。
 
-  若重装不起作用，你可以尝试在`Modules\EnhancedBattleTest\SubModule.xml`文件中移除下面的内容：
+  或者若你不需要自定义角色功能，你可以尝试在`Modules\EnhancedBattleTest\SubModule.xml`文件中移除下面的内容：
   ```
   <XmlNode>
 	<XmlName id="MPClassDivisions" path="mpclassdivisions"/>

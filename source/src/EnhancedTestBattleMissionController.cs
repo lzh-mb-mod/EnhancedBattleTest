@@ -69,6 +69,7 @@ namespace EnhancedBattleTest
             var scene = this.Mission.Scene;
 
             if (this.TestBattleConfig.SkyBrightness >= 0)
+
             {
                 scene.SetSkyBrightness(this.TestBattleConfig.SkyBrightness);
             }

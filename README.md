@@ -45,9 +45,9 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
 
 ### Note
-- Try to reinstall the mod after game update. This may solve some problems.
-
-- **However**, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), you should remove spaces between xml elements in this file(I use vscode with `XML tools` extension to automatically do that) and make a backup up of it. You should then overwrite this file using the backup when reinstalling the mod.
+- Due to a bug in official code, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), the mod will crash.
+  
+  You can wait for mod update or play multiplayer mode. If you want to play this mod instantly, you should remove spaces between xml elements in `mpclassdivisions.xml`(I use vscode with `XML tools` extension to automatically do that) and make a backup up of it. You should then reinstall the mod and overwrite this file using the backup.
 
 - Please read `How to customizing characters` section for details and reason.
 
@@ -108,7 +108,9 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
   You can install vscode, then open it and install `XML Tools` extension. Open the file, right click and select `Minify xml` to remove all the spaces.
 
-- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, you should remove all the spaces in `mpclassdivisions.xml`, make backup of them and overwrite them using bakcups when reinstalling the mod.
+- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, you can wait for mod update or go to play multiplayer mode.
+  
+  If you want to play this mod instantly, you can remove all the spaces in `mpclassdivisions.xml`, make backup of them and overwrite them using backups when reinstalling the mod.
 
   Or if you don't need character customization, you can remove the following content in `Modules\EnhancedBattleTest\SubModule.xml`:
   ```
@@ -118,7 +120,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
   ```
   and try to start the mod again.
   
-  This should make the game not to load `mpclassdivisions.xml` in this mod anymore, and do not merge it with the one in `native`. So it shound be impossible to trigger the bug mentioned above.
+  This should make the game not to load `mpclassdivisions.xml` in this mod anymore, and do not merge it with the one in `Native`. So it shound be impossible to trigger the bug mentioned above.
   
   However, the characters defined in `mpcharacters.xml` can no longer be spawned in the game.
 
