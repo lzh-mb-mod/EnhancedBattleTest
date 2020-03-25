@@ -119,7 +119,7 @@ namespace EnhancedBattleTest
                 {
                     new ClassInfo { classStringId = "mp_shock_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                     new ClassInfo { classStringId = "mp_heavy_ranged_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
-                    new ClassInfo { classStringId = "mp_light_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
+                    new ClassInfo { classStringId = "mp_heavy_infantry_battania", selectedFirstPerk = 0, selectedSecondPerk = 0, troopCount = 20 },
                 },
                 disableDying = false,
                 changeCombatAI = false,

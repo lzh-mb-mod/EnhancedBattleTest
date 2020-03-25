@@ -6,6 +6,9 @@ namespace EnhancedBattleTest
 {
     public class EnhancedTestBattleAgentOrigin : IAgentOriginBase
     {
+        private EnhancedTroopSupplier _troopSupplier;
+        private bool _isRemoved;
+
         private readonly UniqueTroopDescriptor _descriptor;
 
         public CustomBattleCombatant CustomBattleCombatant { get; private set; }
@@ -34,28 +37,41 @@ namespace EnhancedBattleTest
 
         public EnhancedTestBattleAgentOrigin(
           CustomBattleCombatant customBattleCombatant,
+          EnhancedTroopSupplier troopSupplier,
           BasicCharacterObject characterObject,
-          bool isPlayerSide,
           int rank = -1,
           UniqueTroopDescriptor uniqueNo = default(UniqueTroopDescriptor))
         {
             this.CustomBattleCombatant = customBattleCombatant;
+            this._troopSupplier = troopSupplier;
             this.Troop = characterObject;
             this._descriptor = !uniqueNo.IsValid ? new UniqueTroopDescriptor(Game.Current.NextUniqueTroopSeed) : uniqueNo;
             this.Rank = rank == -1 ? MBRandom.RandomInt(10000) : rank;
-            this.IsUnderPlayersCommand = isPlayerSide;
+            this.IsUnderPlayersCommand = Mission.Current.PlayerTeam.Side == customBattleCombatant.Side;
         }
 
         public void SetWounded()
         {
+            if (this._isRemoved)
+                return;
+            this._troopSupplier?.OnTroopWounded();
+            this._isRemoved = true;
         }
 
         public void SetKilled()
         {
+            if (this._isRemoved)
+                return;
+            this._troopSupplier?.OnTroopKilled();
+            this._isRemoved = true;
         }
 
         public void SetRouted()
         {
+            if (this._isRemoved)
+                return;
+            this._troopSupplier?.OnTroopRouted();
+            this._isRemoved = true;
         }
 
         public void OnAgentRemoved(float agentHealth)

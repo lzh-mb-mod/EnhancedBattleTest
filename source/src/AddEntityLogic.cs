@@ -35,13 +35,13 @@ namespace EnhancedBattleTest
                 Utility.ToMatrixFrame(Mission.Scene, position + 2 * direction, direction));
             GameEntity.Instantiate(this.Mission.Scene, "sp_" + sideString + "_infantry",
                 Utility.ToMatrixFrame(Mission.Scene, position, direction));
-            var region1 = Utility.GetFormationRegion(FormationClass.Infantry, troopCount[0],
+            var region1 = Utility.GetFormationArea(FormationClass.Infantry, troopCount[0],
                 soldiersPerRow);
             GameEntity.Instantiate(this.Mission.Scene, "sp_" + sideString + "_archer",
                 Utility.ToMatrixFrame(Mission.Scene,
                     position - direction * region1.Item2,
                     direction));
-            var region2 = Utility.GetFormationRegion(FormationClass.Ranged, troopCount[1],
+            var region2 = Utility.GetFormationArea(FormationClass.Ranged, troopCount[1],
                 soldiersPerRow);
             GameEntity.Instantiate(this.Mission.Scene, "sp_" + sideString + "_cavalry",
                 Utility.ToMatrixFrame(Mission.Scene,

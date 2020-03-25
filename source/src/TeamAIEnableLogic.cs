@@ -21,6 +21,21 @@ namespace EnhancedBattleTest
             {
                 Utility.ApplyTeamAIEnabled(_config);
             };
+            var siegeMissionController = Mission.GetMissionBehaviour<SiegeMissionController>();
+            if (siegeMissionController != null)
+                siegeMissionController.PlayerDeploymentFinish += OnDeploymentFinished;
+        }
+
+        public override void AfterStart()
+        {
+            base.AfterStart();
+
+            Utility.ApplyTeamAIEnabled(_config);
+        }
+
+        private void OnDeploymentFinished()
+        {
+            Utility.ApplyTeamAIEnabled(_config);
         }
     }
 }

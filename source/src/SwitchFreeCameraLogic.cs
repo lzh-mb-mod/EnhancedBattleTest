@@ -8,13 +8,13 @@ namespace EnhancedBattleTest
         {
             base.OnMissionTick(dt);
 
-            if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.Numpad6))
+            if (this.Mission.InputManager.IsKeyPressed(TaleWorlds.InputSystem.InputKey.F10))
             {
                 this.SwitchCamera();
             }
         }
 
-        private void SwitchCamera()
+        public void SwitchCamera()
         {
             ModuleLogger.Log("SwitchCamera");
             if (Utility.IsPlayerDead())

@@ -28,7 +28,7 @@ namespace EnhancedBattleTest
 
         public bool hasBoundary;
 
-        protected static Version BinaryVersion => new Version(1, 9);
+        protected static Version BinaryVersion => new Version(1, 10);
 
         protected void UpgradeToCurrentVersion()
         {
@@ -39,7 +39,7 @@ namespace EnhancedBattleTest
                     ResetToDefault();
                     Serialize();
                     break;
-                case "1.9":
+                case "1.10":
                     break;
             }
         }
@@ -151,7 +151,7 @@ namespace EnhancedBattleTest
                 new SceneInfo{name = "mp_siege_map_003", formationPosition = new Vec2(461,634), formationDirection = new Vec2(0.55f,0.45f).Normalized(), distance = 180},
                 new SceneInfo{name = "mp_siege_map_004", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
                 new SceneInfo{name = "mp_siege_map_004_bat", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
-                //new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(470,413), formationDirection = new Vec2(0, 1)},
+                new SceneInfo{name = "mp_siege_map_004_rs", formationPosition = new Vec2(502,472), formationDirection = new Vec2(0.23f,0.77f).Normalized(), distance = 200},
                 new SceneInfo{name = "mp_siege_map_005", formationPosition = new Vec2(424, 320), formationDirection = new Vec2(0,1), distance = 220},
                 new SceneInfo{name = "mp_siege_map_007_battania", formationPosition = new Vec2(614,612), formationDirection = new Vec2(0.65f, 0.35f), distance = 140},
                 //"mp_skirmish_map_002f",

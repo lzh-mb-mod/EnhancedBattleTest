@@ -8,8 +8,13 @@ namespace EnhancedBattleTest
 {
     public class EnhancedTestBattleGame : TaleWorlds.Core.GameType
     {
-
+        private BattleConfigBase _config;
         public static EnhancedTestBattleGame Current => Game.Current.GameType as EnhancedTestBattleGame;
+
+        public EnhancedTestBattleGame(BattleConfigBase config)
+        {
+            _config = config;
+        }
 
         protected override void OnInitialize()
         {
@@ -58,7 +63,7 @@ namespace EnhancedBattleTest
             basicGameStarter.AddModel(new DefaultRidingModel());
             basicGameStarter.AddModel(new EnhancedMPStrikeMagnitudeModel());
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new EnhancedMPAgentStatCalculateModel());
+            basicGameStarter.AddModel(new EnhancedMPAgentStatCalculateModel(_config));
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new MultiplayerBattleMoraleModel());
         }

@@ -10,17 +10,6 @@ namespace EnhancedBattleTest
 {
     class Utility
     {
-        public static Mission CurrentMission()
-        {
-            GameState state = GameStateManager.Current.ActiveState;
-            if (state.IsMission)
-            {
-                MissionState missionState = state as MissionState;
-                return missionState?.CurrentMission;
-            }
-
-            return null;
-        }
 
         public static void DisplayMessage(string msg)
         {
@@ -34,12 +23,12 @@ namespace EnhancedBattleTest
 
         public static bool IsPlayerDead()
         {
-            return IsAgentDead(CurrentMission().MainAgent);
+            return IsAgentDead(Mission.Current.MainAgent);
         }
 
         public static void SetPlayerAsCommander()
         {
-            var mission = CurrentMission();
+            var mission = Mission.Current;
             if (mission == null)
                 return;
             mission.PlayerTeam.PlayerOrderController.Owner = mission.MainAgent;
@@ -49,7 +38,7 @@ namespace EnhancedBattleTest
                 formation.PlayerOwner = mission.MainAgent;
                 formation.IsAIControlled = isAIControlled;
             }
-            DisplayMessage("Set player as commander");
+            //DisplayMessage("Set player as commander");
             foreach (var formation in mission.PlayerTeam.Formations)
             {
                 DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
@@ -59,22 +48,18 @@ namespace EnhancedBattleTest
 
         public static void CancelPlayerCommander()
         {
-            var mission = CurrentMission();
-            if (mission == null)
-                return;
-            DisplayMessage("Cancel player commander:");
-            foreach (var formation in mission.PlayerTeam.Formations)
-            {
-                DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
-                               formation.IsAIControlled.ToString());
-            }
+            var mission = Mission.Current;
+            //DisplayMessage("Cancel player commander:");
+            //foreach (var formation in mission.PlayerTeam.Formations)
+            //{
+            //    DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
+            //                   formation.IsAIControlled.ToString());
+            //}
         }
 
         public static void ApplyTeamAIEnabled(BattleConfigBase config)
         {
-            var mission = CurrentMission();
-            if (mission == null)
-                return;
+            var mission = Mission.Current;
             switch (config.aiEnableType)
             {
                 case AIEnableType.None:
@@ -136,7 +121,7 @@ namespace EnhancedBattleTest
             BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
             Equipment equipment = isPlayer ? character.Equipment.Clone() : Equipment.GetRandomEquipmentElements(character, true, false, MBRandom.RandomInt());
             foreach (PerkEffect perkEffectsForPerk in SelectRandomPerkEffectsForPerks(mpHeroClass, isPlayer,
-                PerkType.PerkAlternativeEquipment, new[] {info.selectedFirstPerk, info.selectedSecondPerk}))
+                PerkType.PerkAlternativeEquipment, new[] { info.selectedFirstPerk, info.selectedSecondPerk }))
                 equipment[perkEffectsForPerk.NewItemIndex] = perkEffectsForPerk.NewItem.EquipmentElement;
             return equipment;
         }
@@ -165,7 +150,7 @@ namespace EnhancedBattleTest
             if (equipment == null)
                 return sourceCharacter;
             var character = NewCharacter(sourceCharacter);
-            character.InitializeEquipmentsOnLoad(new List<Equipment>{equipment});
+            character.InitializeEquipmentsOnLoad(new List<Equipment> { equipment });
             character.SetIsHero(isHero);
             return character;
         }
@@ -183,7 +168,7 @@ namespace EnhancedBattleTest
         public static EnhancedBattleTestCharacter NewCharacter(BasicCharacterObject sourceCharacter)
         {
             var character = new EnhancedBattleTestCharacter();
-            
+
             character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
             character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
             character.StringId = sourceCharacter.StringId + "_WithPerkApplied";
@@ -209,6 +194,14 @@ namespace EnhancedBattleTest
             combatant.AddCharacter(character, info.troopCount);
         }
 
+        public static MatrixFrame ToMatrixFrame(Scene scene, Vec3 position, Vec2 direction)
+        {
+            var defaultDir = new Vec2(0, 1);
+            var mat = Mat3.Identity;
+            mat.RotateAboutUp(defaultDir.AngleBetween(direction));
+            return new MatrixFrame(mat, position);
+        }
+
         public static MatrixFrame ToMatrixFrame(Scene scene, Vec2 position, Vec2 direction)
         {
             var defaultDir = new Vec2(0, 1);
@@ -223,7 +216,7 @@ namespace EnhancedBattleTest
             return result;
         }
 
-        public static Tuple<float, float> GetFormationRegion(FormationClass formationClass, int troopCount, int soldiersPerRow)
+        public static Tuple<float, float> GetFormationArea(FormationClass formationClass, int troopCount, int soldiersPerRow)
         {
             var mounted = formationClass == FormationClass.Cavalry || formationClass == FormationClass.HorseArcher;
             var unitDiameter = Formation.GetDefaultUnitDiameter(mounted);
@@ -239,24 +232,20 @@ namespace EnhancedBattleTest
 
         public static void SetInitialCameraPos(Camera camera, Vec2 formationPosition, Vec2 formationDirection)
         {
-            Vec3 position = formationPosition.ToVec3(GetSceneHeightForAgent(CurrentMission().Scene, formationPosition) + 5);
+            Vec3 position = formationPosition.ToVec3(GetSceneHeightForAgent(Mission.Current.Scene, formationPosition) + 5);
             Vec3 direction = formationPosition.ToVec3(-1).NormalizedCopy();
             camera.LookAt(position, position + direction, Vec3.Up);
         }
 
-        private static bool _oldGameStatusDisabledStatus = false;
-
-        public static void PauseGame()
+        public static IAgentOriginBase CreateOrigin(
+            CustomBattleCombatant customBattleCombatant,
+            BasicCharacterObject characterObject,
+            int rank = -1,
+            EnhancedTroopSupplier troopSupplier = null)
         {
-            MBCommon.PauseGameEngine();
-            _oldGameStatusDisabledStatus = Game.Current.GameStateManager.ActiveStateDisabledByUser;
-            Game.Current.GameStateManager.ActiveStateDisabledByUser = true;
-        }
-
-        public static void UnpauseGame()
-        {
-            MBCommon.UnPauseGameEngine();
-            Game.Current.GameStateManager.ActiveStateDisabledByUser = _oldGameStatusDisabledStatus;
+            UniqueTroopDescriptor uniqueNo = new UniqueTroopDescriptor(Game.Current.NextUniqueTroopSeed);
+            return new EnhancedTestBattleAgentOrigin(customBattleCombatant, troopSupplier, characterObject, rank,
+                uniqueNo);
         }
     }
 }

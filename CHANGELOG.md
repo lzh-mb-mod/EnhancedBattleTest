@@ -1,6 +1,22 @@
 # Changelog
 
-## [0.6.1] - 2020-03-16
+## [0.6.2] - 2020-03-25
+## Added
+- Add resetting mission in Test Battle mode.
+
+- Add option to use realistic blocking.
+
+- Add option to let player spawn as defender(useful in siege battle).
+
+- Add buttons in mission menu(open by pressing letter O) so that player can switch team/free camera, toggle pause, etc. using mouse.
+
+## Changed
+- Do not use numpad anymore.
+
+## Fixed
+- Fix bug that siege battle use armor configured by test battle.
+
+## [0.6.1] - 2020-03-21
 ### Added
 - Add mission result in test battle mode.
 
@@ -26,7 +42,7 @@
 - Player can choose to disable agent label and soldier's making grunt voice behaviour.
 
 ### Fixed
-- Fix the bug that customzied character gender is always male.
+- Fix the bug that customized character gender is always male.
 
 - Fix the bug that armor bonus of improved armor perks is not applied.
 

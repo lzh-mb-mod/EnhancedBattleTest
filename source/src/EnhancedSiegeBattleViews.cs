@@ -32,7 +32,6 @@ namespace EnhancedBattleTest
             {
                 new MissionMenuView(config),
                 new MissionCustomBattlePreloadView(),
-                new PauseView(),
                 ViewCreator.CreateOptionsUIHandler(),
                 //ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
                 //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
@@ -54,7 +53,11 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionBoundaryCrossingView(),
                 new MissionBoundaryWallView(),
                 new SpectatorCameraView(),
-                new InitializeCameraPosView(config.FormationPosition, config.FormationDirection),
+                new InitializeCameraPosView(
+                    config.isPlayerAttacker
+                        ? config.FormationPosition
+                        : config.FormationPosition + config.FormationDirection * config.Distance,
+                    config.isPlayerAttacker ? config.FormationDirection : -config.FormationDirection),
             };
 
             if (!config.noAgentLabel)

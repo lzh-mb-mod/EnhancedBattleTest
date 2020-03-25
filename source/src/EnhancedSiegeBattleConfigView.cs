@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade.View.Missions;
 
@@ -39,8 +40,14 @@ namespace EnhancedBattleTest
         {
             this._dataSource = new EnhancedSiegeBattleConfigVM(_selectionView, Mission.GetMissionBehaviour<MissionMenuView>(), (config) =>
             {
+                this.Mission.EndMission();
+                GameStateManager.Current.PopStateRPC(0);
                 EnhancedBattleTestMissions.OpenSiegeBattleMission(config);
-            }, (param) => { this.Mission.EndMission(); });
+            }, (param) =>
+            {
+                TopState.status = TopStateStatus.exit;
+                this.Mission.EndMission();
+            });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
             this._gauntletLayer.LoadMovie(nameof(EnhancedSiegeBattleConfigView), this._dataSource);

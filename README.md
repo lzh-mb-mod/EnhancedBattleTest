@@ -11,7 +11,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Map selection. Including sergeant maps, skirmish maps, tdm maps and some siege maps.
 
-  Siege maps may crash.
+  Siege maps may crash. Due to incompleteness of AI navigation mesh and other entities in siege maps, AI may perform poorly in those maps.
 
   Custom battle mode contains sergeant maps only, because only sergeant maps contains corrrect spawning positions that custom battle mode requires.
 
@@ -47,32 +47,32 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 ### Note
 - Try to reinstall the mod after game update. This may solve some problems.
 
-- **However**, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), you should avoid reinstalling the mod if you want to play multiplayer mode.
+- **However**, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), you should remove spaces between xml elements in this file(I use vscode with `XML tools` extension to automatically do that) and make a backup up of it. You should then overwrite this file using the backup when reinstalling the mod.
 
-- If you did so, verifying game file integrity can solve problems that you cannot enter multiplayer mode and/or some crashes in multiplayer mode.
-  
-- You should waiting for mod update if you want to playing multiplayer mode as well as playing this mod.
-
-- Please read `How to customizing characters` section for reasons.
+- Please read `How to customizing characters` section for details and reason.
 
 ## How to use
-- Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder.
+- Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder. If it crashed, try to run `EnhancedBattleTest-Alternative.bat` instead.
 
 - You can select troops for each side of teams.
 
-- Press and hold `TAB` key for a while to exit the battle scene.
+- Press `F` key or `F10` key to control one of your troops after you being killed.
 
-- Press `numpad5` key to switch your team.
+- Press `F9` to switch your team.
 
-- Press `numpad6` key to switch between free camera and main agent camera.
+- Press `F10` to switch between free camera and main agent camera.
 
-- Press `f` key or `numpad6` key to control one of your troops after you being killed.
+- Press `F11` to disable dying.
 
-- Press `numpad7` to disable dying.
+- Press `F12` to reset mission (available in `Test Battle mode` only).
 
-- Press `numpad8` to adjust more settings including team AI tactic options, etc.
+- Press `O(letter)` to adjust more settings including team AI tactic options, etc.
 
 - Press `P` key to pause game.
+
+- Press and hold `TAB` key for a while to exit the battle scene.
+
+- Press `I` key to get player or camera position.
 
 - Press `L` key to teleport player when in free camera mode.
 
@@ -106,15 +106,21 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
   I use vscode with xml extension to remove spaces automatically.
 
-- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, try to reinstall the mod.
+  You can install vscode, then open it and install `XML Tools` extension. Open the file, right click and select `Minify xml` to remove all the spaces.
 
-  If it does not work, then try to remove the following content in `Modules\EnhancedBattleTest\SubModule.xml`:
+- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, you should remove all the spaces in `mpclassdivisions.xml`, make backup of them and overwrite them using bakcups when reinstalling the mod.
+
+  Or if you don't need character customization, you can remove the following content in `Modules\EnhancedBattleTest\SubModule.xml`:
   ```
   <XmlNode>
 		<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
 	</XmlNode>
   ```
-  This should make the game not to load `mpclassdivisions.xml` in this mod anymore, and do not merge it with the one in `native`. So it shound be impossible to trigger the bug mentioned above. However, the characters defined in `mpcharacters.xml` can no longer be spawned in the game.
+  and try to start the mod again.
+  
+  This should make the game not to load `mpclassdivisions.xml` in this mod anymore, and do not merge it with the one in `native`. So it shound be impossible to trigger the bug mentioned above.
+  
+  However, the characters defined in `mpcharacters.xml` can no longer be spawned in the game.
 
 - Don't blame me, blame the code that TaleWorlds wrote.
 
@@ -131,29 +137,31 @@ The source code is located in the `source` folder or available at [https://gitla
 3. open a termial (powershell or cmd), run `dotnet msbuild -t:install`. This step will build `EnhancedBattleTest.dll` and copy it to `bin\Win64_Shipping_Client`
 
 ## Troubleshoot
-- First of all, please try checking file integrity from Steam and then **reinstall** the mod.
-
-  - Note that you should reinstall the mod everytime after game update (especially the update after checking file integrity) if you want to launch the mod.
-
 - If it shows "Unable to initialize Steam API":
 
   - Please start steam first, and make sure that Bannerlord is in your steam account.
 
 - If the mod crashed without entering Main menu:
 
+  - If the game updated, wait for mod update. Or:
+
   - Reinstall the mod. If not working:
 
-  - Try to replace `ManagedStarter.exe` with `NativeStarter.exe` in `EnhancedBattleTest.bat`.
+  - Try to run `EnhancedBattleTest-Alternative.bat` instead of `EnhancedBattleTest.bat`.
 
     This works for some people.
 
 - If the mod crashed when clicking buttons in main menu:
   
-  - Reinstall the mod. See `How to customize characters` section above for reasons.
+  - Please read `How to customize characters` section and follow instructions in it. Or you can wait for mod update.
 
 - If the mod crashed when selecting numbers in battle config UI:
   
   - This is caused by bugs in Bannerlord. Maybe you can avoid to trigger this bug.
+
+- If the mod exited without showing any message when loading battles:
+
+  - Try to reduce soldier numbers or graphic quality.
 
 - If the mod crashed in battle (except in siege map):
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
@@ -20,8 +21,14 @@ namespace EnhancedBattleTest
               1,
               () =>
               {
-                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(),
-                      () => EnhancedBattleTestMissions.OpenTestBattleConfigMission()));
+                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(EnhancedTestBattleConfig.Get()),
+                      () =>
+                      {
+                          var state = GameStateManager.Current.CreateState<TopState>();
+                          TopState.status = TopStateStatus.openConfig;
+                          state.openConfigMission = () => EnhancedBattleTestMissions.OpenTestBattleConfigMission();
+                          GameStateManager.Current.PushState(state);
+                      }));
               },
               false
             ));
@@ -31,8 +38,14 @@ namespace EnhancedBattleTest
                 2,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedCustomBattleGame(),
-                        () => EnhancedBattleTestMissions.OpenCustomBattleConfigMission()));
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedCustomBattleGame(EnhancedCustomBattleConfig.Get()),
+                        () =>
+                        {
+                            var state = GameStateManager.Current.CreateState<TopState>();
+                            TopState.status = TopStateStatus.openConfig;
+                            state.openConfigMission = () => EnhancedBattleTestMissions.OpenCustomBattleConfigMission();
+                            GameStateManager.Current.PushState(state);
+                        }));
                 },
                 false));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
@@ -41,8 +54,14 @@ namespace EnhancedBattleTest
                 2,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(),
-                        () => EnhancedBattleTestMissions.OpenSiegeBattleConfigMission()));
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(EnhancedSiegeBattleConfig.Get()),
+                        () =>
+                        {
+                            var state = GameStateManager.Current.CreateState<TopState>();
+                            TopState.status = TopStateStatus.openConfig;
+                            state.openConfigMission = () => EnhancedBattleTestMissions.OpenSiegeBattleConfigMission();
+                            GameStateManager.Current.PushState(state);
+                        }));
                 },
                 false));
         }

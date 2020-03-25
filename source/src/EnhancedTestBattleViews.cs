@@ -28,7 +28,6 @@ namespace EnhancedBattleTest
             {
                 new MissionMenuView(config),
                 new MissionTestBattlePreloadView(config),
-                new PauseView(),
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
                 ViewCreator.CreateMissionLeaveView(),
@@ -40,7 +39,11 @@ namespace EnhancedBattleTest
                 new MissionAgentContourControllerView(),
                 ViewCreator.CreateOptionsUIHandler(),
                 new SpectatorCameraView(),
-                new InitializeCameraPosView(config.FormationPosition, config.FormationDirection),
+                new InitializeCameraPosView(
+                    config.isPlayerAttacker
+                        ? config.FormationPosition
+                        : config.FormationPosition + config.FormationDirection * config.Distance,
+                    config.isPlayerAttacker ? config.FormationDirection : -config.FormationDirection),
             };
             if (config.hasBoundary)
             {

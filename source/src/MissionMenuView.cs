@@ -89,7 +89,7 @@ namespace EnhancedBattleTest
             this._movie = this._gauntletLayer.LoadMovie(nameof(MissionMenuView), _dataSource);
             this.MissionScreen.AddLayer(this._gauntletLayer);
             ScreenManager.TrySetFocus(this._gauntletLayer);
-            Utility.PauseGame();
+            PauseGame();
             this.OnMissionMenuViewActivated?.Invoke();
         }
 
@@ -101,7 +101,7 @@ namespace EnhancedBattleTest
             this.MissionScreen.RemoveLayer(this._gauntletLayer);
             this._movie = null;
             this._gauntletLayer = null;
-            Utility.UnpauseGame();
+            UnpauseGame();
             this.OnMissionMenuViewDeactivated?.Invoke();
         }
 
@@ -111,12 +111,27 @@ namespace EnhancedBattleTest
             if (IsActivated)
             {
                 if (this._gauntletLayer.Input.IsKeyReleased(InputKey.RightMouseButton) ||
-                    this._gauntletLayer.Input.IsKeyReleased(InputKey.Numpad8) ||
+                    this._gauntletLayer.Input.IsKeyReleased(InputKey.O) ||
                     this._gauntletLayer.Input.IsHotKeyReleased("Exit"))
                     DeactivateMenu();
             }
-            else if (this.Input.IsKeyReleased(InputKey.Numpad8))
+            else if (this.Input.IsKeyReleased(InputKey.O))
                 ActivateMenu();
+        }
+
+        private static bool _oldGameStatusDisabledStatus = false;
+
+        private static void PauseGame()
+        {
+            MBCommon.PauseGameEngine();
+            _oldGameStatusDisabledStatus = Game.Current.GameStateManager.ActiveStateDisabledByUser;
+            Game.Current.GameStateManager.ActiveStateDisabledByUser = true;
+        }
+
+        private static void UnpauseGame()
+        {
+            MBCommon.UnPauseGameEngine();
+            Game.Current.GameStateManager.ActiveStateDisabledByUser = _oldGameStatusDisabledStatus;
         }
     }
 }

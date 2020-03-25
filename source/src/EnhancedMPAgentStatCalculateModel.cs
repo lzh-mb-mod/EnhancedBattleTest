@@ -10,6 +10,12 @@ namespace EnhancedBattleTest
 {
     class EnhancedMPAgentStatCalculateModel : AgentStatCalculateModel
     {
+        private BattleConfigBase _config;
+
+        public EnhancedMPAgentStatCalculateModel(BattleConfigBase config)
+        {
+            _config = config;
+        }
         public override void InitializeAgentStats(
           Agent agent,
           Equipment spawnEquipment,
@@ -40,15 +46,14 @@ namespace EnhancedBattleTest
             if (classForCharacter != null)
             {
                 this.FillAgentStatsFromData(ref agentDrivenProperties, classForCharacter, agent, agentBuildData?.AgentMissionPeer);
-                agentDrivenProperties.SetStat(DrivenProperty.UseRealisticBlocking, MBMultiplayerOptionsAccessor.GetUseAnimationProgressDependentBlocking(MBMultiplayerOptionsAccessor.MultiplayerOptionsAccessMode.CurrentMapOptions) ? 1f : 0.0f);
+                agentDrivenProperties.SetStat(DrivenProperty.UseRealisticBlocking, _config.useRealisticBlocking ? 1f : 0.0f);
             }
             float num1 = 0.5f;
             float num2 = 0.5f;
-            var config = EnhancedTestBattleConfig.Get();
-            if (config.changeCombatAI)
+            if (_config.changeCombatAI)
             {
-                num1 = config.combatAI / 100f;
-                num2 = config.combatAI / 100f;
+                num1 = _config.combatAI / 100f;
+                num2 = _config.combatAI / 100f;
             }
             else if (classForCharacter != null)
             {
@@ -253,17 +258,16 @@ namespace EnhancedBattleTest
           MissionPeer missionPeer)
         {
             float num = 0.0f;
-            var config = EnhancedTestBattleConfig.Get();
             bool isGeneral = agent.Formation.FormationIndex == Utility.CommanderFormationClass();
             bool isPlayerTeam = agent.Team.IsPlayerTeam;
             ClassInfo info;
             if (isGeneral)
             {
-                info = isPlayerTeam ? config.playerClass : config.enemyClass;
+                info = isPlayerTeam ? _config.playerClass : _config.enemyClass;
             }
             else
             {
-                info = isPlayerTeam ? config.playerTroops[agent.Formation.Index] : config.enemyTroops[agent.Formation.Index];
+                info = isPlayerTeam ? _config.playerTroops[agent.Formation.Index] : _config.enemyTroops[agent.Formation.Index];
             }
             num = MPPerkObject.GetArmorBonusFromPerks(isGeneral, Utility.GetAllSelectedPerks(heroClass, new[] { info.selectedFirstPerk, info.selectedSecondPerk }));
             agentDrivenProperties.ArmorHead = (float)heroClass.ArmorValue + num;

@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Engine.GauntletUI;
+﻿using TaleWorlds.Core;
+using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
@@ -36,9 +37,12 @@ namespace EnhancedBattleTest
         {
             this._dataSource = new EnhancedCustomBattleConfigVM(_selectionView, Mission.GetMissionBehaviour<MissionMenuView>(), config =>
             {
+                this.Mission.EndMission();
+                GameStateManager.Current.PopStateRPC(0);
                 EnhancedBattleTestMissions.OpenCustomBattleMission(config);
             }, (config) =>
             {
+                TopState.status = TopStateStatus.exit;
                 this.Mission.EndMission();
             });
 

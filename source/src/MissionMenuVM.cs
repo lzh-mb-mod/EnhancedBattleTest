@@ -41,6 +41,11 @@ namespace EnhancedBattleTest
     public class MissionMenuVM : ViewModel
     {
         private BattleConfigBase _config;
+        private Mission _mission;
+        private SwitchTeamLogic _switchTeamLogic;
+        private SwitchFreeCameraLogic _switchFreeCameraLogic;
+        private PauseLogic _pauseLogic;
+        private ResetMissionLogic _resetMissionLogic;
 
         private string _currentAIEnableType;
         private MBBindingList<TacticOptionVM> _attackerTacticOptions;
@@ -102,6 +107,22 @@ namespace EnhancedBattleTest
             }
         }
 
+        public void SwitchTeam()
+        {
+            _switchTeamLogic?.SwapTeam();
+            CloseMenu();
+        }
+
+        [DataSourceProperty] public bool SwitchTeamEnabled => _switchTeamLogic != null;
+
+        public void SwitchFreeCamera()
+        {
+            _switchFreeCameraLogic?.SwitchCamera();
+            CloseMenu();
+        }
+
+        [DataSourceProperty] public bool SwitchFreeCameraEnabled => _switchFreeCameraLogic != null;
+
         [DataSourceProperty]
         public bool DisableDying
         {
@@ -111,10 +132,26 @@ namespace EnhancedBattleTest
                 if (this._config.disableDying == value)
                     return;
                 this._config.disableDying = value;
-                Utility.CurrentMission().GetMissionBehaviour<TrainingLogic>()?.SetDisableDying(DisableDying);
+                _mission.GetMissionBehaviour<DisableDyingLogic>()?.SetDisableDying(DisableDying);
                 this.OnPropertyChanged(nameof(DisableDying));
             }
         }
+
+        public void TogglePause()
+        {
+            _pauseLogic?.TogglePause();
+            CloseMenu();
+        }
+
+        [DataSourceProperty] public bool TogglePauseEnabled => this._pauseLogic != null;
+
+        public void ResetMission()
+        {
+            _resetMissionLogic?.ResetMission();
+            CloseMenu();
+        }
+
+        [DataSourceProperty] public bool ResetMissionEnabled => this._resetMissionLogic != null;
 
         private void CloseMenu()
         {
@@ -127,6 +164,11 @@ namespace EnhancedBattleTest
             this.CurrentAIEnableType = config.aiEnableType.ToString();
             this.updateSelectedTactic = updateSelectedTactic;
             this._closeMenu = closeMenu;
+            this._mission = Mission.Current;
+            this._switchTeamLogic = _mission.GetMissionBehaviour<SwitchTeamLogic>();
+            this._switchFreeCameraLogic = _mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
+            this._pauseLogic = _mission.GetMissionBehaviour<PauseLogic>();
+            this._resetMissionLogic = _mission.GetMissionBehaviour<ResetMissionLogic>();
 
             FillAttackerAvailableTactics();
             FillDefenderAvailableTactics();

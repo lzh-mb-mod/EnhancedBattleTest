@@ -3,11 +3,11 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class TrainingLogic : MissionLogic
+    public class DisableDyingLogic : MissionLogic
     {
         private BattleConfigBase _config;
 
-        public TrainingLogic(BattleConfigBase config)
+        public DisableDyingLogic(BattleConfigBase config)
         {
             _config = config;
         }
@@ -21,7 +21,7 @@ namespace EnhancedBattleTest
         public override void OnMissionTick(float dt)
         {
             base.OnMissionTick(dt);
-            if (this.Mission.InputManager.IsKeyPressed(InputKey.Numpad7))
+            if (this.Mission.InputManager.IsKeyPressed(InputKey.F11))
             {
                 SetDisableDying(!Mission.DisableDying);
             }

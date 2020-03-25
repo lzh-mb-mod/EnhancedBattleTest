@@ -142,6 +142,30 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
+        public bool SpawnPlayer
+        {
+            get => this.CurrentConfig.SpawnPlayer;
+            set
+            {
+                this.CurrentConfig.SpawnPlayer = value;
+                this.OnPropertyChanged(nameof(SpawnPlayer));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsPlayerAttacker
+        {
+            get => this.CurrentConfig.isPlayerAttacker;
+            set
+            {
+                if (this.CurrentConfig.isPlayerAttacker == value)
+                    return;
+                this.CurrentConfig.isPlayerAttacker = value;
+                this.OnPropertyChanged(nameof(IsPlayerAttacker));
+            }
+        }
+
+        [DataSourceProperty]
         public string EnemyName
         {
             get => this._enemyName;
@@ -325,6 +349,19 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
+        public bool UseRealisticBlocking
+        {
+            get => this.CurrentConfig.useRealisticBlocking;
+            set
+            {
+                if (this.CurrentConfig.useRealisticBlocking == value)
+                    return;
+                this.CurrentConfig.useRealisticBlocking = value;
+                this.OnPropertyChanged(nameof(UseRealisticBlocking));
+            }
+        }
+
+        [DataSourceProperty]
         public bool NoAgentLabel
         {
             get => this.CurrentConfig.noAgentLabel;
@@ -360,17 +397,6 @@ namespace EnhancedBattleTest
                     return;
                 this._combatAI = value;
                 this.OnPropertyChanged(nameof(CombatAI));
-            }
-        }
-
-        [DataSourceProperty]
-        public bool SpawnPlayer
-        {
-            get => this.CurrentConfig.SpawnPlayer;
-            set
-            {
-                this.CurrentConfig.SpawnPlayer = value;
-                this.OnPropertyChanged(nameof(SpawnPlayer));
             }
         }
 

@@ -45,6 +45,19 @@
 
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy = "CoverChildren" HeightSizePolicy = "CoverChildren" HorizontalAlignment="Center" MarginTop="10">
               <Children>
+                
+                <ButtonWidget Command.Click="SwitchTeam" IsVisible="@SwitchTeamEnabled" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button" >
+                  <Children>
+                    <TextWidget Text="Switch Team" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
+                  </Children>
+                </ButtonWidget>
+                
+                <ButtonWidget Command.Click="SwitchFreeCamera" IsVisible="@SwitchFreeCameraEnabled" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button" >
+                  <Children>
+                    <TextWidget Text="Switch Free Camera" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
+                  </Children>
+                </ButtonWidget>
+
                 <TextWidget Text="Disable Dying" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Widget WidthSizePolicy="Fixed" HeightSizePolicy = "CoverChildren" SuggestedWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center" MarginTop="10">
                   <Children>
@@ -55,7 +68,18 @@
                     </ButtonWidget>
                   </Children>
                 </Widget>
-
+                
+                <ButtonWidget Command.Click="TogglePause" IsVisible="@TogglePauseEnabled" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button" >
+                  <Children>
+                    <TextWidget Text="Toggle Pause" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
+                  </Children>
+                </ButtonWidget>
+                
+                <ButtonWidget Command.Click="ResetMission" IsVisible="@ResetMissionEnabled" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button" >
+                  <Children>
+                    <TextWidget Text="Reset Mission" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
+                  </Children>
+                </ButtonWidget>
               </Children>
             </ListPanel>
           </Children>

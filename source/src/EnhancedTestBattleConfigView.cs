@@ -1,4 +1,5 @@
-﻿using TaleWorlds.Engine.GauntletUI;
+﻿using TaleWorlds.Core;
+using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Engine.Screens;
 using TaleWorlds.MountAndBlade.View.Missions;
 
@@ -38,9 +39,15 @@ namespace EnhancedBattleTest
         public void Open()
         {
             this._dataSource = new EnhancedTestBattleConfigVM(_selectionView, _missionMenuView, (config) =>
-                {
-                    EnhancedBattleTestMissions.OpenTestBattleMission(config);
-                }, (param) => { this.Mission.EndMission(); });
+            {
+                this.Mission.EndMission();
+                GameStateManager.Current.PopStateRPC(0);
+                EnhancedBattleTestMissions.OpenTestBattleMission(config);
+            }, (param) =>
+            {
+                TopState.status = TopStateStatus.exit;
+                this.Mission.EndMission();
+            });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
             this._gauntletLayer.LoadMovie(nameof(EnhancedTestBattleConfigView), this._dataSource);

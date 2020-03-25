@@ -10,6 +10,8 @@ namespace EnhancedBattleTest
     {
         private MissionTime _enemiesNotYetRetreatingTime;
         private BasicTimer _checkRetreatingTimer;
+        private BattleConfigBase _config;
+        private bool _shouldCelebrate;
         private bool _isEnemySideRetreating;
         private bool _isEnemySideDepleted;
         private bool _isPlayerSideDepleted;
@@ -37,6 +39,11 @@ namespace EnhancedBattleTest
 
         private bool _notificationsDisabled { get; set; }
 
+        public EnhancedEndMissionLogic(BattleConfigBase config)
+        {
+            _config = config;
+        }
+
         public override bool MissionEnded(ref MissionResult missionResult)
         {
             bool flag = false;
@@ -55,7 +62,7 @@ namespace EnhancedBattleTest
 
         public override void OnMissionTick(float dt)
         {
-            if (this.Mission.IsMissionEnding)
+            if (_shouldCelebrate && this.Mission.IsMissionEnding)
             {
                 if (this._notificationsDisabled)
                     this._scoreBoardOpenedOnceOnMissionEnd = true;
@@ -184,6 +191,7 @@ namespace EnhancedBattleTest
         {
             base.OnBehaviourInitialize();
             this._checkRetreatingTimer = new BasicTimer(MBCommon.TimeType.Mission);
+            this._shouldCelebrate = _config.ShouldCelebrateVictory;
         }
 
         protected override void OnEndMission()

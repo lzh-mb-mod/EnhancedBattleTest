@@ -10,6 +10,12 @@ namespace EnhancedBattleTest
 
     public class EnhancedSPAgentStatCalculateModel : AgentStatCalculateModel
     {
+        private BattleConfigBase _config;
+
+        public EnhancedSPAgentStatCalculateModel(BattleConfigBase config)
+        {
+            _config = config;
+        }
         public override void InitializeAgentStats(
           Agent agent,
           Equipment spawnEquipment,
@@ -69,6 +75,7 @@ namespace EnhancedBattleTest
             }
             else
             {
+                agentDrivenProperties.SetStat(DrivenProperty.UseRealisticBlocking, _config.useRealisticBlocking ? 1f : 0.0f);
                 agentDrivenProperties.ArmorHead = spawnEquipment.GetHeadArmorSum();
                 agentDrivenProperties.ArmorTorso = spawnEquipment.GetHumanBodyArmorSum();
                 agentDrivenProperties.ArmorLegs = spawnEquipment.GetLegArmorSum();

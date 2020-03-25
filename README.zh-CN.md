@@ -9,7 +9,9 @@
 
 - Siege Battle Mode: 该模式中AI为攻城战的AI；加入了部署阶段。
 
-- 地图选择：包括领军地图，冲突地图，死斗地图和部分攻城图。攻城图目前不稳定，容易崩溃。
+- 地图选择：包括领军地图，冲突地图，死斗地图和部分攻城图
+
+  攻城图目前不稳定，容易崩溃。由于攻城图的AI网格和其它AI用到的实体不完整，攻城图的AI可能表现很差。
 
   Custom Battle Mode只包含领军地图，因为只有领军地图有该模式要求的军队出生点信息。
 
@@ -43,16 +45,12 @@
 ### 注意
 - 游戏更新后可尝试重装mod，这可能可以解决一部分进不了mod的问题。
 
-- **然而**，若该游戏更新更新了联机perk，（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），若你想进入联机模式，则应该避免重装mod。
+- **然而**，若该游戏更新更新了联机perk（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），你应当移除其中的xml elements间的所有空格（我用vscode和`XML Tools`扩展来自动移除空格）并备份它，并在重装mod时用备份覆盖该文件。
 
-- 若你重装了mod，验证游戏文件完整性可以解决进入不了联机模式和/或一部分情况下的联机模式崩溃的问题。
-
-- 若你想玩联机并且也想玩mod，你应等待mod更新。
-
-- 请阅读“如何自定义角色”小节以了解原因。
+- 请阅读“如何自定义角色”小节以了解更多细节和原因。
 
 ## 如何使用
-- 当前联机测试中，官方的加载器禁用了单机模式，所以需要通过点击砍二安装目录下，`bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`来启动。
+- 当前联机测试中，官方的加载器禁用了单机模式，所以需要通过点击砍二安装目录下，`bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`来启动。若它崩溃，可尝试运行`EnhancedBattleTest-Alternative.bat`.
 
 - 配置界面介绍：
   - 最上方的左右箭头用于切换地图，中间的名称即为地图名称。
@@ -87,6 +85,8 @@
 
   - Spawn Player：开局是否生成玩家角色。若不生成玩家角色，玩家仍可按F键控制下属士兵。
 
+  - Is Player Attacker：玩家是否为攻击方。若取消勾选则玩家为防守方。
+
   - Player Troop 1/2/3：玩家的一至三号部队的角色。
 
   - Player Troop 1/2/3 Count：玩家的一至三号部队的人数。
@@ -99,17 +99,61 @@
 
   - Spawn Enemy Commaner：是否生成敌军将领。
 
-  - Disable Dying：是否禁用死亡。若是则所有角色不掉血。
+  - More Options：更多选项
+
+    - Enable AI For：选择是否分别为双方队伍启用指挥AI（AI代理指挥）。
+
+      - None：双方队伍均无指挥AI。
+
+      - EnemyOnly：仅敌军有指挥AI。
+
+      - PlayerOnly：仅玩家队伍有指挥AI。
+
+      - Both：双方队伍均有指挥AI。
+    
+    - Attacker Tactic Options：攻击方启用的战术。右侧列表中高亮选中的战术会被AI不断考虑并选择其中一个执行。
+
+      - Charge：冲锋。
+
+      - FullScaleAttack：全军攻击。
+
+      - DefensiveEngagement：防御性接战。
+
+      - DefensiveLine：防御性线阵。
+
+      - DefensiveRing：防御性圆阵。
+
+      - HoldTheHill：防守高坡。
+
+      - ArchersOnTheHill：远程待在坡上，步兵进攻。
+
+      - RangedHarassmentOffensive：远程骚扰攻势
+
+      - FrontalCavalryCharge：骑兵先行冲锋。
+
+      - CoordinatedRetreat：有序撤退。
+
+    - Disable Dying：是否禁用死亡。若是则所有角色不掉血。
+
+    - Switch Team：（仅战斗中）切换玩家队伍。
+
+    - Switch Free Camera：（仅战斗中）切换自由视角。
+
+    - Toggle Pause：（仅战斗中）切换暂停。
+
+    - Reset Mission：（仅在Test Battle模式的战斗中）重置关卡。
+
+  - Use Realistic Blocking：是否使用更真实的格挡。
+
+  - NoAgentLabel：关闭队友标识
+
+  - Make Grunt Voice：玩家下令后部下是否出声回应。
+
+  - Has Boundary: 地图是否设置边界。
 
   - Change Combat AI：是否改变战斗AI。若是则右侧的数值对所有单位生效，若否则所有单位的战斗AI为各自默认的设置。
 
   - Comabt AI(0-100)：要改变的战斗AI的数值，只有左侧的Change Combat AI选中才生效。有效范围在0-100。
-
-  - NoAgentLabel：关闭队友标识
-
-  - MakeGruntVoice：玩家下令后部下是否出声回应。
-
-  - Has Boundary: 地图是否设置边界。
 
   - Save And Start：保存配置并开始战斗。
 
@@ -120,19 +164,24 @@
   - Exit：退出，返回到标题画面。
 
 - 局内操作：
-  - 按住`TAB`键来退出战斗。
 
-  - 按小键盘5键来切换队伍。
+  - 按`F`键或`F10`键来在玩家死后控制其小兵。
 
-  - 按小键盘6键来切换自由视角。
+  - 按`F9`键来切换队伍。
 
-  - 按`F`键或小键盘6键来在玩家死后控制其小兵。
+  - 按`F10`键来切换自由视角。
 
-  - 按小键盘7键来切换不死模式。
+  - 按`F11`键来切换不死模式。
 
-  - 按小键盘8键来打开更多设置，如战术AI选项。
+  - 按`F12`键来重置关卡（仅在Test Battle模式的战斗中)。
+
+  - 按`O(字母)`键来打开更多设置，如战术AI选项。
 
   - 按`P`键来暂停游戏。
+
+  - 按住`TAB`键来退出战斗。
+
+  - 按`I`键来获取玩家或相机的位置。
 
   - 按`L`键在自由视角下让玩家瞬移到镜头位置。
 
@@ -153,6 +202,8 @@
 
   我用的是vscode的xml插件来自动删除空格。
 
+  你可用安装vscode，然后用vscode打开该文件，安装`XML tools`扩展，在文件中打开右键菜单并选择`Minify xml`来移除所有空格。
+
 - 因此如果你修改了其中的文件，或者游戏更新了（从而更新了Native中的`mpclassdivisions.xml`），若mod不能启动了，请尝试重装mod。
 
   若重装不起作用，你可以尝试在`Modules\EnhancedBattleTest\SubModule.xml`文件中移除下面的内容：
@@ -161,6 +212,7 @@
 	<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
   </XmlNode>
   ```
+  并再次尝试启动mod。
   这样，游戏就应当不会再加载本mod中的`mpclassdivisions.xml`文件，也就不会将它和`Native`的对应文件合并，从而不可能再触发这个bug。
 
   但这样做会导致无法自定义角色。
@@ -179,10 +231,6 @@
 3. 打开一个终端shell(powershell或者cmd)，运行`dotnet msbuild -t:install`。这一步会构建`EnhancedBattleTest.dll`并将它复制到`bin\Win64_Shipping_Client`中。
 
 ## 解决问题
-- 若遇到无法进入mod的情况，首先请在steam中校验文件完整性，之后再**重新安装**mod。
-  
-  - 注意每次游戏更新后（尤其是校验文件完整性之后的游戏更新后），若你想启动mod，你都应当先重新安装mod。
-
 - 若提示"Unable to initialize Steam API":
 
   - 请先启动Steam，并确保砍二在你登录的Steam账号的库中.
@@ -191,17 +239,21 @@
   
   - mod很可能没有正确安装，请重新安装mod。若没用：
 
-  - 尝试将`EnhancedBattleTest.bat`中的`ManagedStarter.exe`替换为`NativeStarter.exe`。
+  - 尝试运行`EnhancedBattleTest-Alternative.bat`而非`EnhancedBattleTest.bat`。
 
     这个方法已知对一部分无法启动mod的情况有用。
 
 - 如果在点击主菜单中的按钮时崩溃：
 
-  - 重装mod。请阅读`如何自定义角色`小节以了解原因。
+  - 请阅读`如何自定义角色`小节并按照其中的指示解决。或者你可用等待mod更新。
 
 - 如果在战斗配置界面中，选择数字时崩溃：
 
   - 这是由砍二的bug导致。你能做的是避免触发这个bug。
+
+- 若在载入战斗时mod没有显示任何消息就崩溃：
+
+  - 尝试减少士兵数量或降低画质。
 
 - 若除攻城图之外的战斗中mod崩溃
 

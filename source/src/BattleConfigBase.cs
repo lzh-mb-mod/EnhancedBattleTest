@@ -45,6 +45,7 @@ namespace EnhancedBattleTest
 
         public ClassInfo playerClass;
         private bool _spawnPlayer;
+        public bool isPlayerAttacker = true;
         public ClassInfo enemyClass;
         private bool _spawnEnemyCommander;
         public ClassInfo[] playerTroops;
@@ -57,10 +58,24 @@ namespace EnhancedBattleTest
 
         public bool disableDying;
 
+        public bool useRealisticBlocking = false;
+
         public bool noAgentLabel = false;
 
         public bool changeCombatAI;
         public int combatAI;
+
+        [XmlIgnore]
+        public bool ShouldCelebrateVictory
+        {
+            get
+            {
+                int playerNumber = this.SpawnPlayer ? 1 : 0;
+                int enemyCommanderNumber = this.SpawnEnemyCommander ? 1 : 0;
+                return (playerNumber + this.playerTroops.Sum(classInfo => classInfo.troopCount)) != 0 &&
+                       (enemyCommanderNumber + this.enemyTroops.Sum(classInfo => classInfo.troopCount)) != 0;
+            }
+        }
 
         public void ToPreviousAIEnableType()
         {
@@ -326,6 +341,7 @@ namespace EnhancedBattleTest
             if (other.playerClass != null)
                 this.playerClass = other.playerClass;
             this.SpawnPlayer = other.SpawnPlayer;
+            this.isPlayerAttacker = other.isPlayerAttacker;
             if (other.enemyClass != null)
                 this.enemyClass = other.enemyClass;
             this.SpawnEnemyCommander = other.SpawnEnemyCommander;
@@ -337,6 +353,7 @@ namespace EnhancedBattleTest
             this.defenderTacticOptions = other.defenderTacticOptions;
             this.aiEnableType = other.aiEnableType;
             this.disableDying = other.disableDying;
+            this.useRealisticBlocking = other.useRealisticBlocking;
             this.noAgentLabel = other.noAgentLabel;
             this.changeCombatAI = other.changeCombatAI;
             this.combatAI = other.combatAI;

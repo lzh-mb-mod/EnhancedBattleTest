@@ -14,7 +14,7 @@ namespace EnhancedBattleTest
         {
             base.OnMissionTick(dt);
             
-            if (this.Mission.InputManager.IsKeyPressed(InputKey.Numpad5))
+            if (this.Mission.InputManager.IsKeyPressed(InputKey.F9))
                 this.SwapTeam();
         }
 
