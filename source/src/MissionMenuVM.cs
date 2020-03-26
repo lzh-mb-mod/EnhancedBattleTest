@@ -1,12 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Messages.FromBattleServer.ToBattleServerManager;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
+    public class NumericVM : ViewModel
+    {
+
+        private readonly float _initialValue;
+        private float _min;
+        private float _max;
+        private float _optionValue;
+        private bool _isDiscrete;
+        private Action<float> _updateAction;
+
+        public NumericVM(float initialValue, float min, float max, bool isDiscrete, Action<float> updateAction)
+        {
+            _initialValue = initialValue;
+            _min = min;
+            _max = max;
+            _optionValue = initialValue;
+            _isDiscrete = isDiscrete;
+            _updateAction = updateAction;
+        }
+
+        [DataSourceProperty]
+        public float Min
+        {
+            get => this._min;
+            set
+            {
+                if (Math.Abs(value - this._min) < 0.01f)
+                    return;
+                this._min = value;
+                this.OnPropertyChanged(nameof(Min));
+            }
+        }
+
+        [DataSourceProperty]
+        public float Max
+        {
+            get => this._max;
+            set
+            {
+                if (Math.Abs(value - this._max) < 0.01f)
+                    return;
+                this._max = value;
+                this.OnPropertyChanged(nameof(Max));
+            }
+        }
+
+        [DataSourceProperty]
+        public float OptionValue
+        {
+            get => this._optionValue;
+            set
+            {
+                if (Math.Abs((double)value - (double)this._optionValue) < 0.01f)
+                    return;
+                this._optionValue = MathF.Round(value * 100) / 100f;
+                this.OnPropertyChanged(nameof(OptionValue));
+                this.OnPropertyChanged(nameof(OptionValueAsString));
+                this._updateAction(OptionValue);
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsDiscrete
+        {
+            get => this._isDiscrete;
+            set
+            {
+                if (value == this._isDiscrete)
+                    return;
+                this._isDiscrete = value;
+                this.OnPropertyChanged(nameof(IsDiscrete));
+            }
+        }
+
+        [DataSourceProperty]
+        public string OptionValueAsString => !this.IsDiscrete ? this._optionValue.ToString("F") : ((int)this._optionValue).ToString();
+    }
+
     public class TacticOptionVM : ViewModel
     {
         public MissionMenuVM parent;
@@ -44,7 +123,7 @@ namespace EnhancedBattleTest
         private Mission _mission;
         private SwitchTeamLogic _switchTeamLogic;
         private SwitchFreeCameraLogic _switchFreeCameraLogic;
-        private PauseLogic _pauseLogic;
+        private MissionSpeedLogic _missionSpeedLogic;
         private ResetMissionLogic _resetMissionLogic;
 
         private string _currentAIEnableType;
@@ -137,14 +216,6 @@ namespace EnhancedBattleTest
             }
         }
 
-        public void TogglePause()
-        {
-            _pauseLogic?.TogglePause();
-            CloseMenu();
-        }
-
-        [DataSourceProperty] public bool TogglePauseEnabled => this._pauseLogic != null;
-
         public void ResetMission()
         {
             _resetMissionLogic?.ResetMission();
@@ -152,6 +223,23 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty] public bool ResetMissionEnabled => this._resetMissionLogic != null;
+
+        public void TogglePause()
+        {
+            _missionSpeedLogic?.TogglePause();
+            CloseMenu();
+        }
+
+        [DataSourceProperty] public bool AdjustSpeedEnabled => this._missionSpeedLogic != null;
+
+        public void ResetSpeed()
+        {
+            SpeedFactor.OptionValue = 1.0f;
+            _missionSpeedLogic.ResetSpeed();
+        }
+
+        [DataSourceProperty]
+        public NumericVM SpeedFactor { get;}
 
         private void CloseMenu()
         {
@@ -167,8 +255,12 @@ namespace EnhancedBattleTest
             this._mission = Mission.Current;
             this._switchTeamLogic = _mission.GetMissionBehaviour<SwitchTeamLogic>();
             this._switchFreeCameraLogic = _mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
-            this._pauseLogic = _mission.GetMissionBehaviour<PauseLogic>();
+            this._missionSpeedLogic = _mission.GetMissionBehaviour<MissionSpeedLogic>();
             this._resetMissionLogic = _mission.GetMissionBehaviour<ResetMissionLogic>();
+            this.SpeedFactor = new NumericVM(_mission.Scene.SlowMotionMode ? _mission.Scene.SlowMotionFactor : 1.0f, 0.01f, 2.0f, false, factor =>
+                {
+                    _missionSpeedLogic.SetSlowMotionFactor(factor);
+                });
 
             FillAttackerAvailableTactics();
             FillDefenderAvailableTactics();

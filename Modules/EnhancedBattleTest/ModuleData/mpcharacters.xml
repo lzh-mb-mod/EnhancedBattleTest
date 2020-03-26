@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <MPCharacters>
 <NPCCharacter id="player_character_1" is_female="true" default_group="Infantry" level="25" name="Player Character 1" occupation="Soldier" culture="Culture.aserai">
     <face>

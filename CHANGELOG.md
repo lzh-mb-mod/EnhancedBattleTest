@@ -1,7 +1,13 @@
 # Changelog
+## [0.6.3] - 2020-03-26
+### Added
+- Add adjust battle speed feature.
+
+### Fixed
+- Fix incorrect team color when player is spawned as defender.
 
 ## [0.6.2] - 2020-03-25
-## Added
+### Added
 - Add resetting mission in Test Battle mode.
 
 - Add option to use realistic blocking.
@@ -10,10 +16,10 @@
 
 - Add buttons in mission menu(open by pressing letter O) so that player can switch team/free camera, toggle pause, etc. using mouse.
 
-## Changed
+### Changed
 - Do not use numpad anymore.
 
-## Fixed
+### Fixed
 - Fix bug that siege battle use armor configured by test battle.
 
 ## [0.6.1] - 2020-03-21

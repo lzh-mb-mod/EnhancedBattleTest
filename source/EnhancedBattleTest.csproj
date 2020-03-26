@@ -96,21 +96,6 @@
     <Reference Include="TaleWorlds.Network">
       <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.Network.dll</HintPath>
     </Reference>
-    <Reference Include="TaleWorlds.PlatformService">
-      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PlatformService.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.PlatformService.Epic">
-      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PlatformService.Epic.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.PlatformService.Steam">
-      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PlatformService.Steam.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.PlayerServices">
-      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PlayerServices.dll</HintPath>
-    </Reference>
-    <Reference Include="TaleWorlds.PSAI">
-      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PSAI.dll</HintPath>
-    </Reference>
     <Reference Include="TaleWorlds.SaveSystem">
       <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.SaveSystem.dll</HintPath>
     </Reference>

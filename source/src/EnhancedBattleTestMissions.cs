@@ -44,7 +44,7 @@ namespace EnhancedBattleTest
                         new SwitchTeamLogic(),
                         new SwitchFreeCameraLogic(),
                         new ResetMissionLogic(),
-                        new PauseLogic(),
+                        new MissionSpeedLogic(),
                         new ReadPositionLogic(),
                         new TeleportPlayerLogic(),
                         new AgentBattleAILogic(),
@@ -85,7 +85,7 @@ namespace EnhancedBattleTest
             var playerSide = config.isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender;
             var playerCulture = config.GetPlayerTeamCulture();
             var playerParty = new CustomBattleCombatant(playerCulture.Name, playerCulture,
-                new Banner(playerCulture.BannerKey, playerCulture.BackgroundColor1, playerCulture.ForegroundColor1))
+                new Banner(playerCulture.BannerKey, Utility.BackgroundColor(playerCulture, config.isPlayerAttacker), Utility.ForegroundColor(playerCulture, config.isPlayerAttacker)))
             {
                 Side = playerSide
             };
@@ -96,7 +96,7 @@ namespace EnhancedBattleTest
 
             var enemyCulture = config.GetEnemyTeamCulture();
             var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
-                new Banner(enemyCulture.BannerKey, enemyCulture.BackgroundColor2, enemyCulture.ForegroundColor2))
+                new Banner(enemyCulture.BannerKey, Utility.BackgroundColor(enemyCulture, !config.isPlayerAttacker), Utility.ForegroundColor(enemyCulture, !config.isPlayerAttacker)))
             {
                 Side = playerSide.GetOppositeSide()
             };
@@ -157,7 +157,7 @@ namespace EnhancedBattleTest
                new DisableDyingLogic(EnhancedCustomBattleConfig.Get()),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),
-               new PauseLogic(),
+               new MissionSpeedLogic(),
                new ReadPositionLogic(),
                new TeleportPlayerLogic(),
                new MissionOptionsComponent(),
@@ -226,7 +226,7 @@ namespace EnhancedBattleTest
             var playerSide = config.isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender;
             var playerCulture = config.GetPlayerTeamCulture();
             var playerParty = new CustomBattleCombatant(playerCulture.Name, playerCulture,
-                new Banner(playerCulture.BannerKey, playerCulture.BackgroundColor1, playerCulture.ForegroundColor1))
+                new Banner(playerCulture.BannerKey, Utility.BackgroundColor(playerCulture, config.isPlayerAttacker), Utility.ForegroundColor(playerCulture, config.isPlayerAttacker)))
             {
                 Side = playerSide
             };
@@ -237,7 +237,7 @@ namespace EnhancedBattleTest
 
             var enemyCulture = config.GetEnemyTeamCulture();
             var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
-                new Banner(enemyCulture.BannerKey, enemyCulture.BackgroundColor2, enemyCulture.ForegroundColor2))
+                new Banner(enemyCulture.BannerKey, Utility.BackgroundColor(enemyCulture, !config.isPlayerAttacker), Utility.ForegroundColor(enemyCulture, !config.isPlayerAttacker)))
             {
                 Side = playerSide.GetOppositeSide()
             };
@@ -352,7 +352,7 @@ namespace EnhancedBattleTest
                         new DisableDyingLogic(config),
                         new SwitchTeamLogic(),
                         new SwitchFreeCameraLogic(),
-                        new PauseLogic(),
+                        new MissionSpeedLogic(),
                         new ReadPositionLogic(),
                         new TeleportPlayerLogic(),
                         new AgentMoraleInteractionLogic(),

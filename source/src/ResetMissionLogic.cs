@@ -28,6 +28,8 @@ namespace EnhancedBattleTest
         public void ResetMission()
         {
             Mission.ResetMission();
+            Mission.PlayerTeam.PlayerOrderController.Owner = null;
+            Mission.PlayerEnemyTeam.PlayerOrderController.Owner = null;
             _controller?.SpawnAgents();
             Utility.DisplayMessage("Mission reset.");
         }

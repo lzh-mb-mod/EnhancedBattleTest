@@ -247,5 +247,15 @@ namespace EnhancedBattleTest
             return new EnhancedTestBattleAgentOrigin(customBattleCombatant, troopSupplier, characterObject, rank,
                 uniqueNo);
         }
+
+        public static uint BackgroundColor(BasicCultureObject culture, bool isAttacker)
+        {
+            return isAttacker ? culture.BackgroundColor1 : culture.BackgroundColor2;
+        }
+
+        public static uint ForegroundColor(BasicCultureObject culture, bool isAttacker)
+        {
+            return isAttacker ? culture.ForegroundColor1 : culture.ForegroundColor2;
+        }
     }
 }

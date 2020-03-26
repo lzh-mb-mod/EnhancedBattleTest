@@ -82,17 +82,24 @@ namespace EnhancedBattleTest
 
         private void AddTeams(BasicCultureObject playerTeamCulture, BasicCultureObject enemyTeamCulture)
         {
+            var playerTeamBackgroundColor =
+                Utility.BackgroundColor(playerTeamCulture, TestBattleConfig.isPlayerAttacker);
+            var playerTeamForegroundColor =
+                Utility.ForegroundColor(playerTeamCulture, TestBattleConfig.isPlayerAttacker);
             // see TaleWorlds.MountAndBlade.dll/MissionMultiplayerFlagDomination.cs : TaleWorlds.MountAndBlade.MissionMultiplayerFlagDomination.AfterStart();
-            Banner playerTeamBanner = new Banner(playerTeamCulture.BannerKey,
-                playerTeamCulture.BackgroundColor1,
-                playerTeamCulture.ForegroundColor1);
+            Banner playerTeamBanner = new Banner(playerTeamCulture.BannerKey, playerTeamBackgroundColor,
+                playerTeamForegroundColor);
             var playerSide = TestBattleConfig.isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender;
-            var playerTeam = this.Mission.Teams.Add(playerSide, color: playerTeamCulture.BackgroundColor1, color2: playerTeamCulture.ForegroundColor1, banner: playerTeamBanner);
+            var playerTeam = this.Mission.Teams.Add(playerSide, color: playerTeamBackgroundColor, color2: playerTeamForegroundColor, banner: playerTeamBanner);
 
+            var enemyTeamBackgroundColor =
+                Utility.BackgroundColor(enemyTeamCulture, !TestBattleConfig.isPlayerAttacker);
+            var enemyTeamForegroundColor =
+                Utility.ForegroundColor(enemyTeamCulture, !TestBattleConfig.isPlayerAttacker);
             Banner enemyTeamBanner = new Banner(enemyTeamCulture.BannerKey,
-                enemyTeamCulture.BackgroundColor2, enemyTeamCulture.ForegroundColor2);
+                enemyTeamBackgroundColor, enemyTeamForegroundColor);
             var enemySide = playerSide.GetOppositeSide();
-            var enemyTeam = this.Mission.Teams.Add(enemySide, color: enemyTeamCulture.BackgroundColor2, color2: enemyTeamCulture.ForegroundColor2, banner: enemyTeamBanner);
+            var enemyTeam = this.Mission.Teams.Add(enemySide, color: enemyTeamBackgroundColor, color2: enemyTeamForegroundColor, banner: enemyTeamBanner);
 
             playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
             enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
