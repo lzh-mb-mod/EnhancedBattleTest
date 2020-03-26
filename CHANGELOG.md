@@ -1,7 +1,11 @@
 # Changelog
+## [0.6.3-hotfix] - 2020-03-26
+### Fixed
+- Fix the bug that resetting battle speed does not work.
+
 ## [0.6.3] - 2020-03-26
 ### Added
-- Add adjust battle speed feature.
+- Add adjusting battle speed feature.
 
 ### Fixed
 - Fix incorrect team color when player is spawned as defender.

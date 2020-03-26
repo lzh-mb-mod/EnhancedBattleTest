@@ -84,16 +84,16 @@
                     <TextWidget Text="Toggle Pause" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
                   </Children>
                 </ButtonWidget>
+                <ButtonWidget Command.Click="ResetSpeed" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button">
+                  <Children>
+                    <TextWidget Text="Reset Speed" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
+                  </Children>
+                </ButtonWidget>
 
                 <Widget IsVisible="@AdjustSpeedEnabled" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
                   <Children>
                     <ListPanel DataSource="{SpeedFactor}" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="20">
                       <Children>
-                        <ButtonWidget Command.Click="ResetSpeed" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Done.Button">
-                          <Children>
-                            <TextWidget Text="Reset Speed" HeightSizePolicy="CoverChildren" WidthSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Popup.Button.Text"/>
-                          </Children>
-                        </ButtonWidget>
                         <RichTextWidget Text="Slow Motion Factor" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="10" Brush="SPOptions.Slider.Value.Text" />
 
                         <SliderWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="338" SuggestedHeight="42" MarginLeft="50" VerticalAlignment="Center" DoNotUpdateHandleSize="true" Filler="Filler" Handle="SliderHandle" IsDiscrete="@IsDiscrete" MaxValueFloat="@Max" MinValueFloat="@Min" ValueFloat="@OptionValue">
