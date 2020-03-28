@@ -39,11 +39,11 @@ namespace EnhancedBattleTest
                 formation.IsAIControlled = isAIControlled;
             }
             //DisplayMessage("Set player as commander");
-            foreach (var formation in mission.PlayerTeam.Formations)
-            {
-                DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
-                               formation.IsAIControlled.ToString());
-            }
+            //foreach (var formation in mission.PlayerTeam.Formations)
+            //{
+            //    DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
+            //                   formation.IsAIControlled.ToString());
+            //}
         }
 
         public static void CancelPlayerCommander()
@@ -155,12 +155,12 @@ namespace EnhancedBattleTest
             return character;
         }
 
+        public const string characterSufix = "_WithPerkApplied";
         public static MultiplayerClassDivisions.MPHeroClass GetMPHeroClassForCharacter(BasicCharacterObject character)
         {
             string id = character.StringId;
-            string suffix = "_WithPerkApplied";
-            if (id.EndsWith(suffix))
-                id = id.Substring(0, id.Length - suffix.Length);
+            if (id.EndsWith(characterSufix))
+                id = id.Substring(0, id.Length - characterSufix.Length);
             BasicCharacterObject originalCharacter = MBObjectManager.Instance.GetObject<BasicCharacterObject>(id);
             return MultiplayerClassDivisions.GetMPHeroClassForCharacter(originalCharacter);
         }
@@ -171,7 +171,7 @@ namespace EnhancedBattleTest
 
             character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
             character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
-            character.StringId = sourceCharacter.StringId + "_WithPerkApplied";
+            character.StringId = sourceCharacter.StringId + characterSufix;
             character.Name = sourceCharacter.Name;
             character.Age = sourceCharacter.Age;
             character.FaceDirtAmount = sourceCharacter.FaceDirtAmount;

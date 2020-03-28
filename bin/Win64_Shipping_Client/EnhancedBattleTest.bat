@@ -1,1 +1,1 @@
-ManagedStarter.exe _MODULES_*Native*EnhancedBattleTest*_MODULES_ /singleplayer
+Bannerlord.exe _MODULES_*Native*EnhancedBattleTest*_MODULES_ /singleplayer

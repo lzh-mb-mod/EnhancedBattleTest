@@ -30,7 +30,6 @@ namespace EnhancedBattleTest
                 new MissionMenuView(config),
                 new MissionCustomBattlePreloadView(),
                 ViewCreator.CreateOptionsUIHandler(),
-                new MusicBattleMissionView(config.SceneName.Contains("siege")),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
@@ -40,7 +39,6 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateOrderTroopPlacerView(mission),
                 // ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
-                ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 ViewCreator.CreateMissionBoundaryCrossingView(),
@@ -51,6 +49,11 @@ namespace EnhancedBattleTest
             if (!config.noAgentLabel)
             {
                 missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
+            }
+
+            if (!config.noKillNotification)
+            {
+                missionViewList.Add(ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler());
             }
 
             return missionViewList.ToArray();

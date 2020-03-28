@@ -27,9 +27,9 @@ namespace EnhancedBattleTest
 
         public uint FactionColor2 => this.CustomBattleCombatant.BasicCulture.Color2;
 
-        public int Seed => this.Troop.GetDefaultFaceSeed(this.Rank);
+        public int Seed => this.Troop.IsHero ? 0 : this.Troop.GetDefaultFaceSeed(this.Rank);
 
-        public int UniqueSeed => this._descriptor.UniqueSeed;
+        public int UniqueSeed => this.Troop.IsHero ? 0 : this._descriptor.UniqueSeed;
 
         public bool IsCoopTroop => false;
 

@@ -133,19 +133,25 @@
 
       - CoordinatedRetreat：有序撤退。
 
-    - Disable Dying：是否禁用死亡。若是则所有角色不掉血。
-
     - Switch Team：（仅战斗中）切换玩家队伍。
 
     - Switch Free Camera：（仅战斗中）切换自由视角。
 
-    - Toggle Pause：（仅战斗中）切换暂停。
+    - Disable Death：是否禁用死亡。若是则所有角色不掉血。
 
     - Reset Mission：（仅在Test Battle模式的战斗中）重置关卡。
 
+    - Toggle Pause：（仅战斗中）切换暂停。
+
+    - Reset Speed：（仅战斗中）重置战斗速度。
+
+    - Slow Motion Factor：（仅战斗中）调整战斗速度倍率。
+
   - Use Realistic Blocking：是否使用更真实的格挡。
 
-  - NoAgentLabel：关闭队友标识
+  - No Banner on Friendly Troops：关闭队友标识。
+
+  - No Kill Notification：关闭右上角击杀报告。
 
   - Make Grunt Voice：玩家下令后部下是否出声回应。
 

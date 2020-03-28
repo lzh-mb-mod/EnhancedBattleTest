@@ -36,11 +36,11 @@ namespace EnhancedBattleTest
                     var behaviors = new List<MissionBehaviour>
                     {
                         new EnhancedTestBattleMissionController(config),
-                        new EnhancedEndMissionLogic(config),
+                        new EnhancedBattleEndLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
                         new TeamAIEnableLogic(config),
-                        new DisableDyingLogic(config),
+                        new DisableDeathLogic(config),
                         new SwitchTeamLogic(),
                         new SwitchFreeCameraLogic(),
                         new ResetMissionLogic(),
@@ -55,6 +55,7 @@ namespace EnhancedBattleTest
                         new AgentMoraleInteractionLogic(),
                         new HighlightsController(),
                         new BattleHighlightsController(),
+                        new FieldBattleController(),
                     };
                     if (config.makeGruntVoice)
                     {
@@ -145,7 +146,7 @@ namespace EnhancedBattleTest
                 isPlayerAttacker ? playerParty : enemyParty;
             return MissionState.OpenNew("EnhancedCustomBattle", new MissionInitializerRecord(config.SceneName)
             {
-                DoNotUseLoadingScreen = true,
+                DoNotUseLoadingScreen = false,
                 AtmosphereOnCampaign = atmosphereInfo,
                 SceneLevels = sceneLevels,
                 TimeOfDay = timeOfDay
@@ -154,7 +155,7 @@ namespace EnhancedBattleTest
                new ControlTroopAfterPlayerDeadLogic(),
                new CommanderLogic(),
                new TeamAIEnableLogic(config),
-               new DisableDyingLogic(EnhancedCustomBattleConfig.Get()),
+               new DisableDeathLogic(EnhancedCustomBattleConfig.Get()),
                new SwitchTeamLogic(),
                new SwitchFreeCameraLogic(),
                new MissionSpeedLogic(),
@@ -181,6 +182,7 @@ namespace EnhancedBattleTest
                new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), (string) null, (string) null, true),
                new HighlightsController(),
                new BattleHighlightsController(),
+               new FieldBattleController(),
            }), true, true, true);
         }
 
@@ -215,7 +217,10 @@ namespace EnhancedBattleTest
         {
             return MissionState.OpenNew(
                 "EnhancedSiegeBattleConfig",
-                new MissionInitializerRecord("scn_character_creation_scene"),
+                new MissionInitializerRecord("scn_character_creation_scene")
+                {
+                    DoNotUseLoadingScreen = true,
+                },
                 missionController => new MissionBehaviour[] {
                 },
                 true, true, true);
@@ -349,7 +354,7 @@ namespace EnhancedBattleTest
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
                         new TeamAIEnableLogic(config),
-                        new DisableDyingLogic(config),
+                        new DisableDeathLogic(config),
                         new SwitchTeamLogic(),
                         new SwitchFreeCameraLogic(),
                         new MissionSpeedLogic(),

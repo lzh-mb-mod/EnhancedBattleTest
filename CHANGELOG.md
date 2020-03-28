@@ -1,4 +1,16 @@
 # Changelog
+## [0.6.4] - 2020-03-29
+### Fixed
+- Keep compatible with b0.9.0
+
+- Fix the bug that soldiers will not celebrate victory after mission reset.
+
+### Added
+- Add disable death notification UI option.
+
+### Changed
+- Change organization of files in ModuleData. Customized characters are placed in a new file.
+
 ## [0.6.3-hotfix] - 2020-03-26
 ### Fixed
 - Fix the bug that resetting battle speed does not work.

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using psai.net;
 using TaleWorlds.Core;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {

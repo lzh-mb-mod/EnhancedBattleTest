@@ -205,13 +205,13 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public bool DisableDying
         {
-            get => this._config.disableDying;
+            get => this._config.disableDeath;
             set
             {
-                if (this._config.disableDying == value)
+                if (this._config.disableDeath == value)
                     return;
-                this._config.disableDying = value;
-                _mission.GetMissionBehaviour<DisableDyingLogic>()?.SetDisableDying(DisableDying);
+                this._config.disableDeath = value;
+                _mission.GetMissionBehaviour<DisableDeathLogic>()?.SetDisableDeath(DisableDying);
                 this.OnPropertyChanged(nameof(DisableDying));
             }
         }

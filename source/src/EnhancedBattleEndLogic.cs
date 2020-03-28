@@ -6,7 +6,7 @@ using TaleWorlds.MountAndBlade.Source.Missions;
 
 namespace EnhancedBattleTest
 {
-    class EnhancedEndMissionLogic : MissionLogic, IBattleEndLogic
+    class EnhancedBattleEndLogic : MissionLogic, IBattleEndLogic
     {
         private MissionTime _enemiesNotYetRetreatingTime;
         private BasicTimer _checkRetreatingTimer;
@@ -39,7 +39,7 @@ namespace EnhancedBattleTest
 
         private bool _notificationsDisabled { get; set; }
 
-        public EnhancedEndMissionLogic(BattleConfigBase config)
+        public EnhancedBattleEndLogic(BattleConfigBase config)
         {
             _config = config;
         }
@@ -58,6 +58,14 @@ namespace EnhancedBattleTest
                 flag = true;
             }
             return flag;
+        }
+
+        public override void OnClearScene()
+        {
+            base.OnClearScene();
+
+            // for mission reset.
+            this.OnBehaviourInitialize();
         }
 
         public override void OnMissionTick(float dt)
@@ -190,8 +198,17 @@ namespace EnhancedBattleTest
         public override void OnBehaviourInitialize()
         {
             base.OnBehaviourInitialize();
+            _enemiesNotYetRetreatingTime = new MissionTime();
             this._checkRetreatingTimer = new BasicTimer(MBCommon.TimeType.Mission);
             this._shouldCelebrate = _config.ShouldCelebrateVictory;
+            _isEnemySideRetreating = false;
+            _isEnemySideDepleted = false;
+            _isPlayerSideDepleted = false;
+            _canCheckForEndCondition = false;
+            _missionEndedMessageShown = false;
+            _victoryReactionsActivated = false;
+            _victoryReactionsActivatedForRetreating = false;
+            _scoreBoardOpenedOnceOnMissionEnd = false;
         }
 
         protected override void OnEndMission()

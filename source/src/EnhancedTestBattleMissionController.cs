@@ -12,22 +12,14 @@ namespace EnhancedBattleTest
     public class EnhancedTestBattleMissionController : MissionLogic
     {
         private EnhancedTestBattleConfig _testBattleConfig;
-
+        private SoundEvent _musicSoundEvent;
         public EnhancedTestBattleConfig TestBattleConfig
         {
             get => _testBattleConfig;
-            set
-            {
-                _testBattleConfig = value;
-                int playerNumber = this.TestBattleConfig.SpawnPlayer ? 1 : 0;
-                int enemyCommanderNumber = this.TestBattleConfig.SpawnEnemyCommander ? 1 : 0;
-                _shouldCelebrateVictory = (playerNumber + this.TestBattleConfig.playerTroops.Sum(classInfo => classInfo.troopCount)) != 0 &&
-                                          (enemyCommanderNumber + this.TestBattleConfig.enemyTroops.Sum(classInfo => classInfo.troopCount)) != 0;
-            }
+            set => _testBattleConfig = value;
         }
 
-        private bool _shouldCelebrateVictory;
-        private bool _ended = false;
+        //private bool _ended = false;
         public TL.Vec3 initialFreeCameraPos;
         public TL.Vec3 initialFreeCameraTarget;
         private AgentVictoryLogic _victoryLogic;
@@ -62,14 +54,15 @@ namespace EnhancedBattleTest
             var enemyTeamCulture = this.TestBattleConfig.GetEnemyTeamCulture();
             SpawnPlayerTeamAgents(playerTeamCulture);
             SpawnEnemyTeamAgents(enemyTeamCulture);
+
+            _musicSoundEvent = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/ambient/area/multiplayer/city_mp_02"), Mission.Scene);
+            _musicSoundEvent.Play();
         }
 
         private void AdjustScene()
         {
             var scene = this.Mission.Scene;
-
             if (this.TestBattleConfig.SkyBrightness >= 0)
-
             {
                 scene.SetSkyBrightness(this.TestBattleConfig.SkyBrightness);
             }
@@ -148,7 +141,6 @@ namespace EnhancedBattleTest
             }
 
             this.Mission.PlayerTeam = playerTeam;
-            Utility.ApplyTeamAIEnabled(TestBattleConfig);
         }
 
         private void SpawnPlayerTeamAgents(BasicCultureObject playerTeamCulture)
@@ -221,6 +213,24 @@ namespace EnhancedBattleTest
                         troopIndex);
                 }
             }
+
+            //var matrixFrame = Utility.ToMatrixFrame(Mission.Scene, GetFormationPosition(true, -2), TL.Vec2.Forward);
+
+            //MissionWeapon weapon = new MissionWeapon(MBObjectManager.Instance.GetObject<ItemObject>("mp_hatchet_axe"), (Banner)null);
+            //Mission.Current.SpawnWeaponWithNewEntity(ref weapon, Mission.WeaponSpawnFlags.WithPhysics, matrixFrame);
+
+            //var hat = MBObjectManager.Instance.GetObject<ItemObject>("mp_northern_padded_cloth");
+            //var gameEntity = GameEntity.CreateEmpty(Mission.Scene);
+            //gameEntity.AddMesh(Mesh.GetFromResource(hat.MultiMeshName));
+            //gameEntity.SetGlobalFrame(matrixFrame);
+            //Mission.Scene.AttachEntity(gameEntity);
+
+            //var horse = MBObjectManager.Instance.GetObject<ItemObject>("mp_sturgia_horse");
+
+            //Mission.Scene.AddEntityWithMesh(Mesh.GetFromResource(horse.MultiMeshName), ref matrixFrame);
+
+            //var house = GameEntity.Instantiate(Mission.Scene, "hawk_stand_b", matrixFrame);
+            //Mission.Scene.AttachEntity(house);
         }
 
         private void SpawnEnemyTeamAgents(BasicCultureObject enemyTeamCulture)
@@ -274,27 +284,27 @@ namespace EnhancedBattleTest
 
         private void CheckVictory()
         {
-            if (!_ended && _shouldCelebrateVictory)
-            {
-                bool playerVictory = this.Mission.PlayerEnemyTeam.ActiveAgents.IsEmpty();
-                bool enemyVictory = this.Mission.PlayerTeam.ActiveAgents.IsEmpty();
-                if (!playerVictory && !enemyVictory)
-                    return;
-                _ended = true;
-                _victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
-                if (_victoryLogic == null)
-                    return;
-                if (enemyVictory)
-                {
-                    _ended = true;
-                    _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerEnemyTeam.Side);
-                }
-                else
-                {
-                    _ended = true;
-                    _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerTeam.Side);
-                }
-            }
+            //if (!_ended && _shouldCelebrateVictory)
+            //{
+            //    bool playerVictory = this.Mission.PlayerEnemyTeam.ActiveAgents.IsEmpty();
+            //    bool enemyVictory = this.Mission.PlayerTeam.ActiveAgents.IsEmpty();
+            //    if (!playerVictory && !enemyVictory)
+            //        return;
+            //    _ended = true;
+            //    _victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
+            //    if (_victoryLogic == null)
+            //        return;
+            //    if (enemyVictory)
+            //    {
+            //        _ended = true;
+            //        _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerEnemyTeam.Side);
+            //    }
+            //    else
+            //    {
+            //        _ended = true;
+            //        _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerTeam.Side);
+            //    }
+            //}
         }
 
         void OrderIssuedDelegate(
@@ -335,14 +345,13 @@ namespace EnhancedBattleTest
         private Agent SpawnAgent(ClassInfo classInfo, bool isPlayer, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
         {
             bool isAttacker = isPlayerSide ? TestBattleConfig.isPlayerAttacker : !TestBattleConfig.isPlayerAttacker;
-            AgentBuildData agentBuildData = new AgentBuildData(Utility.CreateOrigin(combatant, character))
+            AgentBuildData agentBuildData = new AgentBuildData(Utility.CreateOrigin(combatant, Utility.ApplyPerks(classInfo, isHero)))
                 .Team(team)
                 .Formation(formation)
                 .FormationTroopCount(formationTroopCount).FormationTroopIndex(formationTroopIndex)
                 .Banner(team.Banner)
                 .ClothingColor1(isAttacker ? culture.Color : culture.ClothAlternativeColor)
                 .ClothingColor2(isAttacker ? culture.Color2 : culture.ClothAlternativeColor2);
-            Utility.OverrideEquipment(agentBuildData, classInfo, isHero);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
             var agent = this.Mission.SpawnAgent(agentBuildData, false, 0);

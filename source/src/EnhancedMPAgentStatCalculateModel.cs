@@ -8,7 +8,7 @@ using TaleWorlds.MountAndBlade.ComponentInterfaces;
 
 namespace EnhancedBattleTest
 {
-    class EnhancedMPAgentStatCalculateModel : AgentStatCalculateModel
+    public class EnhancedMPAgentStatCalculateModel : AgentStatCalculateModel
     {
         private BattleConfigBase _config;
 
@@ -29,7 +29,7 @@ namespace EnhancedBattleTest
                 agentDrivenProperties = this.InitializeHumanAgentStats(agent, agentDrivenProperties, agentBuildData);
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
+                if (MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 56))
                 {
                     float num = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num);
@@ -57,8 +57,8 @@ namespace EnhancedBattleTest
             }
             else if (classForCharacter != null)
             {
-                num1 = (float) classForCharacter.MeleeAI / 100f;
-                num2 = (float) classForCharacter.RangedAI / 100f;
+                num1 = (float)classForCharacter.MeleeAI / 100f;
+                num2 = (float)classForCharacter.RangedAI / 100f;
             }
             else
             {
@@ -72,7 +72,7 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AiShootFreq = (float)(0.200000002980232 + 0.800000011920929 * (double)num3);
             agentDrivenProperties.AiWaitBeforeShootFactor = agent._propertyModifiers.resetAiWaitBeforeShootFactor ? 0.0f : (float)(1.0 - 0.5 * (double)num3);
             agentDrivenProperties.AIBlockOnDecideAbility = MBMath.Lerp(0.05f, 0.95f, MBMath.ClampFloat((float)((Math.Pow((double)MBMath.Lerp(-10f, 10f, amount, 1E-05f), 3.0) + 1000.0) * 0.000500000023748726), 0.0f, 1f), 1E-05f);
-            agentDrivenProperties.AIParryOnDecideAbility = MBMath.Lerp(0.05f, 0.95f, MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.0f, 1f), 1E-05f);
+            agentDrivenProperties.AIParryOnDecideAbility = MBMath.Lerp(0.05f, 0.95f, MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 4.0) * 0.0001f, 0.0f, 1f), 1E-05f);
             agentDrivenProperties.AiTryChamberAttackOnDecide = (float)(((double)amount - 0.150000005960464) * 0.100000001490116);
             agentDrivenProperties.AIAttackOnParryChance = 0.3f;
             agentDrivenProperties.AiAttackOnParryTiming = (float)(0.300000011920929 * (double)amount - 0.200000002980232);
@@ -83,17 +83,17 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AiDecideOnAttackWhenReceiveHitTiming = (float)(-0.25 * (1.0 - (double)amount));
             agentDrivenProperties.AiDecideOnAttackContinueAction = (float)(-0.5 * (1.0 - (double)amount));
             agentDrivenProperties.AiDecideOnAttackingContinue = 0.1f * amount;
-            agentDrivenProperties.AIParryOnAttackingContinueAbility = MBMath.Lerp(0.05f, 0.95f, MBMath.ClampFloat((float)((Math.Pow((double)MBMath.Lerp(-10f, 10f, amount, 1E-05f), 3.0) + 1000.0) * 0.000500000023748726), 0.0f, 1f), 1E-05f);
-            agentDrivenProperties.AIDecideOnRealizeEnemyBlockingAttackAbility = 0.5f * MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 4.0) * 0.0001f, 0.0f, 1f);
-            agentDrivenProperties.AIRealizeBlockingFromIncorrectSideAbility = 0.5f * MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 4.0) * 0.0001f, 0.0f, 1f);
+            agentDrivenProperties.AIParryOnAttackingContinueAbility = MBMath.Lerp(0.05f, 0.95f, MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 4.0) * 0.0001f, 0.0f, 1f), 1E-05f);
+            agentDrivenProperties.AIDecideOnRealizeEnemyBlockingAttackAbility = 0.5f * MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 5.0) * 1E-05f, 0.0f, 1f);
+            agentDrivenProperties.AIRealizeBlockingFromIncorrectSideAbility = 0.5f * MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 5.0) * 1E-05f, 0.0f, 1f);
             agentDrivenProperties.AiAttackingShieldDefenseChance = (float)(0.200000002980232 + 0.300000011920929 * (double)amount);
             agentDrivenProperties.AiAttackingShieldDefenseTimer = (float)(0.300000011920929 * (double)amount - 0.300000011920929);
             agentDrivenProperties.AiRandomizedDefendDirectionChance = (float)(1.0 - Math.Log((double)amount * 7.0 + 1.0, 2.0) * 0.333330005407333);
-            agentDrivenProperties.AISetNoAttackTimerAfterBeingHitAbility = MBMath.Lerp(0.05f, 0.95f, amount, 1E-05f);
-            agentDrivenProperties.AISetNoAttackTimerAfterBeingParriedAbility = MBMath.Lerp(0.05f, 0.95f, amount, 1E-05f);
-            agentDrivenProperties.AISetNoDefendTimerAfterHittingAbility = MBMath.Lerp(0.05f, 0.95f, amount, 1E-05f);
-            agentDrivenProperties.AISetNoDefendTimerAfterParryingAbility = MBMath.Lerp(0.05f, 0.95f, amount, 1E-05f);
-            agentDrivenProperties.AiEstimateStunDurationPrecision = 1f - MBMath.Lerp(0.05f, 0.95f, amount, 1E-05f);
+            agentDrivenProperties.AISetNoAttackTimerAfterBeingHitAbility = MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.05f, 0.95f);
+            agentDrivenProperties.AISetNoAttackTimerAfterBeingParriedAbility = MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.05f, 0.95f);
+            agentDrivenProperties.AISetNoDefendTimerAfterHittingAbility = MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.05f, 0.95f);
+            agentDrivenProperties.AISetNoDefendTimerAfterParryingAbility = MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.05f, 0.95f);
+            agentDrivenProperties.AIEstimateStunDurationPrecision = 1f - MBMath.ClampFloat((float)Math.Pow((double)MBMath.Lerp(0.0f, 10f, amount, 1E-05f), 2.0) * 0.01f, 0.05f, 0.95f);
             agentDrivenProperties.AiRaiseShieldDelayTimeBase = (float)(0.5 * (double)amount - 0.75);
             agentDrivenProperties.AiUseShieldAgainstEnemyMissileProbability = (float)(0.100000001490116 + (double)amount * 0.200000002980232);
             agentDrivenProperties.AiCheckMovementIntervalFactor = (float)(0.00499999988824129 * (1.0 - (double)amount));
@@ -110,7 +110,8 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AiRangerLeadErrorMin = num4 * 0.2f;
             agentDrivenProperties.AiRangerLeadErrorMax = num4 * 0.3f;
             agentDrivenProperties.AiRangerVerticalErrorMultiplier = num4 * 0.1f;
-            agentDrivenProperties.AIAttackOnDecideChance = 0.96f;
+            agentDrivenProperties.AiRangerHorizontalErrorMultiplier = num4 * ((float)Math.PI / 90f);
+            agentDrivenProperties.AIAttackOnDecideChance = AgentStatCalculateModel.CalculateAIAttackOnDecideMaxValue;
             agent.HealthLimit = classForCharacter == null ? 100f : (float)classForCharacter.Health;
             agent.Health = agent.HealthLimit;
             return agentDrivenProperties;
@@ -188,7 +189,9 @@ namespace EnhancedBattleTest
             float inaccuracy;
             agentDrivenProperties.LongestRangedWeaponSlotIndex = (float)equipment.GetLongestRangedWeaponWithAimingError(out inaccuracy, agent);
             agentDrivenProperties.LongestRangedWeaponInaccuracy = inaccuracy;
-            agentDrivenProperties.WeaponSpeed = (float)(0.930000007152557 + 0.000699999975040555 * (double)this.GetSkillValueForItem(character, weaponComponentData?.Item));
+            agentDrivenProperties.SwingSpeedMultiplier = (float)(0.930000007152557 + 0.000699999975040555 * (double)this.GetSkillValueForItem(character, weaponComponentData?.Item));
+            agentDrivenProperties.ThrustOrRangedReadySpeedMultiplier = agentDrivenProperties.SwingSpeedMultiplier;
+            agentDrivenProperties.ShieldBashStunDurationMultiplier = 1f;
             agentDrivenProperties.ReloadSpeed = (float)(0.930000007152557 + 0.000699999975040555 * (double)this.GetSkillValueForItem(character, weaponComponentData?.Item));
             agentDrivenProperties.WeaponInaccuracy = 0.0f;
             int weight = agent.Monster.Weight;
@@ -238,7 +241,7 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AttributeHorseArchery = Game.Current.BasicModels.StrikeMagnitudeModel.CalculateHorseArcheryFactor(character);
             foreach (DrivenPropertyBonusAgentComponent bonusAgentComponent in agent.Components.OfType<DrivenPropertyBonusAgentComponent>())
             {
-                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 55))
+                if (!MBMath.IsBetween((int)bonusAgentComponent.DrivenProperty, 0, 56))
                 {
                     float num2 = agentDrivenProperties.GetStat(bonusAgentComponent.DrivenProperty) + bonusAgentComponent.DrivenPropertyBonus;
                     agentDrivenProperties.SetStat(bonusAgentComponent.DrivenProperty, num2);

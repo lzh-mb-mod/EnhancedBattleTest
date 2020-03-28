@@ -56,24 +56,36 @@ namespace EnhancedBattleTest
 
         public AIEnableType aiEnableType = AIEnableType.EnemyOnly;
 
-        public bool disableDying;
+        public bool disableDeath;
 
         public bool useRealisticBlocking = false;
 
         public bool noAgentLabel = false;
+        public bool noKillNotification = false;
 
         public bool changeCombatAI;
         public int combatAI;
+
+        public int GetTotalNumberForSide(BattleSideEnum side)
+        {
+            return GetTotalNumberForSide((isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender) == side);
+        }
+
+        public int GetTotalNumberForSide(bool isPlayer)
+        {
+            if (isPlayer)
+                return (this.SpawnPlayer ? 1 : 0) + this.playerTroops.Sum(classInfo => classInfo.troopCount);
+            else
+                return (this.SpawnEnemyCommander ? 1 : 0) + this.enemyTroops.Sum(classInfo => classInfo.troopCount);
+        }
 
         [XmlIgnore]
         public bool ShouldCelebrateVictory
         {
             get
             {
-                int playerNumber = this.SpawnPlayer ? 1 : 0;
-                int enemyCommanderNumber = this.SpawnEnemyCommander ? 1 : 0;
-                return (playerNumber + this.playerTroops.Sum(classInfo => classInfo.troopCount)) != 0 &&
-                       (enemyCommanderNumber + this.enemyTroops.Sum(classInfo => classInfo.troopCount)) != 0;
+                return GetTotalNumberForSide(true) != 0 &&
+                       GetTotalNumberForSide(false) != 0;
             }
         }
 
@@ -352,9 +364,10 @@ namespace EnhancedBattleTest
             this.attackerTacticOptions = other.attackerTacticOptions;
             this.defenderTacticOptions = other.defenderTacticOptions;
             this.aiEnableType = other.aiEnableType;
-            this.disableDying = other.disableDying;
+            this.disableDeath = other.disableDeath;
             this.useRealisticBlocking = other.useRealisticBlocking;
             this.noAgentLabel = other.noAgentLabel;
+            this.noKillNotification = other.noKillNotification;
             this.changeCombatAI = other.changeCombatAI;
             this.combatAI = other.combatAI;
         }

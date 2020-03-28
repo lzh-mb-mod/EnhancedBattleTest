@@ -89,6 +89,7 @@ namespace EnhancedBattleTest
 
         public int NumRemovedTroops => this._numWounded + this._numKilled + this._numRouted;
 
+        public int NumTroopsNotSupplied => this._characters.Count - this._numAllocated;
         public bool AnyTroopRemainsToBeSupplied => this._anyTroopRemainsToBeSupplied;
     }
 }

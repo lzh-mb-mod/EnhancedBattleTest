@@ -375,6 +375,19 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
+        public bool NoKillNotification
+        {
+            get => this.CurrentConfig.noKillNotification;
+            set
+            {
+                if (this.CurrentConfig.noKillNotification == value)
+                    return;
+                this.CurrentConfig.noKillNotification = value;
+                this.OnPropertyChanged(nameof(NoKillNotification));
+            }
+        }
+
+        [DataSourceProperty]
         public bool ChangeCombatAI
         {
             get => this.CurrentConfig.changeCombatAI;

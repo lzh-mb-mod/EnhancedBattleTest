@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MPCharacters>
+<NPCCharacter id="player_character_1" is_female="true" default_group="Infantry" level="25" name="Player Character 1 - female" occupation="Soldier" culture="Culture.aserai">
+    <face>
+      <!--face_key value="40.96;0.5333;0.5864;1CC40E4EFC0000;100000000080000;0;6650003;9800509000000;0;0;300000" max_value="87.1;0.5864;1;2DFC0FDA003754;FFFFFFFFAE79FFFF;FFF1FFFFFFD7FFFF;FFFFEFEFFFFFFFFF;F9FFA0FFFFEFF;0;0;409183"/-->
+      <BodyProperties version="4"
+                      age="40.96"
+                      weight="0.5333"
+                      build="0.5864"
+                      key="001CC40E4EFC00000100000000080000000000000000000000000000066500030009800509000000000000000000000000000000000000000000000000C80000" />
+      <BodyPropertiesMax version="4"
+                         age="87.1"
+                         weight="0.5864"
+                         build="1"
+                         key="002DFC0FDA003754FFFFFFFFAE79FFFFFFF1FFFFFFD7FFFFFFFFEFEFFFFFFFFF000F9FFA0FFFFEFF000000000000000000000000000000000000000001189183" />
+    </face>
+    <skills>
+      <skill id="Riding" value="15" />
+      <skill id="OneHanded" value="50" />
+      <skill id="TwoHanded" value="50" />
+      <skill id="Polearm" value="50" />
+      <skill id="Crossbow" value="20" />
+      <skill id="Bow" value="20" />
+      <skill id="Throwing" value="100" />
+    </skills>
+    <equipmentSet>
+      <equipment slot="Item0" id="Item.mp_aserai_twohanded_axe" />
+      <equipment slot="Head" id="Item.mp_desert_mail_coif" />
+      <equipment slot="Body" id="Item.mp_southern_lamellar_armor" />
+      <equipment slot="Leg" id="Item.mp_steppe_leather_boots" />
+    </equipmentSet>
+  </NPCCharacter>
+  <NPCCharacter id="player_character_2" default_group="Infantry" level="25" name="Player Character 2" occupation="Soldier" culture="Culture.aserai">
+    <face>
+      <!--face_key value="40.96;0.5333;0.5864;1CC40E4EFC0000;100000000080000;0;6650003;9800509000000;0;0;300000" max_value="87.1;0.5864;1;2DFC0FDA003754;FFFFFFFFAE79FFFF;FFF1FFFFFFD7FFFF;FFFFEFEFFFFFFFFF;F9FFA0FFFFEFF;0;0;409183"/-->
+      <BodyProperties version="4"
+                      age="40.96"
+                      weight="0.5333"
+                      build="0.5864"
+                      key="001CC40E4EFC00000100000000080000000000000000000000000000066500030009800509000000000000000000000000000000000000000000000000C80000" />
+      <BodyPropertiesMax version="4"
+                         age="87.1"
+                         weight="0.5864"
+                         build="1"
+                         key="002DFC0FDA003754FFFFFFFFAE79FFFFFFF1FFFFFFD7FFFFFFFFEFEFFFFFFFFF000F9FFA0FFFFEFF000000000000000000000000000000000000000001189183" />
+    </face>
+    <skills>
+      <skill id="Riding" value="15" />
+      <skill id="OneHanded" value="50" />
+      <skill id="TwoHanded" value="50" />
+      <skill id="Polearm" value="50" />
+      <skill id="Crossbow" value="20" />
+      <skill id="Bow" value="20" />
+      <skill id="Throwing" value="100" />
+    </skills>
+    <equipmentSet>
+      <equipment slot="Item0" id="Item.mp_aserai_twohanded_axe" />
+      <equipment slot="Head" id="Item.mp_desert_mail_coif" />
+      <equipment slot="Body" id="Item.mp_southern_lamellar_armor" />
+      <equipment slot="Leg" id="Item.mp_steppe_leather_boots" />
+    </equipmentSet>
+  </NPCCharacter>
+  <NPCCharacter id="player_character_3" default_group="Infantry" level="25" name="Player Character 3" occupation="Soldier" culture="Culture.aserai">
+    <face>
+      <!--face_key value="40.96;0.5333;0.5864;1CC40E4EFC0000;100000000080000;0;6650003;9800509000000;0;0;300000" max_value="87.1;0.5864;1;2DFC0FDA003754;FFFFFFFFAE79FFFF;FFF1FFFFFFD7FFFF;FFFFEFEFFFFFFFFF;F9FFA0FFFFEFF;0;0;409183"/-->
+      <BodyProperties version="4"
+                      age="40.96"
+                      weight="0.5333"
+                      build="0.5864"
+                      key="001CC40E4EFC00000100000000080000000000000000000000000000066500030009800509000000000000000000000000000000000000000000000000C80000" />
+      <BodyPropertiesMax version="4"
+                         age="87.1"
+                         weight="0.5864"
+                         build="1"
+                         key="002DFC0FDA003754FFFFFFFFAE79FFFFFFF1FFFFFFD7FFFFFFFFEFEFFFFFFFFF000F9FFA0FFFFEFF000000000000000000000000000000000000000001189183" />
+    </face>
+    <skills>
+      <skill id="Riding" value="15" />
+      <skill id="OneHanded" value="50" />
+      <skill id="TwoHanded" value="50" />
+      <skill id="Polearm" value="50" />
+      <skill id="Crossbow" value="20" />
+      <skill id="Bow" value="20" />
+      <skill id="Throwing" value="100" />
+    </skills>
+    <equipmentSet>
+      <equipment slot="Item0" id="Item.mp_aserai_twohanded_axe" />
+      <equipment slot="Head" id="Item.mp_desert_mail_coif" />
+      <equipment slot="Body" id="Item.mp_southern_lamellar_armor" />
+      <equipment slot="Leg" id="Item.mp_steppe_leather_boots" />
+    </equipmentSet>
+  </NPCCharacter>
+</MPCharacters>

@@ -34,7 +34,6 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionOrderUIHandler(mission),
                 ViewCreator.CreateOrderTroopPlacerView(mission),
-                ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 ViewCreator.CreateOptionsUIHandler(),
@@ -55,6 +54,12 @@ namespace EnhancedBattleTest
             {
                 missionViewList.Add(ViewCreator.CreateMissionAgentLabelUIHandler(mission));
             }
+
+            if (!config.noKillNotification)
+            {
+                missionViewList.Add(ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler());
+            }
+
             return missionViewList.ToArray();
         }
     }

@@ -3,19 +3,19 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class DisableDyingLogic : MissionLogic
+    public class DisableDeathLogic : MissionLogic
     {
         private BattleConfigBase _config;
 
-        public DisableDyingLogic(BattleConfigBase config)
+        public DisableDeathLogic(BattleConfigBase config)
         {
             _config = config;
         }
         public override void AfterStart()
         {
             base.AfterStart();
-            Mission.DisableDying = _config.disableDying;
-            PrintDyingStatus();
+            Mission.DisableDying = _config.disableDeath;
+            PrintDeathStatus();
         }
 
         public override void OnMissionTick(float dt)
@@ -23,19 +23,19 @@ namespace EnhancedBattleTest
             base.OnMissionTick(dt);
             if (this.Mission.InputManager.IsKeyPressed(InputKey.F11))
             {
-                SetDisableDying(!Mission.DisableDying);
+                SetDisableDeath(!Mission.DisableDying);
             }
         }
 
-        public void SetDisableDying(bool disableDying)
+        public void SetDisableDeath(bool disableDeath)
         {
-            Mission.DisableDying = disableDying;
-            PrintDyingStatus();
+            Mission.DisableDying = disableDeath;
+            PrintDeathStatus();
         }
 
-        private void PrintDyingStatus()
+        private void PrintDeathStatus()
         {
-            Utility.DisplayMessage(Mission.DisableDying ? "Dying Disabled." : "Dying Enabled.");
+            Utility.DisplayMessage(Mission.DisableDying ? "Death Disabled." : "Death Enabled.");
         }
     }
 }

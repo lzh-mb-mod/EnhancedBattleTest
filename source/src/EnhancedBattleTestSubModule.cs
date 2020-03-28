@@ -13,7 +13,6 @@ namespace EnhancedBattleTest
         {
             base.OnSubModuleLoad();
             ModuleLogger.Writer.WriteLine("EnhancedBattleTestSubModule::OnSubModuleLoad");
-
             EnhancedBattleTestSubModule._instance = this;
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
               "EBTtestbattle",

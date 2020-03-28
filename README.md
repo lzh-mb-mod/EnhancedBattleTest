@@ -62,7 +62,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Press `F10` to switch between free camera and main agent camera.
 
-- Press `F11` to disable dying.
+- Press `F11` to disable death.
 
 - Press `F12` to reset mission (available in `Test Battle mode` only).
 
@@ -79,7 +79,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 ## How to add more maps
 - You can go to `Modules\Native\SceneObj` to find available maps.
 
-- To add more maps, you need to edit the configuartion file(in folder "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\").
+- To add more maps, you need to edit the configuartion file(in folder `(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\`).
 
 - The maps available in mod are under the xml element `sceneList`.
 
@@ -92,39 +92,27 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
   The other config like formation positions can be configured in the game.
 
 ## How to customize characters
-- You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`.
+- To customize characters, you need to provide XML element `NPCCharacter` and `MPClassDivision`.
 
-- These characters are referred in another file `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, in which armors, movement speed, perks and other properties of the character are defined.
+- `NPCCharcter` defines character name, the culture it belongs to, body properties, equipment, etc.
 
-- **However**, since Bannerlord b0.8.0(maybe since earlier version, I don't know), merging those two `mpclassdivisions.xml` files (one in `native` and one in this mod), and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
+- `MPClassDivision` defines perks, armor, movement_speed, etc. which are properties used in multplayer mode. As this mod use the same mechanism as multiplayer mode to spawn characters, you have to define `MPClassDivision` to make the `NPCCharacter` you defined to appear.
 
-  This is a bug in Bannerlord, and the work-around is to remove all the spaces between xml elements in both files.
-  
-  I have done this for you. So you don't need to worry about it if you don't modify those two `mpclassdivisions.xml` files.
+- The identity of `NPCCharacter` and `MPClassDivision` are determined by `id` attribute. Characters with the same id are the same one, and the one defined later will overwrite the one defined earlier(except that equipment list are concatened and equipments will be chosen from the list randomly).
 
-  If you need to modify any of those two files, please remember to remove all the spaces between the xml elements just like I do.
+  You need to specify the id of `NPCCharacter` in `hero` and `troop` attribute of `MPClassDivision` to associate them with each other.
 
-  I use vscode with xml extension to remove spaces automatically.
+- If you only need to customize less than 4 characters, You can customize your characters by modifying the xml elements with id `player_character_1`, `player_character_2` and `player_character_3` in `Modules\EnhancedBattleTest\ModuleData\customcharacters.xml`.
 
-  You can install vscode, then open it and install `XML Tools` extension. Open the file, right click and select `Minify xml` to remove all the spaces.
+- If you need more than 3 characters, then:
 
-- If you modified those files or the game updated(so `mpclassdivisions.xml` in Native may be updated), and the mod could not start, you can wait for mod update or go to play multiplayer mode.
-  
-  If you want to play this mod instantly, you can remove all the spaces in `mpclassdivisions.xml`, make backup of them and overwrite them using backups when reinstalling the mod.
+- In `customcharacters.xml`, add your character with different `id`. For example you can copy-paste an existing character, change `id` to a new one, and modify other properties as you need.
 
-  Or if you don't need character customization, you can remove the following content in `Modules\EnhancedBattleTest\SubModule.xml`:
-  ```
-  <XmlNode>
-		<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
-	</XmlNode>
-  ```
-  and try to start the mod again.
-  
-  This should make the game not to load `mpclassdivisions.xml` in this mod anymore, and do not merge it with the one in `Native`. So it shound be impossible to trigger the bug mentioned above.
-  
-  However, the characters defined in `mpcharacters.xml` can no longer be spawned in the game.
+- In `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, add a `MPClassDivision` element associated with your character. For example, you can copy-paste an existing `MPClassDivision` element, change `id` to a new one, then change `hero` and `troop` attributes to the `id` of your character, at last modify other properties as you need.
 
-- Don't blame me, blame the code that TaleWorlds wrote.
+- You may wonder why I don't put customized `MPClassDivision` into a separate file such as `customclassdivision.xml`, just like what I do for `NPCCharacters`, which will make it more convenient for you to install mod update. It's because since Bannerlord b0.8.0(maybe since earlier version, I don't know), merging two `mpclassdivisions.xml` files, and parsing them is **NOT** correctly implemented: the spaces between xml elements are not ignored, and the game will crash.
+
+- A work-around is to remove all the spaces between XML elements in files defining `MPClassDivision` and keep your customized content in a seperate file. But this way may be inconvenient compared with copy-pasting your customized content into `mpclassdivisions.xml` each time you install the mod update.
 
 - Hope to see this bug fixed soon.
 
@@ -145,17 +133,18 @@ The source code is located in the `source` folder or available at [https://gitla
 
 - If the mod crashed without entering Main menu:
 
-  - If the game updated, wait for mod update. Or:
+  - Try to run `EnhancedBattleTest-Alternative.bat` instead of `EnhancedBattleTest.bat`.
+
+    This works for some people. Or:
 
   - Reinstall the mod. If not working:
 
-  - Try to run `EnhancedBattleTest-Alternative.bat` instead of `EnhancedBattleTest.bat`.
 
-    This works for some people.
+  - Wait for mod update. I would appreciate it if you sent the crash report to me, details below.
 
 - If the mod crashed when clicking buttons in main menu:
   
-  - Please read `How to customize characters` section and follow instructions in it. Or you can wait for mod update.
+  - If you customized characters, please make sure the files you modified are syntax correct. You can reinstall the mod if you cannot get it work.
 
 - If the mod crashed when selecting numbers in battle config UI:
   
@@ -167,7 +156,13 @@ The source code is located in the `source` folder or available at [https://gitla
 
 - If the mod crashed in battle (except in siege map):
 
-  - Please pack and send the crash report in folder `bin\Win64_Shipping_Client\(crash time)` to me via email below.
+  - Please send the crash report to me and wait for a fix.
+
+### How to send crash report to me
+- Click `Yes` when it says 
+  > The application faced a problem. We need to collect necessary files to fix this problem. Would you like to update these files now?
+
+- In `bin\Win64_Shipping_Client\crashes\` folder, there should be a folder shows the crash time. Sent the files in this folder, espacially the dump.dmp file to me. My mail address is below.
 
 ## Contact with me
 * Please mail to: lizhenhuan1019@qq.com

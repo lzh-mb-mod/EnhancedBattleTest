@@ -138,7 +138,7 @@ namespace EnhancedBattleTest
                 soldierYInterval = 1f,
                 charge = false,
                 hasBoundary = true,
-                disableDying = false,
+                disableDeath = false,
                 changeCombatAI = false,
                 combatAI = 100,
             };
