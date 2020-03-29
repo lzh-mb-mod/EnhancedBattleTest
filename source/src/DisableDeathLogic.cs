@@ -23,7 +23,8 @@ namespace EnhancedBattleTest
             base.OnMissionTick(dt);
             if (this.Mission.InputManager.IsKeyPressed(InputKey.F11))
             {
-                SetDisableDeath(!Mission.DisableDying);
+                this._config.disableDeath = !this._config.disableDeath;
+                SetDisableDeath(this._config.disableDeath);
             }
         }
 

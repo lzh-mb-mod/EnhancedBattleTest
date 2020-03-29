@@ -8,7 +8,7 @@
       <Children>
         <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="50" Text="Enhanced Battle Test 0.7: Custom Battle" Brush="CenterAlignedLargeFont" />
         <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginTop="120" Text="Spawn Characters with perks in built-in way." Brush="ChatLog.Text"/>
-        <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightPolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="200" MarginLeft="20">
+        <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightPolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="100" MarginLeft="20">
           <Children>
             <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="10" Text="Press F or numpad 6 to control your troop after dead." Brush="ChatLog.Text"/>
             <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Left" MarginTop="10" Text="Press F9 to switch team." Brush="ChatLog.Text"/>

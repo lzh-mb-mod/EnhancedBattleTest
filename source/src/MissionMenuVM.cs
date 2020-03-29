@@ -203,7 +203,7 @@ namespace EnhancedBattleTest
         [DataSourceProperty] public bool SwitchFreeCameraEnabled => _switchFreeCameraLogic != null;
 
         [DataSourceProperty]
-        public bool DisableDying
+        public bool DisableDeath
         {
             get => this._config.disableDeath;
             set
@@ -211,8 +211,8 @@ namespace EnhancedBattleTest
                 if (this._config.disableDeath == value)
                     return;
                 this._config.disableDeath = value;
-                _mission.GetMissionBehaviour<DisableDeathLogic>()?.SetDisableDeath(DisableDying);
-                this.OnPropertyChanged(nameof(DisableDying));
+                _mission.GetMissionBehaviour<DisableDeathLogic>()?.SetDisableDeath(DisableDeath);
+                this.OnPropertyChanged(nameof(DisableDeath));
             }
         }
 

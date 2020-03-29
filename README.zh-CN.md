@@ -42,13 +42,6 @@
 ## 如何安装
 1. 复制`bin`和`Modules`两个文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)。
 
-### 注意
-- 由于官方代码的一个bug，若游戏本体更新了联机perk（也就更新了`Native\ModuleData\mpclassdivisions.xml`文件），mod会崩溃。
-
-- 你可以等待mod更新或去玩联机模式。若你想立即玩mod，你应当移除`mpclassdivisions.xml`中的xml elements间的所有空格（我用vscode和`XML Tools`扩展来自动移除空格）并备份它，然后重装mod并用备份覆盖该文件。
-
-- 请阅读“如何自定义角色”小节以了解更多细节和原因。
-
 ## 如何使用
 - 当前联机测试中，官方的加载器禁用了单机模式，所以需要通过点击砍二安装目录下，`bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`来启动。若它崩溃，可尝试运行`EnhancedBattleTest-Alternative.bat`.
 
@@ -192,42 +185,23 @@
   - 按`L`键在自由视角下让玩家瞬移到镜头位置。
 
 ## 如何自定义角色
-- 你可以通过修改`Modules\EnhancedBattleTest\ModuleData\mpcharacters.xml`文件中，id为`player_character_1`，`player_character_2`和`player_character_3`的xml元素来自定义角色。
+- 若要自定义角色，你需要编写两个XML元素：`NPCCharacter`和`MPClassDivision`。
 
-- 这个角色在`Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`中被引用，该文件定义了角色的护甲、移速和其它属性。
+- `NPCCharacter`定义了角色名称，它所属的文化，身体属性，装备等等。
 
-- **然而**，自从砍二b0.8.0版本开始（也许更早），将第三方mod中的`mpclassdivisions.xml`和`Native`中的`mpclassdivisions.xml`合并，并解析读取，实现得**不正确**：
+- `MPClassDivision`定义了perk，护甲，移速等等在联机中生效的属性。由于这个mod使用和多人模式相同的机制生成角色，你需要定义`MPClassdivision`来让你定义的`NPCCharacter`出现在mod中。
 
-  xml元素间的空格未被忽略，游戏会因此崩溃。
+- `NPCCharacter`和`MPClassDivision`的同一性由`id`属性决定：有相同`id`的角色是同一个角色，在文件中之后定义的角色会覆盖先前定义的同一个角色（装备除外，装备列表会合并，最终装备会从装备列表中随机选取）。
 
-  这是砍二自身的bug，临时的解决方案是移除`Native`和本mod中的两个`mpclassdivisions.xml`文件里的xml元素间的所有换行和空格。
+  你需要在`MPClassDivision`的`hero`和`troop`属性中填写`NPCCharacter`的id，以将二者关联在一起。
 
-  我已经帮你把这些做好了。所以如果你不修改这两个文件，你不需要关心这些。
+- 若你仅需要自定义少于4个的角色，你可以直接修改`Modules\EnhancedBattleTest\ModuleData\customcharacters.xml`中的`id`为`player_character_1`，`player_character_2`，`player_character_3`的这三个XML元素。
 
-  如果你需要修改这两个文件中的任何一个，记得修改完毕后将其中xml元素间的所有换行和空格删除。
+- 若你需要自定义多于3个的元素，那么：
 
-  我用的是vscode的xml插件来自动删除空格。
+- 在`customcharacters.xml`中，添加带有与已有角色不同的`id`的角色。例如你可以复制粘贴已有的`NPCCharacter`，将`id`改为新的id，并根据需要修改其它属性。
 
-  你可用安装vscode，然后用vscode打开该文件，安装`XML tools`扩展，在文件中打开右键菜单并选择`Minify xml`来移除所有空格。
-
-- 因此如果你修改了其中的文件，或者游戏更新了（从而更新了Native中的`mpclassdivisions.xml`），若mod不能启动了，你可以等待mod更新或玩联机模式。
-  
-  若你想立即玩这个mod，你可以移除`mpclassdivisions.xml`中的所有空格，备份修改后的该文件，重装mod，然后用该备份覆盖该文件。
-
-  或者若你不需要自定义角色功能，你可以尝试在`Modules\EnhancedBattleTest\SubModule.xml`文件中移除下面的内容：
-  ```
-  <XmlNode>
-	<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
-  </XmlNode>
-  ```
-  并再次尝试启动mod。
-  这样，游戏就应当不会再加载本mod中的`mpclassdivisions.xml`文件，也就不会将它和`Native`的对应文件合并，从而不可能再触发这个bug。
-
-  但这样做会导致无法自定义角色。
-
-- 别怪我，请怪TaleWorlds写的代码(bug)。
-
-- 希望这个bug早日被TaleWorlds修复。
+- 在`Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`中，添加一个和你的角色相关联的`MPClassDivision`元素。例如，你可以复制粘贴一个已有的`MPClassDivision`元素，将`id`改为新的id，将`hero`和`troop`属性更改为你的角色的`id`，最后根据需要修改其它属性。
 
 ## 从源代码构建
 源代码位于`source`文件夹下，在[https://gitlab.com/lzh_mb_mod/enhancedbattletest](https://gitlab.com/lzh_mb_mod/enhancedbattletest) 中也可以获得源代码。
@@ -244,16 +218,20 @@
   - 请先启动Steam，并确保砍二在你登录的Steam账号的库中.
 
 - 若在没有进入主菜单的情况下崩溃：
-  
-  - mod很可能没有正确安装，请重新安装mod。若没用：
 
   - 尝试运行`EnhancedBattleTest-Alternative.bat`而非`EnhancedBattleTest.bat`。
 
-    这个方法已知对一部分无法启动mod的情况有用。
+    这个方法已知对一部分无法启动mod的情况有用。或者：
+  
+  - 尝试重新安装mod。若没用：
+
+  - 等待mod更新。同时你可以将崩溃报告发给我。具体方法见末尾。
 
 - 如果在点击主菜单中的按钮时崩溃：
 
-  - 请阅读`如何自定义角色`小节并按照其中的指示解决。或者你可用等待mod更新。
+  - 若你自定义了角色，请确保你的修改语法正确。若你无法修改正确，你可以重装mod以放弃自定义角色。否则：
+
+  - 等待mod更新并将崩溃报告发给我。
 
 - 如果在战斗配置界面中，选择数字时崩溃：
 
@@ -265,7 +243,13 @@
 
 - 若除攻城图之外的战斗中mod崩溃
 
-  - 请把崩溃报告打包并通过下面的邮箱发给我。（崩溃报告位于`bin\Win64_Shipping_Client\`中，以崩溃时间为文件夹的名称）
+  - 请把崩溃报告打包并通过下面的邮箱发给我。
+
+### 如何将崩溃报告发给我
+- 当崩溃提示窗口弹出并显示如下内容时点击是：
+  > The application faced a problem. We need to collect necessary files to fix this problem. Would you like to update these files now?
+
+- 在`bin\Win64_Shipping_Client\crashes\`文件夹中，应当有一个文件夹显示了崩溃时间。将该文件夹内的文件发给我，尤其是`dump.dmp`文件。邮箱地址见下文。
 
 ## 联系我
 * 请发邮件到：lizhenhuan1019@qq.com

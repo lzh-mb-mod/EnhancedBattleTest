@@ -44,13 +44,6 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 ## How to install
 1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
 
-### Note
-- Due to a bug in official code, if a game update changes multiplayer perks (so that it updates `Native\ModuleData\mpclassdivisions.xml`), the mod will crash.
-  
-  You can wait for mod update or play multiplayer mode. If you want to play this mod instantly, you should remove spaces between xml elements in `mpclassdivisions.xml`(I use vscode with `XML tools` extension to automatically do that) and make a backup up of it. You should then reinstall the mod and overwrite this file using the backup.
-
-- Please read `How to customizing characters` section for details and reason.
-
 ## How to use
 - Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder. If it crashed, try to run `EnhancedBattleTest-Alternative.bat` instead.
 
@@ -106,7 +99,7 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - If you need more than 3 characters, then:
 
-- In `customcharacters.xml`, add your character with different `id`. For example you can copy-paste an existing character, change `id` to a new one, and modify other properties as you need.
+- In `customcharacters.xml`, add your character with a new `id`. For example you can copy-paste an existing `NPCCharacter`, change `id` to a new one, and modify other properties as you need.
 
 - In `Modules\EnhancedBattleTest\ModuleData\mpclassdivisions.xml`, add a `MPClassDivision` element associated with your character. For example, you can copy-paste an existing `MPClassDivision` element, change `id` to a new one, then change `hero` and `troop` attributes to the `id` of your character, at last modify other properties as you need.
 
@@ -144,7 +137,9 @@ The source code is located in the `source` folder or available at [https://gitla
 
 - If the mod crashed when clicking buttons in main menu:
   
-  - If you customized characters, please make sure the files you modified are syntax correct. You can reinstall the mod if you cannot get it work.
+  - If you customized characters, please make sure the files you modified are syntax correct. You can reinstall the mod if you cannot get it work. Or:
+
+  - Wait for mod update and send me the crash report.
 
 - If the mod crashed when selecting numbers in battle config UI:
   

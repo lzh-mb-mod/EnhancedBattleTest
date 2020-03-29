@@ -1,5 +1,9 @@
 # Changelog
-## [0.6.4] - 2020-03-29
+## [0.7.1] - 2020-03-30
+### Fixed
+- Fix the bug that disable death option in mission menu does not work.
+
+## [0.7.0] - 2020-03-29
 ### Fixed
 - Keep compatible with b0.9.0
 
