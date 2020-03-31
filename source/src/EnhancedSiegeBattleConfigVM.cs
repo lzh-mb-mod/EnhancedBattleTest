@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
@@ -21,6 +22,8 @@ namespace EnhancedBattleTest
 
         private string _selectedMapName;
 
+        public string BattleModeString { get; } = "EnhancedBattleTest e" + BattleConfigBase.ModVersion.ToString(2) +
+                                                  ": " + GameTexts.FindText("str_siege_battle").ToString();
         [DataSourceProperty]
         public string SelectedMapName
         {
@@ -214,7 +217,6 @@ namespace EnhancedBattleTest
         {
             if (SaveConfig() != SaveParamResult.success)
                 return;
-            ModuleLogger.Writer.WriteLine("StartBattle");
             this.startAction(CurrentConfig);
         }
 
@@ -227,7 +229,6 @@ namespace EnhancedBattleTest
         {
             this.CurrentConfig.ReloadSavedConfig();
             this.InitializeContent();
-            Utility.DisplayMessage("Load config successfully");
         }
 
         public void GoBack()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using Debug = System.Diagnostics.Debug;
@@ -29,6 +30,97 @@ namespace EnhancedBattleTest
         private string _playerName, _enemyName;
         private TroopInfo[] _playerTroopInfos, _enemyTroopInfos;
         private string _combatAI;
+
+        public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
+        {
+            get => this.CurrentConfig.PlayerHeroClass;
+            set
+            {
+                this.CurrentConfig.PlayerHeroClass = value;
+                this.PlayerName = value?.HeroName.ToString();
+            }
+        }
+
+        public string ControlTroopTipString { get; } = GameTexts.FindText("str_control_troop_tip").ToString();
+        public string SwitchTeamTipString { get; } = GameTexts.FindText("str_switch_team_tip").ToString();
+        public string SwitchFreeCameraTipString { get; } = GameTexts.FindText("str_switch_free_camera_tip").ToString();
+        public string DisableDeathTipString { get; } = GameTexts.FindText("str_disable_death_tip").ToString();
+        public string ResetMissionTipString { get; } = GameTexts.FindText("str_reset_mission_tip").ToString();
+        public string MoreOptionTipString { get; } = GameTexts.FindText("str_more_option_tip").ToString();
+        public string PauseTipString { get; } = GameTexts.FindText("str_pause_tip").ToString();
+        public string LeaveMissionTip { get; } = GameTexts.FindText("str_leave_mission_tip").ToString();
+        public string ReadPositionTip { get; } = GameTexts.FindText("str_read_position_tip").ToString();
+        public string TeleportTip { get; } = GameTexts.FindText("str_teleport_tip").ToString();
+
+        public string PlayerCharacterString { get; } = GameTexts.FindText("str_player_character").ToString();
+        public string SpawnPlayerString { get; } = GameTexts.FindText("str_spawn_player").ToString();
+
+        public string IsPlayerAttackerString { get; } = GameTexts.FindText("str_is_player_attacker").ToString();
+
+        public string PlayerTroop1String { get; } = GameTexts.FindText("str_player_troop_1").ToString();
+        public string PlayerTroop2String { get; } = GameTexts.FindText("str_player_troop_2").ToString();
+        public string PlayerTroop3String { get; } = GameTexts.FindText("str_player_troop_3").ToString();
+
+        public string PlayerTroop1CountString { get; } = GameTexts.FindText("str_player_troop_1_count").ToString();
+        public string PlayerTroop2CountString { get; } = GameTexts.FindText("str_player_troop_2_count").ToString();
+        public string PlayerTroop3CountString { get; } = GameTexts.FindText("str_player_troop_3_count").ToString();
+
+        public string EnemyTroop1String { get; } = GameTexts.FindText("str_enemy_troop_1").ToString();
+        public string EnemyTroop2String { get; } = GameTexts.FindText("str_enemy_troop_2").ToString();
+        public string EnemyTroop3String { get; } = GameTexts.FindText("str_enemy_troop_3").ToString();
+
+        public string EnemyTroop1CountString { get; } = GameTexts.FindText("str_enemy_troop_1_count").ToString();
+        public string EnemyTroop2CountString { get; } = GameTexts.FindText("str_enemy_troop_2_count").ToString();
+        public string EnemyTroop3CountString { get; } = GameTexts.FindText("str_enemy_troop_3_count").ToString();
+
+        public string EnemyCommanderString { get; } = GameTexts.FindText("str_enemy_commander").ToString();
+        public string SpawnEnemyCommanderString { get; } = GameTexts.FindText("str_spawn_enemy_commander").ToString();
+
+        public string SoldiersPerRowString { get; } = GameTexts.FindText("str_soldiers_per_row").ToString();
+        public string FormationPositionString { get; } = GameTexts.FindText("str_formation_position").ToString();
+        public string FormationDirectionString { get; } = GameTexts.FindText("str_formation_direction").ToString();
+        public string DistanceString { get; } = GameTexts.FindText("str_distance").ToString();
+        public string SkyBrightnessString { get; } = GameTexts.FindText("str_sky_brightness").ToString();
+        public string RainDensityString { get; } = GameTexts.FindText("str_rain_density").ToString();
+
+        public string MoreOptionsString { get; } = GameTexts.FindText("str_more_options").ToString();
+        public string NoFriendlyBannerString { get; } = GameTexts.FindText("str_no_friendly_banner").ToString();
+        public string NoKillNotificationString { get; } = GameTexts.FindText("str_no_kill_notification").ToString();
+
+
+        public string MakeGruntVoiceString { get; } = GameTexts.FindText("str_make_grunt_voice").ToString();
+        public string HasBoundaryString { get; } = GameTexts.FindText("str_has_boundary").ToString();
+        public string ChangeCombatAIString { get; } = GameTexts.FindText("str_change_combat_ai").ToString();
+        public string CombatAIString { get; } = GameTexts.FindText("str_combat_ai").ToString();
+
+        public string SaveAndStartString { get; } = GameTexts.FindText("str_save_and_start").ToString();
+        public string SaveString { get; } = GameTexts.FindText("str_save_config").ToString();
+        public string LoadConfigString { get; } = GameTexts.FindText("str_load_config").ToString();
+        public string ExitString { get; } = GameTexts.FindText("str_exit").ToString();
+
+        [DataSourceProperty]
+        public bool SpawnPlayer
+        {
+            get => this.CurrentConfig.SpawnPlayer;
+            set
+            {
+                this.CurrentConfig.SpawnPlayer = value;
+                this.OnPropertyChanged(nameof(SpawnPlayer));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsPlayerAttacker
+        {
+            get => this.CurrentConfig.isPlayerAttacker;
+            set
+            {
+                if (this.CurrentConfig.isPlayerAttacker == value)
+                    return;
+                this.CurrentConfig.isPlayerAttacker = value;
+                this.OnPropertyChanged(nameof(IsPlayerAttacker));
+            }
+        }
 
         [DataSourceProperty]
         public string PlayerTroopCount1
@@ -128,40 +220,6 @@ namespace EnhancedBattleTest
                     return;
                 this._playerName = value;
                 this.OnPropertyChanged(nameof(PlayerName));
-            }
-        }
-
-        public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
-        {
-            get => this.CurrentConfig.PlayerHeroClass;
-            set
-            {
-                this.CurrentConfig.PlayerHeroClass = value;
-                this.PlayerName = value?.HeroName.ToString();
-            }
-        }
-
-        [DataSourceProperty]
-        public bool SpawnPlayer
-        {
-            get => this.CurrentConfig.SpawnPlayer;
-            set
-            {
-                this.CurrentConfig.SpawnPlayer = value;
-                this.OnPropertyChanged(nameof(SpawnPlayer));
-            }
-        }
-
-        [DataSourceProperty]
-        public bool IsPlayerAttacker
-        {
-            get => this.CurrentConfig.isPlayerAttacker;
-            set
-            {
-                if (this.CurrentConfig.isPlayerAttacker == value)
-                    return;
-                this.CurrentConfig.isPlayerAttacker = value;
-                this.OnPropertyChanged(nameof(IsPlayerAttacker));
             }
         }
 
@@ -417,8 +475,6 @@ namespace EnhancedBattleTest
         {
             this._selectionView = selectionView;
             this._missionMenuView = missionMenuView;
-            this._missionMenuView.OnMissionMenuViewActivated += this.OnMissionMenuViewActivated;
-            this._missionMenuView.OnMissionMenuViewDeactivated += this.OnMissionMenuViewDeactivated;
             this.CurrentConfig = currentConfig;
             this._playerTroopInfos = new TroopInfo[3];
             this._enemyTroopInfos = new TroopInfo[3];
@@ -489,7 +545,6 @@ namespace EnhancedBattleTest
 
         protected void SelectPlayerCharacter()
         {
-            ModuleLogger.Log("SelectPlayerCharacter");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.playerClass, false, (param) =>
                 {
@@ -502,7 +557,6 @@ namespace EnhancedBattleTest
 
         protected void SelectEnemyCharacter()
         {
-            ModuleLogger.Log("SelectEnemyCharacter");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.enemyClass, false, (param) =>
                 {
@@ -515,7 +569,6 @@ namespace EnhancedBattleTest
 
         protected void SelectPlayerTroopCharacter1()
         {
-            ModuleLogger.Log("SelectPlayerTroopCharacter1");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.playerTroops[0], true, (param) =>
                 {
@@ -528,7 +581,6 @@ namespace EnhancedBattleTest
 
         protected void SelectPlayerTroopCharacter2()
         {
-            ModuleLogger.Log("SelectPlayerTroopCharacter2");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.playerTroops[1], true, (param) =>
                 {
@@ -541,7 +593,6 @@ namespace EnhancedBattleTest
 
         protected void SelectPlayerTroopCharacter3()
         {
-            ModuleLogger.Log("SelectPlayerTroopCharacter3");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.playerTroops[2], true, (param) =>
                 {
@@ -554,7 +605,6 @@ namespace EnhancedBattleTest
 
         protected void SelectEnemyTroopCharacter1()
         {
-            ModuleLogger.Log("SelectEnemyTroopCharacter1");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.enemyTroops[0],
                 true, (param) =>
@@ -568,7 +618,6 @@ namespace EnhancedBattleTest
 
         protected void SelectEnemyTroopCharacter2()
         {
-            ModuleLogger.Log("SelectEnemyTroopCharacter2");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.enemyTroops[1],
                 true, (param) =>
@@ -582,7 +631,6 @@ namespace EnhancedBattleTest
 
         protected void SelectEnemyTroopCharacter3()
         {
-            ModuleLogger.Log("SelectEnemyTroopCharacter3");
             _selectionView.Open(CharacterSelectionParams.CharacterSelectionParamsFor(this._allMpHeroClassesMap,
                 this.CurrentConfig.enemyTroops[2],
                 true, (param) =>
@@ -607,13 +655,13 @@ namespace EnhancedBattleTest
             }
             catch
             {
-                Utility.DisplayMessage("Content is illegal.");
+                Utility.DisplayLocalizedText("str_content_illegal");
                 return SaveParamResult.notValid;
             }
 
             if (!CurrentConfig.Validate())
             {
-                Utility.DisplayMessage("Content is out of range.");
+                Utility.DisplayLocalizedText("str_content_outofrange");
                 return SaveParamResult.notValid;
             }
             CurrentConfig.Serialize();
@@ -632,16 +680,6 @@ namespace EnhancedBattleTest
             }
 
             CurrentConfig.combatAI = System.Convert.ToInt32(this._combatAI);
-        }
-
-        private void OnMissionMenuViewActivated()
-        {
-            //this.BlockEvents = true;
-        }
-
-        private void OnMissionMenuViewDeactivated()
-        {
-            //this.BlockEvents = false;
         }
     }
 }

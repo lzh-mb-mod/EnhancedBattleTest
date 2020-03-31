@@ -38,6 +38,7 @@ namespace EnhancedBattleTest
 
     public abstract class BattleConfigBase
     {
+        public static Version ModVersion { get; } = new Version(1, 0,0);
         public string ConfigVersion { get; set; }
 
         [XmlIgnore]
@@ -301,7 +302,7 @@ namespace EnhancedBattleTest
             MoveOldConfig();
             if (File.Exists(SaveName) && Deserialize())
                 return;
-            Utility.DisplayMessage("Create default config.");
+            Utility.DisplayLocalizedText("str_create_default_config");
             ResetToDefault();
             Serialize();
         }
@@ -312,8 +313,8 @@ namespace EnhancedBattleTest
             {
                 if (File.Exists(oldName))
                 {
-                    Utility.DisplayMessage($"Found old config file: \"{oldName}\".");
-                    Utility.DisplayMessage("Delete the old config file.");
+                    Utility.DisplayMessage(GameTexts.FindText("str_found_old_config").ToString() + $" \"{oldName}\".");
+                    Utility.DisplayLocalizedText("str_delete_old_config");
                     File.Delete(oldName);
                 }
             }
@@ -324,8 +325,7 @@ namespace EnhancedBattleTest
             string firstOldName = OldNames.FirstOrDefault(File.Exists);
             if (firstOldName != null && !firstOldName.IsEmpty())
             {
-                Utility.DisplayMessage($"Found old config file: \"{firstOldName}\".");
-                Utility.DisplayMessage("Rename old config file to new name...");
+                Utility.DisplayLocalizedText("str_rename_old_config");
                 File.Move(firstOldName, SaveName);
             }
             RemoveOldConfig();

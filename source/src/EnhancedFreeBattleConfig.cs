@@ -5,7 +5,7 @@ using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleConfig : BattleConfigBase<EnhancedTestBattleConfig>
+    public class EnhancedFreeBattleConfig : BattleConfigBase<EnhancedFreeBattleConfig>
     {
         public class SceneInfo
         {
@@ -18,7 +18,7 @@ namespace EnhancedBattleTest
             public float rainDensity = -1;
         }
 
-        private static EnhancedTestBattleConfig _instance;
+        private static EnhancedFreeBattleConfig _instance;
 
         public SceneInfo[] sceneList;
         public int sceneIndex;
@@ -35,7 +35,7 @@ namespace EnhancedBattleTest
             switch (ConfigVersion?.ToString())
             {
                 default:
-                    Utility.DisplayMessage("Config version not compatible.\nReset config.");
+                    Utility.DisplayLocalizedText("str_config_incompatible");
                     ResetToDefault();
                     Serialize();
                     break;
@@ -89,10 +89,10 @@ namespace EnhancedBattleTest
         [XmlIgnore]
         public string SceneName => sceneList[sceneIndex].name;
 
-        public EnhancedTestBattleConfig()
+        public EnhancedFreeBattleConfig()
             : base(BattleType.FieldBattle)
         { }
-        private static EnhancedTestBattleConfig CreateDefault()
+        private static EnhancedFreeBattleConfig CreateDefault()
         {
             //string sceneIndex = "mp_skirmish_map_001a";
             //string sceneIndex = "mp_sergeant_map_001";
@@ -185,7 +185,7 @@ namespace EnhancedBattleTest
                 new SceneInfo{name = "mp_skirmish_map_battania_03", formationPosition = new Vec2(360,186), formationDirection = new Vec2(0.6f,-0.4f), soldiersPerRow = 10},
             };
             int defaultIndex = 0;
-            var p = new EnhancedTestBattleConfig
+            var p = new EnhancedFreeBattleConfig
             {
                 ConfigVersion = BinaryVersion.ToString(2),
                 sceneList = list,
@@ -216,11 +216,11 @@ namespace EnhancedBattleTest
             return p;
         }
 
-        public static EnhancedTestBattleConfig Get()
+        public static EnhancedFreeBattleConfig Get()
         {
             if (_instance == null)
             {
-                _instance = new EnhancedTestBattleConfig();
+                _instance = new EnhancedFreeBattleConfig();
                 _instance.SyncWithSave();
             }
 
@@ -242,18 +242,19 @@ namespace EnhancedBattleTest
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedTestBattleConfig));
+                XmlSerializer serializer = new XmlSerializer(typeof(EnhancedFreeBattleConfig));
                 using (TextWriter writer = new StreamWriter(SaveName))
                 {
                     serializer.Serialize(writer, this);
                 }
-                Utility.DisplayMessage("Config saved.");
+                Utility.DisplayLocalizedText("str_saved_config");
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Saving config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_save_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 
@@ -265,20 +266,21 @@ namespace EnhancedBattleTest
             try
             {
                 EnsureSaveDirectory();
-                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedTestBattleConfig));
+                XmlSerializer deserializer = new XmlSerializer(typeof(EnhancedFreeBattleConfig));
                 using (TextReader reader = new StreamReader(SaveName))
                 {
-                    var config = (EnhancedTestBattleConfig)deserializer.Deserialize(reader);
+                    var config = (EnhancedFreeBattleConfig)deserializer.Deserialize(reader);
                     this.CopyFrom(config);
                 }
-                Utility.DisplayMessage("Config loaded.");
+                Utility.DisplayLocalizedText("str_loaded_config");
                 UpgradeToCurrentVersion();
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Loading config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_load_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 
@@ -298,7 +300,7 @@ namespace EnhancedBattleTest
         }
 
 
-        protected override void CopyFrom(EnhancedTestBattleConfig other)
+        protected override void CopyFrom(EnhancedFreeBattleConfig other)
         {
             base.CopyFrom(other);
 
@@ -310,7 +312,7 @@ namespace EnhancedBattleTest
             this.makeGruntVoice = other.makeGruntVoice;
             this.hasBoundary = other.hasBoundary;
         }
-        protected override string SaveName => SavePath + nameof(EnhancedTestBattleConfig) +".xml";
-        protected override string[] OldNames { get; } = { SavePath + "Param.xml" };
+        protected override string SaveName => SavePath + nameof(EnhancedFreeBattleConfig) +".xml";
+        protected override string[] OldNames { get; } = { SavePath + "Param.xml", SavePath + "EnhancedTestBattleConfig.xml" };
     }
 }

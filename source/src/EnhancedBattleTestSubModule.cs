@@ -12,20 +12,20 @@ namespace EnhancedBattleTest
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestSubModule::OnSubModuleLoad");
             EnhancedBattleTestSubModule._instance = this;
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-              "EBTtestbattle",
-              new TextObject("{=EBTtestbattle}EBT Test Battle", (Dictionary<string, TextObject>)null),
-              1,
+              "EBTFreeBattle",
+              new TextObject("{=freebattleoption}EnhancedBattleTest Free Battle"), 
+              3,
               () =>
               {
-                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(EnhancedTestBattleConfig.Get()),
+                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
+                      new EnhancedFreeBattleGame(EnhancedFreeBattleConfig.Get),
                       () =>
                       {
                           var state = GameStateManager.Current.CreateState<TopState>();
                           TopState.status = TopStateStatus.openConfig;
-                          state.openConfigMission = () => EnhancedBattleTestMissions.OpenTestBattleConfigMission();
+                          state.openConfigMission = () => EnhancedBattleTestMissions.OpenFreeBattleConfigMission();
                           GameStateManager.Current.PushState(state);
                       }));
               },
@@ -33,11 +33,12 @@ namespace EnhancedBattleTest
             ));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
                 "EBTcustomebattle",
-                new TextObject("{=EBTcustomebattle}EBT Custom Battle"),
-                2,
+                new TextObject("{=custombattleoption}EnhancedBattleTest Custom Battle"),
+                3,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedCustomBattleGame(EnhancedCustomBattleConfig.Get()),
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
+                        new EnhancedCustomBattleGame(EnhancedCustomBattleConfig.Get),
                         () =>
                         {
                             var state = GameStateManager.Current.CreateState<TopState>();
@@ -49,11 +50,12 @@ namespace EnhancedBattleTest
                 false));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
                 "EBTsiegebattle",
-                new TextObject("{=EBTsiegebattle}EBT Siege Battle"),
-                2,
+                new TextObject("{=siegebattleoption}EnhancedBattleTest Siege Battle"),
+                3,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(new EnhancedTestBattleGame(EnhancedSiegeBattleConfig.Get()),
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
+                        new EnhancedFreeBattleGame(EnhancedSiegeBattleConfig.Get),
                         () =>
                         {
                             var state = GameStateManager.Current.CreateState<TopState>();
@@ -67,8 +69,6 @@ namespace EnhancedBattleTest
 
         protected override void OnSubModuleUnloaded()
         {
-            ModuleLogger.Writer.WriteLine("EnhancedBattleTestSubModule::OnSubModuleUnloaded");
-            ModuleLogger.Writer.Close();
             EnhancedBattleTestSubModule._instance = (EnhancedBattleTestSubModule)null;
             base.OnSubModuleUnloaded();
         }

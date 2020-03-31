@@ -4,7 +4,7 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleAgentOrigin : IAgentOriginBase
+    public class EnhancedFreeBattleAgentOrigin : IAgentOriginBase
     {
         private EnhancedTroopSupplier _troopSupplier;
         private bool _isRemoved;
@@ -35,7 +35,7 @@ namespace EnhancedBattleTest
 
         public VirtualPlayer Peer => (VirtualPlayer)null;
 
-        public EnhancedTestBattleAgentOrigin(
+        public EnhancedFreeBattleAgentOrigin(
           CustomBattleCombatant customBattleCombatant,
           EnhancedTroopSupplier troopSupplier,
           BasicCharacterObject characterObject,

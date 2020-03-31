@@ -14,11 +14,11 @@ namespace EnhancedBattleTest
                                          this.Mission.PlayerTeam.Leader;
                 if (closestAllyAgent != null)
                 {
-                    Utility.DisplayMessage("Taking control of an ally troop.");
+                    Utility.DisplayLocalizedText("str_control_troop");
                     closestAllyAgent.Controller = Agent.ControllerType.Player;
                 }
                 else
-                    Utility.DisplayMessage("No ally troop to control.");
+                    Utility.DisplayLocalizedText("str_no_troop_to_control");
             }
         }
 

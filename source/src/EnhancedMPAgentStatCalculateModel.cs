@@ -62,7 +62,7 @@ namespace EnhancedBattleTest
             }
             else
             {
-                Utility.DisplayMessage("Error: The Character does not have corresponding hero class. Use 50 as default combat ai level.");
+                Utility.DisplayLocalizedText("str_error_no_hero_class");
             }
             float amount = MBMath.ClampFloat(num1, 0.0f, 1f);
             float num3 = MBMath.ClampFloat(num2, 0.0f, 1f);

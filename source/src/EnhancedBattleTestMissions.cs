@@ -13,10 +13,10 @@ namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestMissions
     {
-        public static Mission OpenTestBattleConfigMission()
+        public static Mission OpenFreeBattleConfigMission()
         {
             return MissionState.OpenNew(
-                "EnhancedTestBattleConfig",
+                "EnhancedFreeBattleConfig",
                 new MissionInitializerRecord("scn_character_creation_scene")
                 {
                     DoNotUseLoadingScreen = true,
@@ -26,16 +26,16 @@ namespace EnhancedBattleTest
                 true, true, true);
         }
 
-        public static Mission OpenTestBattleMission(EnhancedTestBattleConfig config)
+        public static Mission OpenFreeBattleMission(EnhancedFreeBattleConfig config)
         {
             return MissionState.OpenNew(
-                "EnhancedTestBattle",
+                "EnhancedFreeBattle",
                 new MissionInitializerRecord(config.SceneName),
                 missionController =>
                 {
                     var behaviors = new List<MissionBehaviour>
                     {
-                        new EnhancedTestBattleMissionController(config),
+                        new EnhancedFreeBattleMissionController(config),
                         new EnhancedBattleEndLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
@@ -182,7 +182,7 @@ namespace EnhancedBattleTest
                new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), (string) null, (string) null, true),
                new HighlightsController(),
                new BattleHighlightsController(),
-               new FieldBattleController(),
+               //new FieldBattleController(),
            }), true, true, true);
         }
 

@@ -1,4 +1,11 @@
 # Changelog
+## [e1.0.0] - 2020-04-1
+### Fixed
+- Keep compatible with Bannerlord e1.0.0.
+
+### Added
+- Add localization for Chinese.
+
 ## [0.7.1] - 2020-03-30
 ### Fixed
 - Fix the bug that disable death option in mission menu does not work.

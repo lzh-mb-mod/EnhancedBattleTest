@@ -28,7 +28,7 @@ namespace EnhancedBattleTest
         public void TogglePause()
         {
             MissionState.Current.Paused = !MissionState.Current.Paused;
-            Utility.DisplayMessage("Mission " + (MissionState.Current.Paused ? "paused." : "continued."));
+            Utility.DisplayLocalizedText(MissionState.Current.Paused ? "str_mission_paused" : "str_mission_continued.");
         }
 
 
@@ -77,21 +77,21 @@ namespace EnhancedBattleTest
         {
             SetFastForwardModeImpl(false);
             SetSlowMotionModeImpl(true);
-            Utility.DisplayMessage("Slow Motion Mode Enabled");
+            Utility.DisplayLocalizedText("str_slow_motion_enabled");
         }
 
         public void SetFastForwardMode()
         {
             SetSlowMotionModeImpl(false);
             SetFastForwardModeImpl(true);
-            Utility.DisplayMessage("Fast Forward Mode Enabled");
+            Utility.DisplayLocalizedText("str_fast_forward_mode_enabled");
         }
 
         public void SetNormalMode()
         {
             SetSlowMotionModeImpl(false);
             SetFastForwardModeImpl(false);
-            Utility.DisplayMessage("Normal Mode Enabled");
+            Utility.DisplayLocalizedText("str_normal_mode_enabled");
         }
 
         private void SetSlowMotionModeImpl(bool enabled)

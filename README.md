@@ -1,9 +1,9 @@
 # Enhanced Battle Test
 
-A mod for Mount&Blade Bannerlord that can test battle locally.
+A mod for Mount&Blade Bannerlord that can let you enter multiplayer scene and fight in it in singleplayer mode.
 
 ## Features
-- Test Battle Mode: You can choose where to spawn troops and they will be all spawned instantly.
+- Free Battle Mode: You can choose where to spawn troops and they will be all spawned instantly.
 
 - Custom Battle Mode: Use built-in mechanism to spawn troops. Troops that exceeds the battle size limit will be spawned later.
 
@@ -23,9 +23,9 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 
 - Configuration saving. The battle configuration is saved in "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\".
 
-  The configuration for Test Battle mode is saved in "EnhancedTestBattleConfig.xml" and that for Custom Battle mode is saved in "EnhancedCustomBattleConfig.xml".
+  The configuration for Free Battle mode is saved in "EnhancedFreeBattleConfig.xml" and that for Custom Battle mode is saved in "EnhancedCustomBattleConfig.xml".
 
-  You can modify it to add more maps, but if you edit it incorrectly, the configuration will be reset to default, or the game may crash. I don't guarantee anything.
+  You can modify them to add more maps, but if you edit it incorrectly, the configuration will be reset to default, or the game may crash. I don't guarantee anything.
 
 - Switching player's team. You can switch between player agent and the enemy commander to control their troops respectively.
 
@@ -42,35 +42,43 @@ A mod for Mount&Blade Bannerlord that can test battle locally.
 - Customizing player characters, details below.
 
 ## How to install
-1. Copy `bin` and `Modules` into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`).
+1. Copy `Modules` folder into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`). It should be merged with `Modules` of the game.
 
 ## How to use
-- Start the mod by clicking `EnhancedBattleTest.bat` in `bin\Win64_Shipping_Client` that you have copied into Bannerlord installation folder. If it crashed, try to run `EnhancedBattleTest-Alternative.bat` instead.
+- You have two ways to start the mod:
 
-- You can select troops for each side of teams.
+  - Start the launcher and choose Single player mode. In `Mods` panel select `EnhancedBattleTest` mod and click `PLAY`. Or:
 
-- Press `F` key or `F10` key to control one of your troops after you being killed.
+  - Double click `EnhancedBattleTest.bat` in folder `Modules\EnhancedBattleTest\bin\Win64_Shipping_Client`.
 
-- Press `F9` to switch your team.
+    If crash happens when loading, run `EnhancedBattleTest-Alternative.bat` instead.
+- After starting:
+  - Select a mode to play in main menu.
 
-- Press `F10` to switch between free camera and main agent camera.
+  - You can select troops for each side of teams.
 
-- Press `F11` to disable death.
+  - Press `F` key or `F10` key to control one of your troops after you being killed.
 
-- Press `F12` to reset mission (available in `Test Battle mode` only).
+  - Press `F9` to switch your team.
 
-- Press `O(letter)` to adjust more settings including team AI tactic options, etc.
+  - Press `F10` to switch between free camera and main agent camera.
 
-- Press `P` key to pause game.
+  - Press `F11` to disable death.
 
-- Press and hold `TAB` key for a while to exit the battle scene.
+  - Press `F12` to reset mission (available in `Test Battle mode` only).
 
-- Press `I` key to get player or camera position.
+  - Press `O(letter)` to adjust more settings including team AI tactic options, etc.
 
-- Press `L` key to teleport player when in free camera mode.
+  - Press `P` key to pause game.
+
+  - Press and hold `TAB` key for a while to exit the battle scene.
+
+  - Press `I` key to get player or camera position.
+
+  - Press `L` key to teleport player when in free camera mode.
 
 ## How to add more maps
-- You can go to `Modules\Native\SceneObj` to find available maps.
+- You can go to `Modules\Native\SceneObj`, `Modules\Sandbox\SceneObj` and `Modules\SandboxCore\SceneObj` to find available maps.
 
 - To add more maps, you need to edit the configuartion file(in folder `(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\`).
 

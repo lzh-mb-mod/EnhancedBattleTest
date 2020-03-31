@@ -19,12 +19,6 @@ namespace EnhancedBattleTest
         private GauntletMovie _movie;
         private BattleConfigBase _config;
 
-        public delegate void OnMissionMenuViewDelegate();
-
-        public event OnMissionMenuViewDelegate OnMissionMenuViewActivated;
-        public event OnMissionMenuViewDelegate OnMissionMenuViewDeactivated;
-
-
         public bool IsActivated { get; set; }
 
         public MissionMenuView(BattleConfigBase config)
@@ -60,7 +54,7 @@ namespace EnhancedBattleTest
                     return false;
                 if (_config.battleType == BattleType.SiegeBattle)
                 {
-                    Utility.DisplayMessage("Tactic option cannot be changed in siege battle mode");
+                    Utility.DisplayLocalizedText("str_tactic_inchangable_in_siege");
                     return false;
                 }
                 var tacticArray = side == BattleSideEnum.Attacker
@@ -70,7 +64,7 @@ namespace EnhancedBattleTest
                     info.tacticOption == tacticOption ? (isEnabled ? 1 : 0) : info.isEnabled ? 1 : 0);
                 if (count == 0)
                 {
-                    Utility.DisplayMessage("There should be at least one tactic");
+                    Utility.DisplayLocalizedText("str_at_least_one_tactic");
                     return false;
                 }
                 tacticArray.First(info => info.tacticOption == tacticOption).isEnabled = isEnabled;
@@ -90,7 +84,6 @@ namespace EnhancedBattleTest
             this.MissionScreen.AddLayer(this._gauntletLayer);
             ScreenManager.TrySetFocus(this._gauntletLayer);
             PauseGame();
-            this.OnMissionMenuViewActivated?.Invoke();
         }
 
         public void DeactivateMenu()
@@ -102,7 +95,6 @@ namespace EnhancedBattleTest
             this._movie = null;
             this._gauntletLayer = null;
             UnpauseGame();
-            this.OnMissionMenuViewDeactivated?.Invoke();
         }
 
         public override void OnMissionScreenTick(float dt)

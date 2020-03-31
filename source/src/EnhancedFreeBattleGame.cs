@@ -6,14 +6,14 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleGame : TaleWorlds.Core.GameType
+    public class EnhancedFreeBattleGame : TaleWorlds.Core.GameType
     {
-        private BattleConfigBase _config;
-        public static EnhancedTestBattleGame Current => Game.Current.GameType as EnhancedTestBattleGame;
+        private Func<BattleConfigBase> _getConfig;
+        public static EnhancedFreeBattleGame Current => Game.Current.GameType as EnhancedFreeBattleGame;
 
-        public EnhancedTestBattleGame(BattleConfigBase config)
+        public EnhancedFreeBattleGame(Func<BattleConfigBase> getConfig)
         {
-            _config = config;
+            _getConfig = getConfig;
         }
 
         protected override void OnInitialize()
@@ -54,6 +54,9 @@ namespace EnhancedBattleTest
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
+            this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/EnhancedBattleTest/ModuleData/module_strings.xml");
+
+
         }
 
         private void AddGameModels(IGameStarter basicGameStarter)
@@ -63,7 +66,7 @@ namespace EnhancedBattleTest
             basicGameStarter.AddModel(new DefaultRidingModel());
             basicGameStarter.AddModel(new EnhancedMPStrikeMagnitudeModel());
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new EnhancedMPAgentStatCalculateModel(_config));
+            basicGameStarter.AddModel(new EnhancedMPAgentStatCalculateModel(_getConfig()));
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new MultiplayerBattleMoraleModel());
         }

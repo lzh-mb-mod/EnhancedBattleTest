@@ -35,8 +35,8 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
                 ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
-                ViewCreator.CreateMissionOrderUIHandler(mission),
-                ViewCreator.CreateOrderTroopPlacerView(mission),
+                new SwitchTeamMissionOrderUIHandler(),
+                new SwitchTeamOrderTroopPlacer(),
                 // ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 new MissionItemContourControllerView(),

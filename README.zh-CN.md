@@ -1,9 +1,9 @@
 # Enhanced Battle Test
 
-这是一个骑马与砍杀2：霸主的mod，可以做离线战斗测试。
+这是一个骑马与砍杀2：霸主的mod，可以在单人模式中进入多人模式的场景并在其中进行战斗。
 
 ## 功能
-- Test Battle Mode：该模式中，你可以选择出生地点，所有部队都会一次性生成。
+- Free Battle Mode：该模式中，你可以选择出生地点，所有部队都会一次性生成。
 
 - Custom Battle Mode：该模式采用砍二内建的生成部队方式：部队在场景中固定的地点生成。超出人数限制的部队会作为援军稍后加入战场。
 
@@ -21,7 +21,7 @@
 
 - 保存配置：保存战斗配置的文件夹为"(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\"。
 
-  Test Battle Mode的配置保存在"EnhancedTestBattleConfig.xml"文件中，Custom Battle Mode的配置保存在"EnhancedCustomBattleConfig.xml"文件中。
+  Free Battle Mode的配置保存在"EnhancedFreeBattleConfig.xml"文件中，Custom Battle Mode的配置保存在"EnhancedCustomBattleConfig.xml"文件中。
 
   比如你可以修改配置来添加更多地图，但如果你编辑有误，配置可能会被初始化为默认内容，或者游戏可能会崩溃，我对可能发生的情况不做任何保证。
 
@@ -40,129 +40,22 @@
 - 自定义玩家角色，详细内容如下。
 
 ## 如何安装
-1. 复制`bin`和`Modules`两个文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)。
+1. 复制`Modules`文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)，和砍二本体的Modules文件夹合并。
 
 ## 如何使用
-- 当前联机测试中，官方的加载器禁用了单机模式，所以需要通过点击砍二安装目录下，`bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`来启动。若它崩溃，可尝试运行`EnhancedBattleTest-Alternative.bat`.
+- 有两种方式可以启动mod：
+  
+  - 启动游戏启动器，并选择单人模式(Singleplayer)。在Mods选项卡中勾选`EnhancedBattleTest`并点击`Play`。或者：
 
-- 配置界面介绍：
+  - 双击启动`Modules\EnhancedBattleTest\bin\Win64_Shipping_Client`中的`EnhancedBattleTest.bat`。
+
+    若启动mod时崩溃了，请尝试运行`EnhancedBattleTest-Alternative.bat`。
+
+- 启动后：
+
+  - 在主菜单中选择一个模式进入。
+
   - 最上方的左右箭头用于切换地图，中间的名称即为地图名称。
-
-  - Soldiers per Row: 每行士兵数量。
-
-  - Formation Position(x, y)：玩家队伍出生位置。
-
-  - Formation Direction(x, y)：玩家队伍朝向。
-
-  - Distance：敌军部队和己方部队的距离。
-
-  - Sky Brightness：天空亮度。-1表示不做修改，采用场景的默认设置。
-
-  - Rain Density：下雨程度。-1表示不做修改，采用场景的默认设置。
-
-  - Player Character：选择玩家控制的角色。
-
-    - 点击右侧按钮后，进入角色选择页面。角色选择页面从左至右依次为：
-
-      - 联机阵营。
-
-      - 士兵类型。Infantry为步兵，Ranged为射手，Cavalry为骑兵，HorseArcher为骑射手。
-
-      - 兵种名称。
-
-      - 兵种的第一个可选装备。
-
-      - 兵种的第二个可选装备。
-
-    - 选择完成后，点击界面下方的done确认。
-
-  - Spawn Player：开局是否生成玩家角色。若不生成玩家角色，玩家仍可按F键控制下属士兵。
-
-  - Is Player Attacker：玩家是否为攻击方。若取消勾选则玩家为防守方。
-
-  - Player Troop 1/2/3：玩家的一至三号部队的角色。
-
-  - Player Troop 1/2/3 Count：玩家的一至三号部队的人数。
-
-  - Enemy Troop 1/2/3：敌军的一至三号部队的角色。
-
-  - Enemy Troop 1/2/3 Count：敌军的一至三号部队的人数。
-
-  - Enemy Commander：敌军将领的角色。
-
-  - Spawn Enemy Commaner：是否生成敌军将领。
-
-  - More Options：更多选项
-
-    - Enable AI For：选择是否分别为双方队伍启用指挥AI（AI代理指挥）。
-
-      - None：双方队伍均无指挥AI。
-
-      - EnemyOnly：仅敌军有指挥AI。
-
-      - PlayerOnly：仅玩家队伍有指挥AI。
-
-      - Both：双方队伍均有指挥AI。
-    
-    - Attacker Tactic Options：攻击方启用的战术。右侧列表中高亮选中的战术会被AI不断考虑并选择其中一个执行。
-
-      - Charge：冲锋。
-
-      - FullScaleAttack：全军攻击。
-
-      - DefensiveEngagement：防御性接战。
-
-      - DefensiveLine：防御性线阵。
-
-      - DefensiveRing：防御性圆阵。
-
-      - HoldTheHill：防守高坡。
-
-      - ArchersOnTheHill：远程待在坡上，步兵进攻。
-
-      - RangedHarassmentOffensive：远程骚扰攻势
-
-      - FrontalCavalryCharge：骑兵先行冲锋。
-
-      - CoordinatedRetreat：有序撤退。
-
-    - Switch Team：（仅战斗中）切换玩家队伍。
-
-    - Switch Free Camera：（仅战斗中）切换自由视角。
-
-    - Disable Death：是否禁用死亡。若是则所有角色不掉血。
-
-    - Reset Mission：（仅在Test Battle模式的战斗中）重置关卡。
-
-    - Toggle Pause：（仅战斗中）切换暂停。
-
-    - Reset Speed：（仅战斗中）重置战斗速度。
-
-    - Slow Motion Factor：（仅战斗中）调整战斗速度倍率。
-
-  - Use Realistic Blocking：是否使用更真实的格挡。
-
-  - No Banner on Friendly Troops：关闭队友标识。
-
-  - No Kill Notification：关闭右上角击杀报告。
-
-  - Make Grunt Voice：玩家下令后部下是否出声回应。
-
-  - Has Boundary: 地图是否设置边界。
-
-  - Change Combat AI：是否改变战斗AI。若是则右侧的数值对所有单位生效，若否则所有单位的战斗AI为各自默认的设置。
-
-  - Comabt AI(0-100)：要改变的战斗AI的数值，只有左侧的Change Combat AI选中才生效。有效范围在0-100。
-
-  - Save And Start：保存配置并开始战斗。
-
-  - Save：保存配置。
-
-  - Load Config：从文件中加载配置。
-
-  - Exit：退出，返回到标题画面。
-
-- 局内操作：
 
   - 按`F`键或`F10`键来在玩家死后控制其小兵。
 
@@ -183,6 +76,21 @@
   - 按`I`键来获取玩家或相机的位置。
 
   - 按`L`键在自由视角下让玩家瞬移到镜头位置。
+
+## 如何增加更多地图
+- 你可以在 `Modules\Native\SceneObj`, `Modules\Sandbox\SceneObj`和 `Modules\SandboxCore\SceneObj`中找到更多地图。
+
+- 要添加更多地图，你需要编辑配置文件(在文件夹`(用户目录)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\`中)。
+
+- 配置文件中所有地图都在`sceneList` XML元素中。
+
+  其中元素`SceneInfo`代表一个地图和相关的配置。
+
+  所以类似地，你需要在`sceneList`中添加一个`SceneInfo`元素。
+
+  比如你可以复制`<SceneInfo>`和`</SceneInfo>`之间的内容，然后将`<name>`和`</name>`之间的内容替换为你想添加的地图的文件夹名称.
+
+  其它的配置，比如出生位置，可以在游戏内配置.
 
 ## 如何自定义角色
 - 若要自定义角色，你需要编写两个XML元素：`NPCCharacter`和`MPClassDivision`。

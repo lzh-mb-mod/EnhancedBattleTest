@@ -18,8 +18,9 @@ namespace EnhancedBattleTest
         private bool _isDiscrete;
         private Action<float> _updateAction;
 
-        public NumericVM(float initialValue, float min, float max, bool isDiscrete, Action<float> updateAction)
+        public NumericVM(string name, float initialValue, float min, float max, bool isDiscrete, Action<float> updateAction)
         {
+            Name = name;
             _initialValue = initialValue;
             _min = min;
             _max = max;
@@ -27,6 +28,7 @@ namespace EnhancedBattleTest
             _isDiscrete = isDiscrete;
             _updateAction = updateAction;
         }
+        public string Name { get; }
 
         [DataSourceProperty]
         public float Min
@@ -93,8 +95,7 @@ namespace EnhancedBattleTest
         public TacticOptionEnum tacticOption;
         private bool _isSelected;
 
-        [DataSourceProperty]
-        public string Name => tacticOption.ToString();
+        [DataSourceProperty] public string Name { get; set; }
 
         [DataSourceProperty]
         public bool IsSelected
@@ -133,11 +134,22 @@ namespace EnhancedBattleTest
         private Action _closeMenu;
         public Func<BattleSideEnum, TacticOptionEnum, bool, bool> updateSelectedTactic;
 
+        public string EnableAIForString { get; } = GameTexts.FindText("str_enable_ai_for").ToString();
+        public string AttackerTacticOptionString { get; } = GameTexts.FindText("str_attacker_tactic_option").ToString();
+        public string DefenderTacticOptionString { get; } = GameTexts.FindText("str_defender_tactic_option").ToString();
+
+        public string SwitchTeamString { get; } = GameTexts.FindText("str_switch_team").ToString();
+        public string SwitchFreeCameraString { get; } = GameTexts.FindText("str_switch_free_camera").ToString();
+        public string DisableDeathString { get; } = GameTexts.FindText("str_disable_death").ToString();
+        public string ResetMissionString { get; } = GameTexts.FindText("str_reset_mission").ToString();
+        public string TogglePauseString { get; } = GameTexts.FindText("str_toggle_pause").ToString();
+        public string ResetSpeedString { get; } = GameTexts.FindText("str_reset_speed").ToString();
+
         public void PreviousAIEnableType()
         {
             _config.ToPreviousAIEnableType();
             Utility.ApplyTeamAIEnabled(_config);
-            CurrentAIEnableType = _config.aiEnableType.ToString();
+            UpdateCurrentAIEnableType();
         }
 
         [DataSourceProperty]
@@ -157,7 +169,7 @@ namespace EnhancedBattleTest
         {
             _config.ToNextAIEnableType();
             Utility.ApplyTeamAIEnabled(_config);
-            CurrentAIEnableType = _config.aiEnableType.ToString();
+            UpdateCurrentAIEnableType();
         }
 
         [DataSourceProperty]
@@ -249,7 +261,7 @@ namespace EnhancedBattleTest
         public MissionMenuVM(BattleConfigBase config, Func<BattleSideEnum, TacticOptionEnum, bool, bool> updateSelectedTactic, Action closeMenu)
         {
             _config = config;
-            this.CurrentAIEnableType = config.aiEnableType.ToString();
+            UpdateCurrentAIEnableType();
             this.updateSelectedTactic = updateSelectedTactic;
             this._closeMenu = closeMenu;
             this._mission = Mission.Current;
@@ -257,7 +269,7 @@ namespace EnhancedBattleTest
             this._switchFreeCameraLogic = _mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
             this._missionSpeedLogic = _mission.GetMissionBehaviour<MissionSpeedLogic>();
             this._resetMissionLogic = _mission.GetMissionBehaviour<ResetMissionLogic>();
-            this.SpeedFactor = new NumericVM(_mission.Scene.SlowMotionMode ? _mission.Scene.SlowMotionFactor : 1.0f, 0.01f, 2.0f, false, factor =>
+            this.SpeedFactor = new NumericVM(GameTexts.FindText("str_slow_motion_factor").ToString(), _mission.Scene.SlowMotionMode ? _mission.Scene.SlowMotionFactor : 1.0f, 0.01f, 2.0f, false, factor =>
                 {
                     _missionSpeedLogic.SetSlowMotionFactor(factor);
                 });
@@ -266,12 +278,17 @@ namespace EnhancedBattleTest
             FillDefenderAvailableTactics();
         }
 
+        private void UpdateCurrentAIEnableType()
+        {
+            this.CurrentAIEnableType = GameTexts.FindText("str_ai_enable_type", _config.aiEnableType.ToString()).ToString();
+        }
+
         private void FillAttackerAvailableTactics()
         {
             var tactics = new MBBindingList<TacticOptionVM>();
             foreach (var tactic in _config.attackerTacticOptions)
             {
-                tactics.Add(new TacticOptionVM { parent = this, side = BattleSideEnum.Attacker, IsSelected = tactic.isEnabled, tacticOption = tactic.tacticOption });
+                tactics.Add(new TacticOptionVM { parent = this, side = BattleSideEnum.Attacker, IsSelected = tactic.isEnabled, tacticOption = tactic.tacticOption, Name = GameTexts.FindText("str_tactic_option", tactic.tacticOption.ToString()).ToString() });
             }
 
             this.AttackerAvailableTactics = tactics;
@@ -282,7 +299,7 @@ namespace EnhancedBattleTest
             var tactics = new MBBindingList<TacticOptionVM>();
             foreach (var tactic in _config.defenderTacticOptions)
             {
-                tactics.Add(new TacticOptionVM { parent = this, side = BattleSideEnum.Defender, IsSelected = tactic.isEnabled, tacticOption = tactic.tacticOption });
+                tactics.Add(new TacticOptionVM { parent = this, side = BattleSideEnum.Defender, IsSelected = tactic.isEnabled, tacticOption = tactic.tacticOption, Name = GameTexts.FindText("str_tactic_option", tactic.tacticOption.ToString()).ToString() });
             }
 
             this.DefenderAvailableTactics = tactics;

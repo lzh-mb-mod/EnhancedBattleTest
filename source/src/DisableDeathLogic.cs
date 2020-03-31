@@ -36,7 +36,7 @@ namespace EnhancedBattleTest
 
         private void PrintDeathStatus()
         {
-            Utility.DisplayMessage(Mission.DisableDying ? "Death Disabled." : "Death Enabled.");
+            Utility.DisplayLocalizedText(Mission.DisableDying ? "str_death_disabled" : "str_death_enabled");
         }
     }
 }

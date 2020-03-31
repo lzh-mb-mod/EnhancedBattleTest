@@ -95,7 +95,6 @@ namespace EnhancedBattleTest
         public CharacterSelectionVM(CharacterSelectionParams p)
             : base()
         {
-            ModuleLogger.Log("begin character selection vm construction");
             this._params = p;
             var selectedCharacter = p.selectedHeroClass;
 
@@ -112,15 +111,12 @@ namespace EnhancedBattleTest
             FillSecondPerks();
             this.SelectedFirstPerkIndex = FirstPerks.FindIndex(item => item.perkIndex == this._params.selectedFirstPerk);
             this.SelectedSecondPerkIndex = SecondPerks.FindIndex(item => item.perkIndex == this._params.selectedSecondPerk);
-
-            ModuleLogger.Log("end character selection vm construction");
         }
 
         public void SelectedCultureChanged(ListPanel listPanel)
         {
             this._inChange = true;
             var index = listPanel.IntValue;
-            ModuleLogger.Log("SelectedCultureChanged {0}", index);
 
             SelectedCultureIndex = index;
 
@@ -136,7 +132,6 @@ namespace EnhancedBattleTest
         {
             var index = listPanel.IntValue;
             if (index < 0 || this._inChange) return;
-            ModuleLogger.Log("SelectedGroupChanged {0} {1}", index, Groups.Count);
 
             this._inChange = true;
             SelectedGroupIndex = index;
@@ -152,7 +147,6 @@ namespace EnhancedBattleTest
         {
             var index = listPanel.IntValue;
             if (index < 0 || this._inChange) return;
-            ModuleLogger.Log("SelectedCharacterChanged {0}", index);
             this._inChange = true;
 
             SelectedCharacterIndex = index;
@@ -165,7 +159,6 @@ namespace EnhancedBattleTest
         {
             var index = listPanel.IntValue;
             if (index < 0 || this._inChange) return;
-            ModuleLogger.Log("SelectedFirstPerkChanged {0}", index);
             this._inChange = true;
             SelectedFirstPerkIndex = index;
             this._inChange = false;
@@ -175,7 +168,6 @@ namespace EnhancedBattleTest
         {
             var index = listPanel.IntValue;
             if (index < 0 || this._inChange) return;
-            ModuleLogger.Log("SelectedSecondPerkChanged {0}", index);
             this._inChange = true;
             SelectedSecondPerkIndex = index;
             this._inChange = false;
@@ -211,7 +203,7 @@ namespace EnhancedBattleTest
                 Groups = new MBBindingList<NameVM>();
             foreach (var groupId in this._params.allMpHeroClassMap[culture].Keys)
             {
-                Groups.Add(new NameVM { StringId = groupId, Name = groupId });
+                Groups.Add(new NameVM { StringId = groupId, Name = GameTexts.FindText("str_character_group", groupId).ToString() });
             }
 
             SelectedGroupIndex = 0;

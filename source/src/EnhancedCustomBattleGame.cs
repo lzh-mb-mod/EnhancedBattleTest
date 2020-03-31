@@ -8,13 +8,13 @@ namespace EnhancedBattleTest
 {
     public class EnhancedCustomBattleGame : TaleWorlds.Core.GameType
     {
-        private BattleConfigBase _config;
+        private Func<BattleConfigBase> _getConfig;
 
         public static EnhancedCustomBattleGame Current => Game.Current.GameType as EnhancedCustomBattleGame;
 
-        public EnhancedCustomBattleGame(BattleConfigBase config)
+        public EnhancedCustomBattleGame(Func<BattleConfigBase> getConfig)
         {
-            _config = config;
+            _getConfig = getConfig;
         }
 
         protected override void OnInitialize()
@@ -22,6 +22,7 @@ namespace EnhancedBattleTest
             base.OnInitialize();
             Game currentGame = this.CurrentGame;
             currentGame.FirstInitialize();
+            this.AddGameTexts();
             IGameStarter gameStarter = new BasicGameStarter();
             this.AddGameModels(gameStarter);
             this.GameManager.OnGameStart(this.CurrentGame, gameStarter);
@@ -40,8 +41,6 @@ namespace EnhancedBattleTest
             this.ObjectManager.ClearEmptyObjects();
             MultiplayerClassDivisions.Initialize();
             currentGame.SetDefaultEquipments((IReadOnlyDictionary<string, Equipment>)new Dictionary<string, Equipment>());
-            ModuleLogger.Writer.WriteLine(currentGame.BasicModels);
-            ModuleLogger.Writer.Flush();
             if (currentGame.BasicModels.SkillList == null)
             {
                 throw new Exception("Error: No Skill List");
@@ -58,8 +57,6 @@ namespace EnhancedBattleTest
             GameTypeLoadingStates gameTypeLoadingState,
             out GameTypeLoadingStates nextState)
         {
-            // ModuleLogger.Writer.WriteLine("EnhancedTestBattleGame.DoLoadingForGameType {0}", gameTypeLoadingState);
-            // ModuleLogger.Writer.Flush();
             nextState = GameTypeLoadingStates.None;
             switch (gameTypeLoadingState)
             {
@@ -83,7 +80,7 @@ namespace EnhancedBattleTest
         private void AddGameModels(IGameStarter basicGameStarter)
         {
             basicGameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
-            basicGameStarter.AddModel(new EnhancedSPAgentStatCalculateModel(_config));
+            basicGameStarter.AddModel(new EnhancedSPAgentStatCalculateModel(_getConfig()));
             basicGameStarter.AddModel(new CustomBattleApplyWeatherEffectsModel());
             basicGameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             basicGameStarter.AddModel(new DefaultRidingModel());
@@ -106,6 +103,7 @@ namespace EnhancedBattleTest
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
             this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
+            this.CurrentGame.GameTextManager.LoadGameTexts(BasePath.Name + "Modules/EnhancedBattleTest/ModuleData/module_strings.xml");
         }
     }
 

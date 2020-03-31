@@ -20,7 +20,6 @@ namespace EnhancedBattleTest
                 string str = new WorldPosition(this.Mission.Scene, position).GetNavMesh().ToString() ?? "";
                 Utility.DisplayMessage(
                     $"Position: {(object)position} | Navmesh: {(object)str} | Time: {(object)this.Mission.Time}");
-                ModuleLogger.Log("INFO Position: {0}, Navigation Mesh: {1}", (object)position, (object)str);
             }
         }
     }

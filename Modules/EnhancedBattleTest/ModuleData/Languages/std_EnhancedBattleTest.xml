@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <string id="freebattleoption" text="EnhancedBattleTest Free Battle" />
+    <string id="custombattleoption" text="EnhancedBattleTest Custom Battle" />
+    <string id="siegebattleoption" text="EnhancedBattleTest Siege Battle" />
+
+    <string id="freebattle" text="Free Battle" />
+    <string id="custombattle" text="Custom Battle" />
+    <string id="siegebattle" text="Siege Battle" />
+
+    <string id="controltrooptip" text="Press F or F10 to control your troop after dead." />
+    <string id="switchteamtip" text="Press F9 to switch team." />
+    <string id="switchfreecameratip" text="Press F10 to switch free camera." />
+    <string id="disabledeathtip" text="Press F11 to disable death." />
+    <string id="resetmissiontip" text="Press F12 to reset mission." />
+    <string id="moreoptiontip" text="Press O(letter) to adjust more settings." />
+    <string id="pausetip" text="Press P to pause game." />
+    <string id="leavemissiontip" text="Hold TAB to leave the mission." />
+    <string id="readpositiontip" text="Press `I` key to get player or camera position." />
+    <string id="teleporttip" text="Press `L` key to teleport player when in free camera mode." />
+
+    <string id="createdefaultconfig" text="Create default config" />
+    <string id="foundoldconfig" text="Found old config file:" />
+    <string id="deleteoldconfig" text="Delete the old config file." />
+    <string id="renameoldconfig" text="Rename old config file to new name..." />
+    <string id="contentillegal" text="Content is illegal." />
+    <string id="contentoutofrange" text="Content is out of range." />
+    <string id="playercharacter" text="Player Character" />
+    <string id="spawnplayer" text="Spawn Player" />
+    <string id="isplayerattacker" text="Is Player Attacker" />
+    <string id="playertroop1" text="Player Troop 1" />
+    <string id="playertroop2" text="Player Troop 2" />
+    <string id="playertroop3" text="Player Troop 3" />
+    <string id="playertroop1count" text="Player Troop 1 Count" />
+    <string id="playertroop2count" text="Player Troop 2 Count" />
+    <string id="playertroop3count" text="Player Troop 3 Count" />
+    <string id="enemytroop1" text="enemy Troop 1" />
+    <string id="enemytroop2" text="enemy Troop 2" />
+    <string id="enemytroop3" text="enemy Troop 3" />
+    <string id="enemytroop1count" text="enemy Troop 1 Count" />
+    <string id="enemytroop2count" text="enemy Troop 2 Count" />
+    <string id="enemytroop3count" text="enemy Troop 3 Count" />
+    <string id="enemycommander" text="Enemy Commander" />
+    <string id="spawnenemycommander" text="Spawn Enemy Commander" />
+    <string id="controltroop" text="Taking control of an ally troop." />
+    <string id="notrooptocontrol" text="No ally troop to control." />
+    <string id="deathdisabled" text="Death Disabled." />
+    <string id="deathenabled" text="Death Enabled." />
+    <string id="configincompatible" text="Config version not compatible.\nReset config." />
+    <string id="savedconfig" text="Saving config succeeded." />
+    <string id="saveconfigfailed" text="Saving config failed." />
+    <string id="exceptioncaught" text="Exception caught:" />
+    <string id="loadedconfig" text="Loading config succeeded." />
+    <string id="loadconfigfailed" text="Loading config failed." />
+    <string id="soldiersperrow" text="Soldiers per Row" />
+    <string id="formationposition" text="Formation Position(x,y)" />
+    <string id="formationdirection" text="Formation Direction(x,y)" />
+    <string id="distance" text="Distance" />
+    <string id="skybrightness" text="Sky Brightness" />
+    <string id="raindensity" text="Rain Density" />
+    <string id="moreoptions" text="More Options" />
+    <string id="userealisticblocking" text="Use Realistic Blocking" />
+    <string id="nofriendlybannder" text="No Banner on Friendly Troops" />
+    <string id="nokillnotification" text="No Kill Notification" />
+    <string id="makegruntvoice" text="Make Grunt Voice" />
+    <string id="hasboundary" text="Has Boundary" />
+
+    <string id="changecombatai" text="Change Combat AI" />
+    <string id="combatai" text="Combat AI(0-100)" />
+
+    <string id="saveandstart" text="Save And Start" />
+    <string id="saveconfig" text="Save" />
+    <string id="loadconfig" text="Load Config" />
+    <string id="exit" text="Exit" />
+
+    <string id="charactergroupinfantry" text="Infantry" />
+    <string id="charactergroupRanged" text="Ranged" />
+    <string id="charactergroupcavalry" text="Cavalry" />
+    <string id="charactergrouphorsearcher" text="HorseArcher" />
+    
+    <string id="errornoheroclass" text="Error: The Character does not have corresponding hero class. Use 50 as default combat ai level." />
+    <string id="tacticinchangableinsiege" text="Tactic option cannot be changed in siege battle mode." />
+    <string id="atleastonetactic" text="There should be at least one tactic." />
+    
+    <string id="enableaifor" text="Enable Team AI For" />
+    <string id="aienabletypenone" text="None" />
+    <string id="aienabletypeenemyonly" text="Enemy Only" />
+    <string id="aienabletypeplayeronly" text="Player Only" />
+    <string id="aienabletypeboth" text="Both" />
+    <string id="aienabledfornone" text="Team AI is disabled." />
+    <string id="aienabledforenemyonly" text="Team AI is enabled for enemy only." />
+    <string id="aienabledforplayeronly" text="Team AI is enabled for player team only." />
+    <string id="aienabledforboth" text="Team AI is enabled for both sides." />
+    
+    <string id="attackertacticoption" text="Attacker Tactic Options" />
+    <string id="defendertacticoption" text="Defender Tactic Options" />
+
+    <string id="tacticcharge" text="Charge" />
+    <string id="tacticfullscaleattack" text="Full Scale Attack" />
+    <string id="tacticdefensiveengagement" text="Defensive Engagement" />
+    <string id="tacticdefensiveline" text="Defensive Line" />
+    <string id="tacticdefensivering" text="Defensive Ring" />
+    <string id="tacticholdthehill" text="Hold The Hill" />
+    <string id="tacticholdchokepoint" text="Hold Choke Point" />
+    <string id="tacticarchersonthehill" text="Archers On The Hill" />
+    <string id="tacticrangedharassmentoffensive" text="Ranged Harassment Offensive" />
+    <string id="tacticfrontalcavalrycharge" text="Frontal Cavalry Charge" />
+    <string id="tacticcoordinatedretreat" text="CoordinatedRetreat" />
+    <string id="tacticbreachwalls" text="BreachWalls" />
+    <string id="tacticdefendcastle" text="DefendCastle" />
+
+    <string id="defender" text="Defender" />
+    <string id="attacker" text="Attacker" />
+
+    <string id="addtactic" text="Add Tactic {CurrentTacticOption} for {CurrentSide}." />
+    <string id="removetactic" text="Remove Tactic {CurrentTacticOption} for {CurrentSide}." />
+
+    <string id="switchteam" text="Switch Team" />
+    <string id="switchfreecamera" text="Switch Free Camera" />
+    <string id="disabledeath" text="Disable Death" />
+    <string id="resetmission" text="Reset Mission" />
+    <string id="togglepause" text="Toggle Pause" />
+    <string id="resetspeed" text="Reset Speed" />
+    <string id="slowmotionfactor" text="Slow Motion Factor" />
+
+    <string id="missionpaused" text="Mission paused." />
+    <string id="missioncontinue" text="Mission continued." />
+
+    <string id="slowmotionenabled" text="Slow Motion Mode Enabled." />
+    <string id="fastfowardenabled" text="Fast Forward Mode Enabled." />
+    <string id="normalmodeenabled" text="Normal Mode Enabled." />
+
+    <string id="missionreset" text="Mission reset." />
+
+    <string id="playeragentdead" text="Player agent is dead." />
+    <string id="switchtoplayer" text="Switch to player agent." />
+    <string id="switchtofreecamera" text="Switch to free camera." />
+
+    <string id="enemywipedout" text="Enemy has been wiped out." />
+    <string id="switchtoenemyteam" text="Switched to the enemy team." />
+  </strings>
+</base>

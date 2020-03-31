@@ -1,12 +1,13 @@
 using System;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleConfigVM : BattleConfigVMBase<EnhancedTestBattleConfig>
+    public class EnhancedFreeBattleConfigVM : BattleConfigVMBase<EnhancedFreeBattleConfig>
     {
-        private Action<EnhancedTestBattleConfig> startAction;
-        private Action<EnhancedTestBattleConfig> backAction;
+        private Action<EnhancedFreeBattleConfig> startAction;
+        private Action<EnhancedFreeBattleConfig> backAction;
 
         private int _selectedSceneIndex;
         private string _distance;
@@ -19,6 +20,8 @@ namespace EnhancedBattleTest
 
         private string _selectedMapName;
 
+        public string BattleModeString { get; } = "EnhancedBattleTest e" + BattleConfigBase.ModVersion.ToString(2) +
+                                                  ": " + GameTexts.FindText("str_free_battle").ToString();
         [DataSourceProperty]
         public string SelectedMapName
         {
@@ -173,9 +176,9 @@ namespace EnhancedBattleTest
             }
         }
 
-        public EnhancedTestBattleConfigVM(CharacterSelectionView selectionView, MissionMenuView missionMenuView, Action<EnhancedTestBattleConfig> startAction,
-            Action<EnhancedTestBattleConfig> backAction)
-            : base(selectionView, missionMenuView, EnhancedTestBattleConfig.Get())
+        public EnhancedFreeBattleConfigVM(CharacterSelectionView selectionView, MissionMenuView missionMenuView, Action<EnhancedFreeBattleConfig> startAction,
+            Action<EnhancedFreeBattleConfig> backAction)
+            : base(selectionView, missionMenuView, EnhancedFreeBattleConfig.Get())
         {
             InitializeContent();
 
@@ -225,7 +228,6 @@ namespace EnhancedBattleTest
         {
             if (SaveConfig() != SaveParamResult.success)
                 return;
-            ModuleLogger.Writer.WriteLine("StartBattle");
             this.startAction(CurrentConfig);
         }
 
@@ -238,7 +240,6 @@ namespace EnhancedBattleTest
         {
             this.CurrentConfig.ReloadSavedConfig();
             this.InitializeContent();
-            Utility.DisplayMessage("Load config successfully");
         }
 
         public void GoBack()

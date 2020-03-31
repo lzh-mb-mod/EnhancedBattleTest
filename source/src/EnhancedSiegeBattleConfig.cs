@@ -37,7 +37,7 @@ namespace EnhancedBattleTest
             switch (ConfigVersion?.ToString())
             {
                 default:
-                    Utility.DisplayMessage("Config version not compatible.\nReset config.");
+                    Utility.DisplayLocalizedText("str_config_incompatible");
                     ResetToDefault();
                     Serialize();
                     break;
@@ -177,13 +177,14 @@ namespace EnhancedBattleTest
                 {
                     serializer.Serialize(writer, this);
                 }
-                Utility.DisplayMessage("Config saved.");
+                Utility.DisplayLocalizedText("str_saved_config");
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Saving config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_save_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 
@@ -201,14 +202,15 @@ namespace EnhancedBattleTest
                     var config = (EnhancedSiegeBattleConfig)deserializer.Deserialize(reader);
                     this.CopyFrom(config);
                 }
-                Utility.DisplayMessage("Config loaded.");
+                Utility.DisplayLocalizedText("str_loaded_config");
                 UpgradeToCurrentVersion();
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Loading config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_load_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 

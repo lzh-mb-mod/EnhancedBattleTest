@@ -43,12 +43,12 @@ namespace EnhancedBattleTest
           int numberToAllocate)
         {
             List<BasicCharacterObject> basicCharacterObjectList = this.AllocateTroops(numberToAllocate);
-            EnhancedTestBattleAgentOrigin[] battleAgentOriginArray = new EnhancedTestBattleAgentOrigin[basicCharacterObjectList.Count];
+            EnhancedFreeBattleAgentOrigin[] battleAgentOriginArray = new EnhancedFreeBattleAgentOrigin[basicCharacterObjectList.Count];
             this._numAllocated += basicCharacterObjectList.Count;
             for (int rank = 0; rank < battleAgentOriginArray.Length; ++rank)
             {
                 UniqueTroopDescriptor uniqueNo = new UniqueTroopDescriptor(Game.Current.NextUniqueTroopSeed);
-                battleAgentOriginArray[rank] = new EnhancedTestBattleAgentOrigin(this._customBattleCombatant,this, basicCharacterObjectList[rank], rank, uniqueNo);
+                battleAgentOriginArray[rank] = new EnhancedFreeBattleAgentOrigin(this._customBattleCombatant,this, basicCharacterObjectList[rank], rank, uniqueNo);
             }
             if (battleAgentOriginArray.Length < numberToAllocate)
                 this._anyTroopRemainsToBeSupplied = false;

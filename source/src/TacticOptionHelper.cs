@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TaleWorlds.Core;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -64,8 +66,12 @@ namespace EnhancedBattleTest
 
         public static void AddTacticComponent(Team team, TacticOptionEnum tacticOptionEnum, bool displayMessage = false)
         {
-            if (displayMessage) 
-                Utility.DisplayMessage("Add tactic " + tacticOptionEnum.ToString() + " for " + team.Side.ToString());
+            if (displayMessage)
+            {
+                MBTextManager.SetTextVariable("CurrentTacticOption", GameTexts.FindText("str_tactic_option", tacticOptionEnum.ToString()));
+                MBTextManager.SetTextVariable("CurrentSide", GameTexts.FindText("str_side", team.Side.ToString()));
+                Utility.DisplayLocalizedText("str_add_tactic");
+            }
             team.AddTacticOption((TacticComponent) Activator.CreateInstance(GetTacticComponentType(tacticOptionEnum),
                 new Object[] {team}));
 
@@ -75,8 +81,12 @@ namespace EnhancedBattleTest
 
         public static void RemoveTacticComponent(Team team, TacticOptionEnum tacticOptionEnum, bool displayMessage = false)
         {
-            if (displayMessage) 
-                Utility.DisplayMessage("Remove tactic " + tacticOptionEnum.ToString() + " for " + team.Side.ToString());
+            if (displayMessage)
+            {
+                MBTextManager.SetTextVariable("CurrentTacticOption", GameTexts.FindText("str_tactic_option", tacticOptionEnum.ToString()));
+                MBTextManager.SetTextVariable("CurrentSide", GameTexts.FindText("str_side", team.Side.ToString()));
+                Utility.DisplayLocalizedText("str_remove_tactic");
+            }
             team.RemoveTacticOption(GetTacticComponentType(tacticOptionEnum));
 
             team.ExpireAIQuerySystem();

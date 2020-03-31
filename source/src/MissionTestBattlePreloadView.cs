@@ -7,11 +7,11 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class MissionTestBattlePreloadView : MissionView
+    public class MissionFreeBattlePreloadView : MissionView
     {
-        private EnhancedTestBattleConfig _config;
+        private EnhancedFreeBattleConfig _config;
 
-        public MissionTestBattlePreloadView(EnhancedTestBattleConfig config)
+        public MissionFreeBattlePreloadView(EnhancedFreeBattleConfig config)
         {
             _config = config;
         }

@@ -13,7 +13,6 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    [OverrideView(typeof(OrderTroopPlacer))]
     public class SwitchTeamOrderTroopPlacer : MissionView
     {
         private SwitchTeamLogic _controller;

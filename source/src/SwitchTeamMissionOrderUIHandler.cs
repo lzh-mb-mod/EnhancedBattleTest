@@ -20,7 +20,6 @@ using TaleWorlds.MountAndBlade.ViewModelCollection.Order;
 
 namespace EnhancedBattleTest
 {
-    [OverrideView(typeof(MissionOrderUIHandler))]
     class SwitchTeamMissionOrderUIHandler : MissionView, ISiegeDeploymentView
     {
         private SwitchTeamLogic _controller;

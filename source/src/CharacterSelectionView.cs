@@ -125,7 +125,6 @@ namespace EnhancedBattleTest
             if (secondPerkListPanel != null)
                 secondPerkListPanel.IntValue = vm.SelectedSecondPerkIndex;
 
-            ModuleLogger.Log("vm.SelectedCharacterIndex {0}", vm.SelectedCharacterIndex);
 
 
             culturesListPanel.SelectEventHandlers.Add(w =>

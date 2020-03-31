@@ -6,34 +6,34 @@ using TaleWorlds.MountAndBlade.View.Missions;
 namespace EnhancedBattleTest
 {
     [ViewCreatorModule]
-    public class EnhancedTestBattleViews
+    public class EnhancedFreeBattleViews
     {
-        [ViewMethod("EnhancedTestBattleConfig")]
+        [ViewMethod("EnhancedFreeBattleConfig")]
         public static MissionView[] OpenInitialMission(Mission mission)
         {
             var selectionView = new CharacterSelectionView(true);
             return new MissionView[]
             {
                 selectionView,
-                new EnhancedTestBattleConfigView(selectionView),
-                new MissionMenuView(EnhancedTestBattleConfig.Get()),
+                new EnhancedFreeBattleConfigView(selectionView),
+                new MissionMenuView(EnhancedFreeBattleConfig.Get()),
             };
         }
 
-        [ViewMethod("EnhancedTestBattle")]
+        [ViewMethod("EnhancedFreeBattle")]
         public static MissionView[] OpenTestMission(Mission mission)
         {
-            var config = EnhancedTestBattleConfig.Get();
+            var config = EnhancedFreeBattleConfig.Get();
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
-                new MissionTestBattlePreloadView(config),
+                new MissionFreeBattlePreloadView(config),
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
                 ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
-                ViewCreator.CreateMissionOrderUIHandler(mission),
-                ViewCreator.CreateOrderTroopPlacerView(mission),
+                new SwitchTeamMissionOrderUIHandler(),
+                new SwitchTeamOrderTroopPlacer(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 ViewCreator.CreateOptionsUIHandler(),

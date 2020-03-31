@@ -25,7 +25,7 @@ namespace EnhancedBattleTest
                 : this.Mission.PlayerEnemyTeam.Leader;
             if (targetAgent == null)
             {
-                Utility.DisplayMessage("Enemy has been wiped out.");
+                Utility.DisplayLocalizedText("str_enemy_wiped_out");
                 return;
             }
             if (!Utility.IsPlayerDead()) // MainAgent may be null because of free camera mode.
@@ -33,7 +33,7 @@ namespace EnhancedBattleTest
                 this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
                 this.Mission.MainAgent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             }
-            Utility.DisplayMessage("Switched to the enemy team.");
+            Utility.DisplayLocalizedText("str_switch_to_enemy_team");
 
             PreSwitchTeam?.Invoke();
             this.Mission.PlayerTeam = this.Mission.PlayerEnemyTeam;

@@ -10,7 +10,10 @@ namespace EnhancedBattleTest
 {
     class Utility
     {
-
+        public static void DisplayLocalizedText(string id, string variation = null)
+        {
+            InformationManager.DisplayMessage(new InformationMessage(GameTexts.FindText(id, variation).ToString()));
+        }
         public static void DisplayMessage(string msg)
         {
             InformationManager.DisplayMessage(new InformationMessage(new TaleWorlds.Localization.TextObject(msg).ToString()));
@@ -38,47 +41,31 @@ namespace EnhancedBattleTest
                 formation.PlayerOwner = mission.MainAgent;
                 formation.IsAIControlled = isAIControlled;
             }
-            //DisplayMessage("Set player as commander");
-            //foreach (var formation in mission.PlayerTeam.Formations)
-            //{
-            //    DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
-            //                   formation.IsAIControlled.ToString());
-            //}
         }
 
         public static void CancelPlayerCommander()
         {
-            var mission = Mission.Current;
-            //DisplayMessage("Cancel player commander:");
-            //foreach (var formation in mission.PlayerTeam.Formations)
-            //{
-            //    DisplayMessage("Formation " + formation.FormationIndex.ToString() + ": IsAIControlled = " +
-            //                   formation.IsAIControlled.ToString());
-            //}
         }
 
         public static void ApplyTeamAIEnabled(BattleConfigBase config)
         {
             var mission = Mission.Current;
+            Utility.DisplayLocalizedText("str_ai_enabled_for", config.aiEnableType.ToString());
             switch (config.aiEnableType)
             {
                 case AIEnableType.None:
-                    Utility.DisplayMessage("Team AI is disabled.");
                     Utility.SetTeamAIEnabled(mission.PlayerTeam, false);
                     Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, false);
                     break;
                 case AIEnableType.EnemyOnly:
-                    Utility.DisplayMessage("Team AI is enabled for enemy only");
                     Utility.SetTeamAIEnabled(mission.PlayerTeam, false);
                     Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, true);
                     break;
                 case AIEnableType.PlayerOnly:
-                    Utility.DisplayMessage("Team AI is enabled for player team only");
                     Utility.SetTeamAIEnabled(mission.PlayerTeam, true);
                     Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, false);
                     break;
                 case AIEnableType.Both:
-                    Utility.DisplayMessage("Team AI is enabled for both sides");
                     Utility.SetTeamAIEnabled(mission.PlayerTeam, true);
                     Utility.SetTeamAIEnabled(mission.PlayerEnemyTeam, true);
                     break;
@@ -149,7 +136,7 @@ namespace EnhancedBattleTest
             var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isHero);
             if (equipment == null)
                 return sourceCharacter;
-            var character = NewCharacter(sourceCharacter);
+            var character = NewCharacter(sourceCharacter, isHero);
             character.InitializeEquipmentsOnLoad(new List<Equipment> { equipment });
             character.SetIsHero(isHero);
             return character;
@@ -165,12 +152,19 @@ namespace EnhancedBattleTest
             return MultiplayerClassDivisions.GetMPHeroClassForCharacter(originalCharacter);
         }
 
-        public static EnhancedBattleTestCharacter NewCharacter(BasicCharacterObject sourceCharacter)
+        public static EnhancedBattleTestCharacter NewCharacter(BasicCharacterObject sourceCharacter, bool isHero)
         {
             var character = new EnhancedBattleTestCharacter();
-
-            character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
             character.InitializeHeroBasicCharacterOnAfterLoad(sourceCharacter, sourceCharacter.Name);
+            character.UpdatePlayerCharacterBodyProperties(sourceCharacter.GetBodyPropertiesMax(), sourceCharacter.IsFemale);
+            if (isHero)
+                character.StaticBodyPropertiesMax =
+                    character.StaticBodyPropertiesMin = character.StaticBodyPropertiesMin;
+            else
+            {
+                character.StaticBodyPropertiesMax = character.StaticBodyPropertiesMax;
+                character.StaticBodyPropertiesMin = character.StaticBodyPropertiesMin;
+            }
             character.StringId = sourceCharacter.StringId + characterSufix;
             character.Name = sourceCharacter.Name;
             character.Age = sourceCharacter.Age;
@@ -244,7 +238,7 @@ namespace EnhancedBattleTest
             EnhancedTroopSupplier troopSupplier = null)
         {
             UniqueTroopDescriptor uniqueNo = new UniqueTroopDescriptor(Game.Current.NextUniqueTroopSeed);
-            return new EnhancedTestBattleAgentOrigin(customBattleCombatant, troopSupplier, characterObject, rank,
+            return new EnhancedFreeBattleAgentOrigin(customBattleCombatant, troopSupplier, characterObject, rank,
                 uniqueNo);
         }
 

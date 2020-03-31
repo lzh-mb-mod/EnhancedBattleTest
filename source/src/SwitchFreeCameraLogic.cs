@@ -16,7 +16,6 @@ namespace EnhancedBattleTest
 
         public void SwitchCamera()
         {
-            ModuleLogger.Log("SwitchCamera");
             if (Utility.IsPlayerDead())
             {
                 SwitchToAgent();
@@ -32,20 +31,20 @@ namespace EnhancedBattleTest
             Agent target = this.Mission.PlayerTeam.PlayerOrderController.Owner;
             if (Utility.IsAgentDead(target))
             {
-                Utility.DisplayMessage("Player agent is dead.");
+                Utility.DisplayLocalizedText("str_player_dead");
                 this.Mission.GetMissionBehaviour<ControlTroopAfterPlayerDeadLogic>()?.ControlTroopAfterDead();
                 return;
             }
 
             target.Controller = Agent.ControllerType.Player;
-            Utility.DisplayMessage("Switch to player agent.");
+            Utility.DisplayLocalizedText("str_switch_to_player");
         }
 
         private void SwitchToFreeCamera()
         {
             this.Mission.MainAgent.Controller = Agent.ControllerType.AI;
             this.Mission.MainAgent = null;
-            Utility.DisplayMessage("Switch to free camera.");
+            Utility.DisplayLocalizedText("str_switch_to_free_camera");
         }
     }
 }

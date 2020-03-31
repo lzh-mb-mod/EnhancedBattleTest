@@ -21,14 +21,14 @@ namespace EnhancedBattleTest
 
         public int sceneIndex;
 
-        protected static Version BinaryVersion => new Version(1, 9);
+        protected static Version BinaryVersion { get; } = new Version(1, 9);
 
         protected void UpgradeToCurrentVersion()
         {
             switch (ConfigVersion?.ToString())
             {
                 default:
-                    Utility.DisplayMessage("Config version not compatible.\nReset config.");
+                    Utility.DisplayLocalizedText("str_config_incompatible");
                     ResetToDefault();
                     Serialize();
                     break;
@@ -154,13 +154,14 @@ namespace EnhancedBattleTest
                 {
                     serializer.Serialize(writer, this);
                 }
-                Utility.DisplayMessage("Save config succeeded.");
+                Utility.DisplayLocalizedText("str_saved_config");
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Save config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_save_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 
@@ -178,14 +179,15 @@ namespace EnhancedBattleTest
                     var config = (EnhancedCustomBattleConfig)deserializer.Deserialize(reader);
                     this.CopyFrom(config);
                 }
-                Utility.DisplayMessage("Load config succeeded.");
+                Utility.DisplayLocalizedText("str_loaded_config");
                 UpgradeToCurrentVersion();
                 return true;
             }
             catch (Exception e)
             {
-                Utility.DisplayMessage("Error: Load config failed.");
-                Utility.DisplayMessage("Exception caught: " + e.ToString());
+                Utility.DisplayLocalizedText("str_load_config_failed");
+                Utility.DisplayLocalizedText("str_exception_caught");
+                Utility.DisplayMessage(e.ToString());
                 Console.WriteLine(e);
             }
 

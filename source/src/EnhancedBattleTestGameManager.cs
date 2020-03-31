@@ -17,8 +17,6 @@ namespace EnhancedBattleTest
                 GameManagerLoadingSteps gameManagerLoadingStep,
                 out GameManagerLoadingSteps nextStep)
             {
-                ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.DoLoadingForGameManager {0}", gameManagerLoadingStep);
-                ModuleLogger.Writer.Flush();
                 nextStep = GameManagerLoadingSteps.None;
                 switch (gameManagerLoadingStep)
                 {
@@ -53,9 +51,6 @@ namespace EnhancedBattleTest
 
             public override void OnLoadFinished()
             {
-                ModuleLogger.Writer.WriteLine("EnhancedBattleTestGameManager.OnLoadFinished");
-                ModuleLogger.Writer.Flush();
-
                 base.OnLoadFinished();
                 _startMission();
             }

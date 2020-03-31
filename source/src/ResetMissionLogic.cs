@@ -8,13 +8,13 @@ namespace EnhancedBattleTest
 {
     class ResetMissionLogic : MissionLogic
     {
-        private EnhancedTestBattleMissionController _controller;
+        private EnhancedFreeBattleMissionController _controller;
 
         public override void OnBehaviourInitialize()
         {
             base.OnBehaviourInitialize();
 
-            _controller = Mission.GetMissionBehaviour<EnhancedTestBattleMissionController>();
+            _controller = Mission.GetMissionBehaviour<EnhancedFreeBattleMissionController>();
         }
 
         public override void OnMissionTick(float dt)
@@ -31,7 +31,7 @@ namespace EnhancedBattleTest
             Mission.PlayerTeam.PlayerOrderController.Owner = null;
             Mission.PlayerEnemyTeam.PlayerOrderController.Owner = null;
             _controller?.SpawnAgents();
-            Utility.DisplayMessage("Mission reset.");
+            Utility.DisplayLocalizedText("str_mission_reset");
         }
     }
 }

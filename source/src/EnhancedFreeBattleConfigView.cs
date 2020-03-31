@@ -5,14 +5,14 @@ using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedTestBattleConfigView : MissionView
+    public class EnhancedFreeBattleConfigView : MissionView
     {
         private GauntletLayer _gauntletLayer;
-        private EnhancedTestBattleConfigVM _dataSource;
+        private EnhancedFreeBattleConfigVM _dataSource;
         private CharacterSelectionView _selectionView;
         private MissionMenuView _missionMenuView;
 
-        public EnhancedTestBattleConfigView(CharacterSelectionView selectionView)
+        public EnhancedFreeBattleConfigView(CharacterSelectionView selectionView)
         {
             this._selectionView = selectionView;
             this.ViewOrderPriorty = 22;
@@ -38,11 +38,11 @@ namespace EnhancedBattleTest
 
         public void Open()
         {
-            this._dataSource = new EnhancedTestBattleConfigVM(_selectionView, _missionMenuView, (config) =>
+            this._dataSource = new EnhancedFreeBattleConfigVM(_selectionView, _missionMenuView, (config) =>
             {
                 this.Mission.EndMission();
                 GameStateManager.Current.PopStateRPC(0);
-                EnhancedBattleTestMissions.OpenTestBattleMission(config);
+                EnhancedBattleTestMissions.OpenFreeBattleMission(config);
             }, (param) =>
             {
                 TopState.status = TopStateStatus.exit;
@@ -50,7 +50,7 @@ namespace EnhancedBattleTest
             });
 
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
-            this._gauntletLayer.LoadMovie(nameof(EnhancedTestBattleConfigView), this._dataSource);
+            this._gauntletLayer.LoadMovie(nameof(EnhancedFreeBattleConfigView), this._dataSource);
             this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, TaleWorlds.Library.InputUsageMask.All);
             this.MissionScreen.AddLayer(this._gauntletLayer);
         }

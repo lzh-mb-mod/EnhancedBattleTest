@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="简体中文" />
+  </tags>
+  <strings>
+    <string id="freebattleoption" text="EnhancedBattleTest自由战斗" />
+    <string id="custombattleoption" text="EnhancedBattleTest自定义战斗" />
+    <string id="siegebattleoption" text="EnhancedBattleTest攻城战斗" />
+
+    <string id="freebattle" text="自由战斗" />
+    <string id="custombattle" text="自定义战斗" />
+    <string id="siegebattle" text="攻城战斗" />
+
+    <string id="controltrooptip" text="按F或F10来在你死后控制你的士兵。" />
+    <string id="switchteamtip" text="按F9来切换队伍。" />
+    <string id="switchfreecameratip" text="按F10来切换自由视角。" />
+    <string id="disabledeathtip" text="按F11来禁用死亡。" />
+    <string id="resetmissiontip" text="按F12来重置关卡。" />
+    <string id="moreoptiontip" text="按字母O键来调整更多设置。" />
+    <string id="pausetip" text="按P键来暂停游戏。" />
+    <string id="leavemissiontip" text="按住TAB键来结束战斗。" />
+    <string id="readpositiontip" text="按住大小字母I键来获取当前玩家或镜头的位置" />
+    <string id="teleporttip" text="按L键来在自由视角中让玩家瞬移至镜头位置" />
+
+    <string id="createdefaultconfig" text="创建默认配置" />
+    <string id="foundoldconfig" text="找到旧配置文件: " />
+    <string id="deleteoldconfig" text="删除旧配置文件" />
+    <string id="renameoldconfig" text="将旧配置文件重命名为新名称..." />
+    <string id="contentillegal" text="内容不合法。" />
+    <string id="contentoutofrange" text="内容超出范围。" />
+    <string id="playercharacter" text="玩家角色" />
+    <string id="spawnplayer" text="是否生成玩家角色" />
+    <string id="isplayerattacker" text="己方作为进攻方" />
+    <string id="playertroop1" text="己方1号部队" />
+    <string id="playertroop2" text="己方2号部队" />
+    <string id="playertroop3" text="己方3号部队" />
+    <string id="playertroop1count" text="己方1号部队数量" />
+    <string id="playertroop2count" text="己方2号部队数量" />
+    <string id="playertroop3count" text="己方3号部队数量" />
+    <string id="enemytroop1" text="敌方1号部队" />
+    <string id="enemytroop2" text="敌方2号部队" />
+    <string id="enemytroop3" text="敌方3号部队" />
+    <string id="enemytroop1count" text="敌方1号部队数量" />
+    <string id="enemytroop2count" text="敌方2号部队数量" />
+    <string id="enemytroop3count" text="敌方3号部队数量" />
+    <string id="enemycommander" text="敌方指挥官" />
+    <string id="spawnenemycommander" text="是否生成敌方指挥官" />
+    <string id="controltroop" text="正在控制下属士兵。" />
+    <string id="notrooptocontrol" text="无可控制的下属士兵。" />
+    <string id="deathdisabled" text="已禁用死亡。" />
+    <string id="deathenabled" text="已启用死亡。" />
+    <string id="configincompatible" text="配置文件不兼容。\n重设为默认设置。" />
+    <string id="savedconfig" text="保存配置文件成功。" />
+    <string id="saveconfigfailed" text="保存配置文件失败。" />
+    <string id="exceptioncaught" text="捕获到异常：" />
+    <string id="loadedconfig" text="加载配置成功。" />
+    <string id="loadconfigfailed" text="加载配置文件失败。" />
+    <string id="soldiersperrow" text="每行士兵数量" />
+    <string id="formationposition" text="进攻方位置(x,y)" />
+    <string id="formationdirection" text="进攻方朝向(x,y)" />
+    <string id="distance" text="双方距离" />
+    <string id="skybrightness" text="天空亮度" />
+    <string id="raindensity" text="降雨大小" />
+    <string id="moreoptions" text="更多选项" />
+    <string id="userealisticblocking" text="更真实的格挡机制" />
+    <string id="nofriendlybannder" text="关闭队友标识" />
+    <string id="nokillnotification" text="关闭击杀报告" />
+    <string id="makegruntvoice" text="下令后士兵回应" />
+    <string id="hasboundary" text="地图边界" />
+
+    <string id="changecombatai" text="改变战斗AI" />
+    <string id="combatai" text="战斗AI（0-100）" />
+
+    <string id="saveandstart" text="保存配置并开始" />
+    <string id="saveconfig" text="保存" />
+    <string id="loadconfig" text="加载配置" />
+    <string id="exit" text="退出" />
+
+    <string id="charactergroupinfantry" text="步兵" />
+    <string id="charactergroupRanged" text="远程" />
+    <string id="charactergroupcavalry" text="骑兵" />
+    <string id="charactergrouphorsearcher" text="骑射" />
+
+    <string id="errornoheroclass" text="错误: 该角色无对应的HeroClass。战斗ai等级将会设为50。" />
+    <string id="tacticinchangableinsiege" text="攻城中不能改变战术选项。" />
+    <string id="atleastonetactic" text="至少应启用一个战术选项。" />
+
+    <string id="enableaifor" text="启用队伍战术AI" />
+    <string id="aienabletypenone" text="均无" />
+    <string id="aienabletypeenemyonly" text="仅敌方" />
+    <string id="aienabletypeplayeronly" text="仅己方" />
+    <string id="aienabletypeboth" text="双方均有" />
+    <string id="aienabledfornone" text="双方均已禁用队伍AI。" />
+    <string id="aienabledforenemyonly" text="仅敌方启用队伍AI。" />
+    <string id="aienabledforplayeronly" text="仅己方启用队伍AI。" />
+    <string id="aienabledforboth" text="双方均启用队伍AI。" />
+    
+    <string id="attackertacticoption" text="进攻方战术AI" />
+    <string id="defendertacticoption" text="防守方战术AI" />
+
+    <string id="tacticcharge" text="冲锋" />
+    <string id="tacticfullscaleattack" text="全军攻击" />
+    <string id="tacticdefensiveengagement" text="防御性接战" />
+    <string id="tacticdefensiveline" text="防御性线阵" />
+    <string id="tacticdefensivering" text="防御性圆阵" />
+    <string id="tacticholdthehill" text="防守高坡" />
+    <string id="tacticholdchokepoint" text="防守咽喉" />
+    <string id="tacticarchersonthehill" text="远程待坡上，步兵进攻" />
+    <string id="tacticrangedharassmentoffensive" text="远程骚扰攻势" />
+    <string id="tacticfrontalcavalrycharge" text="骑兵先行冲锋" />
+    <string id="tacticcoordinatedretreat" text="有序撤退" />
+    <string id="tacticbreachwalls" text="破坏城墙" />
+    <string id="tacticdefendcastle" text="防守城堡" />
+
+    <string id="defender" text="防守方" />
+    <string id="attacker" text="进攻方" />
+
+    <string id="addtactic" text="为{CurrentSide}添加{CurrentTacticOption}战术." />
+    <string id="removetactic" text="为{CurrentSide}移除{CurrentTacticOption}战术." />
+
+    <string id="switchteam" text="切换队伍" />
+    <string id="switchfreecamera" text="切换自由视角" />
+    <string id="disabledeath" text="禁用死亡" />
+    <string id="resetmission" text="重置关卡" />
+    <string id="togglepause" text="切换暂停" />
+    <string id="resetspeed" text="重置速度" />
+    <string id="slowmotionfactor" text="速度倍率" />
+
+    <string id="missionpaused" text="已暂停关卡。" />
+    <string id="missioncontinue" text="关卡继续。" />
+
+    <string id="slowmotionenabled" text="启用变速模式。" />
+    <string id="fastfowardenabled" text="启用快速模式。" />
+    <string id="normalmodeenabled" text="启用正常速度。" />
+
+    <string id="missionreset" text="关卡已重置。" />
+
+    <string id="playeragentdead" text="玩家角色已死亡。" />
+    <string id="switchtoplayer" text="切换到玩家角色。" />
+    <string id="switchtofreecamera" text="切换到自由视角。" />
+
+    <string id="enemywipedout" text="敌人已被消灭。" />
+    <string id="switchtoenemyteam" text="已切换至敌军队伍。" />
+  </strings>
+</base>
