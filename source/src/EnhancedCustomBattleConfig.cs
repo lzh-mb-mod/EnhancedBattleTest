@@ -37,21 +37,21 @@ namespace EnhancedBattleTest
             }
         }
         [XmlIgnore]
-        public float SkyBrightness
+        public override float SkyBrightness
         {
             get => sceneList[sceneIndex].skyBrightness;
             set => sceneList[sceneIndex].skyBrightness = value;
         }
 
         [XmlIgnore]
-        public float RainDensity
+        public override float RainDensity
         {
             get => sceneList[sceneIndex].rainDensity;
             set => sceneList[sceneIndex].rainDensity = value;
         }
 
         [XmlIgnore]
-        public string SceneName => sceneList[sceneIndex].name;
+        public override string SceneName => sceneList[sceneIndex].name;
 
         public EnhancedCustomBattleConfig()
             : base(BattleType.FieldBattle)

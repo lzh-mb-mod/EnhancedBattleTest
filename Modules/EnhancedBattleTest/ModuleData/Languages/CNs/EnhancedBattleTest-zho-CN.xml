@@ -20,7 +20,7 @@
     <string id="resetmissiontip" text="按F12来重置关卡。" />
     <string id="moreoptiontip" text="按字母O键来调整更多设置。" />
     <string id="pausetip" text="按P键来暂停游戏。" />
-    <string id="leavemissiontip" text="按住TAB键来结束战斗。" />
+    <string id="leavemissiontip" text="按TAB键来打开战绩面板或结束战斗。" />
     <string id="readpositiontip" text="按住大小字母I键来获取当前玩家或镜头的位置" />
     <string id="teleporttip" text="按L键来在自由视角中让玩家瞬移至镜头位置" />
 

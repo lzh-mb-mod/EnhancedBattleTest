@@ -219,7 +219,9 @@ namespace EnhancedBattleTest
             float num2 = 1f;
             if (!agent.Mission.Scene.IsAtmosphereIndoor && (double)agent.Mission.Scene.GetRainDensity() > 0.0)
                 num2 *= 0.9f;
-            agentDrivenProperties.MaxSpeedMultiplier = num2 * Math.Min((float)((200.0 + (double)character.GetSkillValue(DefaultSkills.Athletics)) / 300.0 * ((double)weight * 2.0 / ((double)weight * 2.0 + (double)num1))), 1f);
+            MultiplayerClassDivisions.MPHeroClass classForCharacter = Utility.GetMPHeroClassForCharacter(agent.Character);
+            agentDrivenProperties.MaxSpeedMultiplier = (float)(1.04999995231628 * ((double)classForCharacter.MovementSpeedMultiplier * (100.0 / (100.0 + (double)totalWeightOfWeapons))));
+            //agentDrivenProperties.MaxSpeedMultiplier = num2 * Math.Min((float)((200.0 + (double)character.GetSkillValue(DefaultSkills.Athletics)) / 300.0 * ((double)weight * 2.0 / ((double)weight * 2.0 + (double)num1))), 1f);
             float managedParameter1 = ManagedParameters.Instance.GetManagedParameter(ManagedParametersEnum.BipedalCombatSpeedMinMultiplier);
             float managedParameter2 = ManagedParameters.Instance.GetManagedParameter(ManagedParametersEnum.BipedalCombatSpeedMaxMultiplier);
             float amount = Math.Min(num1 / (float)weight, 1f);

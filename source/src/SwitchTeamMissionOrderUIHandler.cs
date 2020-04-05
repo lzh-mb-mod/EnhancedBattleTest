@@ -44,7 +44,7 @@ namespace EnhancedBattleTest
         }
         private void OnPreSwitchTeam()
         {
-            this._dataSource.CloseToggleOrder();
+            this.dataSource.CloseToggleOrder();
             this.OnMissionScreenFinalize();
         }
 
@@ -60,7 +60,7 @@ namespace EnhancedBattleTest
         private Vec2 _deploymentPointWidgetSize;
         private SwitchTeamOrderTroopPlacer _orderTroopPlacer;
         private GauntletLayer _gauntletLayer;
-        private MissionOrderVM _dataSource;
+        public MissionOrderVM dataSource;
         private GauntletMovie _viewMovie;
         private SiegeDeploymentHandler _siegeDeploymentHandler;
         private bool IsDeployment;
@@ -73,7 +73,7 @@ namespace EnhancedBattleTest
         }
         public void OnActivateToggleOrder()
         {
-            if (this._dataSource == null || this._dataSource.ActiveTargetState == 0)
+            if (this.dataSource == null || this.dataSource.ActiveTargetState == 0)
                 this._orderTroopPlacer.SuspendTroopPlacer = false;
             this.MissionScreen.SetOrderFlagVisibility(true);
             if (this._gauntletLayer != null)
@@ -107,12 +107,12 @@ namespace EnhancedBattleTest
                     this._siegeMissionView.OnDeploymentFinish += new OnPlayerDeploymentFinishDelegate(this.OnDeploymentFinish);
                 this._deploymentPointDataSources = new List<DeploymentSiegeMachineVM>();
             }
-            this._dataSource = new MissionOrderVM(this.Mission, this.MissionScreen.CombatCamera, this.IsDeployment ? this._siegeDeploymentHandler.DeploymentPoints.ToList<DeploymentPoint>() : new List<DeploymentPoint>(), new Action<bool>(this.ToggleScreenRotation), this.IsDeployment, new GetOrderFlagPositionDelegate(this.MissionScreen.GetOrderFlagPosition), new OnRefreshVisualsDelegate(this.RefreshVisuals), new ToggleOrderPositionVisibilityDelegate(this.SetSuspendTroopPlacer), new OnToggleActivateOrderStateDelegate(this.OnActivateToggleOrder), new OnToggleActivateOrderStateDelegate(this.OnDeactivateToggleOrder));
+            this.dataSource = new MissionOrderVM(this.Mission, this.MissionScreen.CombatCamera, this.IsDeployment ? this._siegeDeploymentHandler.DeploymentPoints.ToList<DeploymentPoint>() : new List<DeploymentPoint>(), new Action<bool>(this.ToggleScreenRotation), this.IsDeployment, new GetOrderFlagPositionDelegate(this.MissionScreen.GetOrderFlagPosition), new OnRefreshVisualsDelegate(this.RefreshVisuals), new ToggleOrderPositionVisibilityDelegate(this.SetSuspendTroopPlacer), new OnToggleActivateOrderStateDelegate(this.OnActivateToggleOrder), new OnToggleActivateOrderStateDelegate(this.OnDeactivateToggleOrder));
             if (this.IsDeployment)
             {
                 foreach (DeploymentPoint deploymentPoint in this._siegeDeploymentHandler.DeploymentPoints)
                 {
-                    DeploymentSiegeMachineVM deploymentSiegeMachineVm = new DeploymentSiegeMachineVM(deploymentPoint, (SiegeWeapon)null, this.MissionScreen.CombatCamera, new Action<DeploymentSiegeMachineVM>(this._dataSource.OnRefreshSelectedDeploymentPoint), new Action<DeploymentPoint>(this._dataSource.OnEntityHover), false);
+                    DeploymentSiegeMachineVM deploymentSiegeMachineVm = new DeploymentSiegeMachineVM(deploymentPoint, (SiegeWeapon)null, this.MissionScreen.CombatCamera, new Action<DeploymentSiegeMachineVM>(this.dataSource.OnRefreshSelectedDeploymentPoint), new Action<DeploymentPoint>(this.dataSource.OnEntityHover), false);
                     Vec3 origin = deploymentPoint.GameEntity.GetFrame().origin;
                     for (int index = 0; index < deploymentPoint.GameEntity.ChildCount; ++index)
                     {
@@ -129,13 +129,13 @@ namespace EnhancedBattleTest
             }
             this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
             this._gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
-            this._viewMovie = this._gauntletLayer.LoadMovie("Order", (ViewModel)this._dataSource);
+            this._viewMovie = this._gauntletLayer.LoadMovie("Order", (ViewModel)this.dataSource);
             this.MissionScreen.AddLayer((ScreenLayer)this._gauntletLayer);
             if (this.IsDeployment)
                 this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
-            else if (!this._dataSource.IsToggleOrderShown)
+            else if (!this.dataSource.IsToggleOrderShown)
                 ScreenManager.SetSuspendLayer((ScreenLayer)this._gauntletLayer, true);
-            this._dataSource.InputRestrictions = this._gauntletLayer.InputRestrictions;
+            this.dataSource.InputRestrictions = this._gauntletLayer.InputRestrictions;
         }
 
         public override void OnMissionScreenFinalize()
@@ -144,8 +144,8 @@ namespace EnhancedBattleTest
             this._deploymentPointDataSources = (List<DeploymentSiegeMachineVM>)null;
             this._orderTroopPlacer = null;
             this._gauntletLayer = (GauntletLayer)null;
-            this._dataSource.OnFinalize();
-            this._dataSource = (MissionOrderVM)null;
+            this.dataSource.OnFinalize();
+            this.dataSource = (MissionOrderVM)null;
             this._viewMovie = (GauntletMovie)null;
             this._siegeDeploymentHandler = (SiegeDeploymentHandler)null;
         }
@@ -153,7 +153,7 @@ namespace EnhancedBattleTest
         private void OnDeploymentFinish()
         {
             this.IsDeployment = false;
-            this._dataSource.FinalizeDeployment();
+            this.dataSource.FinalizeDeployment();
             this._deploymentPointDataSources.Clear();
             this._orderTroopPlacer.SuspendTroopPlacer = true;
             this.MissionScreen.SetOrderFlagVisibility(false);
@@ -164,20 +164,20 @@ namespace EnhancedBattleTest
 
         public override bool OnEscape()
         {
-            return this._dataSource.CloseToggleOrder();
+            return this.dataSource.CloseToggleOrder();
         }
 
         public override void OnMissionScreenTick(float dt)
         {
             base.OnMissionScreenTick(dt);
             this.TickInput(dt);
-            this._dataSource.Tick(dt);
-            if (this._dataSource.IsToggleOrderShown)
+            this.dataSource.Tick(dt);
+            if (this.dataSource.IsToggleOrderShown)
             {
-                if (this._orderTroopPlacer.SuspendTroopPlacer && this._dataSource.ActiveTargetState == 0)
+                if (this._orderTroopPlacer.SuspendTroopPlacer && this.dataSource.ActiveTargetState == 0)
                     this._orderTroopPlacer.SuspendTroopPlacer = false;
-                this._orderTroopPlacer.IsDrawingForced = this._dataSource.IsMovementSubOrdersShown;
-                this._orderTroopPlacer.IsDrawingFacing = this._dataSource.IsFacingSubOrdersShown;
+                this._orderTroopPlacer.IsDrawingForced = this.dataSource.IsMovementSubOrdersShown;
+                this._orderTroopPlacer.IsDrawingFacing = this.dataSource.IsFacingSubOrdersShown;
                 this._orderTroopPlacer.IsDrawingForming = false;
                 this._orderTroopPlacer.IsDrawingAttaching = this.cursorState == MissionOrderVM.CursorState.Attach;
                 this._orderTroopPlacer.UpdateAttachVisuals(this.cursorState == MissionOrderVM.CursorState.Attach);
@@ -203,7 +203,7 @@ namespace EnhancedBattleTest
                 else
                     this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             }
-            this.MissionScreen.OrderFlag.IsTroop = this._dataSource.ActiveTargetState == 0;
+            this.MissionScreen.OrderFlag.IsTroop = this.dataSource.ActiveTargetState == 0;
             this.MissionScreen.OrderFlag.Tick(dt);
         }
 
@@ -218,7 +218,7 @@ namespace EnhancedBattleTest
         public override void OnMissionScreenActivate()
         {
             base.OnMissionScreenActivate();
-            this._dataSource.AfterInitialize();
+            this.dataSource.AfterInitialize();
             this.isInitialized = true;
         }
 
@@ -226,7 +226,7 @@ namespace EnhancedBattleTest
         {
             if (!this.isInitialized || !agent.IsHuman)
                 return;
-            this._dataSource.AddTroops(agent);
+            this.dataSource.AddTroops(agent);
         }
 
         public override void OnAgentRemoved(
@@ -238,7 +238,7 @@ namespace EnhancedBattleTest
             base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, killingBlow);
             if (!affectedAgent.IsHuman)
                 return;
-            this._dataSource.RemoveTroops(affectedAgent);
+            this.dataSource.RemoveTroops(affectedAgent);
         }
 
         private IOrderable GetFocusedOrderableObject()
@@ -256,12 +256,12 @@ namespace EnhancedBattleTest
         {
             if (this._gauntletLayer.HitTest())
                 return;
-            this._dataSource.OnEntityHover(hoveredEntity);
+            this.dataSource.OnEntityHover(hoveredEntity);
         }
 
         void ISiegeDeploymentView.OnEntitySelection(GameEntity selectedEntity)
         {
-            this._dataSource.OnEntitySelect(selectedEntity);
+            this.dataSource.OnEntitySelect(selectedEntity);
         }
 
         private void ToggleScreenRotation(bool isLocked)
@@ -278,19 +278,19 @@ namespace EnhancedBattleTest
         {
             get
             {
-                return this._dataSource.IsFacingSubOrdersShown ? MissionOrderVM.CursorState.Face : MissionOrderVM.CursorState.Move;
+                return this.dataSource.IsFacingSubOrdersShown ? MissionOrderVM.CursorState.Face : MissionOrderVM.CursorState.Move;
             }
         }
 
         private void TickInput(float dt)
         {
-            if (this._dataSource.IsToggleOrderShown)
+            if (this.dataSource.IsToggleOrderShown)
             {
-                if (this._dataSource.IsTransferActive && this._gauntletLayer.Input.IsHotKeyReleased("Exit"))
-                    this._dataSource.IsTransferActive = false;
-                if (this._dataSource.IsTransferActive != this._isTransferEnabled)
+                if (this.dataSource.IsTransferActive && this._gauntletLayer.Input.IsHotKeyReleased("Exit"))
+                    this.dataSource.IsTransferActive = false;
+                if (this.dataSource.IsTransferActive != this._isTransferEnabled)
                 {
-                    this._isTransferEnabled = this._dataSource.IsTransferActive;
+                    this._isTransferEnabled = this.dataSource.IsTransferActive;
                     if (!this._isTransferEnabled)
                     {
                         this._gauntletLayer.IsFocusLayer = false;
@@ -302,7 +302,7 @@ namespace EnhancedBattleTest
                         ScreenManager.TrySetFocus((ScreenLayer)this._gauntletLayer);
                     }
                 }
-                if (this._dataSource.ActiveTargetState == 0 && this.Input.IsKeyReleased(InputKey.LeftMouseButton))
+                if (this.dataSource.ActiveTargetState == 0 && this.Input.IsKeyReleased(InputKey.LeftMouseButton))
                 {
                     switch (this.cursorState)
                     {
@@ -310,25 +310,25 @@ namespace EnhancedBattleTest
                             IOrderable focusedOrderableObject = this.GetFocusedOrderableObject();
                             if (focusedOrderableObject != null)
                             {
-                                this._dataSource.OrderController.SetOrderWithOrderableObject(focusedOrderableObject);
+                                this.dataSource.OrderController.SetOrderWithOrderableObject(focusedOrderableObject);
                                 break;
                             }
                             break;
                         case MissionOrderVM.CursorState.Face:
-                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.LookAtDirection, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
+                            this.dataSource.OrderController.SetOrderWithPosition(OrderType.LookAtDirection, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
                             break;
                         case MissionOrderVM.CursorState.Form:
-                            this._dataSource.OrderController.SetOrderWithPosition(OrderType.FormCustom, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
+                            this.dataSource.OrderController.SetOrderWithPosition(OrderType.FormCustom, new WorldPosition(Mission.Scene, UIntPtr.Zero, this.MissionScreen.GetOrderFlagPosition(), false));
                             break;
                     }
                 }
                 if (this.DebugInput.IsAltDown())
                 {
-                    bool isMouseVisible = this._dataSource.IsTransferActive || !this._gauntletLayer.InputRestrictions.MouseVisibility;
+                    bool isMouseVisible = this.dataSource.IsTransferActive || !this._gauntletLayer.InputRestrictions.MouseVisibility;
                     this._gauntletLayer.InputRestrictions.SetInputRestrictions(isMouseVisible, isMouseVisible ? InputUsageMask.Mouse : InputUsageMask.Invalid);
                 }
                 if (this.Input.IsKeyReleased(InputKey.RightMouseButton))
-                    this._dataSource.OnEscape();
+                    this.dataSource.OnEscape();
             }
             int pressedIndex = -1;
             if (!this.DebugInput.IsControlDown())
@@ -353,7 +353,7 @@ namespace EnhancedBattleTest
                     pressedIndex = 8;
             }
             if (pressedIndex > -1)
-                this._dataSource.OnGiveOrder(pressedIndex);
+                this.dataSource.OnGiveOrder(pressedIndex);
             int formationTroopIndex = -1;
             if (this.Input.IsGameKeyPressed(60))
                 formationTroopIndex = 100;
@@ -374,10 +374,10 @@ namespace EnhancedBattleTest
             else if (this.Input.IsGameKeyPressed(68))
                 formationTroopIndex = 7;
             if (formationTroopIndex != -1)
-                this._dataSource.OnSelect(formationTroopIndex);
+                this.dataSource.OnSelect(formationTroopIndex);
             if (!this.Input.IsGameKeyPressed(50))
                 return;
-            this._dataSource.ViewOrders();
+            this.dataSource.ViewOrders();
         }
     }
 }

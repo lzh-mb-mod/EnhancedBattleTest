@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
@@ -40,6 +41,49 @@ namespace EnhancedBattleTest
     {
         public static Version ModVersion { get; } = new Version(1, 0,0);
         public string ConfigVersion { get; set; }
+        [XmlIgnore]
+        public virtual int SoldiersPerRow
+        {
+            get => 0;
+            set { }
+        }
+
+        [XmlIgnore] public virtual Vec2 FormationPosition
+        {
+            get => Vec2.Zero;
+            set { }
+        }
+
+        [XmlIgnore] public virtual Vec2 FormationDirection
+        {
+            get => Vec2.Zero;
+            set { }
+        }
+
+        [XmlIgnore] public virtual float SkyBrightness
+        {
+            get => -1;
+            set { }
+        }
+
+        [XmlIgnore] public virtual float RainDensity
+        {
+            get => -1;
+            set { }
+        }
+
+        [XmlIgnore] public virtual float Distance
+        {
+            get => 0;
+            set { }
+        }
+
+        [XmlIgnore]
+        public virtual string SceneName
+        {
+            get => "";
+            set { }
+        }
 
         [XmlIgnore]
         public BattleType battleType;

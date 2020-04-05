@@ -12,7 +12,6 @@ namespace EnhancedBattleTest
     public class EnhancedFreeBattleMissionController : MissionLogic
     {
         private EnhancedFreeBattleConfig _freeBattleConfig;
-        private SoundEvent _musicSoundEvent;
         public EnhancedFreeBattleConfig FreeBattleConfig
         {
             get => _freeBattleConfig;
@@ -24,10 +23,15 @@ namespace EnhancedBattleTest
         public TL.Vec3 initialFreeCameraTarget;
         private AgentVictoryLogic _victoryLogic;
         private MakeGruntVoiceLogic _makeGruntVoiceLogic;
+        public bool spawned = false;
+        public int NumberOfActiveAttackerTroops { get; set; }
+        public int NumberOfActiveDefenderTroops { get; set; }
 
         public EnhancedFreeBattleMissionController(EnhancedFreeBattleConfig config)
         {
             this.FreeBattleConfig = config;
+            NumberOfActiveAttackerTroops = config.GetTotalNumberForSide(BattleSideEnum.Attacker);
+            NumberOfActiveDefenderTroops = config.GetTotalNumberForSide(BattleSideEnum.Defender);
             _victoryLogic = null;
         }
 
@@ -36,111 +40,43 @@ namespace EnhancedBattleTest
             this.Mission.MissionTeamAIType = Mission.MissionTeamAITypeEnum.FieldBattle;
             this.Mission.SetMissionMode(MissionMode.Battle, true);
             _makeGruntVoiceLogic = this.Mission.GetMissionBehaviour<MakeGruntVoiceLogic>();
-            AdjustScene();
-            var playerTeamCulture = this.FreeBattleConfig.GetPlayerTeamCulture();
-            var enemyTeamCulture = this.FreeBattleConfig.GetEnemyTeamCulture();
-            AddTeams(playerTeamCulture, enemyTeamCulture);
         }
 
         public override void AfterStart()
         {
-            SpawnAgents();
+            base.AfterStart();
+
+            foreach (var team in Mission.Teams)
+            {
+                team.OnOrderIssued += OrderIssuedDelegate;
+            }
+        }
+
+        public override void OnAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
+        {
+            base.OnAgentRemoved(affectedAgent, affectorAgent, agentState, blow);
+
+
+            Team team = affectedAgent.Team;
+            BattleSideEnum battleSideEnum = team != null ? team.Side : BattleSideEnum.None;
+            switch (battleSideEnum)
+            {
+                case BattleSideEnum.Attacker:
+                    --NumberOfActiveAttackerTroops;
+                    break;
+                case BattleSideEnum.Defender:
+                    --NumberOfActiveDefenderTroops;
+                    break;
+            }
         }
 
         public void SpawnAgents()
         {
-            
+
             var playerTeamCulture = this.FreeBattleConfig.GetPlayerTeamCulture();
             var enemyTeamCulture = this.FreeBattleConfig.GetEnemyTeamCulture();
             SpawnPlayerTeamAgents(playerTeamCulture);
             SpawnEnemyTeamAgents(enemyTeamCulture);
-
-            _musicSoundEvent = SoundEvent.CreateEvent(SoundEvent.GetEventIdFromString("event:/mission/ambient/area/multiplayer/city_mp_02"), Mission.Scene);
-            _musicSoundEvent.Play();
-        }
-
-        private void AdjustScene()
-        {
-            var scene = this.Mission.Scene;
-            if (this.FreeBattleConfig.SkyBrightness >= 0)
-            {
-                scene.SetSkyBrightness(this.FreeBattleConfig.SkyBrightness);
-            }
-
-            if (this.FreeBattleConfig.RainDensity >= 0)
-            {
-                scene.SetRainDensity(this.FreeBattleConfig.RainDensity);
-            }
-        }
-
-        private void AddTeams(BasicCultureObject playerTeamCulture, BasicCultureObject enemyTeamCulture)
-        {
-            var playerTeamBackgroundColor =
-                Utility.BackgroundColor(playerTeamCulture, FreeBattleConfig.isPlayerAttacker);
-            var playerTeamForegroundColor =
-                Utility.ForegroundColor(playerTeamCulture, FreeBattleConfig.isPlayerAttacker);
-            // see TaleWorlds.MountAndBlade.dll/MissionMultiplayerFlagDomination.cs : TaleWorlds.MountAndBlade.MissionMultiplayerFlagDomination.AfterStart();
-            Banner playerTeamBanner = new Banner(playerTeamCulture.BannerKey, playerTeamBackgroundColor,
-                playerTeamForegroundColor);
-            var playerSide = FreeBattleConfig.isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender;
-            var playerTeam = this.Mission.Teams.Add(playerSide, color: playerTeamBackgroundColor, color2: playerTeamForegroundColor, banner: playerTeamBanner);
-
-            var enemyTeamBackgroundColor =
-                Utility.BackgroundColor(enemyTeamCulture, !FreeBattleConfig.isPlayerAttacker);
-            var enemyTeamForegroundColor =
-                Utility.ForegroundColor(enemyTeamCulture, !FreeBattleConfig.isPlayerAttacker);
-            Banner enemyTeamBanner = new Banner(enemyTeamCulture.BannerKey,
-                enemyTeamBackgroundColor, enemyTeamForegroundColor);
-            var enemySide = playerSide.GetOppositeSide();
-            var enemyTeam = this.Mission.Teams.Add(enemySide, color: enemyTeamBackgroundColor, color2: enemyTeamForegroundColor, banner: enemyTeamBanner);
-
-            playerTeam.AddTeamAI(new TeamAIGeneral(this.Mission, playerTeam));
-            enemyTeam.AddTeamAI(new TeamAIGeneral(this.Mission, enemyTeam));
-            using (IEnumerator<Team> enumerator = Mission.Teams.Where<Team>((Func<Team, bool>)(t => t.HasTeamAi)).GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
-                    Team team = enumerator.Current;
-                    if (team.Side == BattleSideEnum.Defender)
-                    {
-                        bool flag = false;
-                        foreach (var defenderTacticOption in _freeBattleConfig.defenderTacticOptions)
-                        {
-                            if (defenderTacticOption.isEnabled)
-                            {
-                                flag = true;
-                                TacticOptionHelper.AddTacticComponent(team, defenderTacticOption.tacticOption);
-                            }
-                        }
-                        if (!flag)
-                            team.AddTacticOption(new TacticCharge(team));
-                    }
-
-                    if (team.Side == BattleSideEnum.Attacker)
-                    {
-                        bool flag = false;
-                        foreach (var attackerTacticOption in _freeBattleConfig.attackerTacticOptions)
-                        {
-                            if (attackerTacticOption.isEnabled)
-                            {
-                                flag = true;
-                                TacticOptionHelper.AddTacticComponent(team, attackerTacticOption.tacticOption);
-                            }
-                        }
-                        if (!flag)
-                            team.AddTacticOption(new TacticCharge(team));
-                    }
-                }
-            }
-
-            foreach (Team team in (ReadOnlyCollection<Team>)this.Mission.Teams)
-            {
-                team.ExpireAIQuerySystem();
-                team.ResetTactic();
-                team.OnOrderIssued += OrderIssuedDelegate;
-            }
-
-            this.Mission.PlayerTeam = playerTeam;
         }
 
         private void SpawnPlayerTeamAgents(BasicCultureObject playerTeamCulture)
@@ -214,6 +150,7 @@ namespace EnhancedBattleTest
                 }
             }
 
+            // just test item spawning.
             //var matrixFrame = Utility.ToMatrixFrame(Mission.Scene, GetFormationPosition(true, -2), TL.Vec2.Forward);
 
             //MissionWeapon weapon = new MissionWeapon(MBObjectManager.Instance.GetObject<ItemObject>("mp_hatchet_axe"), (Banner)null);
@@ -279,33 +216,13 @@ namespace EnhancedBattleTest
 
         public override void OnMissionTick(float dt)
         {
-            CheckVictory();
+            if (!spawned)
+            {
+                spawned = true;
+                SpawnAgents();
+            }
         }
 
-        private void CheckVictory()
-        {
-            //if (!_ended && _shouldCelebrateVictory)
-            //{
-            //    bool playerVictory = this.Mission.PlayerEnemyTeam.ActiveAgents.IsEmpty();
-            //    bool enemyVictory = this.Mission.PlayerTeam.ActiveAgents.IsEmpty();
-            //    if (!playerVictory && !enemyVictory)
-            //        return;
-            //    _ended = true;
-            //    _victoryLogic = this.Mission.GetMissionBehaviour<AgentVictoryLogic>();
-            //    if (_victoryLogic == null)
-            //        return;
-            //    if (enemyVictory)
-            //    {
-            //        _ended = true;
-            //        _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerEnemyTeam.Side);
-            //    }
-            //    else
-            //    {
-            //        _ended = true;
-            //        _victoryLogic.SetTimersOfVictoryReactions(this.Mission.PlayerTeam.Side);
-            //    }
-            //}
-        }
 
         void OrderIssuedDelegate(
             OrderType orderType,
@@ -321,10 +238,7 @@ namespace EnhancedBattleTest
                         _victoryLogic.OnAgentDeleted(agent);
                         if (!agent.IsPlayerControlled)
                         {
-                            //EquipmentIndex index = agent.GetWieldedItemIndex(Agent.HandIndex.MainHand);
                             agent.SetActionChannel(1, ActionIndexCache.act_none, true);
-                            //agent.TryToSheathWeaponInHand(Agent.HandIndex.MainHand, Agent.WeaponWieldActionType.Instant);
-                            //agent.TryToWieldWeaponInSlot(index, Agent.WeaponWieldActionType.WithAnimation, false);
                         }
                     }
                 }
@@ -354,7 +268,7 @@ namespace EnhancedBattleTest
                 .ClothingColor2(isAttacker ? culture.Color2 : culture.ClothAlternativeColor2);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
-            var agent = this.Mission.SpawnAgent(agentBuildData, false, 0);
+            var agent = this.Mission.SpawnAgent(agentBuildData, false, formationTroopCount);
             agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
             agent.WieldInitialWeapons();
             agent.Controller = isPlayer ? Agent.ControllerType.Player : Agent.ControllerType.AI;

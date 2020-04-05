@@ -1,5 +1,19 @@
 # Changelog
-## [e1.0.0] - 2020-04-1
+## [e1.0.1] - 2020-04-05
+
+### Added
+- Add score board in custom battle mode and siege battle mode.
+
+- Add bgm.
+
+### Fixed
+- Keep compatible with Bannerlord e1.0.5.
+
+- Fix the bug that sky brightness and rain density settings has no effect in custom battle mode and siege battle mode.
+
+- Fix crash when switching to free camera with team AI enabled in custom battle mode.
+
+## [e1.0.0] - 2020-04-01
 ### Fixed
 - Keep compatible with Bannerlord e1.0.0.
 

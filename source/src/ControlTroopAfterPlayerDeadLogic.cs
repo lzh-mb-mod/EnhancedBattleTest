@@ -1,10 +1,15 @@
-﻿using TaleWorlds.Engine;
+﻿using System.ComponentModel;
+using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.GauntletUI;
+using TaleWorlds.MountAndBlade.View;
+using TaleWorlds.MountAndBlade.View.Missions;
 
 namespace EnhancedBattleTest
 {
     class ControlTroopAfterPlayerDeadLogic : MissionLogic
     {
+
         public void ControlTroopAfterDead()
         {
             // Mission.MainAgent may be null because of free camera mode.

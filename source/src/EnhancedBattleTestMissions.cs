@@ -28,6 +28,33 @@ namespace EnhancedBattleTest
 
         public static Mission OpenFreeBattleMission(EnhancedFreeBattleConfig config)
         {
+            var playerSide = config.isPlayerAttacker ? BattleSideEnum.Attacker : BattleSideEnum.Defender;
+            var playerCulture = config.GetPlayerTeamCulture();
+            var playerParty = new CustomBattleCombatant(playerCulture.Name, playerCulture,
+                new Banner(playerCulture.BannerKey, Utility.BackgroundColor(playerCulture, config.isPlayerAttacker), Utility.ForegroundColor(playerCulture, config.isPlayerAttacker)))
+            {
+                Side = playerSide
+            };
+            //Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass(), true);
+            //Utility.AddCharacter(playerParty, config.playerTroops[0], false, FormationClass.Infantry);
+            //Utility.AddCharacter(playerParty, config.playerTroops[1], false, FormationClass.Ranged);
+            //Utility.AddCharacter(playerParty, config.playerTroops[2], false, FormationClass.Cavalry);
+
+            var enemyCulture = config.GetEnemyTeamCulture();
+            var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
+                new Banner(enemyCulture.BannerKey, Utility.BackgroundColor(enemyCulture, !config.isPlayerAttacker), Utility.ForegroundColor(enemyCulture, !config.isPlayerAttacker)))
+            {
+                Side = playerSide.GetOppositeSide()
+            };
+            //Utility.AddCharacter(enemyParty, config.enemyClass, true, Utility.CommanderFormationClass());
+            //Utility.AddCharacter(enemyParty, config.enemyTroops[0], false, FormationClass.Infantry);
+            //Utility.AddCharacter(enemyParty, config.enemyTroops[1], false, FormationClass.Ranged);
+            //Utility.AddCharacter(enemyParty, config.enemyTroops[2], false, FormationClass.Cavalry);
+            
+            CustomBattleCombatant defenderParty =
+                !config.isPlayerAttacker ? playerParty : enemyParty;
+            CustomBattleCombatant attackerParty =
+                config.isPlayerAttacker ? playerParty : enemyParty;
             return MissionState.OpenNew(
                 "EnhancedFreeBattle",
                 new MissionInitializerRecord(config.SceneName),
@@ -37,6 +64,9 @@ namespace EnhancedBattleTest
                     {
                         new EnhancedFreeBattleMissionController(config),
                         new EnhancedBattleEndLogic(config),
+                        new EnhancedMissionCombatantsLogic((IEnumerable<IBattleCombatant>) null, (IBattleCombatant) playerParty,
+                            defenderParty, attackerParty, Mission.MissionTeamAITypeEnum.FieldBattle, false, config),
+                        new AdjustSceneLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
                         new TeamAIEnableLogic(config),
@@ -90,7 +120,7 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide
             };
-            //Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass(), true);
+            var player = Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass());
             Utility.AddCharacter(playerParty, config.playerTroops[0], false, FormationClass.Infantry);
             Utility.AddCharacter(playerParty, config.playerTroops[1], false, FormationClass.Ranged);
             Utility.AddCharacter(playerParty, config.playerTroops[2], false, FormationClass.Cavalry);
@@ -106,13 +136,14 @@ namespace EnhancedBattleTest
             Utility.AddCharacter(enemyParty, config.enemyTroops[1], false, FormationClass.Ranged);
             Utility.AddCharacter(enemyParty, config.enemyTroops[2], false, FormationClass.Cavalry);
 
-            return OpenCustomBattleMission(config, playerParty, enemyParty, true, null,
+            return OpenCustomBattleMission(config, playerParty, enemyParty, player, true, null,
                 "", "");
         }
         private static Mission OpenCustomBattleMission(
             EnhancedCustomBattleConfig config,
             CustomBattleCombatant playerParty,
             CustomBattleCombatant enemyParty,
+            BasicCharacterObject player,
             bool isPlayerGeneral,
             BasicCharacterObject playerSideGeneralCharacter,
             string sceneLevels = "",
@@ -137,9 +168,6 @@ namespace EnhancedBattleTest
                 atmosphereInfo = (AtmosphereInfo)null;
             if (atmosphereInfo != null)
                 atmosphereInfo.TimeInfo.TimeOfDay = timeOfDay;
-            var player = Utility.ApplyPerks(config.playerClass, true);
-            player.CurrentFormationClass = Utility.CommanderFormationClass();
-            var enemyCharacter = config.EnemyHeroClass.HeroCharacter;
             CustomBattleCombatant defenderParty =
                 !isPlayerAttacker ? playerParty : enemyParty;
             CustomBattleCombatant attackerParty =
@@ -152,8 +180,10 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
+               new AdjustSceneLogic(config),
                new ControlTroopAfterPlayerDeadLogic(),
                new CommanderLogic(),
+               new SetPlayerLogic(player),
                new TeamAIEnableLogic(config),
                new DisableDeathLogic(EnhancedCustomBattleConfig.Get()),
                new SwitchTeamLogic(),
@@ -162,13 +192,14 @@ namespace EnhancedBattleTest
                new ReadPositionLogic(),
                new TeleportPlayerLogic(),
                new MissionOptionsComponent(),
+               new BattleObserverMissionLogic(),
                new BattleEndLogic(),
                new EnhancedMissionCombatantsLogic((IEnumerable<IBattleCombatant>) null, (IBattleCombatant) playerParty,
-                   defenderParty, attackerParty, Mission.MissionTeamAITypeEnum.FieldBattle, isPlayerSergeant, EnhancedCustomBattleConfig.Get()),
+                   defenderParty, attackerParty, Mission.MissionTeamAITypeEnum.FieldBattle, isPlayerSergeant, config),
                //new BattleObserverMissionLogic(),
                new CustomBattleAgentLogic(),
-               new MissionAgentSpawnLogic(troopSuppliers, BattleSideEnum.None), // player's team may change
-               new SpawnPlayerLogic(playerParty, playerTroopSupplier, player, true),
+               new MissionAgentSpawnLogic(troopSuppliers, playerSide), // player's team may change
+               //new SpawnPlayerLogic(playerParty, playerTroopSupplier, player, true),
                new CustomBattleMissionSpawnHandler(defenderParty, attackerParty),
                new AgentBattleAILogic(),
                new AgentVictoryLogic(),
@@ -179,7 +210,7 @@ namespace EnhancedBattleTest
                new AgentFadeOutLogic(),
                new AgentMoraleInteractionLogic(),
                //new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false, isPlayerSergeant ? Enumerable.Repeat<string>(player.StringId, 1).ToList<string>() : new List<string>(), FormationClass.NumberOfRegularFormations),
-               new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), (string) null, (string) null, true),
+               //new CreateBodyguardMissionBehavior(isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), !isPlayerAttacker & isPlayerGeneral ? player.GetName().ToString() : (!isPlayerAttacker & isPlayerSergeant ? playerSideGeneralCharacter?.GetName()?.ToString() : enemyCharacter.Name.ToString()), (string) null, (string) null, true),
                new HighlightsController(),
                new BattleHighlightsController(),
                //new FieldBattleController(),
@@ -235,7 +266,7 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide
             };
-            //Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass(), true);
+            Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass(), true);
             Utility.AddCharacter(playerParty, config.playerTroops[0], false, FormationClass.Infantry);
             Utility.AddCharacter(playerParty, config.playerTroops[1], false, FormationClass.Ranged);
             Utility.AddCharacter(playerParty, config.playerTroops[2], false, FormationClass.Cavalry);
@@ -332,6 +363,7 @@ namespace EnhancedBattleTest
                         //new BattleSpawnLogic(isSallyOut ? "sally_out_set" : (isReliefForceAttack ? "relief_force_attack_set" : "battle_set")),
                         new AddEntityLogic(config),
                         new MissionOptionsComponent(),
+                        new BattleObserverMissionLogic(),
                         new BattleEndLogic(),
                         new EnhancedMissionCombatantsLogic((IEnumerable<IBattleCombatant>) null,
                             (IBattleCombatant) playerParty, defenderParty, attackerParty,
@@ -339,7 +371,6 @@ namespace EnhancedBattleTest
                             isPlayerSergeant, config),
                         new SiegeMissionPreparationHandler(isSallyOut, isReliefForceAttack, wallHitPointPercentages, hasAnySiegeTower),
                         new MissionAgentSpawnLogic(troopSuppliers, playerSide), // player's team may change
-                        new SpawnPlayerLogic(playerParty, playerTroopSupplier, player, false),
                         //new BattleObserverMissionLogic(),
                         new CustomBattleAgentLogic(),
                         new AgentBattleAILogic(),
@@ -351,8 +382,10 @@ namespace EnhancedBattleTest
                         new SiegeMissionController(EnhancedBattleTestMissions.GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers), EnhancedBattleTestMissions.GetSiegeWeaponTypes(siegeWeaponsCountOfDefenders), isPlayerAttacker, isSallyOut),
                         new SiegeDeploymentHandler(isPlayerAttacker, isPlayerAttacker ? EnhancedBattleTestMissions.GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers) : EnhancedBattleTestMissions.GetSiegeWeaponTypes(siegeWeaponsCountOfDefenders)),
 
+                        new AdjustSceneLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
+                        new SetPlayerLogic(player),
                         new TeamAIEnableLogic(config),
                         new DisableDeathLogic(config),
                         new SwitchTeamLogic(),

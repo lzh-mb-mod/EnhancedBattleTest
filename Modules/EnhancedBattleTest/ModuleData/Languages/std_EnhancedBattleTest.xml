@@ -20,7 +20,7 @@
     <string id="resetmissiontip" text="Press F12 to reset mission." />
     <string id="moreoptiontip" text="Press O(letter) to adjust more settings." />
     <string id="pausetip" text="Press P to pause game." />
-    <string id="leavemissiontip" text="Hold TAB to leave the mission." />
+    <string id="leavemissiontip" text="Press TAB to open score board or leave the mission." />
     <string id="readpositiontip" text="Press `I` key to get player or camera position." />
     <string id="teleporttip" text="Press `L` key to teleport player when in free camera mode." />
 

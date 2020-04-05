@@ -47,7 +47,6 @@ namespace EnhancedBattleTest
             }
             currentGame.CreateLists();
             this.ObjectManager.ClearEmptyObjects();
-            this.AddGameTexts();
             this.GameManager.OnCampaignStart(this.CurrentGame, (object)null);
             this.GameManager.OnAfterCampaignStart(this.CurrentGame);
             this.GameManager.OnGameInitializationFinished(this.CurrentGame);
@@ -92,9 +91,9 @@ namespace EnhancedBattleTest
         protected override void OnRegisterTypes()
         {
             base.OnRegisterTypes();
-            int num1 = (int)this.ObjectManager.RegisterType<BasicCharacterObject>("NPCCharacter", "MPCharacters", true);
-            int num2 = (int)this.ObjectManager.RegisterType<BasicCultureObject>("Culture", "BasicCultures", true);
-            int num3 = (int)this.ObjectManager.RegisterType<MultiplayerClassDivisions.MPHeroClass>("MPClassDivision", "MPClassDivisions", true);
+            this.ObjectManager.RegisterType<BasicCharacterObject>("NPCCharacter", "MPCharacters", true);
+            this.ObjectManager.RegisterType<BasicCultureObject>("Culture", "BasicCultures", true);
+            this.ObjectManager.RegisterType<MultiplayerClassDivisions.MPHeroClass>("MPClassDivision", "MPClassDivisions", true);
         }
 
         private void AddGameTexts()

@@ -47,49 +47,49 @@ namespace EnhancedBattleTest
         }
 
         [XmlIgnore]
-        public int SoldiersPerRow
+        public override int SoldiersPerRow
         {
             get => sceneList[sceneIndex].soldiersPerRow;
             set => sceneList[sceneIndex].soldiersPerRow = value;
         }
 
         [XmlIgnore]
-        public Vec2 FormationPosition
+        public override Vec2 FormationPosition
         {
             get => sceneList[sceneIndex].formationPosition;
             set => sceneList[sceneIndex].formationPosition = value;
         }
 
         [XmlIgnore]
-        public Vec2 FormationDirection
+        public override Vec2 FormationDirection
         {
             get => sceneList[sceneIndex].formationDirection;
             set => sceneList[sceneIndex].formationDirection = value;
         }
 
         [XmlIgnore]
-        public float SkyBrightness
+        public override float SkyBrightness
         {
             get => sceneList[sceneIndex].skyBrightness;
             set => sceneList[sceneIndex].skyBrightness = value;
         }
 
         [XmlIgnore]
-        public float RainDensity
+        public override float RainDensity
         {
             get => sceneList[sceneIndex].rainDensity;
             set => sceneList[sceneIndex].rainDensity = value;
         }
 
         [XmlIgnore]
-        public float Distance
+        public override float Distance
         {
             get => sceneList[sceneIndex].distance;
             set => sceneList[sceneIndex].distance = value;
         }
 
         [XmlIgnore]
-        public string SceneName => sceneList[sceneIndex].name;
+        public override string SceneName => sceneList[sceneIndex].name;
 
         [XmlIgnore]
         public bool IsSiegeMission => SceneName.Contains("siege");

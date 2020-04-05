@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
+using TaleWorlds.MountAndBlade.View;
 using TaleWorlds.MountAndBlade.View.Missions;
 using TaleWorlds.MountAndBlade.View.Missions.SiegeWeapon;
 using TaleWorlds.MountAndBlade.ViewModelCollection;
@@ -28,30 +30,32 @@ namespace EnhancedBattleTest
         public static MissionView[] OpenSiegeMission(Mission mission)
         {
             var config = EnhancedSiegeBattleConfig.Get();
+            MissionView missionOrderUiHandler = new SwitchTeamMissionOrderUIHandler();
+            ISiegeDeploymentView siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
-                new MissionCustomBattlePreloadView(),
+                ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
+                missionOrderUiHandler,
+                new SwitchTeamOrderTroopPlacer(),
                 //ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
-                //ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
-
-                new MissionEntitySelectionUIHandler(),
-                new MissionBoundaryMarker(new FlagFactory("flag_rope_cloth")),
-                new SiegeDeploymentVisualizationMissionView(),
-                new SiegeMissionView(),
 
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),
-                ViewCreator.CreateMissionLeaveView(),
-                ViewCreator.CreateMissionSingleplayerEscapeMenu(),
-                new SwitchTeamMissionOrderUIHandler(),
-                new SwitchTeamOrderTroopPlacer(),
-                new MissionItemContourControllerView(),
-                new MissionAgentContourControllerView(),
+                new MusicBattleMissionView(false),
+                new SiegeMissionView(),
+                new MissionEntitySelectionUIHandler(new Action<GameEntity>(siegeDeploymentView.OnEntitySelection), new Action<GameEntity>(siegeDeploymentView.OnEntityHover)),
                 ViewCreator.CreateMissionBoundaryCrossingView(),
                 new MissionBoundaryWallView(),
-                new SpectatorCameraView(),
+                new MissionBoundaryMarker(new FlagFactory("swallowtail_banner"), 2f),
+                ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
+                ViewCreator.CreateMissionSpectatorControlView(mission),
+                new SiegeDeploymentVisualizationMissionView(),
+                new MissionItemContourControllerView(),
+                new MissionAgentContourControllerView(),
+                new MissionCustomBattlePreloadView(),
                 new InitializeCameraPosView(
                     config.isPlayerAttacker
                         ? config.FormationPosition

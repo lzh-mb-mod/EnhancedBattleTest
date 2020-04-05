@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using SandBox.View.Missions;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
+using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace EnhancedBattleTest
 {
@@ -27,17 +29,19 @@ namespace EnhancedBattleTest
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
-                new MissionFreeBattlePreloadView(config),
-                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
-                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
-                ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateMissionLeaveView(),
+                ViewCreator.CreateOptionsUIHandler(),
                 new SwitchTeamMissionOrderUIHandler(),
                 new SwitchTeamOrderTroopPlacer(),
+                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
+                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
+                new EnhancedMusicBattleMissionView(false),
+                ViewCreator.CreateMissionSpectatorControlView(mission),
+                ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                ViewCreator.CreateOptionsUIHandler(),
-                new SpectatorCameraView(),
+                new MissionFreeBattlePreloadView(config),
                 new InitializeCameraPosView(
                     config.isPlayerAttacker
                         ? config.FormationPosition

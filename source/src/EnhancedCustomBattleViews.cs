@@ -3,6 +3,7 @@ using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.LegacyGUI.Missions;
 using TaleWorlds.MountAndBlade.View.Missions;
 using TaleWorlds.MountAndBlade.View.Missions.Singleplayer;
+using TaleWorlds.MountAndBlade.ViewModelCollection;
 
 namespace EnhancedBattleTest
 {
@@ -28,22 +29,24 @@ namespace EnhancedBattleTest
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
-                new MissionCustomBattlePreloadView(),
-                ViewCreator.CreateOptionsUIHandler(),
-                ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
-                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
-                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
-                ViewCreator.CreateMissionLeaveView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                //ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
+                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
+                ViewCreator.CreateOptionsUIHandler(),
                 new SwitchTeamMissionOrderUIHandler(),
                 new SwitchTeamOrderTroopPlacer(),
+                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
+                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
+                new MusicBattleMissionView(false),
+                ViewCreator.CreateMissionBoundaryCrossingView(),
+                new MissionBoundaryWallView(),
+                ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
+                ViewCreator.CreateMissionSpectatorControlView(mission),
                 // ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 // missionViewList.Add(ViewCreator.CreateMissionScoreBoardUIHandler(mission, false));
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                ViewCreator.CreateMissionBoundaryCrossingView(),
-                new MissionBoundaryWallView(),
-                new SpectatorCameraView(),
+                new MissionCustomBattlePreloadView(),
             };
 
             if (!config.noAgentLabel)

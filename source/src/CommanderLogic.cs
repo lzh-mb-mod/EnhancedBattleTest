@@ -1,18 +1,30 @@
-﻿using TaleWorlds.MountAndBlade;
+﻿using System.ComponentModel;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
     class CommanderLogic : MissionLogic
     {
-        protected override void OnAgentControllerChanged(Agent agent)
+        public override void EarlyStart()
         {
-            if (agent == this.Mission.MainAgent)
-            {
-                if (agent.Controller == Agent.ControllerType.Player)
-                    Utility.SetPlayerAsCommander();
-                else
-                    Utility.CancelPlayerCommander();
-            }
+            base.EarlyStart();
+
+            this.Mission.OnMainAgentChanged += OnMainAgentChanged;
+        }
+
+        public override void HandleOnCloseMission()
+        {
+            base.HandleOnCloseMission();
+
+            this.Mission.OnMainAgentChanged -= OnMainAgentChanged;
+        }
+
+        private void OnMainAgentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (this.Mission.MainAgent != null)
+                Utility.SetPlayerAsCommander();
+            else
+                Utility.CancelPlayerAsCommander();
         }
     }
 }

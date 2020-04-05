@@ -71,7 +71,7 @@ A mod for Mount&Blade Bannerlord that can let you enter multiplayer scene and fi
 
   - Press `P` key to pause game.
 
-  - Press and hold `TAB` key for a while to exit the battle scene.
+  - Press `TAB` key to open score board to exit the battle scene.
 
   - Press `I` key to get player or camera position.
 
@@ -140,14 +140,13 @@ The source code is located in the `source` folder or available at [https://gitla
 
   - Reinstall the mod. If not working:
 
-
-  - Wait for mod update. I would appreciate it if you sent the crash report to me, details below.
+  - Wait for mod update.
 
 - If the mod crashed when clicking buttons in main menu:
   
   - If you customized characters, please make sure the files you modified are syntax correct. You can reinstall the mod if you cannot get it work. Or:
 
-  - Wait for mod update and send me the crash report.
+  - Wait for mod update.
 
 - If the mod crashed when selecting numbers in battle config UI:
   
@@ -159,13 +158,7 @@ The source code is located in the `source` folder or available at [https://gitla
 
 - If the mod crashed in battle (except in siege map):
 
-  - Please send the crash report to me and wait for a fix.
-
-### How to send crash report to me
-- Click `Yes` when it says 
-  > The application faced a problem. We need to collect necessary files to fix this problem. Would you like to update these files now?
-
-- In `bin\Win64_Shipping_Client\crashes\` folder, there should be a folder shows the crash time. Sent the files in this folder, espacially the dump.dmp file to me. My mail address is below.
+  - Please tell me the step to reproduce and wait for a fix.
 
 ## Contact with me
 * Please mail to: lizhenhuan1019@qq.com
