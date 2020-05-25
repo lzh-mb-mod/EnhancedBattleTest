@@ -62,6 +62,7 @@ namespace EnhancedBattleTest
                 {
                     var behaviors = new List<MissionBehaviour>
                     {
+                        new ExperimentLogic(config),
                         new EnhancedFreeBattleMissionController(config),
                         new EnhancedBattleEndLogic(config),
                         new EnhancedMissionCombatantsLogic((IEnumerable<IBattleCombatant>) null, (IBattleCombatant) playerParty,
@@ -69,10 +70,11 @@ namespace EnhancedBattleTest
                         new AdjustSceneLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
+                        new MainAgentChangedLogic(),
                         new TeamAIEnableLogic(config),
                         new DisableDeathLogic(config),
                         new SwitchTeamLogic(),
-                        new SwitchFreeCameraLogic(),
+                        new SwitchFreeCameraLogic(config),
                         new ResetMissionLogic(),
                         new MissionSpeedLogic(),
                         new ReadPositionLogic(),
@@ -120,10 +122,10 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide
             };
-            var player = Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass());
-            Utility.AddCharacter(playerParty, config.playerTroops[0], false, FormationClass.Infantry);
-            Utility.AddCharacter(playerParty, config.playerTroops[1], false, FormationClass.Ranged);
-            Utility.AddCharacter(playerParty, config.playerTroops[2], false, FormationClass.Cavalry);
+            var player = Utility.AddCharacter(playerParty, config.playerClass, true, true);
+            Utility.AddCharacter(playerParty, config.playerTroops[0], false);
+            Utility.AddCharacter(playerParty, config.playerTroops[1], false);
+            Utility.AddCharacter(playerParty, config.playerTroops[2], false);
 
             var enemyCulture = config.GetEnemyTeamCulture();
             var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
@@ -131,10 +133,10 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide.GetOppositeSide()
             };
-            Utility.AddCharacter(enemyParty, config.enemyClass, true, Utility.CommanderFormationClass());
-            Utility.AddCharacter(enemyParty, config.enemyTroops[0], false, FormationClass.Infantry);
-            Utility.AddCharacter(enemyParty, config.enemyTroops[1], false, FormationClass.Ranged);
-            Utility.AddCharacter(enemyParty, config.enemyTroops[2], false, FormationClass.Cavalry);
+            Utility.AddCharacter(enemyParty, config.enemyClass, true);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[0], false);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[1], false);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[2], false);
 
             return OpenCustomBattleMission(config, playerParty, enemyParty, player, true, null,
                 "", "");
@@ -180,14 +182,16 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, (InitializeMissionBehvaioursDelegate)(missionController => (IEnumerable<MissionBehaviour>)new MissionBehaviour[]
            {
+               new ExperimentLogic(config), 
                new AdjustSceneLogic(config),
                new ControlTroopAfterPlayerDeadLogic(),
                new CommanderLogic(),
-               new SetPlayerLogic(player),
+               new MainAgentChangedLogic(),
+               //new SetPlayerLogic(player),
                new TeamAIEnableLogic(config),
                new DisableDeathLogic(EnhancedCustomBattleConfig.Get()),
                new SwitchTeamLogic(),
-               new SwitchFreeCameraLogic(),
+               new SwitchFreeCameraLogic(config),
                new MissionSpeedLogic(),
                new ReadPositionLogic(),
                new TeleportPlayerLogic(),
@@ -266,10 +270,10 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide
             };
-            Utility.AddCharacter(playerParty, config.playerClass, true, Utility.CommanderFormationClass(), true);
-            Utility.AddCharacter(playerParty, config.playerTroops[0], false, FormationClass.Infantry);
-            Utility.AddCharacter(playerParty, config.playerTroops[1], false, FormationClass.Ranged);
-            Utility.AddCharacter(playerParty, config.playerTroops[2], false, FormationClass.Cavalry);
+            Utility.AddCharacter(playerParty, config.playerClass, true, true);
+            Utility.AddCharacter(playerParty, config.playerTroops[0], false);
+            Utility.AddCharacter(playerParty, config.playerTroops[1], false);
+            Utility.AddCharacter(playerParty, config.playerTroops[2], false);
 
             var enemyCulture = config.GetEnemyTeamCulture();
             var enemyParty = new CustomBattleCombatant(enemyCulture.Name, enemyCulture,
@@ -277,10 +281,10 @@ namespace EnhancedBattleTest
             {
                 Side = playerSide.GetOppositeSide()
             };
-            Utility.AddCharacter(enemyParty, config.enemyClass, true, Utility.CommanderFormationClass());
-            Utility.AddCharacter(enemyParty, config.enemyTroops[0], false, FormationClass.Infantry);
-            Utility.AddCharacter(enemyParty, config.enemyTroops[1], false, FormationClass.Ranged);
-            Utility.AddCharacter(enemyParty, config.enemyTroops[2], false, FormationClass.Cavalry);
+            Utility.AddCharacter(enemyParty, config.enemyClass, true);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[0], false);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[1], false);
+            Utility.AddCharacter(enemyParty, config.enemyTroops[2], false);
 
             return OpenSiegeBattleMission(config, playerParty, enemyParty, true, new float[] { 1 },
                     false, new Dictionary<SiegeEngineType, int>()
@@ -360,6 +364,8 @@ namespace EnhancedBattleTest
                 {
                     var missionBehaviourList = new List<MissionBehaviour>
                     {
+                        new ExperimentLogic(config),
+
                         //new BattleSpawnLogic(isSallyOut ? "sally_out_set" : (isReliefForceAttack ? "relief_force_attack_set" : "battle_set")),
                         new AddEntityLogic(config),
                         new MissionOptionsComponent(),
@@ -385,11 +391,12 @@ namespace EnhancedBattleTest
                         new AdjustSceneLogic(config),
                         new ControlTroopAfterPlayerDeadLogic(),
                         new CommanderLogic(),
+                        new MainAgentChangedLogic(),
                         new SetPlayerLogic(player),
                         new TeamAIEnableLogic(config),
                         new DisableDeathLogic(config),
                         new SwitchTeamLogic(),
-                        new SwitchFreeCameraLogic(),
+                        new SwitchFreeCameraLogic(config),
                         new MissionSpeedLogic(),
                         new ReadPositionLogic(),
                         new TeleportPlayerLogic(),

@@ -29,7 +29,6 @@ namespace EnhancedBattleTest
 
         private string _playerName, _enemyName;
         private TroopInfo[] _playerTroopInfos, _enemyTroopInfos;
-        private string _combatAI;
 
         public MultiplayerClassDivisions.MPHeroClass PlayerHeroClass
         {
@@ -87,11 +86,8 @@ namespace EnhancedBattleTest
         public string NoFriendlyBannerString { get; } = GameTexts.FindText("str_no_friendly_banner").ToString();
         public string NoKillNotificationString { get; } = GameTexts.FindText("str_no_kill_notification").ToString();
 
-
         public string MakeGruntVoiceString { get; } = GameTexts.FindText("str_make_grunt_voice").ToString();
         public string HasBoundaryString { get; } = GameTexts.FindText("str_has_boundary").ToString();
-        public string ChangeCombatAIString { get; } = GameTexts.FindText("str_change_combat_ai").ToString();
-        public string CombatAIString { get; } = GameTexts.FindText("str_combat_ai").ToString();
 
         public string SaveAndStartString { get; } = GameTexts.FindText("str_save_and_start").ToString();
         public string SaveString { get; } = GameTexts.FindText("str_save_config").ToString();
@@ -407,19 +403,6 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
-        public bool UseRealisticBlocking
-        {
-            get => this.CurrentConfig.useRealisticBlocking;
-            set
-            {
-                if (this.CurrentConfig.useRealisticBlocking == value)
-                    return;
-                this.CurrentConfig.useRealisticBlocking = value;
-                this.OnPropertyChanged(nameof(UseRealisticBlocking));
-            }
-        }
-
-        [DataSourceProperty]
         public bool NoAgentLabel
         {
             get => this.CurrentConfig.noAgentLabel;
@@ -442,32 +425,6 @@ namespace EnhancedBattleTest
                     return;
                 this.CurrentConfig.noKillNotification = value;
                 this.OnPropertyChanged(nameof(NoKillNotification));
-            }
-        }
-
-        [DataSourceProperty]
-        public bool ChangeCombatAI
-        {
-            get => this.CurrentConfig.changeCombatAI;
-            set
-            {
-                if (this.CurrentConfig.changeCombatAI == value)
-                    return;
-                this.CurrentConfig.changeCombatAI = value;
-                this.OnPropertyChanged(nameof(ChangeCombatAI));
-            }
-        }
-
-        [DataSourceProperty]
-        public string CombatAI
-        {
-            get => this._combatAI;
-            set
-            {
-                if (this._combatAI == value)
-                    return;
-                this._combatAI = value;
-                this.OnPropertyChanged(nameof(CombatAI));
             }
         }
 
@@ -503,9 +460,6 @@ namespace EnhancedBattleTest
             this.EnemyName = this.EnemyHeroClass.HeroName.ToString();
             UpdatePlayerTroopName();
             UpdateEnemyTroopName();
-
-            this.ChangeCombatAI = this.CurrentConfig.changeCombatAI;
-            this.CombatAI = this.CurrentConfig.combatAI.ToString();
         }
 
         private List<MultiplayerClassDivisions.MPHeroClass> GetHeroClasses()
@@ -678,8 +632,6 @@ namespace EnhancedBattleTest
             {
                 CurrentConfig.enemyTroops[i].troopCount = System.Convert.ToInt32(this._enemyTroopInfos[i].count);
             }
-
-            CurrentConfig.combatAI = System.Convert.ToInt32(this._combatAI);
         }
     }
 }

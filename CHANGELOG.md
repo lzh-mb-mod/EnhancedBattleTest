@@ -1,4 +1,8 @@
 # Changelog
+## [e1.0.2] - 2020-04-09
+### Changed
+- Change free camera to rts-sytle camera. Player can issue order in this mode.
+
 ## [e1.0.1] - 2020-04-05
 
 ### Added

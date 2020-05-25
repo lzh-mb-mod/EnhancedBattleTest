@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Messages.FromBattleServer.ToBattleServerManager;
 using TaleWorlds.Core;
+using TaleWorlds.Engine.Options;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.MountAndBlade.ViewModelCollection.GameOptions;
 
 namespace EnhancedBattleTest
 {
@@ -17,8 +20,10 @@ namespace EnhancedBattleTest
         private float _optionValue;
         private bool _isDiscrete;
         private Action<float> _updateAction;
+        private int _roundScale;
+        private bool _isVisible;
 
-        public NumericVM(string name, float initialValue, float min, float max, bool isDiscrete, Action<float> updateAction)
+        public NumericVM(string name, float initialValue, float min, float max, bool isDiscrete, Action<float> updateAction, int roundScale = 100, bool isVisible = true)
         {
             Name = name;
             _initialValue = initialValue;
@@ -27,6 +32,8 @@ namespace EnhancedBattleTest
             _optionValue = initialValue;
             _isDiscrete = isDiscrete;
             _updateAction = updateAction;
+            _roundScale = roundScale;
+            _isVisible = isVisible;
         }
         public string Name { get; }
 
@@ -64,7 +71,7 @@ namespace EnhancedBattleTest
             {
                 if (Math.Abs((double)value - (double)this._optionValue) < 0.01f)
                     return;
-                this._optionValue = MathF.Round(value * 100) / 100f;
+                this._optionValue = MathF.Round(value * _roundScale) / (float)_roundScale;
                 this.OnPropertyChanged(nameof(OptionValue));
                 this.OnPropertyChanged(nameof(OptionValueAsString));
                 this._updateAction(OptionValue);
@@ -86,6 +93,21 @@ namespace EnhancedBattleTest
 
         [DataSourceProperty]
         public string OptionValueAsString => !this.IsDiscrete ? this._optionValue.ToString("F") : ((int)this._optionValue).ToString();
+
+
+
+        [DataSourceProperty]
+        public bool IsVisible
+        {
+            get => this._isVisible;
+            set
+            {
+                if (value == this._isVisible)
+                    return;
+                this._isVisible = value;
+                this.OnPropertyChanged(nameof(IsVisible));
+            }
+        }
     }
 
     public class TacticOptionVM : ViewModel
@@ -126,6 +148,7 @@ namespace EnhancedBattleTest
         private SwitchFreeCameraLogic _switchFreeCameraLogic;
         private MissionSpeedLogic _missionSpeedLogic;
         private ResetMissionLogic _resetMissionLogic;
+        private EnhancedMissionOrderUIHandler _orderUIHandler;
 
         private string _currentAIEnableType;
         private MBBindingList<TacticOptionVM> _attackerTacticOptions;
@@ -133,6 +156,8 @@ namespace EnhancedBattleTest
 
         private Action _closeMenu;
         public Func<BattleSideEnum, TacticOptionEnum, bool, bool> updateSelectedTactic;
+
+        private SelectionOptionDataVM _playerFormation;
 
         public string EnableAIForString { get; } = GameTexts.FindText("str_enable_ai_for").ToString();
         public string AttackerTacticOptionString { get; } = GameTexts.FindText("str_attacker_tactic_option").ToString();
@@ -144,6 +169,11 @@ namespace EnhancedBattleTest
         public string ResetMissionString { get; } = GameTexts.FindText("str_reset_mission").ToString();
         public string TogglePauseString { get; } = GameTexts.FindText("str_toggle_pause").ToString();
         public string ResetSpeedString { get; } = GameTexts.FindText("str_reset_speed").ToString();
+
+        public string UseRealisticBlockingString { get; } = GameTexts.FindText("str_em_use_realistic_blocking").ToString();
+
+        public string ChangeCombatAIString { get; } = GameTexts.FindText("str_change_combat_ai").ToString();
+        public string CombatAIString { get; } = GameTexts.FindText("str_combat_ai").ToString();
 
         public void PreviousAIEnableType()
         {
@@ -215,6 +245,19 @@ namespace EnhancedBattleTest
         [DataSourceProperty] public bool SwitchFreeCameraEnabled => _switchFreeCameraLogic != null;
 
         [DataSourceProperty]
+        public SelectionOptionDataVM PlayerFormation
+        {
+            get => _playerFormation;
+            set
+            {
+                if (_playerFormation == value)
+                    return;
+                _playerFormation = value;
+                OnPropertyChanged(nameof(PlayerFormation));
+            }
+        }
+
+        [DataSourceProperty]
         public bool DisableDeath
         {
             get => this._config.disableDeath;
@@ -247,11 +290,43 @@ namespace EnhancedBattleTest
         public void ResetSpeed()
         {
             SpeedFactor.OptionValue = 1.0f;
-            _missionSpeedLogic.ResetSpeed();
+            _missionSpeedLogic?.ResetSpeed();
         }
 
         [DataSourceProperty]
-        public NumericVM SpeedFactor { get;}
+        public NumericVM SpeedFactor { get; }
+
+        [DataSourceProperty]
+        public bool UseRealisticBlocking
+        {
+            get => this._config.useRealisticBlocking;
+            set
+            {
+                if (this._config.useRealisticBlocking == value)
+                    return;
+                this._config.useRealisticBlocking = value;
+                ApplyUseRealisticBlocking();
+                this.OnPropertyChanged(nameof(UseRealisticBlocking));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ChangeCombatAI
+        {
+            get => this._config.changeCombatAI;
+            set
+            {
+                if (this._config.changeCombatAI == value)
+                    return;
+                this._config.changeCombatAI = value;
+                this.CombatAI.IsVisible = value;
+                ApplyCombatAI();
+                this.OnPropertyChanged(nameof(ChangeCombatAI));
+            }
+        }
+
+        [DataSourceProperty]
+        public NumericVM CombatAI { get; }
 
         private void CloseMenu()
         {
@@ -267,12 +342,46 @@ namespace EnhancedBattleTest
             this._mission = Mission.Current;
             this._switchTeamLogic = _mission.GetMissionBehaviour<SwitchTeamLogic>();
             this._switchFreeCameraLogic = _mission.GetMissionBehaviour<SwitchFreeCameraLogic>();
+            this._orderUIHandler = _mission.GetMissionBehaviour<EnhancedMissionOrderUIHandler>();
+            this.PlayerFormation = new SelectionOptionDataVM(new SelectionOptionData(
+                (int i) =>
+                {
+                    _config.playerFormation = i;
+                    if (Mission.Current.MainAgent != null && Mission.Current.PlayerTeam != null)
+                    {
+                        var controller = Mission.Current.MainAgent.Controller;
+                        Mission.Current.MainAgent.Controller = Agent.ControllerType.AI;
+                        _orderUIHandler?.dataSource.RemoveTroops(Mission.Current.MainAgent);
+                        Mission.Current.MainAgent.Formation =
+                            Mission.Current.PlayerTeam.GetFormation((FormationClass)_config.playerFormation);
+                        _orderUIHandler?.dataSource.AddTroops(Mission.Current.MainAgent);
+                        Mission.Current.MainAgent.Controller = controller;
+                    }
+                }, () => _config.playerFormation,
+                (int)FormationClass.NumberOfRegularFormations, new[]
+                {
+                    new SelectionItem(true, "str_troop_group_name", "0"),
+                    new SelectionItem(true, "str_troop_group_name", "1"),
+                    new SelectionItem(true, "str_troop_group_name", "2"),
+                    new SelectionItem(true, "str_troop_group_name", "3"),
+                    new SelectionItem(true, "str_troop_group_name", "4"),
+                    new SelectionItem(true, "str_troop_group_name", "5"),
+                    new SelectionItem(true, "str_troop_group_name", "6"),
+                    new SelectionItem(true, "str_troop_group_name", "7"),
+                }), GameTexts.FindText("str_player_formation"));
             this._missionSpeedLogic = _mission.GetMissionBehaviour<MissionSpeedLogic>();
             this._resetMissionLogic = _mission.GetMissionBehaviour<ResetMissionLogic>();
-            this.SpeedFactor = new NumericVM(GameTexts.FindText("str_slow_motion_factor").ToString(), _mission.Scene.SlowMotionMode ? _mission.Scene.SlowMotionFactor : 1.0f, 0.01f, 2.0f, false, factor =>
+            this.SpeedFactor = new NumericVM(GameTexts.FindText("str_slow_motion_factor").ToString(),
+                _mission.Scene.SlowMotionMode ? _mission.Scene.SlowMotionFactor : 1.0f, 0.01f, 2.0f, false,
+                factor => { _missionSpeedLogic.SetSlowMotionFactor(factor); });
+
+            this.ChangeCombatAI = this._config.changeCombatAI;
+            this.CombatAI = new NumericVM(CombatAIString, _config.combatAI, 0, 100, true,
+                combatAI =>
                 {
-                    _missionSpeedLogic.SetSlowMotionFactor(factor);
-                });
+                    this._config.combatAI = (int)combatAI;
+                    ApplyCombatAI();
+                }, 1, this._config.changeCombatAI);
 
             FillAttackerAvailableTactics();
             FillDefenderAvailableTactics();
@@ -303,6 +412,47 @@ namespace EnhancedBattleTest
             }
 
             this.DefenderAvailableTactics = tactics;
+        }
+
+        private void ApplyCombatAI()
+        {
+            if (ChangeCombatAI)
+            {
+                foreach (var agent in _mission.Agents)
+                {
+                    AgentStatModel.SetAgentAIStat(agent, agent.AgentDrivenProperties, _config.combatAI);
+                    agent.UpdateAgentProperties();
+                }
+            }
+            else
+            {
+                foreach (var agent in _mission.Agents)
+                {
+                    MissionGameModels.Current.AgentStatCalculateModel.InitializeAgentStats(agent, agent.SpawnEquipment,
+                        agent.AgentDrivenProperties, null);
+                    agent.UpdateAgentProperties();
+                }
+            }
+        }
+
+        private void ApplyUseRealisticBlocking()
+        {
+            if (UseRealisticBlocking)
+            {
+                foreach (var agent in _mission.Agents)
+                {
+                    AgentStatModel.SetUseRealisticBlocking(agent.AgentDrivenProperties, true);
+                    agent.UpdateAgentProperties();
+                }
+            }
+            else
+            {
+                foreach (var agent in _mission.Agents)
+                {
+                    agent.AgentDrivenProperties.SetStat(DrivenProperty.UseRealisticBlocking, agent.Controller != Agent.ControllerType.Player ? 1f : 0.0f);
+                    agent.UpdateAgentProperties();
+                }
+            }
         }
     }
 }

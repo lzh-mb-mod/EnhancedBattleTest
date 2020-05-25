@@ -22,7 +22,7 @@ namespace EnhancedBattleTest
             {
                 // add player to MissionOrderVM, or it will crash after switching to free camera if player team AI is enabled and move player to other formation.
                 agent.Controller = Agent.ControllerType.AI;
-                Mission.GetMissionBehaviour<SwitchTeamMissionOrderUIHandler>()?.dataSource?.AddTroops(agent);
+                Mission.GetMissionBehaviour<EnhancedMissionOrderUIHandler>()?.dataSource?.AddTroops(agent);
                 agent.Controller = Agent.ControllerType.Player;
             }
         }

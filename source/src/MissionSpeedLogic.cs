@@ -28,7 +28,7 @@ namespace EnhancedBattleTest
         public void TogglePause()
         {
             MissionState.Current.Paused = !MissionState.Current.Paused;
-            Utility.DisplayLocalizedText(MissionState.Current.Paused ? "str_mission_paused" : "str_mission_continued.");
+            Utility.DisplayLocalizedText(MissionState.Current.Paused ? "str_mission_paused" : "str_mission_continued");
         }
 
 

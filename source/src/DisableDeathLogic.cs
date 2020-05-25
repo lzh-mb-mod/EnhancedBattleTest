@@ -14,8 +14,7 @@ namespace EnhancedBattleTest
         public override void AfterStart()
         {
             base.AfterStart();
-            Mission.DisableDying = _config.disableDeath;
-            PrintDeathStatus();
+            SetDisableDeath(_config.disableDeath);
         }
 
         public override void OnMissionTick(float dt)
@@ -31,12 +30,12 @@ namespace EnhancedBattleTest
         public void SetDisableDeath(bool disableDeath)
         {
             Mission.DisableDying = disableDeath;
-            PrintDeathStatus();
+            PrintDeathStatus(disableDeath);
         }
 
-        private void PrintDeathStatus()
+        private void PrintDeathStatus(bool disableDeath)
         {
-            Utility.DisplayLocalizedText(Mission.DisableDying ? "str_death_disabled" : "str_death_enabled");
+            Utility.DisplayLocalizedText(disableDeath ? "str_death_disabled" : "str_death_enabled");
         }
     }
 }

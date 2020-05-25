@@ -20,7 +20,7 @@ using TaleWorlds.MountAndBlade.ViewModelCollection.Order;
 
 namespace EnhancedBattleTest
 {
-    class SwitchTeamMissionOrderUIHandler : MissionView, ISiegeDeploymentView
+    public class EnhancedMissionOrderUIHandler : MissionView, ISiegeDeploymentView
     {
         private SwitchTeamLogic _controller;
         private void RegisterReload()
@@ -54,12 +54,14 @@ namespace EnhancedBattleTest
             this.OnMissionScreenActivate();
         }
 
+        public bool exitWithRightClick = true;
+
         private SiegeMissionView _siegeMissionView;
         private const float DEPLOYMENT_ICON_SIZE = 75f;
         private List<DeploymentSiegeMachineVM> _deploymentPointDataSources;
         private Vec2 _deploymentPointWidgetSize;
         private SwitchTeamOrderTroopPlacer _orderTroopPlacer;
-        private GauntletLayer _gauntletLayer;
+        public GauntletLayer gauntletLayer;
         public MissionOrderVM dataSource;
         private GauntletMovie _viewMovie;
         private SiegeDeploymentHandler _siegeDeploymentHandler;
@@ -67,17 +69,18 @@ namespace EnhancedBattleTest
         private bool isInitialized;
         private bool _isTransferEnabled;
 
-        public SwitchTeamMissionOrderUIHandler()
+        public EnhancedMissionOrderUIHandler()
         {
             this.ViewOrderPriorty = 19;
         }
         public void OnActivateToggleOrder()
         {
+            exitWithRightClick = true;
             if (this.dataSource == null || this.dataSource.ActiveTargetState == 0)
                 this._orderTroopPlacer.SuspendTroopPlacer = false;
             this.MissionScreen.SetOrderFlagVisibility(true);
-            if (this._gauntletLayer != null)
-                ScreenManager.SetSuspendLayer((ScreenLayer)this._gauntletLayer, false);
+            if (this.gauntletLayer != null)
+                ScreenManager.SetSuspendLayer((ScreenLayer)this.gauntletLayer, false);
             Game.Current.EventManager.TriggerEvent<MissionPlayerToggledOrderViewEvent>(new MissionPlayerToggledOrderViewEvent(true));
         }
 
@@ -85,8 +88,8 @@ namespace EnhancedBattleTest
         {
             this._orderTroopPlacer.SuspendTroopPlacer = true;
             this.MissionScreen.SetOrderFlagVisibility(false);
-            if (this._gauntletLayer != null)
-                ScreenManager.SetSuspendLayer((ScreenLayer)this._gauntletLayer, true);
+            if (this.gauntletLayer != null)
+                ScreenManager.SetSuspendLayer((ScreenLayer)this.gauntletLayer, true);
             Game.Current.EventManager.TriggerEvent<MissionPlayerToggledOrderViewEvent>(new MissionPlayerToggledOrderViewEvent(false));
         }
 
@@ -127,15 +130,15 @@ namespace EnhancedBattleTest
                     this._deploymentPointWidgetSize = new Vec2(75f / TaleWorlds.Engine.Screen.RealScreenResolutionWidth, 75f / TaleWorlds.Engine.Screen.RealScreenResolutionHeight);
                 }
             }
-            this._gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
-            this._gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
-            this._viewMovie = this._gauntletLayer.LoadMovie("Order", (ViewModel)this.dataSource);
-            this.MissionScreen.AddLayer((ScreenLayer)this._gauntletLayer);
+            this.gauntletLayer = new GauntletLayer(this.ViewOrderPriorty, "GauntletLayer");
+            this.gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
+            this._viewMovie = this.gauntletLayer.LoadMovie("Order", (ViewModel)this.dataSource);
+            this.MissionScreen.AddLayer((ScreenLayer)this.gauntletLayer);
             if (this.IsDeployment)
-                this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+                this.gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             else if (!this.dataSource.IsToggleOrderShown)
-                ScreenManager.SetSuspendLayer((ScreenLayer)this._gauntletLayer, true);
-            this.dataSource.InputRestrictions = this._gauntletLayer.InputRestrictions;
+                ScreenManager.SetSuspendLayer((ScreenLayer)this.gauntletLayer, true);
+            this.dataSource.InputRestrictions = this.gauntletLayer.InputRestrictions;
         }
 
         public override void OnMissionScreenFinalize()
@@ -143,7 +146,7 @@ namespace EnhancedBattleTest
             base.OnMissionScreenFinalize();
             this._deploymentPointDataSources = (List<DeploymentSiegeMachineVM>)null;
             this._orderTroopPlacer = null;
-            this._gauntletLayer = (GauntletLayer)null;
+            this.gauntletLayer = (GauntletLayer)null;
             this.dataSource.OnFinalize();
             this.dataSource = (MissionOrderVM)null;
             this._viewMovie = (GauntletMovie)null;
@@ -194,14 +197,14 @@ namespace EnhancedBattleTest
             {
                 if (!this._orderTroopPlacer.SuspendTroopPlacer)
                     this._orderTroopPlacer.SuspendTroopPlacer = true;
-                this._gauntletLayer.InputRestrictions.ResetInputRestrictions();
+                this.gauntletLayer.InputRestrictions.ResetInputRestrictions();
             }
             if (this.IsDeployment)
             {
                 if (this.MissionScreen.SceneLayer.Input.IsKeyDown(InputKey.RightMouseButton))
-                    this._gauntletLayer.InputRestrictions.SetMouseVisibility(false);
+                    this.gauntletLayer.InputRestrictions.SetMouseVisibility(false);
                 else
-                    this._gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+                    this.gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
             }
             this.MissionScreen.OrderFlag.IsTroop = this.dataSource.ActiveTargetState == 0;
             this.MissionScreen.OrderFlag.Tick(dt);
@@ -254,7 +257,7 @@ namespace EnhancedBattleTest
 
         void ISiegeDeploymentView.OnEntityHover(GameEntity hoveredEntity)
         {
-            if (this._gauntletLayer.HitTest())
+            if (this.gauntletLayer.HitTest())
                 return;
             this.dataSource.OnEntityHover(hoveredEntity);
         }
@@ -286,20 +289,20 @@ namespace EnhancedBattleTest
         {
             if (this.dataSource.IsToggleOrderShown)
             {
-                if (this.dataSource.IsTransferActive && this._gauntletLayer.Input.IsHotKeyReleased("Exit"))
+                if (this.dataSource.IsTransferActive && this.gauntletLayer.Input.IsHotKeyReleased("Exit"))
                     this.dataSource.IsTransferActive = false;
                 if (this.dataSource.IsTransferActive != this._isTransferEnabled)
                 {
                     this._isTransferEnabled = this.dataSource.IsTransferActive;
                     if (!this._isTransferEnabled)
                     {
-                        this._gauntletLayer.IsFocusLayer = false;
-                        ScreenManager.TryLoseFocus((ScreenLayer)this._gauntletLayer);
+                        this.gauntletLayer.IsFocusLayer = false;
+                        ScreenManager.TryLoseFocus((ScreenLayer)this.gauntletLayer);
                     }
                     else
                     {
-                        this._gauntletLayer.IsFocusLayer = true;
-                        ScreenManager.TrySetFocus((ScreenLayer)this._gauntletLayer);
+                        this.gauntletLayer.IsFocusLayer = true;
+                        ScreenManager.TrySetFocus((ScreenLayer)this.gauntletLayer);
                     }
                 }
                 if (this.dataSource.ActiveTargetState == 0 && this.Input.IsKeyReleased(InputKey.LeftMouseButton))
@@ -322,12 +325,12 @@ namespace EnhancedBattleTest
                             break;
                     }
                 }
-                if (this.DebugInput.IsAltDown())
-                {
-                    bool isMouseVisible = this.dataSource.IsTransferActive || !this._gauntletLayer.InputRestrictions.MouseVisibility;
-                    this._gauntletLayer.InputRestrictions.SetInputRestrictions(isMouseVisible, isMouseVisible ? InputUsageMask.Mouse : InputUsageMask.Invalid);
-                }
-                if (this.Input.IsKeyReleased(InputKey.RightMouseButton))
+                //if (this.DebugInput.IsAltDown())
+                //{
+                //    bool isMouseVisible = this.dataSource.IsTransferActive || !this.gauntletLayer.InputRestrictions.MouseVisibility;
+                //    this.gauntletLayer.InputRestrictions.SetInputRestrictions(isMouseVisible, isMouseVisible ? InputUsageMask.Mouse : InputUsageMask.Invalid);
+                //}
+                if (exitWithRightClick && this.Input.IsKeyReleased(InputKey.RightMouseButton))
                     this.dataSource.OnEscape();
             }
             int pressedIndex = -1;

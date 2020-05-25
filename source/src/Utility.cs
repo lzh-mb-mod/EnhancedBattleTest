@@ -32,7 +32,7 @@ namespace EnhancedBattleTest
         public static void SetPlayerAsCommander()
         {
             var mission = Mission.Current;
-            if (mission == null)
+            if (mission?.PlayerTeam == null)
                 return;
             mission.PlayerTeam.PlayerOrderController.Owner = mission.MainAgent;
             foreach (var formation in mission.PlayerTeam.FormationsIncludingEmpty)
@@ -113,12 +113,12 @@ namespace EnhancedBattleTest
             return equipment;
         }
 
-        public static void OverrideEquipment(AgentBuildData buildData, ClassInfo info, bool isPlayer)
+        public static void OverrideEquipment(AgentBuildData buildData, ClassInfo info, bool isHero)
         {
             MultiplayerClassDivisions.MPHeroClass mpHeroClass =
                 MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
-            BasicCharacterObject character = isPlayer ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
-            var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isPlayer);
+            BasicCharacterObject character = isHero ? mpHeroClass.HeroCharacter : mpHeroClass.TroopCharacter;
+            var equipment = GetNewEquipmentsForPerks(mpHeroClass, info, isHero);
             buildData
                 .Equipment(equipment)
                 .MountKey(MountCreationKey.GetRandomMountKey(equipment[EquipmentIndex.ArmorItemEndSlot].Item,
@@ -178,31 +178,13 @@ namespace EnhancedBattleTest
         }
 
         public static BasicCharacterObject AddCharacter(CustomBattleCombatant combatant, ClassInfo info, bool isHero,
-            FormationClass formationClass, bool isPlayer = false)
+            bool isPlayer = false)
         {
             BasicCharacterObject character = Utility.ApplyPerks(info, isHero);
-            character.CurrentFormationClass = GetActualFormationClass(info, character.CurrentFormationClass);
             if (isPlayer)
                 Game.Current.PlayerTroop = character;
             combatant.AddCharacter(character, info.troopCount);
             return character;
-        }
-
-        public static FormationClass GetActualFormationClass(ClassInfo info, FormationClass formationClass)
-        {
-            MultiplayerClassDivisions.MPHeroClass mpHeroClass =
-                MBObjectManager.Instance.GetObject<MultiplayerClassDivisions.MPHeroClass>(info.classStringId);
-            var character = mpHeroClass.TroopCharacter;
-            if (character.HasMount())
-            {
-                if (formationClass == FormationClass.Infantry)
-                    // Mission.SpawnTroop will change formationClass to Cavalry if character has mount and is of infantry.
-                    formationClass = FormationClass.Skirmisher;
-                else if (character.HasMount() && formationClass == FormationClass.Ranged)
-                    formationClass = FormationClass.HorseArcher; // Same behaviour in Mission.SpawnTroop
-            }
-
-            return formationClass;
         }
 
         public static MatrixFrame ToMatrixFrame(Scene scene, Vec3 position, Vec2 direction)

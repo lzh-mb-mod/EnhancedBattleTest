@@ -203,7 +203,7 @@ namespace EnhancedBattleTest
                 Groups = new MBBindingList<NameVM>();
             foreach (var groupId in this._params.allMpHeroClassMap[culture].Keys)
             {
-                Groups.Add(new NameVM { StringId = groupId, Name = GameTexts.FindText("str_character_group", groupId).ToString() });
+                Groups.Add(new NameVM { StringId = groupId, Name = GameTexts.FindText("str_troop_type_name", groupId).ToString() });
             }
 
             SelectedGroupIndex = 0;

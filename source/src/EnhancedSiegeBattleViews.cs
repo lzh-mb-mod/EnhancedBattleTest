@@ -30,11 +30,12 @@ namespace EnhancedBattleTest
         public static MissionView[] OpenSiegeMission(Mission mission)
         {
             var config = EnhancedSiegeBattleConfig.Get();
-            MissionView missionOrderUiHandler = new SwitchTeamMissionOrderUIHandler();
+            MissionView missionOrderUiHandler = new EnhancedMissionOrderUIHandler();
             ISiegeDeploymentView siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
+                new FlyCameraMissionView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 ViewCreator.CreateOptionsUIHandler(),

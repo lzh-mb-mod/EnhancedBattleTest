@@ -111,6 +111,17 @@ namespace EnhancedBattleTest
                 ActivateMenu();
         }
 
+        public override void OnAgentBuild(Agent agent, Banner banner)
+        {
+            base.OnAgentBuild(agent, banner);
+
+            if (_config.changeCombatAI)
+            {
+                AgentStatModel.SetAgentAIStat(agent, agent.AgentDrivenProperties, _config.combatAI);
+                agent.UpdateAgentProperties();
+            }
+        }
+
         private static bool _oldGameStatusDisabledStatus = false;
 
         private static void PauseGame()

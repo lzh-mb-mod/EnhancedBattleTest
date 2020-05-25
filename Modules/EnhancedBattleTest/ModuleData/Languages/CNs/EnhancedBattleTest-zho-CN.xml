@@ -5,143 +5,139 @@
     <tag language="简体中文" />
   </tags>
   <strings>
-    <string id="freebattleoption" text="EnhancedBattleTest自由战斗" />
-    <string id="custombattleoption" text="EnhancedBattleTest自定义战斗" />
-    <string id="siegebattleoption" text="EnhancedBattleTest攻城战斗" />
+    <string id="EnhancedBattleTest_freebattleoption" text="EnhancedBattleTest自由战斗" />
+    <string id="EnhancedBattleTest_custombattleoption" text="EnhancedBattleTest自定义战斗" />
+    <string id="EnhancedBattleTest_siegebattleoption" text="EnhancedBattleTest攻城战斗" />
 
-    <string id="freebattle" text="自由战斗" />
-    <string id="custombattle" text="自定义战斗" />
-    <string id="siegebattle" text="攻城战斗" />
+    <string id="EnhancedBattleTest_freebattle" text="自由战斗" />
+    <string id="EnhancedBattleTest_custombattle" text="自定义战斗" />
+    <string id="EnhancedBattleTest_siegebattle" text="攻城战斗" />
 
-    <string id="controltrooptip" text="按F或F10来在你死后控制你的士兵。" />
-    <string id="switchteamtip" text="按F9来切换队伍。" />
-    <string id="switchfreecameratip" text="按F10来切换自由视角。" />
-    <string id="disabledeathtip" text="按F11来禁用死亡。" />
-    <string id="resetmissiontip" text="按F12来重置关卡。" />
-    <string id="moreoptiontip" text="按字母O键来调整更多设置。" />
-    <string id="pausetip" text="按P键来暂停游戏。" />
-    <string id="leavemissiontip" text="按TAB键来打开战绩面板或结束战斗。" />
-    <string id="readpositiontip" text="按住大小字母I键来获取当前玩家或镜头的位置" />
-    <string id="teleporttip" text="按L键来在自由视角中让玩家瞬移至镜头位置" />
+    <string id="EnhancedBattleTest_controltrooptip" text="按F或F10来在你死后控制你的士兵。" />
+    <string id="EnhancedBattleTest_switchteamtip" text="按F9来切换队伍。" />
+    <string id="EnhancedBattleTest_switchfreecameratip" text="按F10来切换自由视角。" />
+    <string id="EnhancedBattleTest_disabledeathtip" text="按F11来禁用死亡。" />
+    <string id="EnhancedBattleTest_resetmissiontip" text="按F12来重置关卡。" />
+    <string id="EnhancedBattleTest_moreoptiontip" text="按字母O键来调整更多设置。" />
+    <string id="EnhancedBattleTest_pausetip" text="按P键来暂停游戏。" />
+    <string id="EnhancedBattleTest_leavemissiontip" text="按TAB键来打开战绩面板或结束战斗。" />
+    <string id="EnhancedBattleTest_readpositiontip" text="按住大小字母I键来获取当前玩家或镜头的位置" />
+    <string id="EnhancedBattleTest_teleporttip" text="按L键来在自由视角中让玩家瞬移至镜头位置" />
 
-    <string id="createdefaultconfig" text="创建默认配置" />
-    <string id="foundoldconfig" text="找到旧配置文件: " />
-    <string id="deleteoldconfig" text="删除旧配置文件" />
-    <string id="renameoldconfig" text="将旧配置文件重命名为新名称..." />
-    <string id="contentillegal" text="内容不合法。" />
-    <string id="contentoutofrange" text="内容超出范围。" />
-    <string id="playercharacter" text="玩家角色" />
-    <string id="spawnplayer" text="是否生成玩家角色" />
-    <string id="isplayerattacker" text="己方作为进攻方" />
-    <string id="playertroop1" text="己方1号部队" />
-    <string id="playertroop2" text="己方2号部队" />
-    <string id="playertroop3" text="己方3号部队" />
-    <string id="playertroop1count" text="己方1号部队数量" />
-    <string id="playertroop2count" text="己方2号部队数量" />
-    <string id="playertroop3count" text="己方3号部队数量" />
-    <string id="enemytroop1" text="敌方1号部队" />
-    <string id="enemytroop2" text="敌方2号部队" />
-    <string id="enemytroop3" text="敌方3号部队" />
-    <string id="enemytroop1count" text="敌方1号部队数量" />
-    <string id="enemytroop2count" text="敌方2号部队数量" />
-    <string id="enemytroop3count" text="敌方3号部队数量" />
-    <string id="enemycommander" text="敌方指挥官" />
-    <string id="spawnenemycommander" text="是否生成敌方指挥官" />
-    <string id="controltroop" text="正在控制下属士兵。" />
-    <string id="notrooptocontrol" text="无可控制的下属士兵。" />
-    <string id="deathdisabled" text="已禁用死亡。" />
-    <string id="deathenabled" text="已启用死亡。" />
-    <string id="configincompatible" text="配置文件不兼容。\n重设为默认设置。" />
-    <string id="savedconfig" text="保存配置文件成功。" />
-    <string id="saveconfigfailed" text="保存配置文件失败。" />
-    <string id="exceptioncaught" text="捕获到异常：" />
-    <string id="loadedconfig" text="加载配置成功。" />
-    <string id="loadconfigfailed" text="加载配置文件失败。" />
-    <string id="soldiersperrow" text="每行士兵数量" />
-    <string id="formationposition" text="进攻方位置(x,y)" />
-    <string id="formationdirection" text="进攻方朝向(x,y)" />
-    <string id="distance" text="双方距离" />
-    <string id="skybrightness" text="天空亮度" />
-    <string id="raindensity" text="降雨大小" />
-    <string id="moreoptions" text="更多选项" />
-    <string id="userealisticblocking" text="更真实的格挡机制" />
-    <string id="nofriendlybannder" text="关闭队友标识" />
-    <string id="nokillnotification" text="关闭击杀报告" />
-    <string id="makegruntvoice" text="下令后士兵回应" />
-    <string id="hasboundary" text="地图边界" />
+    <string id="EnhancedBattleTest_createdefaultconfig" text="创建默认配置" />
+    <string id="EnhancedBattleTest_foundoldconfig" text="找到旧配置文件: " />
+    <string id="EnhancedBattleTest_deleteoldconfig" text="删除旧配置文件" />
+    <string id="EnhancedBattleTest_renameoldconfig" text="将旧配置文件重命名为新名称..." />
+    <string id="EnhancedBattleTest_contentillegal" text="内容不合法。" />
+    <string id="EnhancedBattleTest_contentoutofrange" text="内容超出范围。" />
+    <string id="EnhancedBattleTest_playercharacter" text="玩家角色" />
+    <string id="EnhancedBattleTest_spawnplayer" text="是否生成玩家角色" />
+    <string id="EnhancedBattleTest_isplayerattacker" text="己方作为进攻方" />
+    <string id="EnhancedBattleTest_playertroop1" text="己方1号部队" />
+    <string id="EnhancedBattleTest_playertroop2" text="己方2号部队" />
+    <string id="EnhancedBattleTest_playertroop3" text="己方3号部队" />
+    <string id="EnhancedBattleTest_playertroop1count" text="己方1号部队数量" />
+    <string id="EnhancedBattleTest_playertroop2count" text="己方2号部队数量" />
+    <string id="EnhancedBattleTest_playertroop3count" text="己方3号部队数量" />
+    <string id="EnhancedBattleTest_enemytroop1" text="敌方1号部队" />
+    <string id="EnhancedBattleTest_enemytroop2" text="敌方2号部队" />
+    <string id="EnhancedBattleTest_enemytroop3" text="敌方3号部队" />
+    <string id="EnhancedBattleTest_enemytroop1count" text="敌方1号部队数量" />
+    <string id="EnhancedBattleTest_enemytroop2count" text="敌方2号部队数量" />
+    <string id="EnhancedBattleTest_enemytroop3count" text="敌方3号部队数量" />
+    <string id="EnhancedBattleTest_enemycommander" text="敌方指挥官" />
+    <string id="EnhancedBattleTest_spawnenemycommander" text="是否生成敌方指挥官" />
+    <string id="EnhancedBattleTest_controltroop" text="正在控制下属士兵。" />
+    <string id="EnhancedBattleTest_notrooptocontrol" text="无可控制的下属士兵。" />
+    <string id="EnhancedBattleTest_deathdisabled" text="已禁用死亡。" />
+    <string id="EnhancedBattleTest_deathenabled" text="已启用死亡。" />
+    <string id="EnhancedBattleTest_configincompatible" text="配置文件不兼容。\n重设为默认设置。" />
+    <string id="EnhancedBattleTest_savedconfig" text="保存配置文件成功。" />
+    <string id="EnhancedBattleTest_saveconfigfailed" text="保存配置文件失败。" />
+    <string id="EnhancedBattleTest_exceptioncaught" text="捕获到异常：" />
+    <string id="EnhancedBattleTest_loadedconfig" text="加载配置成功。" />
+    <string id="EnhancedBattleTest_loadconfigfailed" text="加载配置文件失败。" />
+    <string id="EnhancedBattleTest_soldiersperrow" text="每行士兵数量" />
+    <string id="EnhancedBattleTest_formationposition" text="进攻方位置(x,y)" />
+    <string id="EnhancedBattleTest_formationdirection" text="进攻方朝向(x,y)" />
+    <string id="EnhancedBattleTest_distance" text="双方距离" />
+    <string id="EnhancedBattleTest_skybrightness" text="天空亮度" />
+    <string id="EnhancedBattleTest_raindensity" text="降雨大小" />
+    <string id="EnhancedBattleTest_moreoptions" text="更多选项" />
+    <string id="EnhancedBattleTest_userealisticblocking" text="更真实的格挡机制" />
+    <string id="EnhancedBattleTest_nofriendlybannder" text="关闭队友标识" />
+    <string id="EnhancedBattleTest_nokillnotification" text="关闭击杀报告" />
+    <string id="EnhancedBattleTest_makegruntvoice" text="下令后士兵回应" />
+    <string id="EnhancedBattleTest_hasboundary" text="地图边界" />
 
-    <string id="changecombatai" text="改变战斗AI" />
-    <string id="combatai" text="战斗AI（0-100）" />
+    <string id="EnhancedBattleTest_changecombatai" text="改变战斗AI" />
+    <string id="EnhancedBattleTest_combatai" text="战斗AI（0-100）" />
 
-    <string id="saveandstart" text="保存配置并开始" />
-    <string id="saveconfig" text="保存" />
-    <string id="loadconfig" text="加载配置" />
-    <string id="exit" text="退出" />
+    <string id="EnhancedBattleTest_saveandstart" text="保存配置并开始" />
+    <string id="EnhancedBattleTest_saveconfig" text="保存" />
+    <string id="EnhancedBattleTest_loadconfig" text="加载配置" />
+    <string id="EnhancedBattleTest_exit" text="退出" />
 
-    <string id="charactergroupinfantry" text="步兵" />
-    <string id="charactergroupRanged" text="远程" />
-    <string id="charactergroupcavalry" text="骑兵" />
-    <string id="charactergrouphorsearcher" text="骑射" />
+    <string id="EnhancedBattleTest_errornoheroclass" text="错误: 该角色无对应的HeroClass。战斗ai等级将会设为50。" />
+    <string id="EnhancedBattleTest_tacticinchangableinsiege" text="攻城中不能改变战术选项。" />
+    <string id="EnhancedBattleTest_atleastonetactic" text="至少应启用一个战术选项。" />
 
-    <string id="errornoheroclass" text="错误: 该角色无对应的HeroClass。战斗ai等级将会设为50。" />
-    <string id="tacticinchangableinsiege" text="攻城中不能改变战术选项。" />
-    <string id="atleastonetactic" text="至少应启用一个战术选项。" />
-
-    <string id="enableaifor" text="启用队伍战术AI" />
-    <string id="aienabletypenone" text="均无" />
-    <string id="aienabletypeenemyonly" text="仅敌方" />
-    <string id="aienabletypeplayeronly" text="仅己方" />
-    <string id="aienabletypeboth" text="双方均有" />
-    <string id="aienabledfornone" text="双方均已禁用队伍AI。" />
-    <string id="aienabledforenemyonly" text="仅敌方启用队伍AI。" />
-    <string id="aienabledforplayeronly" text="仅己方启用队伍AI。" />
-    <string id="aienabledforboth" text="双方均启用队伍AI。" />
+    <string id="EnhancedBattleTest_enableaifor" text="启用队伍战术AI" />
+    <string id="EnhancedBattleTest_aienabletypenone" text="均无" />
+    <string id="EnhancedBattleTest_aienabletypeenemyonly" text="仅敌方" />
+    <string id="EnhancedBattleTest_aienabletypeplayeronly" text="仅己方" />
+    <string id="EnhancedBattleTest_aienabletypeboth" text="双方均有" />
+    <string id="EnhancedBattleTest_aienabledfornone" text="双方均已禁用队伍AI。" />
+    <string id="EnhancedBattleTest_aienabledforenemyonly" text="仅敌方启用队伍AI。" />
+    <string id="EnhancedBattleTest_aienabledforplayeronly" text="仅己方启用队伍AI。" />
+    <string id="EnhancedBattleTest_aienabledforboth" text="双方均启用队伍AI。" />
     
-    <string id="attackertacticoption" text="进攻方战术AI" />
-    <string id="defendertacticoption" text="防守方战术AI" />
+    <string id="EnhancedBattleTest_attackertacticoption" text="进攻方战术AI" />
+    <string id="EnhancedBattleTest_defendertacticoption" text="防守方战术AI" />
 
-    <string id="tacticcharge" text="冲锋" />
-    <string id="tacticfullscaleattack" text="全军攻击" />
-    <string id="tacticdefensiveengagement" text="防御性接战" />
-    <string id="tacticdefensiveline" text="防御性线阵" />
-    <string id="tacticdefensivering" text="防御性圆阵" />
-    <string id="tacticholdthehill" text="防守高坡" />
-    <string id="tacticholdchokepoint" text="防守咽喉" />
-    <string id="tacticarchersonthehill" text="远程待坡上，步兵进攻" />
-    <string id="tacticrangedharassmentoffensive" text="远程骚扰攻势" />
-    <string id="tacticfrontalcavalrycharge" text="骑兵先行冲锋" />
-    <string id="tacticcoordinatedretreat" text="有序撤退" />
-    <string id="tacticbreachwalls" text="破坏城墙" />
-    <string id="tacticdefendcastle" text="防守城堡" />
+    <string id="EnhancedBattleTest_tacticcharge" text="冲锋" />
+    <string id="EnhancedBattleTest_tacticfullscaleattack" text="全军攻击" />
+    <string id="EnhancedBattleTest_tacticdefensiveengagement" text="防御性接战" />
+    <string id="EnhancedBattleTest_tacticdefensiveline" text="防御性线阵" />
+    <string id="EnhancedBattleTest_tacticdefensivering" text="防御性圆阵" />
+    <string id="EnhancedBattleTest_tacticholdthehill" text="防守高坡" />
+    <string id="EnhancedBattleTest_tacticholdchokepoint" text="防守咽喉" />
+    <string id="EnhancedBattleTest_tacticarchersonthehill" text="远程待坡上，步兵进攻" />
+    <string id="EnhancedBattleTest_tacticrangedharassmentoffensive" text="远程骚扰攻势" />
+    <string id="EnhancedBattleTest_tacticfrontalcavalrycharge" text="骑兵先行冲锋" />
+    <string id="EnhancedBattleTest_tacticcoordinatedretreat" text="有序撤退" />
+    <string id="EnhancedBattleTest_tacticbreachwalls" text="破坏城墙" />
+    <string id="EnhancedBattleTest_tacticdefendcastle" text="防守城堡" />
 
-    <string id="defender" text="防守方" />
-    <string id="attacker" text="进攻方" />
+    <string id="EnhancedBattleTest_defender" text="防守方" />
+    <string id="EnhancedBattleTest_attacker" text="进攻方" />
 
-    <string id="addtactic" text="为{CurrentSide}添加{CurrentTacticOption}战术." />
-    <string id="removetactic" text="为{CurrentSide}移除{CurrentTacticOption}战术." />
+    <string id="EnhancedBattleTest_addtactic" text="为{CurrentSide}添加{CurrentTacticOption}战术." />
+    <string id="EnhancedBattleTest_removetactic" text="为{CurrentSide}移除{CurrentTacticOption}战术." />
 
-    <string id="switchteam" text="切换队伍" />
-    <string id="switchfreecamera" text="切换自由视角" />
-    <string id="disabledeath" text="禁用死亡" />
-    <string id="resetmission" text="重置关卡" />
-    <string id="togglepause" text="切换暂停" />
-    <string id="resetspeed" text="重置速度" />
-    <string id="slowmotionfactor" text="速度倍率" />
+    <string id="EnhancedBattleTest_switchteam" text="切换队伍" />
+    <string id="EnhancedBattleTest_switchfreecamera" text="切换自由视角" />
+    <string id="EnhancedBattleTest_playerformation" text="玩家编队" />
+    <string id="EnhancedBattleTest_disabledeath" text="禁用死亡" />
+    <string id="EnhancedBattleTest_resetmission" text="重置关卡" />
+    <string id="EnhancedBattleTest_togglepause" text="切换暂停" />
+    <string id="EnhancedBattleTest_resetspeed" text="重置速度" />
+    <string id="EnhancedBattleTest_slowmotionfactor" text="速度倍率" />
 
-    <string id="missionpaused" text="已暂停关卡。" />
-    <string id="missioncontinue" text="关卡继续。" />
+    <string id="EnhancedBattleTest_missionpaused" text="已暂停关卡。" />
+    <string id="EnhancedBattleTest_missioncontinue" text="关卡继续。" />
 
-    <string id="slowmotionenabled" text="启用变速模式。" />
-    <string id="fastfowardenabled" text="启用快速模式。" />
-    <string id="normalmodeenabled" text="启用正常速度。" />
+    <string id="EnhancedBattleTest_slowmotionenabled" text="启用变速模式。" />
+    <string id="EnhancedBattleTest_fastfowardenabled" text="启用快速模式。" />
+    <string id="EnhancedBattleTest_normalmodeenabled" text="启用正常速度。" />
 
-    <string id="missionreset" text="关卡已重置。" />
+    <string id="EnhancedBattleTest_missionreset" text="关卡已重置。" />
 
-    <string id="playeragentdead" text="玩家角色已死亡。" />
-    <string id="switchtoplayer" text="切换到玩家角色。" />
-    <string id="switchtofreecamera" text="切换到自由视角。" />
+    <string id="EnhancedBattleTest_playeragentdead" text="玩家角色已死亡。" />
+    <string id="EnhancedBattleTest_switchtoplayer" text="切换到玩家角色。" />
+    <string id="EnhancedBattleTest_switchtofreecamera" text="切换到自由视角。" />
 
-    <string id="enemywipedout" text="敌人已被消灭。" />
-    <string id="switchtoenemyteam" text="已切换至敌军队伍。" />
+    <string id="EnhancedBattleTest_enemywipedout" text="敌人已被消灭。" />
+    <string id="EnhancedBattleTest_switchtoenemyteam" text="已切换至敌军队伍。" />
   </strings>
 </base>

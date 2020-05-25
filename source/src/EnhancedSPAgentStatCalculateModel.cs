@@ -246,6 +246,11 @@ namespace EnhancedBattleTest
             return 0;
         }
 
+        public override float GetDifficultyModifier()
+        {
+            return 1;
+        }
+
         private int GetSkillValueForItem(BasicCharacterObject characterObject, ItemObject primaryItem)
         {
             return characterObject.GetSkillValue(primaryItem != null ? primaryItem.RelevantSkill : DefaultSkills.Athletics);

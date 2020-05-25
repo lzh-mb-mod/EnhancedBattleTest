@@ -132,7 +132,7 @@ namespace EnhancedBattleTest
         {
             if (_instance == null)
             {
-                _instance = new EnhancedCustomBattleConfig();
+                _instance = CreateDefault();
                 _instance.SyncWithSave();
             }
             return _instance;

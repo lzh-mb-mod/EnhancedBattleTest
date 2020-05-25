@@ -220,7 +220,7 @@ namespace EnhancedBattleTest
         {
             if (_instance == null)
             {
-                _instance = new EnhancedFreeBattleConfig();
+                _instance = CreateDefault();
                 _instance.SyncWithSave();
             }
 

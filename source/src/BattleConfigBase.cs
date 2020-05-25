@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest
 {
@@ -39,7 +40,7 @@ namespace EnhancedBattleTest
 
     public abstract class BattleConfigBase
     {
-        public static Version ModVersion { get; } = new Version(1, 0,0);
+        public static Version ModVersion { get; } = new Version(1, 0,2);
         public string ConfigVersion { get; set; }
         [XmlIgnore]
         public virtual int SoldiersPerRow
@@ -100,6 +101,8 @@ namespace EnhancedBattleTest
         public TacticOptionInfo[] defenderTacticOptions;
 
         public AIEnableType aiEnableType = AIEnableType.EnemyOnly;
+
+        public int playerFormation = 4;
 
         public bool disableDeath;
 
@@ -408,6 +411,7 @@ namespace EnhancedBattleTest
             this.attackerTacticOptions = other.attackerTacticOptions;
             this.defenderTacticOptions = other.defenderTacticOptions;
             this.aiEnableType = other.aiEnableType;
+            this.playerFormation = other.playerFormation;
             this.disableDeath = other.disableDeath;
             this.useRealisticBlocking = other.useRealisticBlocking;
             this.noAgentLabel = other.noAgentLabel;

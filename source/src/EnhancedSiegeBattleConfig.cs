@@ -149,7 +149,7 @@ namespace EnhancedBattleTest
         {
             if (_instance == null)
             {
-                _instance = new EnhancedSiegeBattleConfig();
+                _instance = CreateDefault();
                 _instance.SyncWithSave();
             }
 

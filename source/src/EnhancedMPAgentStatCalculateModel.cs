@@ -107,8 +107,8 @@ namespace EnhancedBattleTest
             agentDrivenProperties.AiHearingDistanceFactor = 1f + amount;
             agentDrivenProperties.AiChargeHorsebackTargetDistFactor = (float)(1.5 * (3.0 - (double)amount));
             float num4 = 1f - MBMath.ClampFloat(0.004f * (float)agent.Character.GetSkillValue(DefaultSkills.Bow), 0.0f, 0.99f);
-            agentDrivenProperties.AiRangerLeadErrorMin = num4 * 0.2f;
-            agentDrivenProperties.AiRangerLeadErrorMax = num4 * 0.3f;
+            agentDrivenProperties.AiRangerLeadErrorMin = num4 * -0.3f;
+            agentDrivenProperties.AiRangerLeadErrorMax = num4 * 0.2f;
             agentDrivenProperties.AiRangerVerticalErrorMultiplier = num4 * 0.1f;
             agentDrivenProperties.AiRangerHorizontalErrorMultiplier = num4 * ((float)Math.PI / 90f);
             agentDrivenProperties.AIAttackOnDecideChance = AgentStatCalculateModel.CalculateAIAttackOnDecideMaxValue;
@@ -252,6 +252,11 @@ namespace EnhancedBattleTest
         public override short CalculateConsumableMaxAmountAdder()
         {
             return 0;
+        }
+
+        public override float GetDifficultyModifier()
+        {
+            return 1;
         }
 
         private void FillAgentStatsFromData(

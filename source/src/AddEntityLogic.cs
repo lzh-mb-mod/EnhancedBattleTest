@@ -22,36 +22,22 @@ namespace EnhancedBattleTest
         {
             base.EarlyStart();
 
-            AddEntity("attacker", _config.FormationPosition, _config.FormationDirection,
-                _config.playerTroops, _config.SoldiersPerRow);
+            AddEntity("attack", _config.FormationPosition, _config.FormationDirection);
             AddEntity("defender", _config.FormationPosition + _config.Distance * _config.FormationDirection,
-                -_config.FormationDirection, _config.enemyTroops, _config.SoldiersPerRow);
+                -_config.FormationDirection);
+
         }
 
-        private void AddEntity(string sideString, Vec2 position, Vec2 direction, ClassInfo[] classInfos, int soldiersPerRow)
+        private void AddEntity(string sideString, Vec2 position, Vec2 direction)
         {
+            var name = "sergeant_" + sideString + "_spawn";
+            var entity = this.Mission.Scene.GetFirstEntityWithName(name);
+            var matrixFrame = Utility.ToMatrixFrame(Mission.Scene, position, direction);
+            if (entity != null)
+                entity.SetGlobalFrame(matrixFrame);
+            else
             {
-                var name = "sp_" + sideString + "_" + Utility.CommanderFormationClass().ToString().ToLower();
-                var entity = this.Mission.Scene.GetFirstEntityWithName(name);
-                var matrixFrame = Utility.ToMatrixFrame(Mission.Scene, position + 2 * direction, direction);
-                if (entity != null)
-                    entity.SetGlobalFrame(matrixFrame);
-                else
-                    GameEntity.Instantiate(this.Mission.Scene, name, matrixFrame);
-            }
-            float distance = 0;
-            for (int i = 0; i < 3; ++i)
-            {
-                var name = "sp_" + sideString + "_" + Utility.GetActualFormationClass(classInfos[i], (FormationClass)i).ToString().ToLower();
-                var entity = this.Mission.Scene.GetFirstEntityWithName(name);
-                var matrixFrame = Utility.ToMatrixFrame(Mission.Scene, position - distance * direction, direction);
-                if (entity != null)
-                    entity.SetGlobalFrame(matrixFrame);
-                else
-                    GameEntity.Instantiate(this.Mission.Scene, name, matrixFrame);
-                var region = Utility.GetFormationArea(FormationClass.Infantry, classInfos[i].troopCount,
-                    soldiersPerRow);
-                distance += region.Item2;
+                entity = GameEntity.Instantiate(this.Mission.Scene, name, matrixFrame);
             }
         }
     }

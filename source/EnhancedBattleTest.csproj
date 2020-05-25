@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProcessorArchitecture>amd64</ProcessorArchitecture>
-    <BinPath>C:\game\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\</BinPath>
+    <BinPath>C:\game\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord\</BinPath>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="Copy &quot;$(TargetPath)&quot; &quot;$(BinPath)&quot;&#xD;&#xA;Copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;Copy &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\EnhancedBattleTest.bat&quot; &quot;$(BinPath)&quot;&#xD;&#xA;Copy &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\EnhancedBattleTest-Alternative.bat&quot; &quot;$(BinPath)&quot;" />
+    <Exec Command="Copy &quot;$(TargetPath)&quot; &quot;$(BinPath)Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;Copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;Copy &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\EnhancedBattleTest.bat&quot; &quot;$(BinPath)&quot;&#xD;&#xA;Copy &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\EnhancedBattleTest-Alternative.bat&quot; &quot;$(BinPath)&quot;" />
   </Target>
   <ItemGroup>
     <Reference Include="SandBox">
@@ -119,6 +119,9 @@
     </Reference>
     <Reference Include="TaleWorlds.Network">
       <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="TaleWorlds.ObjectSystem">
+      <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.ObjectSystem.dll</HintPath>
     </Reference>
     <Reference Include="TaleWorlds.PlatformService">
       <HintPath>..\..\..\..\bin\Win64_Shipping_Client\TaleWorlds.PlatformService.dll</HintPath>

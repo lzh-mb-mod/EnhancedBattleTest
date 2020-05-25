@@ -15,7 +15,7 @@ namespace EnhancedBattleTest
             EnhancedBattleTestSubModule._instance = this;
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
               "EBTFreeBattle",
-              new TextObject("{=freebattleoption}EnhancedBattleTest Free Battle"), 
+              new TextObject("{=EnhancedBattleTest_freebattleoption}EnhancedBattleTest Free Battle"), 
               3,
               () =>
               {
@@ -33,7 +33,7 @@ namespace EnhancedBattleTest
             ));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
                 "EBTcustomebattle",
-                new TextObject("{=custombattleoption}EnhancedBattleTest Custom Battle"),
+                new TextObject("{=EnhancedBattleTest_custombattleoption}EnhancedBattleTest Custom Battle"),
                 3,
                 () =>
                 {
@@ -50,7 +50,7 @@ namespace EnhancedBattleTest
                 false));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
                 "EBTsiegebattle",
-                new TextObject("{=siegebattleoption}EnhancedBattleTest Siege Battle"),
+                new TextObject("{=EnhancedBattleTest_siegebattleoption}EnhancedBattleTest Siege Battle"),
                 3,
                 () =>
                 {

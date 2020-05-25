@@ -101,7 +101,7 @@ namespace EnhancedBattleTest
                 MultiplayerClassDivisions.MPHeroClass playerHeroClass = this.FreeBattleConfig.PlayerHeroClass;
                 BasicCharacterObject playerCharacter = playerHeroClass.HeroCharacter;
                 Game.Current.PlayerTroop = playerCharacter;
-                var playerFormation = playerTeam.GetFormation(Utility.CommanderFormationClass());
+                var playerFormation = playerTeam.GetFormation((FormationClass)_freeBattleConfig.playerFormation);
                 SetFormationRegion(playerFormation, 1, true, -2);
                 Agent player = this.SpawnAgent(FreeBattleConfig.playerClass, true,
                     playerCharacter, true, playerFormation, playerTeam,
@@ -259,13 +259,14 @@ namespace EnhancedBattleTest
         private Agent SpawnAgent(ClassInfo classInfo, bool isPlayer, BasicCharacterObject character, bool isHero, Formation formation, Team team, CustomBattleCombatant combatant, BasicCultureObject culture, bool isPlayerSide, int formationTroopCount, int formationTroopIndex, TL.MatrixFrame? matrix = null)
         {
             bool isAttacker = isPlayerSide ? FreeBattleConfig.isPlayerAttacker : !FreeBattleConfig.isPlayerAttacker;
-            AgentBuildData agentBuildData = new AgentBuildData(Utility.CreateOrigin(combatant, Utility.ApplyPerks(classInfo, isHero)))
+            AgentBuildData agentBuildData = new AgentBuildData(Utility.CreateOrigin(combatant, character))
                 .Team(team)
                 .Formation(formation)
                 .FormationTroopCount(formationTroopCount).FormationTroopIndex(formationTroopIndex)
                 .Banner(team.Banner)
                 .ClothingColor1(isAttacker ? culture.Color : culture.ClothAlternativeColor)
                 .ClothingColor2(isAttacker ? culture.Color2 : culture.ClothAlternativeColor2);
+            Utility.OverrideEquipment(agentBuildData, classInfo, isHero);
             if (matrix.HasValue)
                 agentBuildData.InitialFrame(matrix.Value);
             var agent = this.Mission.SpawnAgent(agentBuildData, false, formationTroopCount);

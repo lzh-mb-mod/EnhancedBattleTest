@@ -29,11 +29,12 @@ namespace EnhancedBattleTest
             var missionViewList = new List<MissionView>
             {
                 new MissionMenuView(config),
+                new FlyCameraMissionView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 //ViewCreator.CreatePlayerRoleSelectionUIHandler(mission),
                 ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
-                new SwitchTeamMissionOrderUIHandler(),
+                new EnhancedMissionOrderUIHandler(),
                 new SwitchTeamOrderTroopPlacer(),
                 ViewCreator.CreateMissionAgentStatusUIHandler(mission),
                 ViewCreator.CreateMissionMainAgentEquipmentController(mission),

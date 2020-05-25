@@ -23,7 +23,7 @@ namespace EnhancedBattleTest
                     case GameManagerLoadingSteps.PreInitializeZerothStep:
                         MBGameManager.LoadModuleData(false);
                         MBGlobals.InitializeReferences();
-                        new Game(_gameType, this).DoLoading();
+                        Game.CreateGame(_gameType, this).DoLoading();
                         nextStep = GameManagerLoadingSteps.FirstInitializeFirstStep;
                         break;
                     case GameManagerLoadingSteps.FirstInitializeFirstStep:
