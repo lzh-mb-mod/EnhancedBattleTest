@@ -2,9 +2,28 @@
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <strings>
-    <string id="str_free_battle_option" text="{=EnhancedBattleTest_freebattleoption}EnhancedBattleTest Free Battle" />
-    <string id="str_custom_battle_option" text="{=EnhancedBattleTest_custombattleoption}EnhancedBattleTest Custom Battle" />
-    <string id="str_siege_battle_option" text="{=EnhancedBattleTest_siegebattleoption}EnhancedBattleTest Siege Battle" />
+    <string id="str_ebt_multiplayer_battle_option" text="{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test" />
+    <string id="str_ebt_singleplayer_battle_option" text="{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test" />
+
+    <string id="str_ebt_battle_type" text="{=EnhancedBattleTest_battletype}Battle Type" />
+    <string id="str_ebt_battle_type.Field" text="{=EnhancedBattleTest_fieldbattle}Field Battle" />
+    <string id="str_ebt_battle_type.Siege" text="{=EnhancedBattleTest_siegebattle}Siege Battle" />
+    <string id="str_ebt_battle_type.Village" text="{=EnhancedBattleTest_villagebattle}village Battle" />
+
+    <string id="str_ebt_player_type" text="{=EnhancedBattleTest_playertype}Player Type" />
+    <string id="str_ebt_player_type.Commander" text="{=EnhancedBattleTest_commander}Commander" />
+    <string id="str_ebt_player_type.Sergeant" text="{=EnhancedBattleTest_sergeant}Sergeant" />
+
+    <string id="str_ebt_player_side" text="{=EnhancedBattleTest_playerside}Player Side" />
+    <string id="str_ebt_side.Attacker" text="{=EnhancedBattleTest_attacker}Attacker" />
+    <string id="str_ebt_side.Defender" text="{=EnhancedBattleTest_defender}Defender" />
+
+    <string id="str_ebt_troop_role.general" text="{=EnhancedBattleTest_trooprolegeneral}General" />
+    <string id="str_ebt_troop_role.Soldiers" text="{=EnhancedBattleTest_trooprolesoldiers}Troop {TroopIndex}" />
+    
+    <string id="str_ebt_enable" text="{=EnhancedBattleTest_enabled}Enable" />
+    <string id="str_ebt_number" text="{=EnhancedBattleTest_number}Number" />
+    <string id="str_ebt_invalid" text="{=EnhancedBattleTest_invalid}Invalid" />
 
     <string id="str_free_battle" text="{=EnhancedBattleTest_freebattle}Free Battle" />
     <string id="str_custom_battle" text="{=EnhancedBattleTest_custombattle}Custom Battle" />

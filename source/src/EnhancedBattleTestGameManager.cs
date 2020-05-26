@@ -4,15 +4,8 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-        public class EnhancedBattleTestGameManager : MBGameManager
+        public class EnhancedBattleTestGameManager<T> : MBGameManager where T: GameType, new()
         {
-            private GameType _gameType;
-            private Action _startMission;
-            public EnhancedBattleTestGameManager(GameType gameType, Action startMission)
-            {
-                _gameType = gameType;
-                _startMission = startMission;
-            }
             protected override void DoLoadingForGameManager(
                 GameManagerLoadingSteps gameManagerLoadingStep,
                 out GameManagerLoadingSteps nextStep)
@@ -23,7 +16,7 @@ namespace EnhancedBattleTest
                     case GameManagerLoadingSteps.PreInitializeZerothStep:
                         MBGameManager.LoadModuleData(false);
                         MBGlobals.InitializeReferences();
-                        Game.CreateGame(_gameType, this).DoLoading();
+                        Game.CreateGame(new T(), this).DoLoading();
                         nextStep = GameManagerLoadingSteps.FirstInitializeFirstStep;
                         break;
                     case GameManagerLoadingSteps.FirstInitializeFirstStep:
@@ -52,7 +45,7 @@ namespace EnhancedBattleTest
             public override void OnLoadFinished()
             {
                 base.OnLoadFinished();
-                _startMission();
+                Game.Current.GameStateManager.CleanAndPushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
             }
         }
     }

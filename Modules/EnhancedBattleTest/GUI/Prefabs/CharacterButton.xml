@@ -1,0 +1,17 @@
+<Prefab>
+  <Window>
+    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+      <Children>
+
+        <RichTextWidget DataSource="{CharacterRole}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="100" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+        
+        <ButtonWidget DataSource="{Name}" Command.Click="ExecuteAction" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="SPOptions.Dropdown.Center">
+          <Children>
+            <RichTextWidget Text="@ActionText" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" PositionYOffset="1" Brush="CustomBattle.Value.Text" />
+          </Children>
+        </ButtonWidget>
+
+      </Children>
+    </ListPanel>
+  </Window>
+</Prefab>

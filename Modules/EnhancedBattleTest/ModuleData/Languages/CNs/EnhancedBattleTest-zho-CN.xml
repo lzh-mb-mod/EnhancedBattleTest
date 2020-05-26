@@ -5,9 +5,31 @@
     <tag language="简体中文" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_freebattleoption" text="EnhancedBattleTest自由战斗" />
-    <string id="EnhancedBattleTest_custombattleoption" text="EnhancedBattleTest自定义战斗" />
-    <string id="EnhancedBattleTest_siegebattleoption" text="EnhancedBattleTest攻城战斗" />
+    <string id="EnhancedBattleTest_multiplayerbattleoption" text="多人战斗测试" />
+    <string id="EnhancedBattleTest_singleplayerbattleoption" text="单人战斗测试" />
+
+    <string id="EnhancedBattleTest_battletype" text="战斗类型" />
+    <string id="EnhancedBattleTest_fieldbattle" text="野战" />
+    <string id="EnhancedBattleTest_siegebattle" text="攻城" />
+    <string id="EnhancedBattleTest_villagebattle" text="村战" />
+
+    <string id="EnhancedBattleTest_playertype" text="玩家角色" />
+    <string id="EnhancedBattleTest_commander" text="指挥官" />
+    <string id="EnhancedBattleTest_sergeant" text="军士" />
+
+    <string id="EnhancedBattleTest_playerside" text="玩家方" />
+    <string id="EnhancedBattleTest_attacker" text="进攻方" />
+    <string id="EnhancedBattleTest_defender" text="防守方" />
+
+    <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="部队 {TroopIndex}" />
+    
+    <string id="EnhancedBattleTest_enabled" text="启用" />
+    <string id="EnhancedBattleTest_number" text="数量" />
+    <string id="EnhancedBattleTest_invalid" text="无效" />
+
+
+
 
     <string id="EnhancedBattleTest_freebattle" text="自由战斗" />
     <string id="EnhancedBattleTest_custombattle" text="自定义战斗" />
@@ -108,9 +130,6 @@
     <string id="EnhancedBattleTest_tacticcoordinatedretreat" text="有序撤退" />
     <string id="EnhancedBattleTest_tacticbreachwalls" text="破坏城墙" />
     <string id="EnhancedBattleTest_tacticdefendcastle" text="防守城堡" />
-
-    <string id="EnhancedBattleTest_defender" text="防守方" />
-    <string id="EnhancedBattleTest_attacker" text="进攻方" />
 
     <string id="EnhancedBattleTest_addtactic" text="为{CurrentSide}添加{CurrentTacticOption}战术." />
     <string id="EnhancedBattleTest_removetactic" text="为{CurrentSide}移除{CurrentTacticOption}战术." />

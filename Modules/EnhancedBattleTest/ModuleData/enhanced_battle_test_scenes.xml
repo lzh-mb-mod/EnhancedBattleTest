@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSerializedSceneData xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <SerializedSceneData>
+        <Id>battle_terrain_001</Id>
+        <Name>battle_terrain_001</Name>
+        <Terrain>Plain</Terrain>
+        <TerrainTypes>
+            <TerrainType>Plain</TerrainType>
+        </TerrainTypes>
+        <ForestDensity>None</ForestDensity>
+        <IsSiegeMap>0</IsSiegeMap>
+        <IsVillageMap>0</IsVillageMap>
+    </SerializedSceneData>
+</ArrayOfSerializedSceneData>

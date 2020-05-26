@@ -1,70 +1,33 @@
 using System.Collections.Generic;
+using System.IO;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestSubModule : TaleWorlds.MountAndBlade.MBSubModuleBase
+    public class EnhancedBattleTestSubModule : MBSubModuleBase
     {
         private static EnhancedBattleTestSubModule _instance;
         private bool _initialized;
+
+        public static string ModuleFolderName = "EnhancedBattleTest";
+
+        public static string ModuleFolderPath = Path.Combine(BasePath.Name, "Modules", ModuleFolderName);
+
+        public static bool IsMultiplayer;
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
             EnhancedBattleTestSubModule._instance = this;
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-              "EBTFreeBattle",
-              new TextObject("{=EnhancedBattleTest_freebattleoption}EnhancedBattleTest Free Battle"), 
-              3,
-              () =>
-              {
-                  MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
-                      new EnhancedFreeBattleGame(EnhancedFreeBattleConfig.Get),
-                      () =>
-                      {
-                          var state = GameStateManager.Current.CreateState<TopState>();
-                          TopState.status = TopStateStatus.openConfig;
-                          state.openConfigMission = () => EnhancedBattleTestMissions.OpenFreeBattleConfigMission();
-                          GameStateManager.Current.PushState(state);
-                      }));
-              },
-              false
-            ));
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-                "EBTcustomebattle",
-                new TextObject("{=EnhancedBattleTest_custombattleoption}EnhancedBattleTest Custom Battle"),
-                3,
+            Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTMultiplayerTest",
+                new TextObject("{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test"), 3,
                 () =>
                 {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
-                        new EnhancedCustomBattleGame(EnhancedCustomBattleConfig.Get),
-                        () =>
-                        {
-                            var state = GameStateManager.Current.CreateState<TopState>();
-                            TopState.status = TopStateStatus.openConfig;
-                            state.openConfigMission = () => EnhancedBattleTestMissions.OpenCustomBattleConfigMission();
-                            GameStateManager.Current.PushState(state);
-                        }));
-                },
-                false));
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption(
-                "EBTsiegebattle",
-                new TextObject("{=EnhancedBattleTest_siegebattleoption}EnhancedBattleTest Siege Battle"),
-                3,
-                () =>
-                {
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager(
-                        new EnhancedFreeBattleGame(EnhancedSiegeBattleConfig.Get),
-                        () =>
-                        {
-                            var state = GameStateManager.Current.CreateState<TopState>();
-                            TopState.status = TopStateStatus.openConfig;
-                            state.openConfigMission = () => EnhancedBattleTestMissions.OpenSiegeBattleConfigMission();
-                            GameStateManager.Current.PushState(state);
-                        }));
-                },
-                false));
+                    IsMultiplayer = true;
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<EnhancedBattleTestMultiplayerGame>());
+                }, false));
         }
 
         protected override void OnSubModuleUnloaded()
@@ -78,12 +41,6 @@ namespace EnhancedBattleTest
             if (this._initialized)
                 return;
             this._initialized = true;
-        }
-
-        protected override void OnApplicationTick(float dt)
-        {
-            // ModuleLogger.Writer.WriteLine("EnhancedBattleTestSubModule::OnApplicationTick {0}", dt);
-            base.OnApplicationTick(dt);
         }
     }
 }

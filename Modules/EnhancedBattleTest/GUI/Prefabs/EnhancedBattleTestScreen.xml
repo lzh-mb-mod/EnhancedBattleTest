@@ -1,0 +1,301 @@
+<Prefab>
+  <Constants>
+    <Constant Name="Search.Popup.MarginLeft" Value="221" />
+    <Constant Name="Search.Popup.MarginRight" Value="221" />
+    <Constant Name="Search.Popup.MarginBottom" Value="83" />
+    <Constant Name="Search.Popup.MarginTop" Value="33" />
+    <!--Sycned with other Encyclopedia Pages-->
+
+    <Constant Name="SearchResult.Popup.MarginRight" Additive="-5" Value="!Search.Popup.MarginRight" />
+
+    <Constant Name="Search.TextField.Height" Value="40" />
+    <Constant Name="Search.TextField.MarginTop" Additive="!Search.TextField.Height" Value="!Search.Popup.MarginTop" />
+
+    <Constant Name="Encyclopedia.Frame.Width" BrushLayer="Default" BrushName="Encyclopedia.Frame" BrushValueType="Width" />
+    <Constant Name="Encyclopedia.Frame.Height" BrushLayer="Default" BrushName="Encyclopedia.Frame" BrushValueType="Height" />
+
+    <Constant Name="DoneButton.Margin.Top" Additive="-10" Value="!Encyclopedia.Frame.Height" />
+
+    <Constant Name="Popup.CloseButton.Width" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Width" />
+    <Constant Name="Popup.CloseButton.Height" BrushLayer="Default" BrushName="Popup.CloseButton" BrushValueType="Height" />
+
+    <Constant Name="InnerPanel.LeftRight.Padding" Value="80" />
+
+    <Constant Name="SpectateButton.Width" BrushLayer="Default" BrushName="WideButton.Flat" BrushValueType="Width" />
+    <Constant Name="SpectateButton.Height" BrushLayer="Default" BrushName="WideButton.Flat" BrushValueType="Height" />
+
+    <Constant Name="RefreshButton.Width" Value="80" />
+    <Constant Name="RefreshButton.Height" Value="80" />
+
+    <Constant Name="CloseButton.Width" Value="80"/>
+    <Constant Name="CloseButton.Height" Value="80"/>
+    <Constant Name="SiegeMachines.HorizontalPadding" Value="3"/>
+    <Constant Name="SiegeMachines.VerticalPadding" Value="5"/>
+    <Constant Name="SiegeMachines.MarginRight" Value="65"/>
+  </Constants>
+
+  <VisualDefinitions>
+    <VisualDefinition Name="LeftMenu" EaseIn="true" TransitionDuration="0.45">
+      <VisualState PositionXOffset="0" State="Default" />
+    </VisualDefinition>
+    <VisualDefinition Name="RightMenu" EaseIn="true" TransitionDuration="0.45">
+      <VisualState PositionXOffset="0" State="Default" />
+    </VisualDefinition>
+    <VisualDefinition Name="CenterMenu" EaseIn="true" TransitionDuration="0.45">
+      <VisualState PositionYOffset="0" State="Default" />
+    </VisualDefinition>
+  </VisualDefinitions>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+        <Standard.Background />
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+
+            <EnhancedBattleTestSide DataSource="{PlayerSide}" VisualDefinition="LeftMenu" HorizontalAlignment="Left" PositionXOffset="-550"/>
+
+
+            <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+              <Children>
+
+                <!--Center Panel-->
+                <Widget VisualDefinition="CenterMenu" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" VerticalAlignment="Top" PositionYOffset="505" Brush="CustomBattle.CenterPanel">
+                  <Children>
+
+                    <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Title.Text" />
+                    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="650" SuggestedHeight="7" HorizontalAlignment="Center" VerticalAlignment="Top" PositionYOffset="75" Sprite="TownManagement\title_divider" />
+
+                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+
+                        <!--_____Map Selection_________-->
+                        <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <RichTextWidget DataSource="{BattleTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{BattleTypeSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <RichTextWidget DataSource="{PlayerTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{PlayerTypeSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <RichTextWidget DataSource="{PlayerSideText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{PlayerSideSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="12" MarginTop="20" Sprite="StdAssets\subpage_divider" />
+
+                        <RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="-15" Brush="CustomBattle.Character.Title.Text" Text="Map" />
+
+                        <!--<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="310" SuggestedHeight="175" HorizontalAlignment="Center" MarginTop="40" Sprite="BlankWhiteSquare_9" Brush.Color="#FF00FF33" />-->
+
+                        <!--Season Selection-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="60">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Season" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{SeasonSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <!--Time Of Day Selection-->
+                        <!--<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Time of Day" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{TimeOfDaySelection}" />
+                          </Children>
+                        </Widget>-->
+
+                        <!--Scene Level Selection-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@IsCurrentMapSiege">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Scene Level" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{SceneLevelSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <!--Wall Hitpoints-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@IsCurrentMapSiege">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Wall Hitpoints" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{WallHitpointSelection}" />
+                          </Children>
+                        </Widget>
+
+                        <!--Attacker Siege Machines-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="25" IsVisible="@IsCurrentMapSiege">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Attacker Siege Machines" />
+                            <!--<Standard.DropdownWithHorizontalControl DataSource="{..\AttackerSiegePrioritySelection}" HorizontalAlignment="Right" />-->
+
+                            <!--Attacker Machines-->
+                            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginRight="!SiegeMachines.MarginRight">
+                              <Children>
+
+                                <!--Attacker Melee Machines-->
+                                <ListPanel DataSource="{..\AttackerMeleeMachines}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center">
+                                  <ItemTemplate>
+                                    <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
+                                      <Children>
+                                        <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
+                                      </Children>
+                                    </ButtonWidget>
+                                  </ItemTemplate>
+                                </ListPanel>
+
+                                <!--Attacker Ranged Machines-->
+                                <ListPanel DataSource="{..\AttackerRangedMachines}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="!SiegeMachines.VerticalPadding">
+                                  <ItemTemplate>
+                                    <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
+                                      <Children>
+                                        <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID" />
+                                      </Children>
+                                    </ButtonWidget>
+                                  </ItemTemplate>
+                                </ListPanel>
+
+                                <!--<ButtonWidget DataSource="{..}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="RandomButtonBrush" Command.Click="ExecuteRandomizeAttackerSiegeEngines" />-->
+
+                              </Children>
+                            </ListPanel>
+
+                          </Children>
+                        </Widget>
+
+                        <!--Defender Siege Machines-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="25" IsVisible="@IsCurrentMapSiege">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Defender Siege Machines" />
+                            <!--<Standard.DropdownWithHorizontalControl DataSource="{..\DefenderSiegePrioritySelection}" HorizontalAlignment="Right" />-->
+
+                            <!--Defender Machines-->
+                            <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="!SiegeMachines.MarginRight">
+                              <Children>
+                                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                                  <Children>
+                                    <ListPanel DataSource="{..\DefenderMachines}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+                                      <ItemTemplate>
+                                        <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
+                                          <Children>
+                                            <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
+                                          </Children>
+                                        </ButtonWidget>
+                                      </ItemTemplate>
+                                    </ListPanel>
+
+                                    <!--<ButtonWidget DataSource="{..}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="30" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="RandomButtonBrush" Command.Click="ExecuteRandomizeDefenderSiegeEngines" />-->
+                                  </Children>
+                                </ListPanel>
+                              </Children>
+                            </Widget>
+
+                          </Children>
+                        </Widget>
+
+                        <!--Sallyout-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="false">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Sallyout" />
+
+                            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="380" HorizontalAlignment="Right">
+                              <Children>
+
+                                <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="SPOptions.Checkbox.Empty.Button" ButtonType="Toggle" IsSelected="@IsSallyOutSelected" ToggleIndicator="ToggleIndicator" UpdateChildrenStates="true">
+                                  <Children>
+                                    <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                                  </Children>
+                                </ButtonWidget>
+
+                              </Children>
+                            </Widget>
+
+                          </Children>
+                        </Widget>
+
+                      </Children>
+                    </ListPanel>
+
+                    <!--Search Text Bar-->
+                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="345" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
+                      <Children>
+                        <EditableTextWidget Id="SearchInputWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="298" SuggestedHeight="43" MarginLeft="5" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Search.TextBox" Text="@SearchText" />
+                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="24" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="10" Sprite="Encyclopedia\icon_search" IsDisabled="true" />
+                      </Children>
+                    </EncyclopediaSearchBarWidget>
+
+                    <ScrollbarWidget Id="SearchResultListScrollbar" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="20" SuggestedHeight="110" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="75" AlignmentAxis="Vertical" Handle="SearchResultListScrollbarHandle" IsEnabled="false" IsVisible="false" MaxValue="100" MinValue="0">
+                      <Children>
+                        <Widget Id="SearchResultListScrollbarHandle" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" IsVisible="false" />
+                      </Children>
+                    </ScrollbarWidget>
+
+                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="380" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
+                      <Children>
+
+                        <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">
+                          <Children>
+
+                            <ListPanel Id="SearchResultList" DataSource="{MapSearchResults}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="5" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                              <ItemTemplate>
+
+                                <ButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="25" MarginBottom="5" Brush="Standard.DropdownItem" Command.Click="ExecuteSelection">
+                                  <Children>
+                                    <RichTextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="CustomBattleSearchResult.Text" Brush.Font="FiraSansExtraCondensed-Regular" Brush.FontSize="22" IsDisabled="true" Text="@NameText" />
+                                  </Children>
+                                </ButtonWidget>
+
+                              </ItemTemplate>
+                            </ListPanel>
+
+                          </Children>
+                        </Widget>
+
+                      </Children>
+                    </ScrollablePanel>
+
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom">
+                      <Children>
+
+                        <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!RefreshButton.Width" SuggestedHeight="!RefreshButton.Height" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginRight="40" Brush="RefreshButton.Flat" Command.Click="ExecuteRandomize" UpdateChildrenStates="true">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@RandomizeButtonText" />
+                          </Children>
+                        </ButtonWidget>
+
+                        <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteStart" UpdateChildrenStates="true">
+                          <Children>
+                            <TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" Text="@StartButtonText" />
+                          </Children>
+                        </ButtonWidget>
+
+                        <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteBack" SuggestedWidth = "!CloseButton.Width" SuggestedHeight = "!CloseButton.Height" HorizontalAlignment = "Right" VerticalAlignment = "Bottom" MarginLeft="40" Brush="CloseButton.Flat">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@BackButtonText" />
+                          </Children>
+                        </ButtonWidget>
+
+                      </Children>
+                    </ListPanel>
+
+                  </Children>
+                </Widget>
+
+              </Children>
+            </Widget>
+
+
+
+            <EnhancedBattleTestSide DataSource="{EnemySide}" VisualDefinition="RightMenu" HorizontalAlignment="Right" PositionXOffset="550"/>
+
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

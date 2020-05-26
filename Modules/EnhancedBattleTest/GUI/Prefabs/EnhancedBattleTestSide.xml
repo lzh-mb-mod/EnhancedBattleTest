@@ -1,0 +1,59 @@
+<Prefab>
+  <Window>
+    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="585" HorizontalAlignment="Left">
+      <Children>
+        <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Character.Title.Text" />
+
+        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+          <Children>
+
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" MarginTop="100">
+              <Children>
+
+                <CharacterButton DataSource="{General}" />
+                <RichTextWidget DataSource="{EnableGeneralText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                <ButtonWidget DataSource="{EnableGeneral}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+                  <Children>
+                    <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                  </Children>
+                </ButtonWidget>
+
+              </Children>
+            </ListPanel>
+
+            <ListPanel DataSource="{TroopGroup\Troops}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="20">
+              <ItemTemplate>
+
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                  <Children>
+
+                    <CharacterButton DataSource="{Character}" HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="25" />
+
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="100" MarginTop="5">
+                      <Children>
+                        <RichTextWidget DataSource="{NumberText}" Text="@Text" WidthSizePolicy="Fixed" SuggestedWidth="100" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <EditableTextWidget DataSource="{Number}" Text="@Text" WidthSizePolicy="Fixed" SuggestedWidth="200" HeightSizePolicy="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Widget WidthSizePolicy="Fixed" SuggestedWidth="100" HeightSizePolicy="Fixed" SuggestedHeight="30" HorizontalAlignment="Center" VerticalAlignment="Center">
+                          <Children>
+                            <Widget DataSource="{Number}" IsVisible="@IsIllegal" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                              <Children>
+                                <RichTextWidget DataSource="{..\InvalidText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                              </Children>
+                            </Widget>
+                          </Children>
+                        </Widget>
+                      </Children>
+                    </ListPanel>
+
+                  </Children>
+                </ListPanel>
+
+              </ItemTemplate>
+            </ListPanel>
+
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

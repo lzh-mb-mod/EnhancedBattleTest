@@ -5,9 +5,32 @@
     <tag language="English" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_freebattleoption" text="EnhancedBattleTest Free Battle" />
-    <string id="EnhancedBattleTest_custombattleoption" text="EnhancedBattleTest Custom Battle" />
-    <string id="EnhancedBattleTest_siegebattleoption" text="EnhancedBattleTest Siege Battle" />
+    <string id="EnhancedBattleTest_multiplayerbattleoption" text="Multiplayer Battle Test" />
+    <string id="EnhancedBattleTest_singleplayerbattleoption" text="Singleplayer Battle Test" />
+
+    <string id="EnhancedBattleTest_battletype" text="Battle Type" />
+    <string id="EnhancedBattleTest_fieldbattle" text="Field Battle" />
+    <string id="EnhancedBattleTest_siegebattle" text="Siege Battle" />
+    <string id="EnhancedBattleTest_villagebattle" text="village Battle" />
+
+    <string id="EnhancedBattleTest_playertype" text="Player Role" />
+    <string id="EnhancedBattleTest_commander" text="Commander" />
+    <string id="EnhancedBattleTest_sergeant" text="Sergeant" />
+
+    <string id="EnhancedBattleTest_playerside" text="Player Side" />
+    <string id="EnhancedBattleTest_attacker" text="Attacker" />
+    <string id="EnhancedBattleTest_defender" text="Defender" />
+
+    <string id="EnhancedBattleTest_trooprolegeneral" text="General" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="Troop {TroopIndex}" />
+    
+    <string id="EnhancedBattleTest_enabled" text="Enable" />
+    <string id="EnhancedBattleTest_number" text="Count" />
+    <string id="EnhancedBattleTest_invalid" text="Invalid" />
+
+
+
+
 
     <string id="EnhancedBattleTest_freebattle" text="Free Battle" />
     <string id="EnhancedBattleTest_custombattle" text="Custom Battle" />
@@ -108,9 +131,6 @@
     <string id="EnhancedBattleTest_tacticcoordinatedretreat" text="CoordinatedRetreat" />
     <string id="EnhancedBattleTest_tacticbreachwalls" text="BreachWalls" />
     <string id="EnhancedBattleTest_tacticdefendcastle" text="DefendCastle" />
-
-    <string id="EnhancedBattleTest_defender" text="Defender" />
-    <string id="EnhancedBattleTest_attacker" text="Attacker" />
 
     <string id="EnhancedBattleTest_addtactic" text="Add Tactic {CurrentTacticOption} for {CurrentSide}." />
     <string id="EnhancedBattleTest_removetactic" text="Remove Tactic {CurrentTacticOption} for {CurrentSide}." />

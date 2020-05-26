@@ -25,71 +25,64 @@
 		<XmlNode>                
 			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<XmlNode>
+		<!-- <XmlNode>
 			<XmlName id="Items" path="customitems"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode>
+		</XmlNode> -->
 		<XmlNode>
 			<XmlName id="MPCharacters" path="../../Native/ModuleData/mpcharacters"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<XmlNode>
+		<!-- <XmlNode>
 			<XmlName id="MPCharacters" path="customcharacters"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode>
-		<XmlNode>
-			<XmlName id="SPCultures" path="spcultures"/>
-			<IncludedGameTypes>
-				<GameType value = "Campaign"/>
-				<GameType value = "CampaignStoryMode"/>
-			</IncludedGameTypes>
-		</XmlNode>
+		</XmlNode> -->
 		<XmlNode>
 			<XmlName id="BasicCultures" path="../../Native/ModuleData/mpcultures"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<XmlNode>
+		<!-- <XmlNode>
 			<XmlName id="BasicCultures" path="customcultures"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode>
+		</XmlNode> -->
 		<XmlNode>
-			<XmlName id="MPClassDivisions" path="mpclassdivisions"/>
+			<XmlName id="MPClassDivisions" path="../../Native/ModuleData/mpclassdivisions"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="../../Native/ModuleData/mp_crafting_pieces"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="../../Native/ModuleData/crafting_pieces"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedFreeBattleGame"/>
-				<GameType value = "EnhancedCustomBattleGame"/>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 	</Xmls>
