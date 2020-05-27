@@ -92,7 +92,7 @@
 
                         <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="12" MarginTop="20" Sprite="StdAssets\subpage_divider" />
 
-                        <RichTextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="-15" Brush="CustomBattle.Character.Title.Text" Text="Map" />
+                        <RichTextWidget DataSource="{MapText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="-15" Brush="CustomBattle.Character.Title.Text" />
 
                         <!--<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="310" SuggestedHeight="175" HorizontalAlignment="Center" MarginTop="40" Sprite="BlankWhiteSquare_9" Brush.Color="#FF00FF33" />-->
 
@@ -270,7 +270,7 @@
 
                         <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteStart" UpdateChildrenStates="true">
                           <Children>
-                            <TextWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" Text="@StartButtonText" />
+                            <TextWidget DataSource="{StartButtonText}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                           </Children>
                         </ButtonWidget>
 

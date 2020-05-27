@@ -14,7 +14,7 @@ namespace EnhancedBattleTest
     {
         private TroopConfig _config;
 
-        public CharacterVM Character { get; }
+        public CharacterButtonVM CharacterButton { get; }
 
         public TextVM NumberText { get; }
         public NumberVM<int> Number { get; }
@@ -24,7 +24,7 @@ namespace EnhancedBattleTest
         public TroopVM(TroopConfig config, TextObject troopRole)
         {
             _config = config;
-            Character = new CharacterVM(_config.Character, troopRole);
+            CharacterButton = new CharacterButtonVM(_config.Character, troopRole);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 5000);
             Number.OnNumberChanged += number => config.Number = number;
@@ -35,7 +35,7 @@ namespace EnhancedBattleTest
         {
             base.RefreshValues();
 
-            Character.RefreshValues();
+            CharacterButton.RefreshValues();
             NumberText.RefreshValues();
             Number.RefreshValues();
             InvalidText.RefreshValues();

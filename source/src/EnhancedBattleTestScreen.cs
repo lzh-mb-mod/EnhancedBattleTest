@@ -30,6 +30,7 @@ namespace EnhancedBattleTest
             _title = EnhancedBattleTestSubModule.IsMultiplayer
                 ? GameTexts.FindText("str_ebt_multiplayer_battle_option")
                 : GameTexts.FindText("str_ebt_singleplayer_battle_option");
+            
         }
         void IGameStateListener.OnActivate()
         {

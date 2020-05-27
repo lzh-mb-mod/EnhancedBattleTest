@@ -17,7 +17,7 @@ namespace EnhancedBattleTest
 
         public TextVM Name { get; }
 
-        public CharacterVM General { get; }
+        public CharacterButtonVM General { get; }
 
         public TextVM EnableGeneralText { get; }
 
@@ -29,7 +29,7 @@ namespace EnhancedBattleTest
         {
             _config = config;
             Name = new TextVM(name);
-            General = new CharacterVM(_config.General,
+            General = new CharacterButtonVM(_config.General,
                 GameTexts.FindText("str_ebt_troop_role", "general"));
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
             EnableGeneral = new BoolVM(_config.HasGeneral);

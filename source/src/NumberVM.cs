@@ -15,7 +15,7 @@ namespace EnhancedBattleTest
         IEquatable<T>,
         IFormattable
     {
-        private T _maxValue;
+        private readonly T _maxValue;
         private T _number;
         private string _text;
         private bool _isIllegal;

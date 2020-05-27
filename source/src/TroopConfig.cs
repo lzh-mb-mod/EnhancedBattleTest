@@ -2,7 +2,15 @@
 {
     public class TroopConfig
     {
-        public CharacterConfig Character = new CharacterConfig();
+        public CharacterConfig Character;
         public int Number;
+
+        public TroopConfig()
+        { }
+
+        public TroopConfig(bool isMultiplayer)
+        {
+            Character = CharacterConfig.Create(isMultiplayer);
+        }
     }
 }

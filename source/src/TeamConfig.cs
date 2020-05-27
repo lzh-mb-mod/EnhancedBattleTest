@@ -9,8 +9,17 @@ namespace EnhancedBattleTest
 {
     public class TeamConfig
     {
-        public TroopGroupConfig Troops = new TroopGroupConfig();
-        public CharacterConfig General = new CharacterConfig();
+        public TroopGroupConfig Troops;
+        public CharacterConfig General;
         public bool HasGeneral;
+
+        public TeamConfig()
+        { }
+
+        public TeamConfig(bool isMultiplayer)
+        {
+            Troops = new TroopGroupConfig(isMultiplayer);
+            General = CharacterConfig.Create(isMultiplayer);
+        }
     }
 }

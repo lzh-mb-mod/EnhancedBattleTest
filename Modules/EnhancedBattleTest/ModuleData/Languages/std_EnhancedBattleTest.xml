@@ -21,6 +21,8 @@
     <string id="EnhancedBattleTest_attacker" text="Attacker" />
     <string id="EnhancedBattleTest_defender" text="Defender" />
 
+    <string id="EnhancedBattleTest_map" text="Map" />
+
     <string id="EnhancedBattleTest_trooprolegeneral" text="General" />
     <string id="EnhancedBattleTest_trooprolesoldiers" text="Troop {TroopIndex}" />
     
@@ -28,6 +30,11 @@
     <string id="EnhancedBattleTest_number" text="Count" />
     <string id="EnhancedBattleTest_invalid" text="Invalid" />
 
+    <string id="EnhancedBattleTest_selectcharacter" text="Select Character" />
+
+    <string id="EnhancedBattleTest_culture" text="Culture" />
+    <string id="EnhancedBattleTest_group" text="Group" />
+    <string id="EnhancedBattleTest_character" text="Character" />
 
 
 

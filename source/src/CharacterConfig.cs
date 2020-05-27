@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {
-    public class CharacterConfig : ViewModel
+    public abstract class CharacterConfig
     {
-        public string CharacterId;
+        [XmlIgnore]
+        public abstract Character Character { get; protected set; }
 
-        public CharacterConfig()
+        public abstract CharacterConfig Clone();
+        public abstract void CopyFrom(CharacterConfig other);
+
+        public static CharacterConfig Create(bool isMultiplayer)
         {
-            if (EnhancedBattleTestSubModule.IsMultiplayer)
-            {
-                CharacterId = Game.Current.ObjectManager.GetObjectTypeList<BasicCharacterObject>().First().StringId;
-            }
+            return isMultiplayer ? (CharacterConfig) new MPCharacterConfig() : new SPCharacterConfig();
         }
     }
 }

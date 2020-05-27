@@ -1,0 +1,12 @@
+<Prefab>
+  <Window>
+
+    <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top">
+      <Children>
+
+
+      
+      </Children>
+    </ListPanel>
+  </Window>
+</Prefab>

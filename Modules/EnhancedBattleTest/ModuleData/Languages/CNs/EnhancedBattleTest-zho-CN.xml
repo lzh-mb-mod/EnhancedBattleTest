@@ -21,6 +21,8 @@
     <string id="EnhancedBattleTest_attacker" text="进攻方" />
     <string id="EnhancedBattleTest_defender" text="防守方" />
 
+    <string id="EnhancedBattleTest_map" text="地图" />
+
     <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
     <string id="EnhancedBattleTest_trooprolesoldiers" text="部队 {TroopIndex}" />
     
@@ -28,6 +30,11 @@
     <string id="EnhancedBattleTest_number" text="数量" />
     <string id="EnhancedBattleTest_invalid" text="无效" />
 
+    <string id="EnhancedBattleTest_selectcharacter" text="选择角色" />
+
+    <string id="EnhancedBattleTest_culture" text="文化" />
+    <string id="EnhancedBattleTest_group" text="兵种" />
+    <string id="EnhancedBattleTest_character" text="角色" />
 
 
 

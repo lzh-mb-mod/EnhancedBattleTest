@@ -27,7 +27,7 @@
                 <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
                   <Children>
 
-                    <CharacterButton DataSource="{Character}" HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="25" />
+                    <CharacterButton DataSource="{CharacterButton}" HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="25" />
 
                     <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" HorizontalAlignment="Center" VerticalAlignment="Center" MarginLeft="100" MarginTop="5">
                       <Children>
