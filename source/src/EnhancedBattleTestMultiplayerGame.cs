@@ -20,7 +20,9 @@ namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestMultiplayerGame : GameType
     {
-
+        private readonly Harmony harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
+        private readonly MethodInfo original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
+        private readonly MethodInfo prefix = typeof(HarmonyPatchForSpawnLogicInMP).GetMethod("SpawnTroops");
         public static EnhancedBattleTestMultiplayerGame Current => Game.Current.GameType as EnhancedBattleTestMultiplayerGame;
 
         protected override void OnInitialize()
@@ -124,17 +126,13 @@ namespace EnhancedBattleTest
 
         private void ApplyHarmonyPatch()
         {
-            var harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
 
-            var original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
-            var prefix = typeof(HarmonyPatchForSpawnLogicInMP).GetMethod("SpawnTroops");
             harmony.Patch(original, prefix: new HarmonyMethod(prefix));
         }
 
         private void Unpatch()
         {
-            var harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
-            harmony.UnpatchAll();
+            harmony.UnpatchAll(harmony.Id);
         }
     }
 }

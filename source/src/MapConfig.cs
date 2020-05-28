@@ -4,11 +4,9 @@ namespace EnhancedBattleTest
 {
     public class MapConfig
     {
-        public string MapName = String.Empty;
-        public bool IsSiege;
-        public bool IsVillage;
-        public int WallHitPoint;
-        public int SceneLevel;
+        public string MapNameSearchText = String.Empty;
+        public int WallHitPoint = 0;
+        public int SceneLevel = 1;
         public string Season = String.Empty;
     }
 }

@@ -39,8 +39,8 @@
     <string id="EnhancedBattleTest_ishero" text="Is Hero" />
     <string id="EnhancedBattleTest_isfemale" text="Is Female" />
 
-    <string id="EnhancedBattleTets_no_map" text="No map available." />
-
+    <string id="EnhancedBattleTest_no_map" text="No map available." />
+    <string id="EnhancedBattleTest_current_map" text="Current map is {MapName}." />
 
 
 

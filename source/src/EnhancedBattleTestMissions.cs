@@ -50,16 +50,16 @@ namespace EnhancedBattleTest
                 TimeInfo = new TimeInformation() { Season = num }
             };
         }
-        public static Mission OpenMission(BattleConfig config)
+        public static Mission OpenMission(BattleConfig config, string mapName)
         {
             return EnhancedBattleTestSubModule.IsMultiplayer
-                ? OpenMultiplayerMission(config)
-                : OpenSingleplayerMission(config);
+                ? OpenMultiplayerMission(config, mapName)
+                : OpenSingleplayerMission(config, mapName);
         }
 
 
 
-        public static Mission OpenMultiplayerMission(BattleConfig config)
+        public static Mission OpenMultiplayerMission(BattleConfig config, string map)
         {
             var playerCulture = Utility.GetCulture(config.PlayerTeamConfig);
             var playerSide = config.BattleTypeConfig.PlayerSide;
@@ -72,7 +72,7 @@ namespace EnhancedBattleTest
                 MPCombatant.CreateParty(enemySide, enemyCulture, config.EnemyTeamConfig, false)
             };
 
-            if (config.MapConfig.IsSiege)
+            if (config.BattleTypeConfig.BattleType == BattleType.Siege)
             {
                 var attackerSiegeWeaponCount = GetSiegeWeaponCount(config.SiegeMachineConfig.AttackerMeleeMachines)
                     .Union(GetSiegeWeaponCount(config.SiegeMachineConfig.AttackerRangedMachines))
@@ -93,12 +93,12 @@ namespace EnhancedBattleTest
                     hitPointPercentages[1] = wallHitPoint / 100.0f;
                 }
 
-                return OpenMPSiegeMissionWithDeployment(config.MapConfig.MapName, config, parties[0], parties[1], hitPointPercentages,
+                return OpenMPSiegeMissionWithDeployment(map, config, parties[0], parties[1], hitPointPercentages,
                     attackerSiegeWeaponCount, defenderSiegeWeaponCount, false, false);
             }
             else
             {
-                return OpenMPBattleMission(config.MapConfig.MapName, config, parties[0], parties[1]);
+                return OpenMPBattleMission(map, config, parties[0], parties[1]);
             }
         }
 
@@ -286,6 +286,8 @@ namespace EnhancedBattleTest
             foreach (var attackerMeleeMachine in siegeWeaponIds)
             {
                 var siegeWeapon = Utility.GetSiegeEngineType(attackerMeleeMachine);
+                if (siegeWeapon == null)
+                    continue;
                 if (!siegeWeaponsCount.ContainsKey(siegeWeapon))
                     siegeWeaponsCount.Add(siegeWeapon, 0);
                 siegeWeaponsCount[siegeWeapon]++;
@@ -294,7 +296,7 @@ namespace EnhancedBattleTest
             return siegeWeaponsCount;
         }
 
-        public static Mission OpenSingleplayerMission(BattleConfig config)
+        public static Mission OpenSingleplayerMission(BattleConfig config, string map)
         {
             throw new NotImplementedException();
         }

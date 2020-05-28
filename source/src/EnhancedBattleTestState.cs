@@ -4,8 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
@@ -33,6 +36,12 @@ namespace EnhancedBattleTest
                 Scenes = ((List<SerializedSceneData>)serializer.Deserialize(reader))
                     .Select(data => new SceneData(data))
                     .ToList();
+                var customGame = new CustomGame();
+                customGame.LoadCustomBattleScenes(BasePath.Name +
+                                                  "Modules/CustomBattle/ModuleData/custom_battle_scenes.xml");
+                Scenes.AddRange(customGame.CustomBattleScenes.Select(data => new SceneData(data)));
+                GameSceneDataManager.Instance.LoadSPBattleScenes(BasePath.Name + "Modules/Sandbox/ModuleData/sp_battle_scenes.xml");
+                Scenes.AddRange(GameSceneDataManager.Instance.SingleplayerBattleScenes.Select(data => new SceneData(data)));
             }
             catch
             {

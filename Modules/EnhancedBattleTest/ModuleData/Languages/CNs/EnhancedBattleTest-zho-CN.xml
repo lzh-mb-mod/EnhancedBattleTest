@@ -39,7 +39,8 @@
     <string id="EnhancedBattleTest_ishero" text="英雄" />
     <string id="EnhancedBattleTest_isfemale" text="女性" />
 
-    <string id="EnhancedBattleTets_no_map" text="无可用地图。" />
+    <string id="EnhancedBattleTest_no_map" text="无可用地图。" />
+    <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
 
 
 

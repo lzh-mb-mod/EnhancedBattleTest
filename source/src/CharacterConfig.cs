@@ -10,6 +10,8 @@ using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {
+    [XmlInclude(typeof(MPCharacterConfig))]
+    [XmlInclude(typeof(SPCharacterConfig))]
     public abstract class CharacterConfig
     {
         [XmlIgnore]

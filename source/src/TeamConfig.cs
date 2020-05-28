@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TaleWorlds.Core;
 
 namespace EnhancedBattleTest
@@ -10,6 +11,7 @@ namespace EnhancedBattleTest
     public class TeamConfig
     {
         public TroopGroupConfig Troops;
+
         public CharacterConfig General;
         public bool HasGeneral;
 

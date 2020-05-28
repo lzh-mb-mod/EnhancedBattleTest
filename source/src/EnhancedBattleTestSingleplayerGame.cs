@@ -55,7 +55,7 @@ namespace EnhancedBattleTest
 
         private void InitializeGameModels(IGameStarter gameStarter)
         {
-            gameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
+            gameStarter.AddModel(new DefaultAgentDecideKilledOrUnconsciousModel());
             gameStarter.AddModel(new SandboxAgentStatCalculateModel());
             gameStarter.AddModel(new SandboxApplyWeatherEffectsModel());
             gameStarter.AddModel(new SandboxAgentApplyDamageModel());

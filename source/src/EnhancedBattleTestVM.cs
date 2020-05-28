@@ -15,9 +15,9 @@ namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestVM : ViewModel
     {
-        private EnhancedBattleTestState _state;
+        private readonly EnhancedBattleTestState _state;
         private BattleConfig _config;
-        private List<SceneData> _scenes;
+        private readonly List<SceneData> _scenes;
         private List<BasicCultureObject> _factionList;
         private List<BasicCharacterObject> _characterList;
 
@@ -123,7 +123,7 @@ namespace EnhancedBattleTest
         public EnhancedBattleTestVM(EnhancedBattleTestState state, TextObject title)
         {
             _state = state;
-            _config = new BattleConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+            _config = BattleConfig.Deserialize(EnhancedBattleTestSubModule.IsMultiplayer);
             _scenes = _state.Scenes;
             _factionList = Game.Current.ObjectManager.GetObjectTypeList<BasicCultureObject>().ToList();
             _scenes = _state.Scenes;
@@ -146,6 +146,7 @@ namespace EnhancedBattleTest
                         sceneData.IsVillageMap)).ToList());
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
 
+            RecoverConfig();
             InitializeSiegeMachines();
         }
 
@@ -170,6 +171,40 @@ namespace EnhancedBattleTest
             return PlayerSide.IsValid() && EnemySide.IsValid();
         }
 
+        private void RecoverConfig()
+        {
+            MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
+            MapSelectionGroup.SceneLevelSelection.SelectedIndex = _config.MapConfig.SceneLevel - 1;
+            switch (_config.MapConfig.WallHitPoint)
+            {
+                case 0:
+                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 0;
+                    break;
+                case 50:
+                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 1;
+                    break;
+                case 100:
+                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 2;
+                    break;
+            }
+
+            switch (_config.MapConfig.Season)
+            {
+                case "summer":
+                    MapSelectionGroup.SeasonSelection.SelectedIndex = 0;
+                    break;
+                case "fall":
+                    MapSelectionGroup.SeasonSelection.SelectedIndex = 1;
+                    break;
+                case "winter":
+                    MapSelectionGroup.SeasonSelection.SelectedIndex = 2;
+                    break;
+                case "spring":
+                    MapSelectionGroup.SeasonSelection.SelectedIndex = 3;
+                    break;
+            }
+        }
+
         public void ExecuteBack()
         {
             _config = null;
@@ -180,22 +215,34 @@ namespace EnhancedBattleTest
         {
             if (!IsValid())
                 return;
-            var selectedMap = MapSelectionGroup.SelectedMap;
-            MapSelectionElement mapWithName = this.MapSelectionGroup.GetMapWithName(this.MapSelectionGroup.SearchText);
-            if (mapWithName != null && mapWithName != selectedMap)
+
+            _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
+            if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
+                _config.MapConfig.SceneLevel = int.Parse(MapSelectionGroup.SceneLevelSelection.SelectedItem.StringItem);
+            if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
+                _config.MapConfig.WallHitPoint = int.Parse(MapSelectionGroup.WallHitpointSelection.SelectedItem.StringItem);
+            if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
+                _config.MapConfig.Season = MapSelectionGroup.SeasonSelection.SelectedItem.StringItem.ToLower();
+
+            MapSelectionElement selectedMap;
+            MapSelectionElement mapWithName = MapSelectionGroup.GetMapWithName(MapSelectionGroup.SearchText);
+            if (mapWithName != null)
                 selectedMap = mapWithName;
-            if (selectedMap == null)
+            else
             {
-                Utility.DisplayLocalizedText("str_ebt_no_map");
-                return;
+                MapSelectionGroup.ExecuteSelectRandomMap();
+                selectedMap = MapSelectionGroup.SelectedMap;
+                if (selectedMap == null)
+                {
+                    Utility.DisplayLocalizedText("str_ebt_no_map");
+                    return;
+                }
+
+                // Keep search text not changed.
+                MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
             }
 
-            _config.MapConfig.MapName = selectedMap.MapName;
-            _config.MapConfig.IsSiege = selectedMap.IsSiegeMap;
-            _config.MapConfig.IsVillage = selectedMap.IsVillageMap;
-            _config.MapConfig.SceneLevel = int.Parse(MapSelectionGroup.SceneLevelSelection.SelectedItem.StringItem);
-            _config.MapConfig.WallHitPoint = int.Parse(MapSelectionGroup.WallHitpointSelection.SelectedItem.StringItem);
-            _config.MapConfig.Season = MapSelectionGroup.SeasonSelection.SelectedItem.StringItem.ToLower();
+            SceneData sceneData = _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
@@ -204,7 +251,10 @@ namespace EnhancedBattleTest
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
 
-            EnhancedBattleTestMissions.OpenMission(_config);
+            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            GameTexts.SetVariable("MapName", sceneData.Name);
+            Utility.DisplayLocalizedText("str_ebt_current_map");
+            EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
         }
 
         private void OnPlayerTypeChange(bool isCommander)
