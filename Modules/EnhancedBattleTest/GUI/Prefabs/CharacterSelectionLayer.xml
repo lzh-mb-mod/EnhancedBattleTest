@@ -38,28 +38,36 @@
 
             <ListPanel DataSource="{Characters\Character}" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
               <Children>
-                
-                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="700" SuggestedHeight="700" MarginTop="10" ClipContents="true">
+
+                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="700" MarginTop="10" ClipContents="true">
                   <Children>
 
                     <!--Selected Character Tableau-->
-                    <CharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedWidth="700" SuggestedHeight="700" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" PositionYOffset="-30" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2"/>
+                    <CharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedWidth="500" SuggestedHeight="700" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" PositionYOffset="-30" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2"/>
 
                   </Children>
                 </Widget>
 
-                <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
-                  <Children>
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{FirstPerks}" />
-                  </Children>
-                </ListPanel>
+                <MPCharacterConfig IsVisible="@IsMultiplayer"/>
 
-                <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
+              </Children>
+            </ListPanel>
+
+            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center">
+              <Children>
+
+                <ButtonWidget Command.Click="Close" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="SPOptions.Dropdown.Center">
                   <Children>
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{SecondPerks}" />
+                    <RichTextWidget DataSource="{CancelText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" PositionYOffset="1" Brush="CustomBattle.Value.Text" />
                   </Children>
-                </ListPanel>
-                
+                </ButtonWidget>
+
+                <ButtonWidget Command.Click="Done" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="350" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="SPOptions.Dropdown.Center">
+                  <Children>
+                    <RichTextWidget DataSource="{DoneText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" PositionYOffset="1" Brush="CustomBattle.Value.Text" />
+                  </Children>
+                </ButtonWidget>
+
               </Children>
             </ListPanel>
 

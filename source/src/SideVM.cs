@@ -25,17 +25,22 @@ namespace EnhancedBattleTest
 
         public TroopGroup TroopGroup { get; }
 
-        public SideVM(TeamConfig config, TextObject name)
+        public SideVM(TeamConfig config, TextObject name, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
             Name = new TextVM(name);
             General = new CharacterButtonVM(_config.General,
-                GameTexts.FindText("str_ebt_troop_role", "general"));
+                GameTexts.FindText("str_ebt_troop_role", "general"), isPlayerSide, battleTypeConfig);
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
             EnableGeneral = new BoolVM(_config.HasGeneral);
             EnableGeneral.OnValueChanged += value => _config.HasGeneral = value;
 
-            TroopGroup = new TroopGroup(config.Troops);
+            TroopGroup = new TroopGroup(config.Troops, isPlayerSide, battleTypeConfig);
+        }
+
+        public bool IsValid()
+        {
+            return TroopGroup.IsValid();
         }
 
         public override void RefreshValues()

@@ -13,7 +13,7 @@ namespace EnhancedBattleTest
         public bool IsSinglePlayer => true;
 
 
-        public override void SetConfig(CharacterConfig config)
+        public override void SetConfig(CharacterConfig config, bool isAttacker)
         {
             throw new NotImplementedException();
         }

@@ -47,10 +47,10 @@ namespace EnhancedBattleTest
             RefreshCharacterList();
         }
 
-        public void SetConfig(CharacterConfig config)
+        public void SetConfig(CharacterConfig config, bool isAttacker)
         {
             _config = config;
-            Character.SetConfig(_config);
+            Character.SetConfig(_config, isAttacker);
             Characters.SelectedIndex = _charactersInCurrentGroup.FindIndex(c => c.StringId == _config.Character.StringId);
         }
 

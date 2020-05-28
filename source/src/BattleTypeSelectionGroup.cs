@@ -59,7 +59,7 @@ namespace EnhancedBattleTest
             {
                 GameTexts.FindText("str_ebt_side", "Attacker").ToString(),
                 GameTexts.FindText("str_ebt_side", "Defender").ToString(),
-            }, _config.PlayerSide == BattleSideEnum.Defender ? 1 : 0, null);
+            }, _config.PlayerSide == BattleSideEnum.Defender ? 1 : 0, OnPlayerSideChanged);
             BattleTypeText.RefreshValues();
             PlayerTypeText.RefreshValues();
             PlayerSideText.RefreshValues();
@@ -93,6 +93,11 @@ namespace EnhancedBattleTest
         {
             _config.PlayerType = (PlayerType)selector.SelectedIndex;
             _onPlayerTypeChange(selector.SelectedIndex == 0);
+        }
+
+        private void OnPlayerSideChanged(SelectorVM<SelectorItemVM> selector)
+        {
+            _config.PlayerSide = selector.SelectedIndex == 1 ? BattleSideEnum.Defender : BattleSideEnum.Attacker;
         }
 
         public BattleType GetCurrentBattleType()

@@ -14,12 +14,14 @@ namespace EnhancedBattleTest
     public class CharacterSelectionData
     {
         public CharacterConfig Config;
+        public bool IsAttacker;
         public Action<CharacterConfig> SelectAction;
         public bool PauseGameActiveState;
 
-        public CharacterSelectionData(CharacterConfig config, Action<CharacterConfig> selectAction, bool pauseGameActiveState)
+        public CharacterSelectionData(CharacterConfig config, bool isAttacker, Action<CharacterConfig> selectAction, bool pauseGameActiveState)
         {
             Config = config;
+            IsAttacker = isAttacker;
             SelectAction = selectAction;
             PauseGameActiveState = pauseGameActiveState;
         }
@@ -29,12 +31,15 @@ namespace EnhancedBattleTest
     {
         private readonly Action<CharacterSelectionData> _beginSelection;
         private readonly Action _endSelection;
-        private CharacterSelectionData _data;
         private readonly CharacterCollection _characterCollection;
+        private CharacterSelectionData _data;
 
         public TextVM TitleText { get; }
         public TextVM CultureText { get; }
         public TextVM GroupText { get; }
+
+        public TextVM DoneText { get; }
+        public TextVM CancelText { get; }
 
         public SelectorVM<SelectorItemVM> Cultures { get; }
 
@@ -53,6 +58,8 @@ namespace EnhancedBattleTest
             TitleText = new TextVM(GameTexts.FindText("str_ebt_select_character"));
             CultureText = new TextVM(GameTexts.FindText("str_ebt_culture"));
             GroupText = new TextVM(GameTexts.FindText("str_ebt_group"));
+            DoneText = new TextVM(GameTexts.FindText("str_done"));
+            CancelText = new TextVM(GameTexts.FindText("str_cancel"));
 
             Characters = new CharactersInGroupVM(_characterCollection, isMultiplayer);
             Cultures = new SelectorVM<SelectorItemVM>(
@@ -108,14 +115,21 @@ namespace EnhancedBattleTest
 
         private void SetData(CharacterSelectionData data)
         {
+            _data = data;
             var character = data.Config.Character;
             Cultures.SelectedIndex = _characterCollection.Cultures.IndexOf(character.Culture) + 1;
             Groups.SelectedIndex = _characterCollection.GroupsInCultures[character.Culture.StringId]
                 .FindIndex(group => group.Info.StringId == character.GroupInfo.StringId) + 1;
-            Characters.SetConfig(data.Config);
+            Characters.SetConfig(data.Config, data.IsAttacker);
         }
 
-        public void Close()
+        private void Done()
+        {
+            _data.SelectAction?.Invoke(_data.Config);
+            Close();
+        }
+
+        private void Close()
         {
             _endSelection?.Invoke();
         }

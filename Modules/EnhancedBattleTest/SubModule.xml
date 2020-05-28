@@ -8,6 +8,7 @@
 	<DependedModules>
 		<DependedModule Id="Native"/>
 		<DependedModule Id="SandBoxCore"/>
+		<DependedModule Id="CustomBattle"/>
 	</DependedModules>
 	<SubModules>
 		<SubModule>
@@ -26,7 +27,6 @@
 			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
-				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<!-- <XmlNode>
@@ -40,7 +40,6 @@
 			<XmlName id="MPCharacters" path="../../Native/ModuleData/mpcharacters"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
-				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<!-- <XmlNode>
@@ -54,7 +53,6 @@
 			<XmlName id="BasicCultures" path="../../Native/ModuleData/mpcultures"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
-				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<!-- <XmlNode>
@@ -68,20 +66,22 @@
 			<XmlName id="MPClassDivisions" path="../../Native/ModuleData/mpclassdivisions"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
-				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="../../Native/ModuleData/mp_crafting_pieces"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
-				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="../../Native/ModuleData/crafting_pieces"/>
 			<IncludedGameTypes>
-				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode><XmlNode>                
+			<XmlName id="Monsters" path="monsters"/>
+			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>

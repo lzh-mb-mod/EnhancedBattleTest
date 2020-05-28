@@ -33,6 +33,11 @@
     <string id="str_ebt_group" text="{=EnhancedBattleTest_group}Group" />
     <string id="str_ebt_character" text="{=EnhancedBattleTest_character}Character" />
 
+    <string id="str_ebt_is_hero" text="{=EnhancedBattleTest_ishero}Is Hero" />
+    <string id="str_ebt_is_female" text="{=EnhancedBattleTest_isfemale}Is Female" />
+
+    <string id="str_ebt_no_map" text="{=EnhancedBattleTets_no_map}No map available." />
+
     <string id="str_free_battle" text="{=EnhancedBattleTest_freebattle}Free Battle" />
     <string id="str_custom_battle" text="{=EnhancedBattleTest_custombattle}Custom Battle" />
     <string id="str_siege_battle" text="{=EnhancedBattleTest_siegebattle}Siege Battle" />

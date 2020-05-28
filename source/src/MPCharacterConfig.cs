@@ -17,6 +17,7 @@ namespace EnhancedBattleTest
         public int SelectedFirstPerk;
         public int SelectedSecondPerk;
         public bool IsHero;
+        public bool IsFemale;
 
         public string CharacterId
         {
@@ -32,15 +33,17 @@ namespace EnhancedBattleTest
         [XmlIgnore]
         public override Character Character { get; protected set; }
 
+        [XmlIgnore]
+        public BasicCharacterObject CharacterObject => IsHero ? HeroClass.HeroCharacter : HeroClass.TroopCharacter;
+
+        [XmlIgnore]
+        public MultiplayerClassDivisions.MPHeroClass HeroClass;
+
         public override CharacterConfig Clone()
         {
-            return new MPCharacterConfig()
-            {
-                CharacterId = CharacterId,
-                SelectedFirstPerk = SelectedFirstPerk,
-                SelectedSecondPerk = SelectedSecondPerk,
-                IsHero = IsHero
-            };
+            var result = new MPCharacterConfig();
+            result.CopyFrom(this);
+            return result;
         }
 
         public override void CopyFrom(CharacterConfig other)
@@ -52,10 +55,8 @@ namespace EnhancedBattleTest
             SelectedFirstPerk = mpOther.SelectedFirstPerk;
             SelectedSecondPerk = mpOther.SelectedSecondPerk;
             IsHero = mpOther.IsHero;
+            IsFemale = mpOther.IsFemale;
         }
-
-        [XmlIgnore]
-        public MultiplayerClassDivisions.MPHeroClass HeroClass;
 
         public MPCharacterConfig()
         {

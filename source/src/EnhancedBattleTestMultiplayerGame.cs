@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using EnhancedBattleTest;
+using HarmonyLib;
 using SandBox;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
@@ -47,6 +49,8 @@ namespace EnhancedBattleTest
             GameManager.OnAfterCampaignStart(this.CurrentGame);
             GameManager.OnGameInitializationFinished(this.CurrentGame);
             CurrentGame.AddGameHandler<ChatBox>();
+
+            ApplyHarmonyPatch();
         }
 
         private void InitializeGameTexts(GameTextManager currentGameGameTextManager)
@@ -115,6 +119,22 @@ namespace EnhancedBattleTest
 
         public override void OnDestroy()
         {
+            Unpatch();
+        }
+
+        private void ApplyHarmonyPatch()
+        {
+            var harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
+
+            var original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
+            var prefix = typeof(HarmonyPatchForSpawnLogicInMP).GetMethod("SpawnTroops");
+            harmony.Patch(original, prefix: new HarmonyMethod(prefix));
+        }
+
+        private void Unpatch()
+        {
+            var harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
+            harmony.UnpatchAll();
         }
     }
 }

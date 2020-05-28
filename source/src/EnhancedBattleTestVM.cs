@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.CustomBattle;
@@ -134,8 +135,10 @@ namespace EnhancedBattleTest
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
 
-            PlayerSide = new SideVM(_config.PlayerTeamConfig, new TextObject("{=BC7n6qxk}PLAYER"));
-            EnemySide = new SideVM(_config.EnemyTeamConfig, new TextObject("{=35IHscBa}ENEMY"));
+            PlayerSide = new SideVM(_config.PlayerTeamConfig, new TextObject("{=BC7n6qxk}PLAYER"), true,
+                _config.BattleTypeConfig);
+            EnemySide = new SideVM(_config.EnemyTeamConfig, new TextObject("{=35IHscBa}ENEMY"), false,
+                _config.BattleTypeConfig);
 
             MapSelectionGroup = new MapSelectionGroup("",
                 _scenes.Select(sceneData =>
@@ -162,6 +165,11 @@ namespace EnhancedBattleTest
 
         }
 
+        public bool IsValid()
+        {
+            return PlayerSide.IsValid() && EnemySide.IsValid();
+        }
+
         public void ExecuteBack()
         {
             _config = null;
@@ -170,12 +178,33 @@ namespace EnhancedBattleTest
 
         public void ExecuteStart()
         {
+            if (!IsValid())
+                return;
+            var selectedMap = MapSelectionGroup.SelectedMap;
+            MapSelectionElement mapWithName = this.MapSelectionGroup.GetMapWithName(this.MapSelectionGroup.SearchText);
+            if (mapWithName != null && mapWithName != selectedMap)
+                selectedMap = mapWithName;
+            if (selectedMap == null)
+            {
+                Utility.DisplayLocalizedText("str_ebt_no_map");
+                return;
+            }
+
+            _config.MapConfig.MapName = selectedMap.MapName;
+            _config.MapConfig.IsSiege = selectedMap.IsSiegeMap;
+            _config.MapConfig.IsVillage = selectedMap.IsVillageMap;
+            _config.MapConfig.SceneLevel = int.Parse(MapSelectionGroup.SceneLevelSelection.SelectedItem.StringItem);
+            _config.MapConfig.WallHitPoint = int.Parse(MapSelectionGroup.WallHitpointSelection.SelectedItem.StringItem);
+            _config.MapConfig.Season = MapSelectionGroup.SeasonSelection.SelectedItem.StringItem.ToLower();
+
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
             _config.SiegeMachineConfig.AttackerRangedMachines =
                 AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
+
+            EnhancedBattleTestMissions.OpenMission(_config);
         }
 
         private void OnPlayerTypeChange(bool isCommander)
@@ -188,23 +217,18 @@ namespace EnhancedBattleTest
             AttackerMeleeMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < 3; ++index)
                 AttackerMeleeMachines.Add(new CustomBattleSiegeMachineVM(
-                    GetSiegeEngineType(_config.SiegeMachineConfig.AttackerMeleeMachines.ElementAtOrDefault(index)),
+                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerMeleeMachines.ElementAtOrDefault(index)),
                     OnMeleeMachineSelection));
             AttackerRangedMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < 4; ++index)
                 AttackerRangedMachines.Add(new CustomBattleSiegeMachineVM(
-                    GetSiegeEngineType(_config.SiegeMachineConfig.AttackerRangedMachines.ElementAtOrDefault(index)),
+                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerRangedMachines.ElementAtOrDefault(index)),
                     OnAttackerRangedMachineSelection));
             DefenderMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < 4; ++index)
                 DefenderMachines.Add(new CustomBattleSiegeMachineVM(
-                    GetSiegeEngineType(_config.SiegeMachineConfig.DefenderMachines.ElementAtOrDefault(index)),
+                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.DefenderMachines.ElementAtOrDefault(index)),
                     OnDefenderRangedMachineSelection));
-        }
-
-        private SiegeEngineType GetSiegeEngineType(string id)
-        {
-            return id == null ? null : MBObjectManager.Instance.GetObject<SiegeEngineType>(id);
         }
 
         private void ExecuteDoneDefenderCustomMachineSelection()

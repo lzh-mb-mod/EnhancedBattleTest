@@ -17,18 +17,21 @@ namespace EnhancedBattleTest
         public TextVM CharacterRole { get; }
         public StringItemWithActionVM Name { get; }
 
-        public CharacterButtonVM(CharacterConfig config, TextObject characterRole)
+        public CharacterButtonVM(CharacterConfig config, TextObject characterRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
             CharacterRole = new TextVM(characterRole);
-            Name = new StringItemWithActionVM(o =>
-            {
-                EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(_config.Clone(),
-                    characterConfig =>
-                    {
-                        _config.CopyFrom(characterConfig);
-                    }, false));
-            }, _config.Character.Name.ToString(), this);
+            Name = new StringItemWithActionVM(
+                o =>
+                {
+                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(_config.Clone(),
+                        isPlayerSide == (battleTypeConfig.PlayerSide == BattleSideEnum.Attacker),
+                        characterConfig =>
+                        {
+                            _config.CopyFrom(characterConfig);
+                            Name.ActionText = _config.Character.Name.ToString();
+                        }, false));
+                }, _config.Character.Name.ToString(), this);
         }
 
         public override void RefreshValues()

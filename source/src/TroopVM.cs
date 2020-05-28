@@ -21,10 +21,10 @@ namespace EnhancedBattleTest
 
         public TextVM InvalidText { get; }
 
-        public TroopVM(TroopConfig config, TextObject troopRole)
+        public TroopVM(TroopConfig config, TextObject troopRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
-            CharacterButton = new CharacterButtonVM(_config.Character, troopRole);
+            CharacterButton = new CharacterButtonVM(_config.Character, troopRole, isPlayerSide, battleTypeConfig);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 5000);
             Number.OnNumberChanged += number => config.Number = number;
@@ -39,6 +39,11 @@ namespace EnhancedBattleTest
             NumberText.RefreshValues();
             Number.RefreshValues();
             InvalidText.RefreshValues();
+        }
+
+        public bool IsValid()
+        {
+            return !Number.IsIllegal;
         }
     }
 }

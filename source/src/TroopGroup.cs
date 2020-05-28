@@ -26,14 +26,15 @@ namespace EnhancedBattleTest
             }
         }
 
-        public TroopGroup(TroopGroupConfig config)
+        public TroopGroup(TroopGroupConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
             Troops = new MBBindingList<TroopVM>();
             for (int i = 0; i < _config.Troops.Length; ++i)
             {
                 GameTexts.SetVariable("TroopIndex", i);
-                Troops.Add(new TroopVM(_config.Troops[i], GameTexts.FindText("str_ebt_troop_role", "Soldiers")));
+                Troops.Add(new TroopVM(_config.Troops[i], GameTexts.FindText("str_ebt_troop_role", "Soldiers"),
+                    isPlayerSide, battleTypeConfig));
             }
         }
 
@@ -45,6 +46,17 @@ namespace EnhancedBattleTest
             {
                 troopVm.RefreshValues();
             }
+        }
+
+        public bool IsValid()
+        {
+            foreach (var troopVm in _troops)
+            {
+                if (!troopVm.IsValid())
+                    return false;
+            }
+
+            return true;
         }
     }
 }

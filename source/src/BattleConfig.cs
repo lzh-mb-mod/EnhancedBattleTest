@@ -5,6 +5,7 @@
         public TeamConfig PlayerTeamConfig = new TeamConfig();
         public TeamConfig EnemyTeamConfig = new TeamConfig();
         public BattleTypeConfig BattleTypeConfig = new BattleTypeConfig();
+        public MapConfig MapConfig = new MapConfig();
         public SiegeMachineConfig SiegeMachineConfig = new SiegeMachineConfig();
 
         public BattleConfig()

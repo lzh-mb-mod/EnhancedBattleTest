@@ -36,6 +36,11 @@
     <string id="EnhancedBattleTest_group" text="兵种" />
     <string id="EnhancedBattleTest_character" text="角色" />
 
+    <string id="EnhancedBattleTest_ishero" text="英雄" />
+    <string id="EnhancedBattleTest_isfemale" text="女性" />
+
+    <string id="EnhancedBattleTets_no_map" text="无可用地图。" />
+
 
 
     <string id="EnhancedBattleTest_freebattle" text="自由战斗" />
