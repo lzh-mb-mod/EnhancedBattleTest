@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 
@@ -11,15 +12,14 @@ namespace EnhancedBattleTest
 {
     public class MPGroup : Group
     {
-        public override GroupInfo Info { get; }
-        public override Dictionary<string, Character> CharactersInGroup { get; }
+        public Dictionary<string, Character> CharactersInGroup { get; }
 
         public MultiplayerClassDivisions.MPHeroClassGroup MpHeroClassGroup;
 
-        public MPGroup(MultiplayerClassDivisions.MPHeroClassGroup group)
+        public MPGroup(MultiplayerClassDivisions.MPHeroClassGroup group, FormationClass formationClass)
+            :base(new GroupInfo(group.StringId, group.Name, formationClass))
         {
             MpHeroClassGroup = group;
-            Info = new GroupInfo(MpHeroClassGroup.StringId, MpHeroClassGroup.Name);
             CharactersInGroup = new Dictionary<string, Character>();
         }
     }

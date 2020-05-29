@@ -106,8 +106,16 @@ namespace EnhancedBattleTest
 
         public static Banner BannerFor(BasicCultureObject culture, bool isAttacker)
         {
-            return new Banner(culture.BannerKey, BackgroundColor(culture, isAttacker),
-                ForegroundColor(culture, isAttacker));
+            if (culture.BannerKey != null)
+                return new Banner(culture.BannerKey, BackgroundColor(culture, isAttacker),
+                    ForegroundColor(culture, isAttacker));
+            else
+            {
+                var banner = Banner.CreateRandomBanner();
+                banner.ChangePrimaryColor(BackgroundColor(culture, isAttacker));
+                banner.ChangeIconColors(ForegroundColor(culture, isAttacker));
+                return banner;
+            }
         }
 
         public static BasicCultureObject GetCulture(TeamConfig config)

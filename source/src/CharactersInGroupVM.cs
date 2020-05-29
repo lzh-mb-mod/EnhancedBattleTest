@@ -11,57 +11,60 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class CharactersInGroupVM : ViewModel
+    public abstract class CharactersInGroupVM : ViewModel
     {
-        private readonly CharacterCollection _collection;
+        protected readonly CharacterCollection Collection;
 
-        private List<Character> _charactersInCurrentGroup;
+        protected List<Character> CharactersInCurrentGroup;
 
-        private CharacterConfig _config;
+        protected CharacterConfig Config;
+
+        public bool IsMultiplayer => Collection.IsMultiplayer;
+        public bool IsSinglePlayer => !Collection.IsMultiplayer;
 
         public TextVM CharacterText { get; }
 
         public SelectorVM<SelectorItemVM> Characters { get; }
         public CharacterConfigVM Character { get; }
 
-        public CharactersInGroupVM(CharacterCollection collection, bool isMultiplayer)
+        public static CharactersInGroupVM Create(CharacterCollection collection)
         {
-            _collection = collection;
+            return collection.IsMultiplayer
+                ? (CharactersInGroupVM)new MPCharactersInGroupVM(collection)
+                : new SPCharactersInGroupVM(collection);
+        }
+
+        protected CharactersInGroupVM(CharacterCollection collection)
+        {
+            Collection = collection;
 
             CharacterText = new TextVM(GameTexts.FindText("str_ebt_character"));
             Characters = new SelectorVM<SelectorItemVM>(0, null);
 
-            Character = CharacterConfigVM.Create(isMultiplayer);
+            Character = CharacterConfigVM.Create(Collection.IsMultiplayer);
         }
 
-        public void SelectedCultureAndGroupChanged(BasicCultureObject culture, Group group)
-        {
-            if (culture == null)
-                _charactersInCurrentGroup = _collection.GroupsInCultures.Values
-                    .SelectMany(groups => groups.SelectMany(g => g.CharactersInGroup.Values)).ToList();
-            else if (group == null)
-                _charactersInCurrentGroup = _collection.GroupsInCultures[culture.StringId]
-                    .SelectMany(g => g.CharactersInGroup.Values).ToList();
-            else
-                _charactersInCurrentGroup = group.CharactersInGroup.Values.ToList();
-            RefreshCharacterList();
-        }
+        public abstract void SelectedCultureAndGroupChanged(BasicCultureObject culture, Group group, bool updateInstantly = true);
 
         public void SetConfig(CharacterConfig config, bool isAttacker)
         {
-            _config = config;
-            Character.SetConfig(_config, isAttacker);
-            Characters.SelectedIndex = _charactersInCurrentGroup.FindIndex(c => c.StringId == _config.Character.StringId);
+            Config = config;
+            OnSetConfig(config);
+            Characters.SelectedIndex = -1;
+            Characters.SelectedIndex = CharactersInCurrentGroup.FindIndex(c => c.StringId == Config.Character.StringId);
+            Character.SetConfig(Config, isAttacker);
         }
 
-        private void RefreshCharacterList()
+        protected abstract void OnSetConfig(CharacterConfig config);
+
+        protected void RefreshCharacterList()
         {
-            Characters.Refresh(_charactersInCurrentGroup.Select(character => character.Name), 0, OnSelectedCharacterChanged);
+            Characters.Refresh(CharactersInCurrentGroup.Select(character => character.Name), 0, OnSelectedCharacterChanged);
         }
 
         private void OnSelectedCharacterChanged(SelectorVM<SelectorItemVM> characters)
         {
-            Character?.SelectedCharacterChanged(_charactersInCurrentGroup.ElementAtOrDefault(characters.SelectedIndex));
+            Character?.SelectedCharacterChanged(CharactersInCurrentGroup.ElementAtOrDefault(characters.SelectedIndex));
         }
     }
 }

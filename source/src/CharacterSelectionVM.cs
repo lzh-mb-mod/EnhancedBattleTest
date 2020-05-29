@@ -33,6 +33,7 @@ namespace EnhancedBattleTest
         private readonly Action _endSelection;
         private readonly CharacterCollection _characterCollection;
         private CharacterSelectionData _data;
+        private bool _updateInstantly = true;
 
         public TextVM TitleText { get; }
         public TextVM CultureText { get; }
@@ -61,12 +62,11 @@ namespace EnhancedBattleTest
             DoneText = new TextVM(GameTexts.FindText("str_done"));
             CancelText = new TextVM(GameTexts.FindText("str_cancel"));
 
-            Characters = new CharactersInGroupVM(_characterCollection, isMultiplayer);
+            Characters = CharactersInGroupVM.Create(_characterCollection);
+            Groups = new SelectorVM<SelectorItemVM>(0, null);
             Cultures = new SelectorVM<SelectorItemVM>(
                 _characterCollection.Cultures.Select(culture => culture.Name).Prepend(TextObject.Empty), 0,
                 OnSelectedCultureChanged);
-            Groups = new SelectorVM<SelectorItemVM>(0, null);
-            OnSelectedCultureChanged(Cultures);
         }
 
         public override void OnFinalize()
@@ -76,35 +76,63 @@ namespace EnhancedBattleTest
 
         private void OnSelectedCultureChanged(SelectorVM<SelectorItemVM> cultures)
         {
-            var selectedCulture = SelectedCulture();
+            var selectedCulture = SelectedCulture(cultures);
             if (selectedCulture == null)
             {
-                Groups?.Refresh(Enumerable.Empty<TextObject>().Prepend(TextObject.Empty), 0, OnSelectedGroupChanged);
+                var groups = _characterCollection.GroupsInCultures.Values.SelectMany(list => list)
+                    .DistinctBy(group => group.Info.FormationClass).Select(g => g.Info.Name).Prepend(TextObject.Empty)
+                    .ToList();
+                var index = Groups.SelectedIndex;
+                if (index >= groups.Count)
+                    index = 0;
+                RefreshSelector(Groups, groups, index, OnSelectedGroupChanged);
             }
             else
             {
-                Groups?.Refresh(
-                    _characterCollection.GroupsInCultures[selectedCulture.StringId].Select(group => group.Info.Name)
-                        .Prepend(TextObject.Empty), 0, OnSelectedGroupChanged);
+                var groups = _characterCollection.GroupsInCultures[selectedCulture.StringId]
+                    .Select(group => group.Info.Name)
+                    .Prepend(TextObject.Empty).ToList();
+                var index = Groups.SelectedIndex;
+                if (index >= groups.Count)
+                    index = 0;
+                RefreshSelector(Groups, groups, index, OnSelectedGroupChanged);
             }
         }
 
+        private void RefreshSelector(SelectorVM<SelectorItemVM> selector, List<TextObject> texts, int index, Action<SelectorVM<SelectorItemVM>> action)
+        {
+            if (selector == null)
+                return;
+            var bindings = new MBBindingList<SelectorItemVM>();
+            foreach (var textObject in texts)
+            {
+                bindings.Add(new SelectorItemVM(textObject));
+            }
+
+            selector.SetOnChangeAction(null);
+            selector.ItemList = bindings;
+            selector.SelectedIndex = -1;
+            selector.SetOnChangeAction(action);
+            selector.SelectedIndex = index;
+        }
+
+
         private void OnSelectedGroupChanged(SelectorVM<SelectorItemVM> groups)
         {
-            Characters.SelectedCultureAndGroupChanged(SelectedCulture(), SelectedGroup());
+            Characters.SelectedCultureAndGroupChanged(SelectedCulture(Cultures), SelectedGroup(groups), _updateInstantly);
         }
 
-        private BasicCultureObject SelectedCulture()
+        private BasicCultureObject SelectedCulture(SelectorVM<SelectorItemVM> cultures)
         {
-            return Cultures == null || Cultures.SelectedIndex < 1 ? null : _characterCollection.Cultures[Cultures.SelectedIndex - 1];
+            return cultures == null || cultures.SelectedIndex < 1 ? null : _characterCollection.Cultures[cultures.SelectedIndex - 1];
         }
 
-        private Group SelectedGroup()
+        private Group SelectedGroup(SelectorVM<SelectorItemVM> groups)
         {
-            var selectedCulture = SelectedCulture();
-            return selectedCulture == null || Groups == null || Groups.SelectedIndex < 1
+            var selectedCulture = SelectedCulture(Cultures);
+            return selectedCulture == null || groups == null || groups.SelectedIndex < 1
                 ? null
-                : _characterCollection.GroupsInCultures[selectedCulture.StringId][Groups.SelectedIndex - 1];
+                : _characterCollection.GroupsInCultures[selectedCulture.StringId][groups.SelectedIndex - 1];
         }
 
         private void Open(CharacterSelectionData data)
@@ -117,10 +145,12 @@ namespace EnhancedBattleTest
         {
             _data = data;
             var character = data.Config.Character;
+            _updateInstantly = false;
             Cultures.SelectedIndex = _characterCollection.Cultures.IndexOf(character.Culture) + 1;
             Groups.SelectedIndex = _characterCollection.GroupsInCultures[character.Culture.StringId]
                 .FindIndex(group => group.Info.StringId == character.GroupInfo.StringId) + 1;
             Characters.SetConfig(data.Config, data.IsAttacker);
+            _updateInstantly = true;
         }
 
         private void Done()

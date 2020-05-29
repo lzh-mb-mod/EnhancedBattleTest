@@ -12,9 +12,9 @@ namespace EnhancedBattleTest
         public override Dictionary<string, List<Group>> GroupsInCultures { get; } =
             new Dictionary<string, List<Group>>();
 
-        public override bool isMultiplayer => true;
+        public override bool IsMultiplayer => true;
 
-        public void Initialize()
+        public override void Initialize()
         {
             Debug.Assert(MultiplayerClassDivisions.AvailableCultures != null, "Available Cultures should not be null");
             if (MultiplayerClassDivisions.AvailableCultures == null)
@@ -27,15 +27,18 @@ namespace EnhancedBattleTest
                 GroupsInCultures.Add(eachCulture.StringId, groupsInCurrentCulture);
                 foreach (var mpHeroClass in MultiplayerClassDivisions.GetMPHeroClasses(eachCulture))
                 {
-                    Group group = groupsInCurrentCulture.Find(g => g.Info.StringId == mpHeroClass.ClassGroup.StringId);
+                    var group =
+                        groupsInCurrentCulture.Find(g => g.Info.StringId == mpHeroClass.ClassGroup.StringId) as MPGroup;
                     if (group == null)
                     {
-                        var newGroup = new MPGroup(mpHeroClass.ClassGroup);
+                        var newGroup = new MPGroup(mpHeroClass.ClassGroup,
+                            mpHeroClass.HeroCharacter.CurrentFormationClass);
                         groupsInCurrentCulture.Add(newGroup);
-                        newGroup.CharactersInGroup.Add(mpHeroClass.StringId, new MPCharacter(mpHeroClass, newGroup.Info));
+                        groupsInCurrentCulture.Sort((lhs, rhs) => lhs.Info.FormationClass - rhs.Info.FormationClass);
+                        group = newGroup;
                     }
-                    else
-                        group.CharactersInGroup.Add(mpHeroClass.StringId, new MPCharacter(mpHeroClass, group.Info));
+
+                    group.CharactersInGroup.Add(mpHeroClass.StringId, new MPCharacter(mpHeroClass, group.Info));
                 }
             }
         }

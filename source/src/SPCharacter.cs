@@ -18,6 +18,8 @@ namespace EnhancedBattleTest
         public override BasicCultureObject Culture => CharacterObject.Culture;
         public override GroupInfo GroupInfo { get; }
 
+        public Occupation Occupation => CharacterObject.Occupation;
+
         public SPCharacter(CharacterObject characterObject, GroupInfo groupInfo)
         {
             CharacterObject = characterObject;

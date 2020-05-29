@@ -262,11 +262,11 @@
                     <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom">
                       <Children>
 
-                        <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!RefreshButton.Width" SuggestedHeight="!RefreshButton.Height" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginRight="40" Brush="RefreshButton.Flat" Command.Click="ExecuteRandomize" UpdateChildrenStates="true">
+                        <!-- <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!RefreshButton.Width" SuggestedHeight="!RefreshButton.Height" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginRight="40" Brush="RefreshButton.Flat" Command.Click="ExecuteRandomize" UpdateChildrenStates="true">
                           <Children>
                             <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@RandomizeButtonText" />
                           </Children>
-                        </ButtonWidget>
+                        </ButtonWidget> -->
 
                         <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteStart" UpdateChildrenStates="true">
                           <Children>

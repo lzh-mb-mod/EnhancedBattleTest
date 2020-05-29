@@ -37,13 +37,11 @@ namespace EnhancedBattleTest
             };
             int index = new Random().Next(0, strArray.Length);
             string str = strArray[index];
-            Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            dictionary.Add("spring", 0);
-            dictionary.Add("summer", 1);
-            dictionary.Add("fall", 2);
-            dictionary.Add("winter", 3);
-            int num = 0;
-            dictionary.TryGetValue(seasonString, out num);
+            Dictionary<string, int> dictionary = new Dictionary<string, int>
+            {
+                {"spring", 0}, {"summer", 1}, {"fall", 2}, {"winter", 3}
+            };
+            dictionary.TryGetValue(seasonString, out var num);
             return new AtmosphereInfo()
             {
                 AtmosphereName = str,
@@ -72,6 +70,26 @@ namespace EnhancedBattleTest
                 MPCombatant.CreateParty(enemySide, enemyCulture, config.EnemyTeamConfig, false)
             };
 
+            return OpenMission(parties[0], parties[1], config, map);
+        }
+        public static Mission OpenSingleplayerMission(BattleConfig config, string map)
+        {
+            var playerCulture = Utility.GetCulture(config.PlayerTeamConfig);
+            var playerSide = config.BattleTypeConfig.PlayerSide;
+
+            var enemyCulture = Utility.GetCulture(config.EnemyTeamConfig);
+            var enemySide = playerSide.GetOppositeSide();
+            SPCombatant[] parties = new SPCombatant[2]
+            {
+                SPCombatant.CreateParty(playerSide, playerCulture, config.PlayerTeamConfig, true),
+                SPCombatant.CreateParty(enemySide, enemyCulture, config.EnemyTeamConfig, false)
+            };
+            return OpenMission(parties[0], parties[1], config, map);
+        }
+
+        public static Mission OpenMission(IEnhancedBattleTestCombatant playerParty,
+            IEnhancedBattleTestCombatant enemyParty, BattleConfig config, string map)
+        {
             if (config.BattleTypeConfig.BattleType == BattleType.Siege)
             {
                 var attackerSiegeWeaponCount = GetSiegeWeaponCount(config.SiegeMachineConfig.AttackerMeleeMachines)
@@ -93,22 +111,22 @@ namespace EnhancedBattleTest
                     hitPointPercentages[1] = wallHitPoint / 100.0f;
                 }
 
-                return OpenMPSiegeMissionWithDeployment(map, config, parties[0], parties[1], hitPointPercentages,
+                return OpenEnhancedBattleTestSiege(map, config, playerParty, enemyParty, hitPointPercentages,
                     attackerSiegeWeaponCount, defenderSiegeWeaponCount, false, false);
             }
             else
             {
-                return OpenMPBattleMission(map, config, parties[0], parties[1]);
+                return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
             }
         }
 
 
         [MissionMethod]
-        public static Mission OpenMPSiegeMissionWithDeployment(
+        public static Mission OpenEnhancedBattleTestSiege(
             string scene,
             BattleConfig config,
-            MPCombatant playerParty,
-            MPCombatant enemyParty,
+            IEnhancedBattleTestCombatant playerParty,
+            IEnhancedBattleTestCombatant enemyParty,
             float[] wallHitPointPercentages,
             Dictionary<SiegeEngineType, int> siegeWeaponsCountOfAttackers,
             Dictionary<SiegeEngineType, int> siegeWeaponsCountOfDefenders,
@@ -138,16 +156,17 @@ namespace EnhancedBattleTest
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
-            troopSuppliers[(int)playerSide] = new MPTroopSupplier(playerParty);
-            troopSuppliers[(int)enemySide] = new MPTroopSupplier(enemyParty);
+            bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
+            troopSuppliers[(int) playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
+            troopSuppliers[(int)enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
             bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander;
             bool isPlayerSergeant = !isPlayerGeneral;
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
 
             var attackerSiegeWeapons =
-                siegeWeaponsCountOfAttackers.ToDictionary(pair => pair.Key.GetType(), pair => pair.Value);
+                GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers);
             var defenderSiegeWeapons =
-                siegeWeaponsCountOfDefenders.ToDictionary(pair => pair.Key.GetType(), pair => pair.Value);
+                GetSiegeWeaponTypes(siegeWeaponsCountOfDefenders);
             return MissionState.OpenNew("MPSiegeBattle", new MissionInitializerRecord(scene)
             {
                 PlayingInCampaignMode = false,
@@ -208,26 +227,26 @@ namespace EnhancedBattleTest
 
 
         [MissionMethod]
-        public static Mission OpenMPBattleMission(
+        public static Mission OpenEnhancedBattleTestField(
             string scene,
             BattleConfig config,
-            MPCombatant playerParty,
-            MPCombatant enemyParty,
+            IEnhancedBattleTestCombatant playerParty,
+            IEnhancedBattleTestCombatant enemyParty,
             float timeOfDay = 6f)
         {
             var playerSide = config.BattleTypeConfig.PlayerSide;
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
-            var player = config.PlayerTeamConfig.General as MPCharacterConfig;
+            var player = config.PlayerTeamConfig.General;
             if (player == null)
                 return null;
             var playerCharacter = player.CharacterObject;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             var playerSideLeaderExceptPlayer =
-                (config.PlayerTeamConfig.Troops.Troops.FirstOrDefault(config => config.Number > 0)?.Character as
-                    MPCharacterConfig)?.CharacterObject;
+                config.PlayerTeamConfig.Troops.Troops.FirstOrDefault(c => c.Number > 0)?.Character.CharacterObject;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
-            troopSuppliers[(int)playerSide] = new MPTroopSupplier(playerParty);
-            troopSuppliers[(int)enemySide] = new MPTroopSupplier(enemyParty);
+            bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
+            troopSuppliers[(int) playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
+            troopSuppliers[(int) enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
             bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander;
             bool isPlayerSergeant = !isPlayerGeneral;
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
@@ -280,6 +299,13 @@ namespace EnhancedBattleTest
                 }, true, true, true);
         }
 
+        private static IEnhancedBattleTestTroopSupplier CreateTroopSupplier(IEnhancedBattleTestCombatant combatant, bool isMultiplayer)
+        {
+            return isMultiplayer
+                ? (IEnhancedBattleTestTroopSupplier) new MPTroopSupplier(combatant)
+                : new SPTroopSupplier(combatant);
+        }
+
         private static Dictionary<SiegeEngineType, int> GetSiegeWeaponCount(List<string> siegeWeaponIds)
         {
             Dictionary<SiegeEngineType, int> siegeWeaponsCount = new Dictionary<SiegeEngineType, int>();
@@ -295,10 +321,32 @@ namespace EnhancedBattleTest
 
             return siegeWeaponsCount;
         }
-
-        public static Mission OpenSingleplayerMission(BattleConfig config, string map)
+        private static Type GetSiegeWeaponType(SiegeEngineType siegeWeaponType)
         {
-            throw new NotImplementedException();
+            if (siegeWeaponType == DefaultSiegeEngineTypes.Ladder)
+                return typeof(SiegeLadder);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.Ballista)
+                return typeof(Ballista);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.FireBallista)
+                return typeof(FireBallista);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.Ram || siegeWeaponType == DefaultSiegeEngineTypes.ImprovedRam)
+                return typeof(BatteringRam);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.SiegeTower)
+                return typeof(SiegeTower);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.Onager || siegeWeaponType == DefaultSiegeEngineTypes.Catapult)
+                return typeof(Mangonel);
+            if (siegeWeaponType == DefaultSiegeEngineTypes.FireOnager || siegeWeaponType == DefaultSiegeEngineTypes.FireCatapult)
+                return typeof(FireMangonel);
+            return siegeWeaponType == DefaultSiegeEngineTypes.Trebuchet || siegeWeaponType == DefaultSiegeEngineTypes.Bricole ? typeof(Trebuchet) : (Type)null;
+        }
+
+        private static Dictionary<Type, int> GetSiegeWeaponTypes(
+            Dictionary<SiegeEngineType, int> values)
+        {
+            Dictionary<Type, int> dictionary = new Dictionary<Type, int>();
+            foreach (KeyValuePair<SiegeEngineType, int> keyValuePair in values)
+                dictionary.Add(GetSiegeWeaponType(keyValuePair.Key), keyValuePair.Value);
+            return dictionary;
         }
     }
 }

@@ -17,6 +17,8 @@ namespace EnhancedBattleTest
         [XmlIgnore]
         public abstract Character Character { get; protected set; }
 
+        public abstract BasicCharacterObject CharacterObject { get; }
+
         public abstract CharacterConfig Clone();
         public abstract void CopyFrom(CharacterConfig other);
 

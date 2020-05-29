@@ -9,7 +9,8 @@ namespace EnhancedBattleTest
     public class SPCharacterConfig : CharacterConfig
     {
         [XmlIgnore]
-        public string _characterId;
+        private string _characterId;
+        public float FemaleRatio;
 
         public string CharacterId
         {
@@ -17,8 +18,8 @@ namespace EnhancedBattleTest
             set
             {
                 _characterId = value;
-                CharacterObject = Game.Current.ObjectManager.GetObject<CharacterObject>(_characterId);
-                Character = new SPCharacter(CharacterObject, new SPGroup(CharacterObject.CurrentFormationClass).Info);
+                ActualCharacterObject = Game.Current.ObjectManager.GetObject<CharacterObject>(_characterId);
+                Character = new SPCharacter(ActualCharacterObject, new SPGroup(CharacterObject.CurrentFormationClass).Info);
 
             }
         }
@@ -26,15 +27,15 @@ namespace EnhancedBattleTest
         [XmlIgnore]
         public override Character Character { get; protected set; }
 
-        [XmlIgnore]
-        public CharacterObject CharacterObject;
+        [XmlIgnore] public override BasicCharacterObject CharacterObject => ActualCharacterObject;
+
+        [XmlIgnore] public CharacterObject ActualCharacterObject;
 
         public override CharacterConfig Clone()
         {
-            return new SPCharacterConfig()
-            {
-                CharacterId = CharacterId,
-            };
+            var result = new SPCharacterConfig();
+            result.CopyFrom(this);
+            return result;
         }
 
         public override void CopyFrom(CharacterConfig other)
@@ -43,11 +44,12 @@ namespace EnhancedBattleTest
             if (spOther == null)
                 return;
             CharacterId = spOther.CharacterId;
+            FemaleRatio = spOther.FemaleRatio;
         }
 
         public SPCharacterConfig()
         {
-            CharacterId = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>().First().StringId; ;
+            CharacterId = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>().First().StringId;
         }
     }
 }

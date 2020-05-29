@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using EnhancedBattleTest;
-using HarmonyLib;
-using SandBox;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
@@ -20,9 +11,6 @@ namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestMultiplayerGame : GameType
     {
-        private readonly Harmony harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
-        private readonly MethodInfo original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
-        private readonly MethodInfo prefix = typeof(HarmonyPatchForSpawnLogicInMP).GetMethod("SpawnTroops");
         public static EnhancedBattleTestMultiplayerGame Current => Game.Current.GameType as EnhancedBattleTestMultiplayerGame;
 
         protected override void OnInitialize()
@@ -51,8 +39,6 @@ namespace EnhancedBattleTest
             GameManager.OnAfterCampaignStart(this.CurrentGame);
             GameManager.OnGameInitializationFinished(this.CurrentGame);
             CurrentGame.AddGameHandler<ChatBox>();
-
-            ApplyHarmonyPatch();
         }
 
         private void InitializeGameTexts(GameTextManager currentGameGameTextManager)
@@ -121,18 +107,6 @@ namespace EnhancedBattleTest
 
         public override void OnDestroy()
         {
-            Unpatch();
-        }
-
-        private void ApplyHarmonyPatch()
-        {
-
-            harmony.Patch(original, prefix: new HarmonyMethod(prefix));
-        }
-
-        private void Unpatch()
-        {
-            harmony.UnpatchAll(harmony.Id);
         }
     }
 }

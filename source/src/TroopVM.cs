@@ -26,8 +26,8 @@ namespace EnhancedBattleTest
             _config = config;
             CharacterButton = new CharacterButtonVM(_config.Character, troopRole, isPlayerSide, battleTypeConfig);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
-            Number = new NumberVM<int>(config.Number, 5000);
-            Number.OnNumberChanged += number => config.Number = number;
+            Number = new NumberVM<int>(config.Number, 0,5000, true);
+            Number.OnValueChanged += number => config.Number = number;
             InvalidText = new TextVM(GameTexts.FindText("str_ebt_invalid"));
         }
 

@@ -26,9 +26,9 @@ namespace EnhancedBattleTest
 
 
         public TextVM IsHeroText { get; }
-        public TextVM IsFemaleText { get; }
+        public TextVM FemaleRatioText { get; }
         public BoolVM IsHero { get; }
-        public BoolVM IsFemale { get; }
+        public NumberVM<float> FemaleRatio { get; }
 
         public MPCharacterConfigVM()
         {
@@ -36,17 +36,17 @@ namespace EnhancedBattleTest
             SecondPerks = new SelectorVM<SelectorItemVM>(0, null);
 
             IsHeroText = new TextVM(GameTexts.FindText("str_ebt_is_hero"));
-            IsFemaleText = new TextVM(GameTexts.FindText("str_ebt_is_female"));
+            FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
             IsHero = new BoolVM(_config.IsHero);
-            IsFemale = new BoolVM(_config.IsFemale);
+            FemaleRatio = new NumberVM<float>(_config.FemaleRatio, 0, 1, false);
             IsHero.OnValueChanged += b =>
             {
                 _config.IsHero = b;
                 SetCharacterToViewModel();
             };
-            IsFemale.OnValueChanged += isFemale =>
+            FemaleRatio.OnValueChanged += femaleRatio =>
             {
-                _config.IsFemale = isFemale;
+                _config.FemaleRatio = femaleRatio;
                 SetCharacterToViewModel();
             };
         }
@@ -60,7 +60,7 @@ namespace EnhancedBattleTest
             FirstPerks.SelectedIndex = _config.SelectedFirstPerk;
             SecondPerks.SelectedIndex = _config.SelectedSecondPerk;
             IsHero.Value = _config.IsHero;
-            IsFemale.Value = _config.IsFemale;
+            FemaleRatio.Value = _config.FemaleRatio;
             SetCharacterToViewModel();
         }
 
@@ -72,7 +72,7 @@ namespace EnhancedBattleTest
             _config.SelectedFirstPerk = 0;
             _config.SelectedSecondPerk = 0;
             _config.IsHero = IsHero.Value;
-            _config.IsFemale = IsFemale.Value;
+            _config.FemaleRatio = FemaleRatio.Value;
             SetPerks();
         }
 
@@ -121,12 +121,12 @@ namespace EnhancedBattleTest
                 Character.BannerCodeText = "";
             }
             Character.CharStringId = character.StringId;
-            Character.IsFemale = _config.IsFemale;
+            Character.IsFemale = _config.FemaleRatio > 0.5;
             var equipment = Utility.GetNewEquipmentsForPerks(_config.HeroClass, _config.IsHero,
                 _config.SelectedFirstPerk, _config.SelectedSecondPerk, _config.IsHero);
             Character.EquipmentCode = equipment.CalculateEquipmentCode();
-            Character.BodyProperties = null;    
-            Character.BodyProperties = FaceGen.GetRandomBodyProperties(_config.IsFemale,
+            Character.BodyProperties = null;
+            Character.BodyProperties = FaceGen.GetRandomBodyProperties(_config.FemaleRatio > 0.5,
                 character.GetBodyPropertiesMin(false), character.GetBodyPropertiesMax(),
                 (int) equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
                 character.TattooTags).ToString();

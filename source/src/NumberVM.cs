@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,23 +16,40 @@ namespace EnhancedBattleTest
         IEquatable<T>,
         IFormattable
     {
-        private readonly T _maxValue;
-        private T _number;
+        private T _value;
         private string _text;
         private bool _isIllegal;
+        private bool _isDiscrete;
+
+        public T Min { get; }
+
+        public T Max { get; }
 
         [DataSourceProperty]
-        public T Number
+        public T Value
         {
-            get => _number;
+            get => _value;
             set
             {
-                if (_number.Equals(value))
+                if (_value.Equals(value))
                     return;
-                _number = value;
-                Text = _number.ToString();
-                OnPropertyChanged(nameof(Number));
-                OnNumberChanged?.Invoke(_number);
+                if (IsDiscrete)
+                {
+                    _value = value;
+                    Text = _value.ToString();
+                }
+                else
+                {
+                    var oldValue = _value.ToDouble(CultureInfo.CurrentCulture);
+                    var newValue = value.ToDouble(CultureInfo.CurrentCulture);
+                    if (Math.Abs(oldValue - newValue) < 0.01)
+                        return;
+                    _value = value;
+                    Text = newValue.ToString("F");
+                }
+
+                OnPropertyChanged(nameof(Value));
+                OnValueChanged?.Invoke(_value);
             }
         }
 
@@ -50,6 +68,19 @@ namespace EnhancedBattleTest
         }
 
         [DataSourceProperty]
+        public bool IsDiscrete
+        {
+            get => this._isDiscrete;
+            set
+            {
+                if (value == this._isDiscrete)
+                    return;
+                this._isDiscrete = value;
+                this.OnPropertyChanged(nameof(IsDiscrete));
+            }
+        }
+
+        [DataSourceProperty]
         public bool IsIllegal
         {
             get => _isIllegal;
@@ -62,27 +93,29 @@ namespace EnhancedBattleTest
             }
         }
 
-        public event Action<T> OnNumberChanged;
+        public event Action<T> OnValueChanged;
 
-        public NumberVM(T initialValue, T maxValue)
+        public NumberVM(T initialValue, T min, T max, bool isDiscrete)
         {
-            _maxValue = maxValue;
-            Number = initialValue;
-            Text = Number.ToString();
+            IsDiscrete = isDiscrete;
+            Min = min;
+            Max = max;
+            Value = initialValue;
+            Text = IsDiscrete ? _value.ToString() : _value.ToDouble(CultureInfo.CurrentCulture).ToString("F");
         }
 
         private void UpdateNumber()
         {
             try
             {
-                var number = (T)System.Convert.ChangeType(Text, typeof(T));
-                if (number.CompareTo(_maxValue) > 0)
+                var number = (T)Convert.ChangeType(Text, typeof(T));
+                if (number.CompareTo(Min) < 0 || number.CompareTo(Max) > 0)
                 {
                     IsIllegal = true;
                     return;
                 }
 
-                Number = number;
+                Value = number;
                 IsIllegal = false;
             }
             catch

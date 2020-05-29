@@ -37,10 +37,12 @@
     <string id="EnhancedBattleTest_character" text="角色" />
 
     <string id="EnhancedBattleTest_ishero" text="英雄" />
-    <string id="EnhancedBattleTest_isfemale" text="女性" />
+    <string id="EnhancedBattleTest_femaleratio" text="女性占比" />
 
     <string id="EnhancedBattleTest_no_map" text="无可用地图。" />
     <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
+
+    <string id="EnhancedBattleTest_troop_group_general" text="将军" />
 
 
 

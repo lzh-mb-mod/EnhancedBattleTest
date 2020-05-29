@@ -18,8 +18,6 @@ namespace EnhancedBattleTest
         private readonly EnhancedBattleTestState _state;
         private BattleConfig _config;
         private readonly List<SceneData> _scenes;
-        private List<BasicCultureObject> _factionList;
-        private List<BasicCharacterObject> _characterList;
 
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerMeleeMachines;
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerRangedMachines;
@@ -125,9 +123,6 @@ namespace EnhancedBattleTest
             _state = state;
             _config = BattleConfig.Deserialize(EnhancedBattleTestSubModule.IsMultiplayer);
             _scenes = _state.Scenes;
-            _factionList = Game.Current.ObjectManager.GetObjectTypeList<BasicCultureObject>().ToList();
-            _scenes = _state.Scenes;
-            _characterList = Game.Current.ObjectManager.GetObjectTypeList<BasicCharacterObject>().ToList();
 
             TitleText = new TextVM(title);
 

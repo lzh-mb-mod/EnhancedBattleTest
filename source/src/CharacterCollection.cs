@@ -15,6 +15,13 @@ namespace EnhancedBattleTest
         public abstract List<BasicCultureObject> Cultures { get; }
         public abstract Dictionary<string, List<Group>> GroupsInCultures { get; }
 
-        public abstract bool isMultiplayer { get; }
+        public abstract void Initialize();
+
+        public abstract bool IsMultiplayer { get; }
+
+        public static CharacterCollection Create(bool isMultiplayer)
+        {
+            return isMultiplayer ? (CharacterCollection)new MPCharacterCollection() : new SPCharacterCollection();
+        }
     }
 }

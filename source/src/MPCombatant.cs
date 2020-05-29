@@ -9,42 +9,23 @@ using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {
-    public class MPCombatant : IEnhancedBattleTestCombatant
+    public class MPCombatant : EnhancedBattleTestCombatant
     {
         private readonly List<MPSpawnableCharacter> _characters = new List<MPSpawnableCharacter>();
         public IEnumerable<MPSpawnableCharacter> MPCharacters => _characters.AsReadOnly();
-        public IEnumerable<BasicCharacterObject> Characters => MPCharacters.Select(character => character.Character);
+        public override IEnumerable<BasicCharacterObject> Characters => MPCharacters.Select(character => character.Character);
 
-        public int NumberOfAllMembers { get; private set; }
-
-        public int NumberOfHealthyMembers => this._characters.Count;
-
-        public TextObject Name { get; }
-        public BattleSideEnum Side { get; set; }
-        public BasicCultureObject BasicCulture { get; }
-        public Tuple<uint, uint> PrimaryColorPair { get; }
-        public Tuple<uint, uint> AlternativeColorPair { get; }
-        public Banner Banner { get; }
+        public override int NumberOfHealthyMembers => _characters.Count;
 
         public MPCombatant(BattleSideEnum side, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
-        {
-            Name = GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender");
-            Side = side;
-            BasicCulture = culture;
-            PrimaryColorPair = primaryColorPair;
-            AlternativeColorPair = alternativeColorPair;
-            Banner = banner;
-        }
+            : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
+                side, culture, primaryColorPair, alternativeColorPair, banner)
+        { }
 
         public MPCombatant(BattleSideEnum side, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
-        {
-            Name = GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender");
-            Side = side;
-            BasicCulture = culture;
-            PrimaryColorPair = primaryColorPair;
-            AlternativeColorPair = new Tuple<uint, uint>(PrimaryColorPair.Item2, PrimaryColorPair.Item1);
-            Banner = banner;
-        }
+            : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
+                side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner)
+        { }
 
         public static MPCombatant CreateParty(BattleSideEnum side, BasicCultureObject culture,
             TeamConfig teamConfig, bool isPlayerTeam)
@@ -58,20 +39,26 @@ namespace EnhancedBattleTest
             {
                 if (teamConfig.General is MPCharacterConfig general)
                     combatant.AddCharacter(
-                        new MPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
-                            isPlayerTeam), 1);
+                        new MPSpawnableCharacter(general, (int) general.CharacterObject.DefaultFormationGroup,
+                            general.FemaleRatio > 0.5, isPlayerTeam), 1);
             }
             for (int i = 0; i < teamConfig.Troops.Troops.Length; ++i)
             {
                 var troopConfig = teamConfig.Troops.Troops[i];
-                combatant.AddCharacter(new MPSpawnableCharacter((MPCharacterConfig)troopConfig.Character, i),
-                    troopConfig.Number);
+                var mpCharacter = troopConfig.Character as MPCharacterConfig;
+                if (mpCharacter == null)
+                    continue;
+                var femaleCount = (int)(troopConfig.Number * mpCharacter.FemaleRatio);
+                var maleCount = troopConfig.Number - femaleCount;
+                combatant.AddCharacter(new MPSpawnableCharacter(mpCharacter, i, true),
+                    femaleCount);
+                combatant.AddCharacter(new MPSpawnableCharacter(mpCharacter, i, false), maleCount);
             }
 
             return combatant;
         }
 
-        public int GetTacticsSkillAmount()
+        public override int GetTacticsSkillAmount()
         {
             return 0;
         }

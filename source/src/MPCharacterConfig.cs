@@ -17,7 +17,7 @@ namespace EnhancedBattleTest
         public int SelectedFirstPerk;
         public int SelectedSecondPerk;
         public bool IsHero;
-        public bool IsFemale;
+        public float FemaleRatio;
 
         public string CharacterId
         {
@@ -26,7 +26,8 @@ namespace EnhancedBattleTest
             {
                 _characterId = value;
                 HeroClass = Game.Current.ObjectManager.GetObject<MultiplayerClassDivisions.MPHeroClass>(_characterId);
-                Character = new MPCharacter(HeroClass, new MPGroup(HeroClass.ClassGroup).Info);
+                Character = new MPCharacter(HeroClass,
+                    new MPGroup(HeroClass.ClassGroup, HeroClass.HeroCharacter.CurrentFormationClass).Info);
             }
         }
 
@@ -34,7 +35,7 @@ namespace EnhancedBattleTest
         public override Character Character { get; protected set; }
 
         [XmlIgnore]
-        public BasicCharacterObject CharacterObject => IsHero ? HeroClass.HeroCharacter : HeroClass.TroopCharacter;
+        public override BasicCharacterObject CharacterObject => IsHero ? HeroClass.HeroCharacter : HeroClass.TroopCharacter;
 
         [XmlIgnore]
         public MultiplayerClassDivisions.MPHeroClass HeroClass;
@@ -55,7 +56,7 @@ namespace EnhancedBattleTest
             SelectedFirstPerk = mpOther.SelectedFirstPerk;
             SelectedSecondPerk = mpOther.SelectedSecondPerk;
             IsHero = mpOther.IsHero;
-            IsFemale = mpOther.IsFemale;
+            FemaleRatio = mpOther.FemaleRatio;
         }
 
         public MPCharacterConfig()

@@ -8,6 +8,7 @@
 	<DependedModules>
 		<DependedModule Id="Native"/>
 		<DependedModule Id="SandBoxCore"/>
+		<DependedModule Id="Sandbox"/>
 		<DependedModule Id="CustomBattle"/>
 	</DependedModules>
 	<SubModules>
@@ -75,6 +76,9 @@
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
+
+
+
 		<XmlNode>
 			<XmlName id="CraftingPieces" path="../../Native/ModuleData/crafting_pieces"/>
 			<IncludedGameTypes>
@@ -127,6 +131,12 @@
 			</IncludedGameTypes>
 		</XmlNode>
 		<XmlNode>
+			<XmlName id="partyTemplates" path="../../SandBox/ModuleData/partyTemplates"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
 			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/lords"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
@@ -158,6 +168,42 @@
 		</XmlNode>
 		<XmlNode>
 			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/spspecialcharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Kingdoms" path="../../SandBox/ModuleData/spkingdoms"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Factions" path="../../SandBox/ModuleData/spclans"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="WorkshopTypes" path="../../SandBox/ModuleData/spworkshops"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="LocationComplexTemplates" path="../../SandBox/ModuleData/location_complex_templates"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Concepts" path="../../SandBox/ModuleData/concept_strings"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Settlements" path="../../SandBox/ModuleData/settlements"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>

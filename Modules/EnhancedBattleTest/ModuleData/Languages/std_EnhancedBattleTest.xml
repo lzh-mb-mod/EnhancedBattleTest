@@ -37,10 +37,12 @@
     <string id="EnhancedBattleTest_character" text="Character" />
 
     <string id="EnhancedBattleTest_ishero" text="Is Hero" />
-    <string id="EnhancedBattleTest_isfemale" text="Is Female" />
+    <string id="EnhancedBattleTest_femaleratio" text="Female Ratio" />
 
     <string id="EnhancedBattleTest_no_map" text="No map available." />
     <string id="EnhancedBattleTest_current_map" text="Current map is {MapName}." />
+
+    <string id="EnhancedBattleTest_troop_group_general" text="General" />
 
 
 

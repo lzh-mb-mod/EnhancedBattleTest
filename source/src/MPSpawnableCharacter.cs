@@ -14,19 +14,19 @@ namespace EnhancedBattleTest
         public int SelectedFirstPerk;
         public int SelectedSecondPerk;
         public bool IsHero;
-        public bool IsFemale;
-        public FormationClass FormationIndex;
-        public bool IsPlayer;
+        public bool IsFemale { get; }
+        public FormationClass FormationIndex { get; }
+        public bool IsPlayer { get; }
 
         public BasicCharacterObject Character => IsHero ? HeroClass.HeroCharacter : HeroClass.TroopCharacter;
-        public MPSpawnableCharacter(MPCharacterConfig config, int i, bool isPlayer = false)
+        public MPSpawnableCharacter(MPCharacterConfig config, int formationIndex, bool isFemale, bool isPlayer = false)
         {
             HeroClass = config.HeroClass;
             SelectedFirstPerk = config.SelectedFirstPerk;
             SelectedSecondPerk = config.SelectedSecondPerk;
             IsHero = config.IsHero;
-            IsFemale = config.IsFemale;
-            FormationIndex = (FormationClass)i;
+            IsFemale = isFemale;
+            FormationIndex = (FormationClass)formationIndex;
             IsPlayer = isPlayer;
         }
     }
