@@ -30,6 +30,8 @@ namespace EnhancedBattleTest
 
         public TextVM MapText { get; }
 
+        public TextVM SeasonText { get; }
+
         public TextVM StartButtonText { get; }
 
         public SideVM PlayerSide { get; }
@@ -127,6 +129,8 @@ namespace EnhancedBattleTest
             TitleText = new TextVM(title);
 
             MapText = new TextVM(GameTexts.FindText("str_ebt_map"));
+
+            SeasonText = new TextVM(GameTexts.FindText("str_ebt_season"));
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
 

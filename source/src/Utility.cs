@@ -69,12 +69,12 @@ namespace EnhancedBattleTest
             bool isHero,
             int firstPerk,
             int secondPerk,
-            bool fixedEquipment)
+            bool fixedEquipment, int seed = -1)
         {
             BasicCharacterObject character = isHero ? heroClass.HeroCharacter : heroClass.TroopCharacter;
             Equipment equipment = fixedEquipment
                 ? character.Equipment.Clone()
-                : Equipment.GetRandomEquipmentElements(character, true, false, MBRandom.RandomInt());
+                : Equipment.GetRandomEquipmentElements(character, false, false, seed);
             foreach (PerkEffect perkEffectsForPerk in SelectRandomPerkEffectsForPerks(heroClass, isHero,
                 PerkType.PerkAlternativeEquipment, new[]
                 {
@@ -114,6 +114,20 @@ namespace EnhancedBattleTest
                 var banner = Banner.CreateRandomBanner();
                 banner.ChangePrimaryColor(BackgroundColor(culture, isAttacker));
                 banner.ChangeIconColors(ForegroundColor(culture, isAttacker));
+                return banner;
+            }
+        }
+
+        public static Banner SPBannerFor(BasicCultureObject culture, bool isAttacker)
+        {
+            if (culture.BannerKey != null)
+                return new Banner(culture.BannerKey, ClothingColor1(culture, isAttacker),
+                    ClothingColor2(culture, isAttacker));
+            else
+            {
+                var banner = Banner.CreateRandomBanner();
+                banner.ChangePrimaryColor(ClothingColor1(culture, isAttacker));
+                banner.ChangeIconColors(ClothingColor2(culture, isAttacker));
                 return banner;
             }
         }

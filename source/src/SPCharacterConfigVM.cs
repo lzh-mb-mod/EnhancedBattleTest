@@ -11,6 +11,7 @@ namespace EnhancedBattleTest
 {
     public class SPCharacterConfigVM : CharacterConfigVM
     {
+        private TeamConfig _teamConfig;
         private SPCharacterConfig _config = new SPCharacterConfig();
         private bool _isAttacker;
         public bool IsMultiplayer => false;
@@ -18,12 +19,14 @@ namespace EnhancedBattleTest
 
         public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
 
+        public TextVM MaleRatioText { get; }
         public TextVM FemaleRatioText { get; }
 
         public NumberVM<float> FemaleRatio { get; }
 
         public SPCharacterConfigVM()
         {
+            FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
             FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
             FemaleRatio = new NumberVM<float>(_config.FemaleRatio, 0, 1, false);
             FemaleRatio.OnValueChanged += femaleRatio =>
@@ -33,10 +36,11 @@ namespace EnhancedBattleTest
             };
         }
 
-        public override void SetConfig(CharacterConfig config, bool isAttacker)
+        public override void SetConfig(TeamConfig teamConfig, CharacterConfig config, bool isAttacker)
         {
             if (!(config is SPCharacterConfig spConfig))
                 return;
+            _teamConfig = teamConfig;
             _config = spConfig;
             _isAttacker = isAttacker;
             FemaleRatio.Value = _config.FemaleRatio;
@@ -57,16 +61,16 @@ namespace EnhancedBattleTest
             if (!(_config.Character is SPCharacter mpCharacter))
                 return;
             var characterObject = _config.CharacterObject;
-            FillFrom(_isAttacker, characterObject);
+            FillFrom(characterObject);
         }
 
-        private void FillFrom(bool isAttacker, BasicCharacterObject character, int seed = -1)
+        private void FillFrom(BasicCharacterObject character, int seed = -1)
         {
-            if (character.Culture != null)
+            if (_teamConfig != null)
             {
-                Character.ArmorColor1 = Utility.ClothingColor1(character.Culture, isAttacker);
-                Character.ArmorColor2 = Utility.ClothingColor2(character.Culture, isAttacker);
-                Character.BannerCodeText = Utility.BannerFor(character.Culture, isAttacker).Serialize();
+                Character.ArmorColor1 = _teamConfig.Color1;
+                Character.ArmorColor2 = _teamConfig.Color2;
+                Character.BannerCodeText = _teamConfig.BannerKey;
             }
             else
             {

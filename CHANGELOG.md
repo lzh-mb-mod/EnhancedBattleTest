@@ -1,4 +1,11 @@
 # Changelog
+## [e2.0.0] - 2020-05-30
+### Added
+- Support singleplayer troops
+
+### Changed
+- Make the mod from scratch.
+
 ## [e1.0.2] - 2020-04-09
 ### Changed
 - Change free camera to rts-sytle camera. Player can issue order in this mode.

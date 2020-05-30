@@ -2,9 +2,9 @@
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestSingleplayerGame : Campaign
+    public class Campaign : TaleWorlds.CampaignSystem.Campaign
     {
-        public EnhancedBattleTestSingleplayerGame()
+        public Campaign()
             : base(CampaignGameMode.Campaign)
         {
         }

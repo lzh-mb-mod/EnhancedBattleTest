@@ -118,7 +118,7 @@ namespace EnhancedBattleTest
             var equipment = Utility.GetNewEquipmentsForPerks(agentOrigin.MPCharacter.HeroClass,
                 agentOrigin.MPCharacter.IsHero,
                 agentOrigin.MPCharacter.SelectedFirstPerk, agentOrigin.MPCharacter.SelectedSecondPerk,
-                agentOrigin.MPCharacter.IsHero);
+                agentOrigin.MPCharacter.IsHero, agentOrigin.Seed);
             agentBuildData.Equipment(equipment);
             agentBuildData.IsFemale(agentOrigin.MPCharacter.IsFemale);
             if (!troop.IsPlayerCharacter)
@@ -193,6 +193,11 @@ namespace EnhancedBattleTest
             }
             if (agentOrigin.SPCharacter.IsPlayer)
                 agentBuildData.Controller(Agent.ControllerType.Player);
+            if (troop.IsHero)
+                agentBuildData.FixedEquipment(true);
+            var equipment = Equipment.GetRandomEquipmentElements(troop, false, agentBuildData.AgentCivilianEquipment,
+                agentBuildData.AgentEquipmentSeed);
+            agentBuildData.Equipment(equipment);
             Agent agent = Mission.Current.SpawnAgent(agentBuildData, false, formationTroopCount);
             if (agent.IsAIControlled & isAlarmed)
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);

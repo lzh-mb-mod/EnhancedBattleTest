@@ -34,9 +34,9 @@ namespace EnhancedBattleTest.src
                     MBGlobals.InitializeReferences();
                     {
                         MBDebug.Print("Initializing new game begin...", 0, Debug.DebugColor.White, 17592186044416UL);
-                        var game = new EnhancedBattleTestSingleplayerGame();
+                        var game = new Campaign();
                         Game.CreateGame(game, this);
-                        game.SetLoadingParameters(Campaign.GameLoadingType.NewCampaign, this._seed);
+                        game.SetLoadingParameters(TaleWorlds.CampaignSystem.Campaign.GameLoadingType.NewCampaign, this._seed);
                         MBDebug.Print("Initializing new game end...", 0, Debug.DebugColor.White, 17592186044416UL);
                     }
                     Game.Current.DoLoading();

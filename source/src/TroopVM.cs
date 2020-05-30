@@ -21,10 +21,10 @@ namespace EnhancedBattleTest
 
         public TextVM InvalidText { get; }
 
-        public TroopVM(TroopConfig config, TextObject troopRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public TroopVM(TeamConfig teamConfig, TroopConfig config, TextObject troopRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
-            CharacterButton = new CharacterButtonVM(_config.Character, troopRole, isPlayerSide, battleTypeConfig);
+            CharacterButton = new CharacterButtonVM(teamConfig, _config.Character, troopRole, isPlayerSide, battleTypeConfig);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0,5000, true);
             Number.OnValueChanged += number => config.Number = number;

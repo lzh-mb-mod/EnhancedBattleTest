@@ -2,7 +2,7 @@
 <Module>
 	<Name value = "EnhancedBattleTest"/>
 	<Id value = "EnhancedBattleTest"/>
-	<Version value = "e1.0.2"/>
+	<Version value = "e2.0.0"/>
 	<SingleplayerModule value="true"/>
 	<MultiplayerModule value="false"/>
 	<DependedModules>
@@ -24,45 +24,45 @@
 	</SubModules>
 
 	<Xmls>
-		<XmlNode>
+		<!-- <XmlNode>
 			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<!-- <XmlNode>
+		<XmlNode>
 			<XmlName id="Items" path="customitems"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode> -->
+		</XmlNode>
 		<XmlNode>
 			<XmlName id="MPCharacters" path="../../Native/ModuleData/mpcharacters"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<!-- <XmlNode>
+		<XmlNode>
 			<XmlName id="MPCharacters" path="customcharacters"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode> -->
+		</XmlNode>
 		<XmlNode>
 			<XmlName id="BasicCultures" path="../../Native/ModuleData/mpcultures"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode>
-		<!-- <XmlNode>
+		<XmlNode>
 			<XmlName id="BasicCultures" path="customcultures"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedFreeBattleGame"/>
 				<GameType value = "EnhancedCustomBattleGame"/>
 			</IncludedGameTypes>
-		</XmlNode> -->
+		</XmlNode>
 
 		<XmlNode>
 			<XmlName id="MPClassDivisions" path="../../Native/ModuleData/mpclassdivisions"/>
@@ -207,6 +207,6 @@
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
-		</XmlNode>
+		</XmlNode> -->
 	</Xmls>
 </Module>

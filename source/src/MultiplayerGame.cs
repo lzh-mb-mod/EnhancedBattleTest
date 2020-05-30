@@ -9,9 +9,9 @@ using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest
 {
-    public class EnhancedBattleTestMultiplayerGame : GameType
+    public class MultiplayerGame : GameType
     {
-        public static EnhancedBattleTestMultiplayerGame Current => Game.Current.GameType as EnhancedBattleTestMultiplayerGame;
+        public static MultiplayerGame Current => Game.Current.GameType as MultiplayerGame;
 
         protected override void OnInitialize()
         {

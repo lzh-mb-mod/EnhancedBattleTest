@@ -33,9 +33,8 @@ namespace EnhancedBattleTest
         {
             bool isAttacker = side == BattleSideEnum.Attacker;
             var combatant = new SPCombatant(side, culture,
-                new Tuple<uint, uint>(Utility.BackgroundColor(culture, isAttacker),
-                    Utility.ForegroundColor(culture, isAttacker)),
-                Utility.BannerFor(culture, isAttacker));
+                new Tuple<uint, uint>(teamConfig.Color1, teamConfig.Color2),
+                teamConfig.Banner);
             if (teamConfig.HasGeneral)
             {
                 if (teamConfig.General is SPCharacterConfig general)

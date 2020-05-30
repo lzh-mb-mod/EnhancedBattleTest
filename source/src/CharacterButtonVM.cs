@@ -17,14 +17,14 @@ namespace EnhancedBattleTest
         public TextVM CharacterRole { get; }
         public StringItemWithActionVM Name { get; }
 
-        public CharacterButtonVM(CharacterConfig config, TextObject characterRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public CharacterButtonVM(TeamConfig teamConfig, CharacterConfig config, TextObject characterRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;
             CharacterRole = new TextVM(characterRole);
             Name = new StringItemWithActionVM(
                 o =>
                 {
-                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(_config.Clone(),
+                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(teamConfig, _config.Clone(),
                         isPlayerSide == (battleTypeConfig.PlayerSide == BattleSideEnum.Attacker),
                         characterConfig =>
                         {

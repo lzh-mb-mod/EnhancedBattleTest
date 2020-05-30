@@ -19,6 +19,7 @@
     <string id="str_ebt_side.Defender" text="{=EnhancedBattleTest_defender}Defender" />
 
     <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />
+    <string id="str_ebt_season" text="{=EnhancedBattleTest_season}Season" />
 
     <string id="str_ebt_troop_role.general" text="{=EnhancedBattleTest_trooprolegeneral}General" />
     <string id="str_ebt_troop_role.Soldiers" text="{=EnhancedBattleTest_trooprolesoldiers}Troop {TroopIndex}" />
@@ -34,144 +35,12 @@
     <string id="str_ebt_character" text="{=EnhancedBattleTest_character}Character" />
 
     <string id="str_ebt_is_hero" text="{=EnhancedBattleTest_ishero}Is Hero" />
-    <string id="str_ebt_female_ratio" text="{=EnhancedBattleTest_femaleratio}Female Ratio" />
+    <string id="str_ebt_male_ratio" text="{=EnhancedBattleTest_maleside}Male" />
+    <string id="str_ebt_female_ratio" text="{=EnhancedBattleTest_femaleside}Female" />
 
     <string id="str_ebt_no_map" text="{=EnhancedBattleTest_no_map}No map available." />
     <string id="str_ebt_current_map" text="{=EnhancedBattleTest_current_map}Current map is {MapName}." />
 
     <string id="str_troop_group_name.8" text="{=EnhancedBattleTest_troop_group_general}General" />
-
-
-    <string id="str_free_battle" text="{=EnhancedBattleTest_freebattle}Free Battle" />
-    <string id="str_custom_battle" text="{=EnhancedBattleTest_custombattle}Custom Battle" />
-    <string id="str_siege_battle" text="{=EnhancedBattleTest_siegebattle}Siege Battle" />
-
-    <string id="str_control_troop_tip" text="{=EnhancedBattleTest_controltrooptip}Press F or F10 to control your troop after dead." />
-    <string id="str_switch_team_tip" text="{=EnhancedBattleTest_switchteamtip}Press F9 to switch team." />
-    <string id="str_switch_free_camera_tip" text="{=EnhancedBattleTest_switchfreecameratip}Press F10 to switch free camera." />
-    <string id="str_disable_death_tip" text="{=EnhancedBattleTest_disabledeathtip}Press F11 to disable death." />
-    <string id="str_reset_mission_tip" text="{=EnhancedBattleTest_resetmissiontip}Press F12 to reset mission." />
-    <string id="str_more_option_tip" text="{=EnhancedBattleTest_moreoptiontip}Press O(letter) to adjust more settings." />
-    <string id="str_pause_tip" text="{=EnhancedBattleTest_pausetip}Press P to pause game." />
-    <string id="str_leave_mission_tip" text="{=EnhancedBattleTest_leavemissiontip}Hold TAB to leave the mission." />
-    <string id="str_read_position_tip" text="{=EnhancedBattleTest_readpositiontip}Press `I` key to get player or camera position." />
-    <string id="str_teleport_tip" text="{=EnhancedBattleTest_teleporttip}Press `L` key to teleport player when in free camera mode." />
-
-    <string id="str_create_default_config" text="{=EnhancedBattleTest_createdefaultconfig}Create default config" />
-    <string id="str_found_old_config" text="{=EnhancedBattleTest_foundoldconfig}Found old config file:" />
-    <string id="str_delete_old_config" text="{=EnhancedBattleTest_deleteoldconfig}Delete the old config file." />
-    <string id="str_rename_old_config" text="{=EnhancedBattleTest_renameoldconfig}Rename old config file to new name..." />
-    <string id="str_content_illegal" text="{=EnhancedBattleTest_contentillegal}Content is illegal." />
-    <string id="str_content_outofrange" text="{=EnhancedBattleTest_contentoutofrange}Content is out of range." />
-    <string id="str_player_character" text="{=EnhancedBattleTest_playercharacter}Player Character" />
-    <string id="str_spawn_player" text="{=EnhancedBattleTest_spawnplayer}Spawn Player" />
-    <string id="str_is_player_attacker" text="{=EnhancedBattleTest_isplayerattacker}Is Player Attacker" />
-    <string id="str_player_troop_1" text="{=EnhancedBattleTest_playertroop1}Player Troop 1" />
-    <string id="str_player_troop_2" text="{=EnhancedBattleTest_playertroop2}Player Troop 2" />
-    <string id="str_player_troop_3" text="{=EnhancedBattleTest_playertroop3}Player Troop 3" />
-    <string id="str_player_troop_1_count" text="{=EnhancedBattleTest_playertroop1count}Player Troop 1 Count" />
-    <string id="str_player_troop_2_count" text="{=EnhancedBattleTest_playertroop2count}Player Troop 2 Count" />
-    <string id="str_player_troop_3_count" text="{=EnhancedBattleTest_playertroop3count}Player Troop 3 Count" />
-    <string id="str_enemy_troop_1" text="{=EnhancedBattleTest_enemytroop1}enemy Troop 1" />
-    <string id="str_enemy_troop_2" text="{=EnhancedBattleTest_enemytroop2}enemy Troop 2" />
-    <string id="str_enemy_troop_3" text="{=EnhancedBattleTest_enemytroop3}enemy Troop 3" />
-    <string id="str_enemy_troop_1_count" text="{=EnhancedBattleTest_enemytroop1count}enemy Troop 1 Count" />
-    <string id="str_enemy_troop_2_count" text="{=EnhancedBattleTest_enemytroop2count}enemy Troop 2 Count" />
-    <string id="str_enemy_troop_3_count" text="{=EnhancedBattleTest_enemytroop3count}enemy Troop 3 Count" />
-    <string id="str_enemy_commander" text="{=EnhancedBattleTest_enemycommander}Enemy Commander" />
-    <string id="str_spawn_enemy_commander" text="{=EnhancedBattleTest_spawnenemycommander}Spawn Enemy Commander" />
-    <string id="str_control_troop" text="{=EnhancedBattleTest_controltroop}Taking control of an ally troop." />
-    <string id="str_no_troop_to_control" text="{=EnhancedBattleTest_notrooptocontrol}No ally troop to control." />
-    <string id="str_death_disabled" text="{=EnhancedBattleTest_deathdisabled}Death Disabled." />
-    <string id="str_death_enabled" text="{=EnhancedBattleTest_deathenabled}Death Enabled." />
-    <string id="str_config_incompatible" text="{=EnhancedBattleTest_configincompatible}Config version not compatible.\nReset config." />
-    <string id="str_saved_config" text="{=EnhancedBattleTest_savedconfig}Saving config succeeded." />
-    <string id="str_save_config_failed" text="{=EnhancedBattleTest_saveconfigfailed}Saving config failed." />
-    <string id="str_exception_caught" text="{=EnhancedBattleTest_exceptioncaught}Exception caught:" />
-    <string id="str_loaded_config" text="{=EnhancedBattleTest_loadedconfig}Loading config succeeded." />
-    <string id="str_load_config_failed" text="{=EnhancedBattleTest_loadconfigfailed}Loading config failed." />
-    <string id="str_soldiers_per_row" text="{=EnhancedBattleTest_soldiersperrow}Soldiers per Row" />
-    <string id="str_formation_position" text="{=EnhancedBattleTest_formationposition}Formation Position(x,y)" />
-    <string id="str_formation_direction" text="{=EnhancedBattleTest_formationdirection}Formation Direction(x,y)" />
-    <string id="str_distance" text="{=EnhancedBattleTest_distance}Distance" />
-    <string id="str_sky_brightness" text="{=EnhancedBattleTest_skybrightness}Sky Brightness" />
-    <string id="str_rain_density" text="{=EnhancedBattleTest_raindensity}Rain Density" />
-    <string id="str_more_options" text="{=EnhancedBattleTest_moreoptions}More Options" />
-    <string id="str_em_use_realistic_blocking" text="{=EnhancedBattleTest_userealisticblocking}Use Realistic Blocking" />
-    <string id="str_no_friendly_banner" text="{=EnhancedBattleTest_nofriendlybannder}No Banner on Friendly Troops" />
-    <string id="str_no_kill_notification" text="{=EnhancedBattleTest_nokillnotification}No Kill Notification" />
-    <string id="str_make_grunt_voice" text="{=EnhancedBattleTest_makegruntvoice}Make Grunt Voice" />
-    <string id="str_has_boundary" text="{=EnhancedBattleTest_hasboundary}Has Boundary" />
-
-    <string id="str_change_combat_ai" text="{=EnhancedBattleTest_changecombatai}Change Combat AI" />
-    <string id="str_combat_ai" text="{=EnhancedBattleTest_combatai}Combat AI(0-100)" />
-
-    <string id="str_save_and_start" text="{=EnhancedBattleTest_saveandstart}Save And Start" />
-    <string id="str_save_config" text="{=EnhancedBattleTest_saveconfig}Save" />
-    <string id="str_load_config" text="{=EnhancedBattleTest_loadconfig}Load Config" />
-    <string id="str_exit" text="{=EnhancedBattleTest_exit}Exit" />
-
-    <string id="str_error_no_hero_class" text="{=EnhancedBattleTest_errornoheroclass}Error: The Character does not have corresponding hero class. Use 50 as default combat ai level."/>
-
-    <string id="str_tactic_inchangable_in_siege" text="{=EnhancedBattleTest_tacticinchangableinsiege}Tactic option cannot be changed in siege battle mode."/>
-    <string id="str_at_least_one_tactic" text="{=EnhancedBattleTest_atleastonetactic}There should be at least one tactic."/>
-
-    <string id="str_enable_ai_for" text="{=EnhancedBattleTest_enableaifor}Enable Team AI For"/>
-    <string id="str_ai_enable_type.None" text="{=EnhancedBattleTest_aienabletypenone}None"/>
-    <string id="str_ai_enable_type.EnemyOnly" text="{=EnhancedBattleTest_aienabletypeenemyonly}Enemy Only"/>
-    <string id="str_ai_enable_type.PlayerOnly" text="{=EnhancedBattleTest_aienabletypeplayeronly}Player Only"/>
-    <string id="str_ai_enable_type.Both" text="{=EnhancedBattleTest_aienabletypeboth}Both"/>
-    <string id="str_ai_enabled_for.None" text="{=EnhancedBattleTest_aienabledfornone}Team AI is disabled." />
-    <string id="str_ai_enabled_for.EnemyOnly" text="{=EnhancedBattleTest_aienabledforenemyonly}Team AI is enabled for enemy only." />
-    <string id="str_ai_enabled_for.PlayerOnly" text="{=EnhancedBattleTest_aienabledforplayeronly}Team AI is enabled for player team only." />
-    <string id="str_ai_enabled_for.Both" text="{=EnhancedBattleTest_aienabledforboth}Team AI is enabled for both sides." />
-
-    <string id="str_attacker_tactic_option" text="{=EnhancedBattleTest_attackertacticoption}Attacker Tactic Options"/>
-    <string id="str_defender_tactic_option" text="{=EnhancedBattleTest_defendertacticoption}Defender Tactic Options"/>
-
-    <string id="str_tactic_option.Charge" text="{=EnhancedBattleTest_tacticcharge}Charge" />
-    <string id="str_tactic_option.FullScaleAttack" text="{=EnhancedBattleTest_tacticfullscaleattack}Full Scale Attack" />
-    <string id="str_tactic_option.DefensiveEngagement" text="{=EnhancedBattleTest_tacticdefensiveengagement}Defensive Engagement" />
-    <string id="str_tactic_option.DefensiveLine" text="{=EnhancedBattleTest_tacticdefensiveline}Defensive Line" />
-    <string id="str_tactic_option.DefensiveRing" text="{=EnhancedBattleTest_tacticdefensivering}Defensive Ring" />
-    <string id="str_tactic_option.HoldTheHill" text="{=EnhancedBattleTest_tacticholdthehill}Hold The Hill" />
-    <string id="str_tactic_option.HoldChokePoint" text="{=EnhancedBattleTest_tacticholdchokepoint}Hold Choke Point" />
-    <string id="str_tactic_option.ArchersOnTheHill" text="{=EnhancedBattleTest_tacticarchersonthehill}Archers On The Hill" />
-    <string id="str_tactic_option.RangedHarassmentOffensive" text="{=EnhancedBattleTest_tacticrangedharassmentoffensive}Ranged Harassment Offensive" />
-    <string id="str_tactic_option.FrontalCavalryCharge" text="{=EnhancedBattleTest_tacticfrontalcavalrycharge}Frontal Cavalry Charge" />
-    <string id="str_tactic_option.CoordinatedRetreat" text="{=EnhancedBattleTest_tacticcoordinatedretreat}CoordinatedRetreat" />
-    <string id="str_tactic_option.BreachWalls" text="{=EnhancedBattleTest_tacticbreachwalls}BreachWalls" />
-    <string id="str_tactic_option.DefendCastle" text="{=EnhancedBattleTest_tacticdefendcastle}DefendCastle" />
-
-    <string id="str_side.Defender" text="{=EnhancedBattleTest_defender}Defender" />
-    <string id="str_side.Attacker" text="{=EnhancedBattleTest_attacker}Attacker" />
-
-    <string id="str_add_tactic" text="{=EnhancedBattleTest_addtactic}Add Tactic {CurrentTacticOption} for {CurrentSide}." />
-    <string id="str_remove_tactic" text="{=EnhancedBattleTest_removetactic}Remove Tactic {CurrentTacticOption} for {CurrentSide}." />
-
-    <string id="str_switch_team" text="{=EnhancedBattleTest_switchteam}Switch Team" />
-    <string id="str_switch_free_camera" text="{=EnhancedBattleTest_switchfreecamera}Switch Free Camera" />
-    <string id="str_player_formation" text="{=EnhancedBattleTest_playerformation}Player Formation" />
-    <string id="str_disable_death" text="{=EnhancedBattleTest_disabledeath}Disable Death" />
-    <string id="str_reset_mission" text="{=EnhancedBattleTest_resetmission}Reset Mission" />
-    <string id="str_toggle_pause" text="{=EnhancedBattleTest_togglepause}Toggle Pause" />
-    <string id="str_reset_speed" text="{=EnhancedBattleTest_resetspeed}Reset Speed" />
-    <string id="str_slow_motion_factor" text="{=EnhancedBattleTest_slowmotionfactor}Slow Motion Factor" />
-
-    <string id="str_mission_paused" text="{=EnhancedBattleTest_missionpaused}Mission paused." />
-    <string id="str_mission_continued" text="{=EnhancedBattleTest_missioncontinue}Mission continued." />
-
-    <string id="str_slow_motion_enabled" text="{=EnhancedBattleTest_slowmotionenabled}Slow Motion Mode Enabled." />
-    <string id="str_fast_forward_mode_enabled" text="{=EnhancedBattleTest_fastfowardenabled}Fast Forward Mode Enabled." />
-    <string id="str_normal_mode_enabled" text="{=EnhancedBattleTest_normalmodeenabled}Normal Mode Enabled." />
-
-    <string id="str_mission_reset" text="{=EnhancedBattleTest_missionreset}Mission reset." />
-
-    <string id="str_player_dead" text="{=EnhancedBattleTest_playeragentdead}Player agent is dead." />
-    <string id="str_switch_to_player" text="{=EnhancedBattleTest_switchtoplayer}Switch to player agent." />
-    <string id="str_switch_to_free_camera" text="{=EnhancedBattleTest_switchtofreecamera}Switch to free camera." />
-
-    <string id="str_enemy_wiped_out" text="{=EnhancedBattleTest_enemywipedout}Enemy has been wiped out." />
-    <string id="str_switch_to_enemy_team" text="{=EnhancedBattleTest_switchtoenemyteam}Switched to the enemy team." />
   </strings>
 </base>

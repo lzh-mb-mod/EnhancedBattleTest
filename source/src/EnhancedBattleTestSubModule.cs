@@ -38,7 +38,7 @@ namespace EnhancedBattleTest
                 () =>
                 {
                     IsMultiplayer = true;
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<EnhancedBattleTestMultiplayerGame>());
+                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<MultiplayerGame>());
                 }, false));
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTSingleplayerTest",
                 new TextObject("{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test"), 3,
@@ -59,7 +59,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameInitializationFinished(game);
 
-            if (game.GameType is EnhancedBattleTestMultiplayerGame || game.GameType is EnhancedBattleTestSingleplayerGame)
+            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
             {
                 var collection = CharacterCollection.Create(IsMultiplayer);
                 collection.Initialize();
@@ -73,7 +73,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameEnd(game);
 
-            if (game.GameType is EnhancedBattleTestMultiplayerGame || game.GameType is EnhancedBattleTestSingleplayerGame)
+            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
             {
                 CharacterSelectionLayer.OnFinalize();
                 Unpatch();

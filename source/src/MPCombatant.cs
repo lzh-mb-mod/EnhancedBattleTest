@@ -34,7 +34,7 @@ namespace EnhancedBattleTest
             var combatant = new MPCombatant(side, culture,
                 new Tuple<uint, uint>(Utility.BackgroundColor(culture, isAttacker),
                     Utility.ForegroundColor(culture, isAttacker)),
-                Utility.BannerFor(culture, isAttacker));
+                teamConfig.Banner);
             if (teamConfig.HasGeneral)
             {
                 if (teamConfig.General is MPCharacterConfig general)

@@ -30,6 +30,7 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 ViewCreator.CreateMissionSpectatorControlView(mission),
+                ViewCreator.CreatePlayerRoleSelectionUIHandler(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
             }.ToArray();
@@ -59,6 +60,7 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 new SiegeDeploymentVisualizationMissionView(),
+                ViewCreator.CreatePlayerRoleSelectionUIHandler(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
             };
