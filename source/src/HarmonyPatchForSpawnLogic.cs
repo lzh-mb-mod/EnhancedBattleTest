@@ -25,26 +25,23 @@ namespace EnhancedBattleTest
             for (int index = 0; index < 8; ++index)
             {
                 int formationTroopCount = 0;
+                bool isMounted = false;
                 foreach (IAgentOriginBase agentOriginBase in list)
                 {
-                    var mpAgentOrigin = agentOriginBase as MPAgentOrigin;
-                    var spAgentOrigin = agentOriginBase as SPAgentOrigin;
-                    if (mpAgentOrigin != null)
+                    var agentOrigin = agentOriginBase as EnhancedBattleTestAgentOrigin;
+                    if (agentOrigin != null)
                     {
-
-                        FormationClass formationClass = mpAgentOrigin.MPCharacter.FormationIndex;
-                        if ((FormationClass)index == formationClass)
+                        FormationClass formationIndex = agentOrigin.FormationIndex;
+                        if ((FormationClass)index == formationIndex)
+                        {
+                            isMounted = isMounted || agentOrigin.Troop.HasMount();
                             ++formationTroopCount;
-                    }
-                    else if (spAgentOrigin != null)
-                    {
-                        FormationClass formationClass = spAgentOrigin.SPCharacter.FormationIndex;
-                        if ((FormationClass) index == formationClass)
-                            ++formationTroopCount;
+                        }
                     }
                 }
-                float num1 = index == 2 || index == 7 || (index == 6 || index == 3) ? 3f : 1f;
-                float num2 = index == 2 || index == 7 || (index == 6 || index == 3) ? 0.75f : 0.6f;
+
+                float num1 = isMounted ? 3f : 1f;
+                float num2 = isMounted ? 0.75f : 0.6f;
                 Mission.Current.SetTotalWidthBeforeNewFormation(num1 * (float)Math.Pow(formationTroopCount, num2));
                 foreach (IAgentOriginBase agentOriginBase in list)
                 {

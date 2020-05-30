@@ -26,7 +26,7 @@ namespace EnhancedBattleTest
 
         public SPCharacterConfigVM()
         {
-            FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
+            MaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
             FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
             FemaleRatio = new NumberVM<float>(_config.FemaleRatio, 0, 1, false);
             FemaleRatio.OnValueChanged += femaleRatio =>

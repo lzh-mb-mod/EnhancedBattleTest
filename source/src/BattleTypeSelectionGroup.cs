@@ -55,7 +55,7 @@ namespace EnhancedBattleTest
                 GameTexts.FindText("str_ebt_player_type", "Commander").ToString(),
                 GameTexts.FindText("str_ebt_player_type", "Sergeant").ToString(),
             }, (int)_config.PlayerType, OnPlayerTypeSelectionChange);
-            this.PlayerSideSelection = new SelectorVM<SelectorItemVM>(new List<string>()
+            PlayerSideSelection = new SelectorVM<SelectorItemVM>(new List<string>()
             {
                 GameTexts.FindText("str_ebt_side", "Attacker").ToString(),
                 GameTexts.FindText("str_ebt_side", "Defender").ToString(),
@@ -152,6 +152,14 @@ namespace EnhancedBattleTest
                 _playerSideSelection = value;
                 OnPropertyChanged(nameof(PlayerSideSelection));
             }
+        }
+
+        public void SwapSide()
+        {
+            if (PlayerSideSelection.SelectedIndex == 0)
+                PlayerSideSelection.SelectedIndex = 1;
+            else if (PlayerSideSelection.SelectedIndex == 1)
+                PlayerSideSelection.SelectedIndex = 0;
         }
     }
 }

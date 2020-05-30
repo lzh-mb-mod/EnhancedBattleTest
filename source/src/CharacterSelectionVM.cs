@@ -32,6 +32,7 @@ namespace EnhancedBattleTest
     public class CharacterSelectionVM : ViewModel
     {
         private readonly Action<CharacterSelectionData> _beginSelection;
+        private List<Group> _groupsInSelection;
         private readonly Action _endSelection;
         private readonly CharacterCollection _characterCollection;
         private CharacterSelectionData _data;
@@ -66,6 +67,7 @@ namespace EnhancedBattleTest
 
             Characters = CharactersInGroupVM.Create(_characterCollection);
             Groups = new SelectorVM<SelectorItemVM>(0, null);
+            _groupsInSelection = new List<Group>();
             Cultures = new SelectorVM<SelectorItemVM>(
                 _characterCollection.Cultures.Select(culture => culture.Name).Prepend(TextObject.Empty), 0,
                 OnSelectedCultureChanged);
@@ -81,8 +83,9 @@ namespace EnhancedBattleTest
             var selectedCulture = SelectedCulture(cultures);
             if (selectedCulture == null)
             {
-                var groups = _characterCollection.GroupsInCultures.Values.SelectMany(list => list)
-                    .DistinctBy(group => group.Info.FormationClass).Select(g => g.Info.Name).Prepend(TextObject.Empty)
+                _groupsInSelection = _characterCollection.GroupsInCultures.Values.SelectMany(list => list)
+                    .DistinctBy(group => group.Info.FormationClass).ToList();
+                var groups = _groupsInSelection.Select(g => g.Info.Name).Prepend(TextObject.Empty)
                     .ToList();
                 var index = Groups.SelectedIndex;
                 if (index >= groups.Count)
@@ -91,9 +94,8 @@ namespace EnhancedBattleTest
             }
             else
             {
-                var groups = _characterCollection.GroupsInCultures[selectedCulture.StringId]
-                    .Select(group => group.Info.Name)
-                    .Prepend(TextObject.Empty).ToList();
+                _groupsInSelection = _characterCollection.GroupsInCultures[selectedCulture.StringId];
+                var groups = _groupsInSelection.Select(group => group.Info.Name).Prepend(TextObject.Empty).ToList();
                 var index = Groups.SelectedIndex;
                 if (index >= groups.Count)
                     index = 0;
@@ -131,10 +133,9 @@ namespace EnhancedBattleTest
 
         private Group SelectedGroup(SelectorVM<SelectorItemVM> groups)
         {
-            var selectedCulture = SelectedCulture(Cultures);
-            return selectedCulture == null || groups == null || groups.SelectedIndex < 1
+            return groups == null || groups.SelectedIndex < 1 || groups.SelectedIndex > _groupsInSelection.Count
                 ? null
-                : _characterCollection.GroupsInCultures[selectedCulture.StringId][groups.SelectedIndex - 1];
+                : _groupsInSelection[groups.SelectedIndex - 1];
         }
 
         private void Open(CharacterSelectionData data)

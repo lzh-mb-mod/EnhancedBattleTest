@@ -19,6 +19,8 @@ namespace EnhancedBattleTest
         {
             PlayerTeamConfig = new TeamConfig(isMultiplayer);
             EnemyTeamConfig = new TeamConfig(isMultiplayer);
+            PlayerTeamConfig.BannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
+            EnemyTeamConfig.BannerKey = "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0";
         }
 
         public static BattleConfig Deserialize(bool isMultiplayer)

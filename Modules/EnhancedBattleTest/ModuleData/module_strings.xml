@@ -18,6 +18,8 @@
     <string id="str_ebt_side.Attacker" text="{=EnhancedBattleTest_attacker}Attacker" />
     <string id="str_ebt_side.Defender" text="{=EnhancedBattleTest_defender}Defender" />
 
+    <string id="str_ebt_swap_team" text="{=EnhancedBattleTest_swapteam}Swap Team" />
+
     <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />
     <string id="str_ebt_season" text="{=EnhancedBattleTest_season}Season" />
 

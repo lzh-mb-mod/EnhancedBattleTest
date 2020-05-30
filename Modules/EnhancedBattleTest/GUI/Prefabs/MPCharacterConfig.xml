@@ -41,7 +41,7 @@
 
             <RichTextWidget DataSource="{FemaleRatio}" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="50" MarginLeft="20" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" Text="@Text" />
 
-            <RichTextWidget DataSource="{FemaleRatioText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" MarginLeft="100" />
+            <RichTextWidget DataSource="{FemaleRatioText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" MarginLeft="20" />
           </Children>
         </ListPanel>
 

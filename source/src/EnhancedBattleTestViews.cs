@@ -11,14 +11,14 @@ namespace EnhancedBattleTest
     [ViewCreatorModule]
     public class EnhancedBattleTestViews
     {
-        [ViewMethod("MPBattle")]
+        [ViewMethod("EnhancedBattleTestFieldBattle")]
         public static MissionView[] OpenMPBattleMission(Mission mission)
         {
             return new List<MissionView>
             {
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
-                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
+                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
                 ViewCreator.CreateMissionOrderUIHandler(),
                 new OrderTroopPlacer(),
@@ -31,11 +31,12 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(),
+                new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
             }.ToArray();
         }
-        [ViewMethod("MPSiegeBattle")]
+        [ViewMethod("EnhancedBattleTestSiegeBattle")]
         public static MissionView[] OpenMPSiegeBattleMission(Mission mission)
         {
             MissionView missionOrderUiHandler = ViewCreator.CreateMissionOrderUIHandler();
@@ -44,7 +45,7 @@ namespace EnhancedBattleTest
             {
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
-                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new CustomBattleScoreboardVM()),
+                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
                 missionOrderUiHandler,
                 new OrderTroopPlacer(),
@@ -61,6 +62,7 @@ namespace EnhancedBattleTest
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 new SiegeDeploymentVisualizationMissionView(),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(),
+                new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
             };

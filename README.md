@@ -7,17 +7,17 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
   You can choose at most 8 groups of troops for each side.
 
-- For multiplayer characters, you can choose perks, which is the same as in multiplayer mode.
+- For multiplayer battle test, you can choose perks, which is the same as in multiplayer mode.
 
-- For singleplayer characters, you can choose all the characters in campaign mode, except companions, as they are generated dynamically.
+- For singleplayer battle test, you can choose all the characters in campaign mode, except companions, as they are generated dynamically.
 
 - You can adjust gender ratio for each group of troops.
 
-- You can customize the banner of each team in banner editor in singleplayer mode, with copy-paste feature.
+- You can customize the banner of each team in banner editor in singleplayer battle test, with copy-paste feature.
 
 - Configuration saving. The battle configuration is saved in "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\".
 
-  The configuration for multiplayer mode is saved in "mpconfig.xml" and that for singleplayer mode is saved in "spconfig.xml".
+  The configuration for multiplayer battle test is saved in "mpconfig.xml" and that for singleplayer battle test is saved in "spconfig.xml".
 
 ## How to install
 1. Copy `Modules` folder into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`). It should be merged with `Modules` of the game. Or use Vortex to install it automatically.
@@ -28,7 +28,7 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 - Start the launcher and choose Single player mode. In `Mods` panel select `EnhancedBattleTest` mod and click `PLAY`.
 
 - After starting:
-  - Select a mode to play in main menu. Singpleplayer mode may be slow to load because it would start a campaign game to load all the data. This problem may be resolved in the future.
+  - Select a mode to play in main menu. Singpleplayer battle test may be slow to load because it would start a campaign game to load all the data. This problem may be resolved in the future.
 
   - You can select troops for each side of teams.
 

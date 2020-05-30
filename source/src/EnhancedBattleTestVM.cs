@@ -25,8 +25,12 @@ namespace EnhancedBattleTest
 
         private bool _isAttackerCustomMachineSelectionEnabled;
         private bool _isDefenderCustomMachineSelectionEnabled;
+        private SideVM _playerSide;
+        private SideVM _enemySide;
 
         public TextVM TitleText { get; }
+
+        public TextVM SwapTeamText { get; }
 
         public TextVM MapText { get; }
 
@@ -34,8 +38,32 @@ namespace EnhancedBattleTest
 
         public TextVM StartButtonText { get; }
 
-        public SideVM PlayerSide { get; }
-        public SideVM EnemySide { get; }
+        [DataSourceProperty]
+        public SideVM PlayerSide
+        {
+            get => _playerSide;
+            set
+            {
+                if (_playerSide == value)
+                    return;
+                _playerSide = value;
+                OnPropertyChanged(nameof(PlayerSide));
+            }
+        }
+
+        [DataSourceProperty]
+        public SideVM EnemySide
+        {
+            get => _enemySide;
+            set
+            {
+                if (_enemySide == value)
+                    return;
+                _enemySide = value;
+                OnPropertyChanged(nameof(EnemySide));
+            }
+        }
+
         public MapSelectionGroup MapSelectionGroup { get; }
         public BattleTypeSelectionGroup BattleTypeSelectionGroup { get; }
 
@@ -128,15 +156,17 @@ namespace EnhancedBattleTest
 
             TitleText = new TextVM(title);
 
+            SwapTeamText = new TextVM(GameTexts.FindText("str_ebt_swap_team"));
+
             MapText = new TextVM(GameTexts.FindText("str_ebt_map"));
 
             SeasonText = new TextVM(GameTexts.FindText("str_ebt_season"));
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
 
-            PlayerSide = new SideVM(_config.PlayerTeamConfig, new TextObject("{=BC7n6qxk}PLAYER"), true,
+            PlayerSide = new SideVM(_config.PlayerTeamConfig, true,
                 _config.BattleTypeConfig);
-            EnemySide = new SideVM(_config.EnemyTeamConfig, new TextObject("{=35IHscBa}ENEMY"), false,
+            EnemySide = new SideVM(_config.EnemyTeamConfig, false,
                 _config.BattleTypeConfig);
 
             MapSelectionGroup = new MapSelectionGroup("",
@@ -204,8 +234,27 @@ namespace EnhancedBattleTest
             }
         }
 
+        public void ExecuteSwapTeam()
+        {
+            {
+                var tmp = _config.PlayerTeamConfig;
+                _config.PlayerTeamConfig = _config.EnemyTeamConfig;
+                _config.EnemyTeamConfig = tmp;
+            }
+            BattleTypeSelectionGroup.SwapSide();
+            {
+                var tmp = PlayerSide;
+                PlayerSide = EnemySide;
+                EnemySide = tmp;
+            }
+            PlayerSide.IsPlayerSide = true;
+            EnemySide.IsPlayerSide = false;
+        }
+
         public void ExecuteBack()
         {
+            ApplyConfig();
+            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
             _config = null;
             Game.Current.GameStateManager.PopState();
         }
@@ -215,6 +264,18 @@ namespace EnhancedBattleTest
             if (!IsValid())
                 return;
 
+            ApplyConfig();
+            var sceneData = GetMap();
+            if (sceneData == null)
+                return;
+            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            GameTexts.SetVariable("MapName", sceneData.Name);
+            Utility.DisplayLocalizedText("str_ebt_current_map");
+            EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
+        }
+
+        private void ApplyConfig()
+        {
             _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = int.Parse(MapSelectionGroup.SceneLevelSelection.SelectedItem.StringItem);
@@ -223,6 +284,16 @@ namespace EnhancedBattleTest
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
                 _config.MapConfig.Season = MapSelectionGroup.SeasonSelection.SelectedItem.StringItem.ToLower();
 
+            _config.SiegeMachineConfig.AttackerMeleeMachines =
+                AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
+            _config.SiegeMachineConfig.AttackerRangedMachines =
+                AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
+            _config.SiegeMachineConfig.DefenderMachines =
+                DefenderMachines.Select(vm => vm.MachineID).ToList();
+        }
+
+        private SceneData GetMap()
+        {
             MapSelectionElement selectedMap;
             MapSelectionElement mapWithName = MapSelectionGroup.GetMapWithName(MapSelectionGroup.SearchText);
             if (mapWithName != null)
@@ -234,26 +305,13 @@ namespace EnhancedBattleTest
                 if (selectedMap == null)
                 {
                     Utility.DisplayLocalizedText("str_ebt_no_map");
-                    return;
+                    return null;
                 }
 
                 // Keep search text not changed.
                 MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
             }
-
-            SceneData sceneData = _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
-
-            _config.SiegeMachineConfig.AttackerMeleeMachines =
-                AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
-            _config.SiegeMachineConfig.AttackerRangedMachines =
-                AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
-            _config.SiegeMachineConfig.DefenderMachines =
-                DefenderMachines.Select(vm => vm.MachineID).ToList();
-
-            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
-            GameTexts.SetVariable("MapName", sceneData.Name);
-            Utility.DisplayLocalizedText("str_ebt_current_map");
-            EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
+            return _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
         }
 
         private void OnPlayerTypeChange(bool isCommander)

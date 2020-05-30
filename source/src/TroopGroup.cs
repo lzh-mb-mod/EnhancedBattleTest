@@ -26,6 +26,17 @@ namespace EnhancedBattleTest
             }
         }
 
+        public bool IsPlayerSide
+        {
+            set
+            {
+                foreach (var troop in Troops)
+                {
+                    troop.CharacterButton.IsPlayerSide = value;
+                }
+            }
+        }
+
         public TroopGroup(TeamConfig teamConfig, TroopGroupConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _config = config;

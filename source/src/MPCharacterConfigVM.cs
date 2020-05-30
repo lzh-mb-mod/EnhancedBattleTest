@@ -38,7 +38,7 @@ namespace EnhancedBattleTest
             SecondPerks = new SelectorVM<SelectorItemVM>(0, null);
 
             IsHeroText = new TextVM(GameTexts.FindText("str_ebt_is_hero"));
-            FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
+            MaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
             FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
             IsHero = new BoolVM(_config.IsHero);
             FemaleRatio = new NumberVM<float>(_config.FemaleRatio, 0, 1, false);

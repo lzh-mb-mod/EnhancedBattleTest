@@ -17,12 +17,20 @@ namespace EnhancedBattleTest
         public CharacterConfig General;
         public bool HasGeneral;
 
-        public string BannerKey = Banner.CreateRandomBanner().Serialize();
-        public uint Color1 = 0;
-        public uint Color2 = 1;
+        public string BannerKey;
 
         [XmlIgnore]
-        public Banner Banner => new Banner(BannerKey, Color1, Color2);
+        public uint Color1 => Banner.BannerDataList.Count > 0
+            ? BannerManager.GetColor(Banner.BannerDataList[0].ColorId)
+            : uint.MaxValue;
+
+        [XmlIgnore]
+        public uint Color2 => Banner.BannerDataList.Count > 1
+            ? BannerManager.GetColor(Banner.BannerDataList[1].ColorId)
+            : uint.MaxValue;
+
+        [XmlIgnore]
+        public Banner Banner => new Banner(BannerKey);
 
         public TeamConfig()
         { }

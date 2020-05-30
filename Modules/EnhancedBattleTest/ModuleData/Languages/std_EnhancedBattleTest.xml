@@ -21,6 +21,8 @@
     <string id="EnhancedBattleTest_attacker" text="Attacker" />
     <string id="EnhancedBattleTest_defender" text="Defender" />
 
+    <string id="EnhancedBattleTest_swapteam" text="Swap Team" />
+
     <string id="EnhancedBattleTest_map" text="Map" />
     <string id="EnhancedBattleTest_season" text="Season" />
 

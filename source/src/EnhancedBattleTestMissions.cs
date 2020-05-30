@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Missions.Handlers;
-using TaleWorlds.MountAndBlade.MissionSpawnHandlers;
 using TaleWorlds.MountAndBlade.Source.Missions;
 using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
 
@@ -42,10 +38,10 @@ namespace EnhancedBattleTest
                 {"spring", 0}, {"summer", 1}, {"fall", 2}, {"winter", 3}
             };
             dictionary.TryGetValue(seasonString, out var num);
-            return new AtmosphereInfo()
+            return new AtmosphereInfo
             {
                 AtmosphereName = str,
-                TimeInfo = new TimeInformation() { Season = num }
+                TimeInfo = new TimeInformation { Season = num }
             };
         }
         public static Mission OpenMission(BattleConfig config, string mapName)
@@ -112,12 +108,10 @@ namespace EnhancedBattleTest
                 }
 
                 return OpenEnhancedBattleTestSiege(map, config, playerParty, enemyParty, hitPointPercentages,
-                    attackerSiegeWeaponCount, defenderSiegeWeaponCount, false, false);
+                    attackerSiegeWeaponCount, defenderSiegeWeaponCount);
             }
-            else
-            {
-                return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
-            }
+
+            return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
         }
 
 
@@ -167,7 +161,7 @@ namespace EnhancedBattleTest
                 GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers);
             var defenderSiegeWeapons =
                 GetSiegeWeaponTypes(siegeWeaponsCountOfDefenders);
-            return MissionState.OpenNew("MPSiegeBattle", new MissionInitializerRecord(scene)
+            return MissionState.OpenNew("EnhancedBattleTestSiegeBattle", new MissionInitializerRecord(scene)
             {
                 PlayingInCampaignMode = false,
                 AtmosphereOnCampaign = atmosphereInfo,
@@ -175,7 +169,7 @@ namespace EnhancedBattleTest
                 TimeOfDay = timeOfDay
             }, mission =>
             {
-                List<MissionBehaviour> missionBehaviourList = new List<MissionBehaviour>()
+                List<MissionBehaviour> missionBehaviourList = new List<MissionBehaviour>
                 {
                     new BattleSpawnLogic(isSallyOut
                         ? "sally_out_set"
@@ -193,7 +187,7 @@ namespace EnhancedBattleTest
                     new BattleObserverMissionLogic(),
                     new CustomBattleAgentLogic(),
                     new AgentBattleAILogic(),
-                    new AmmoSupplyLogic(new List<BattleSideEnum>() {BattleSideEnum.Defender}),
+                    new AmmoSupplyLogic(new List<BattleSideEnum> {BattleSideEnum.Defender}),
                     new AgentVictoryLogic(),
                     new SiegeMissionController(
                         attackerSiegeWeapons,
@@ -206,7 +200,7 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false, null)
+                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false)
                 };
                 if (isSallyOut)
                 {
@@ -250,7 +244,7 @@ namespace EnhancedBattleTest
             bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander;
             bool isPlayerSergeant = !isPlayerGeneral;
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
-            return MissionState.OpenNew("MPBattle", new MissionInitializerRecord(scene)
+            return MissionState.OpenNew("EnhancedBattleTestFieldBattle", new MissionInitializerRecord(scene)
             {
                 DoNotUseLoadingScreen = false,
                 PlayingInCampaignMode = false,
@@ -262,9 +256,9 @@ namespace EnhancedBattleTest
                 {
                     new MissionOptionsComponent(),
                     new BattleEndLogic(),
-                    new MissionCombatantsLogic((IEnumerable<IBattleCombatant>) null, (IBattleCombatant) playerParty,
-                        !isPlayerAttacker ? (IBattleCombatant) playerParty : (IBattleCombatant) enemyParty,
-                        isPlayerAttacker ? (IBattleCombatant) playerParty : (IBattleCombatant) enemyParty,
+                    new MissionCombatantsLogic(null, playerParty,
+                        !isPlayerAttacker ? playerParty : enemyParty,
+                        isPlayerAttacker ? playerParty : enemyParty,
                         Mission.MissionTeamAITypeEnum.FieldBattle, isPlayerSergeant),
                     new BattleObserverMissionLogic(),
                     new CustomBattleAgentLogic(),
@@ -281,22 +275,22 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false,
                         isPlayerSergeant
-                            ? Enumerable.Repeat<string>(playerCharacter.StringId, 1).ToList<string>()
-                            : new List<string>(), FormationClass.NumberOfRegularFormations),
+                            ? Enumerable.Repeat(playerCharacter.StringId, 1).ToList()
+                            : new List<string>()),
                     new CreateBodyguardMissionBehavior(
                         isPlayerAttacker & isPlayerGeneral
                             ? playerCharacter.Name.ToString()
                             : (isPlayerAttacker & isPlayerSergeant
                                 ? playerSideLeaderExceptPlayer?.GetName().ToString()
-                                : (string) null),
+                                : null),
                         !isPlayerAttacker & isPlayerGeneral
                             ? playerCharacter.GetName().ToString()
                             : (!isPlayerAttacker & isPlayerSergeant
                                 ? playerSideLeaderExceptPlayer?.GetName().ToString()
-                                : (string) null), (string) null, (string) null, true),
+                                : null)),
                     new HighlightsController(),
                     new BattleHighlightsController()
-                }, true, true, true);
+                });
         }
 
         private static IEnhancedBattleTestTroopSupplier CreateTroopSupplier(IEnhancedBattleTestCombatant combatant, bool isMultiplayer)
@@ -337,7 +331,7 @@ namespace EnhancedBattleTest
                 return typeof(Mangonel);
             if (siegeWeaponType == DefaultSiegeEngineTypes.FireOnager || siegeWeaponType == DefaultSiegeEngineTypes.FireCatapult)
                 return typeof(FireMangonel);
-            return siegeWeaponType == DefaultSiegeEngineTypes.Trebuchet || siegeWeaponType == DefaultSiegeEngineTypes.Bricole ? typeof(Trebuchet) : (Type)null;
+            return siegeWeaponType == DefaultSiegeEngineTypes.Trebuchet || siegeWeaponType == DefaultSiegeEngineTypes.Bricole ? typeof(Trebuchet) : null;
         }
 
         private static Dictionary<Type, int> GetSiegeWeaponTypes(

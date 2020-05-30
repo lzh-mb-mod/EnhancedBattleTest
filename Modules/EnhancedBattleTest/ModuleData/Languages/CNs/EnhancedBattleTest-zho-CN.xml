@@ -21,6 +21,8 @@
     <string id="EnhancedBattleTest_attacker" text="进攻方" />
     <string id="EnhancedBattleTest_defender" text="防守方" />
 
+    <string id="EnhancedBattleTest_swapteam" text="交换队伍" />
+
     <string id="EnhancedBattleTest_map" text="地图" />
     <string id="EnhancedBattleTest_season" text="季节" />
 

@@ -11,6 +11,7 @@ namespace EnhancedBattleTest
     public class MPAgentOrigin : EnhancedBattleTestAgentOrigin
     {
         public override BasicCharacterObject Troop => MPCharacter.Character;
+        public override FormationClass FormationIndex => MPCharacter.FormationIndex;
 
         public MPSpawnableCharacter MPCharacter { get; }
 

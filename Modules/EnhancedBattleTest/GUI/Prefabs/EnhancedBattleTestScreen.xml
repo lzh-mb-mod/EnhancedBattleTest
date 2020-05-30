@@ -90,6 +90,13 @@
                           </Children>
                         </Widget>
 
+                        <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteSwapTeam" UpdateChildrenStates="true">
+                          <Children>
+                            <TextWidget DataSource="{SwapTeamText}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                          </Children>
+                        </ButtonWidget>
+
+
                         <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="12" MarginTop="20" Sprite="StdAssets\subpage_divider" />
 
                         <RichTextWidget DataSource="{MapText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="-15" Brush="CustomBattle.Character.Title.Text" />
@@ -222,7 +229,7 @@
                     </ListPanel>
 
                     <!--Search Text Bar-->
-                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="345" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
+                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="415" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
                       <Children>
                         <EditableTextWidget Id="SearchInputWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="298" SuggestedHeight="43" MarginLeft="5" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Search.TextBox" Text="@SearchText" />
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="24" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="10" Sprite="Encyclopedia\icon_search" IsDisabled="true" />
@@ -235,7 +242,7 @@
                       </Children>
                     </ScrollbarWidget>
 
-                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="380" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
+                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="450" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
                       <Children>
 
                         <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">

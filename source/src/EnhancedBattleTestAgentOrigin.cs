@@ -27,6 +27,8 @@ namespace EnhancedBattleTest
         public Banner Banner => BattleCombatant.Banner;
         public abstract BasicCharacterObject Troop { get; }
 
+        public abstract FormationClass FormationIndex { get; }
+
         protected EnhancedBattleTestAgentOrigin(IBattleCombatant combatant, IEnhancedBattleTestTroopSupplier troopSupplier, BattleSideEnum side, int rank = -1, UniqueTroopDescriptor uniqueNo = default)
         {
             _troopSupplier = troopSupplier;

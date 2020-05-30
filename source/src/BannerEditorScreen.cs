@@ -67,8 +67,6 @@ namespace EnhancedBattleTest
 
         private void OnDone()
         {
-            BannerEditorState.Config.Color1 = _bannerEditorLayer.DataSource.BannerVM.GetPrimaryColor();
-            BannerEditorState.Config.Color2 = _bannerEditorLayer.DataSource.BannerVM.GetSigilColor();
             BannerEditorState.Config.BannerKey = _bannerEditorLayer.DataSource.BannerVM.Banner.Serialize();
             BannerEditorState.OnDone?.Invoke();
             Game.Current.GameStateManager.PopState();

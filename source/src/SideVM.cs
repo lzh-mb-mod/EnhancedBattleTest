@@ -13,7 +13,7 @@ namespace EnhancedBattleTest
 {
     public class SideVM : ViewModel
     {
-        private readonly TeamConfig _config;
+        private TeamConfig _config;
         private ImageIdentifierVM _banner;
 
         public TextVM Name { get; }
@@ -41,18 +41,33 @@ namespace EnhancedBattleTest
 
         public TroopGroup TroopGroup { get; }
 
-        public SideVM(TeamConfig config, TextObject name, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public bool IsPlayerSide
         {
+            set
+            {
+                Name.TextObject = value ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY");
+                General.IsPlayerSide = value;
+                TroopGroup.IsPlayerSide = value;
+            }
+        }
+
+        public SideVM(TeamConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        {
+            Name = new TextVM(isPlayerSide ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY"));
             _config = config;
-            Name = new TextVM(name);
-            Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey));
+            Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
             General = new CharacterButtonVM(_config, _config.General,
                 GameTexts.FindText("str_ebt_troop_role", "general"), isPlayerSide, battleTypeConfig);
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
             EnableGeneral = new BoolVM(_config.HasGeneral);
-            EnableGeneral.OnValueChanged += value => _config.HasGeneral = value;
+            EnableGeneral.OnValueChanged += OnEnableGeneralChanged;
 
             TroopGroup = new TroopGroup(config, config.Troops, isPlayerSide, battleTypeConfig);
+        }
+
+        private void OnEnableGeneralChanged(bool value)
+        {
+            _config.HasGeneral = value;
         }
 
         public bool IsValid()

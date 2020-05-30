@@ -1,4 +1,11 @@
 # Changelog
+## [e2.0.1] - 2020-05-31
+### Added
+- Add "Swap team" feature.
+
+### Fixed
+- Fix the problem that default banner can cause cloth of soldiers disappear.
+
 ## [e2.0.0] - 2020-05-30
 ### Added
 - Support singleplayer troops
