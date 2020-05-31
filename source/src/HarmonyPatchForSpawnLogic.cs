@@ -190,11 +190,38 @@ namespace EnhancedBattleTest
             }
             if (agentOrigin.SPCharacter.IsPlayer)
                 agentBuildData.Controller(Agent.ControllerType.Player);
+            bool averageModifier = false;
             if (troop.IsHero)
-                agentBuildData.FixedEquipment(true);
-            var equipment = Equipment.GetRandomEquipmentElements(troop, false, agentBuildData.AgentCivilianEquipment,
-                agentBuildData.AgentEquipmentSeed);
-            agentBuildData.Equipment(equipment);
+            {
+                agentBuildData.Equipment(troop.GetFirstEquipment(agentBuildData.AgentCivilianEquipment).Clone(false));
+            }
+            else
+            {
+                var equipment = Equipment.GetRandomEquipmentElements(troop, false,
+                    agentBuildData.AgentCivilianEquipment,
+                    agentBuildData.AgentEquipmentSeed);
+                if (averageModifier)
+                {
+                    for (EquipmentIndex index = EquipmentIndex.Weapon0;
+                        index < EquipmentIndex.NumEquipmentSetSlots;
+                        ++index)
+                    {
+                        var equipmentElement = equipment.GetEquipmentFromSlot(index);
+                        if (equipmentElement.Item != null)
+                        {
+                            if (equipmentElement.Item.HasArmorComponent)
+                                equipmentElement.SetModifier(
+                                    Utility.AverageItemModifier(equipmentElement.Item.ArmorComponent
+                                        .ItemModifierGroup));
+                            else if (equipmentElement.Item.HasHorseComponent)
+                                equipmentElement.SetModifier(
+                                    Utility.AverageItemModifier(equipmentElement.Item.HorseComponent
+                                        .ItemModifierGroup));
+                        }
+                    }
+                }
+                agentBuildData.Equipment(equipment);
+            }
             Agent agent = Mission.Current.SpawnAgent(agentBuildData, false, formationTroopCount);
             if (agent.IsAIControlled & isAlarmed)
                 agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
