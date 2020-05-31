@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View.Missions;
@@ -11,14 +7,25 @@ namespace EnhancedBattleTest
 {
     class EnhancedBattleTestPreloadView : MissionView
     {
+        private readonly MissionPreloadHelper _helperInstance = new MissionPreloadHelper();
+        private bool _preloadDone;
         public override void OnPreMissionTick(float dt)
         {
-            MissionCombatantsLogic missionBehaviour = this.Mission.GetMissionBehaviour<MissionCombatantsLogic>();
+            if (_preloadDone)
+                return;
+            MissionCombatantsLogic missionBehaviour = Mission.GetMissionBehaviour<MissionCombatantsLogic>();
             List<BasicCharacterObject> characters = new List<BasicCharacterObject>();
             foreach (IBattleCombatant allCombatant in missionBehaviour.GetAllCombatants())
                 characters.AddRange(((IEnhancedBattleTestCombatant)allCombatant).Characters);
-            MissionPreloadHelper.PreloadCharacters(characters);
-            this.Mission.RemoveMissionBehaviour(this);
+
+            _helperInstance.PreloadCharacters(characters);
+            _preloadDone = true;
+        }
+
+        public override void OnMissionDeactivate()
+        {
+            base.OnMissionDeactivate();
+            _helperInstance.Clear();
         }
     }
 }

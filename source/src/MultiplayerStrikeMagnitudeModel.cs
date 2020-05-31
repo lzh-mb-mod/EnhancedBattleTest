@@ -10,22 +10,15 @@ namespace EnhancedBattleTest
 
     public class MultiplayerStrikeMagnitudeModel : StrikeMagnitudeCalculationModel
     {
-        public override float CalculateStrikeMagnitudeForSwing(
-            float swingSpeed,
-            float impactPoint,
-            float weaponWeight,
-            float weaponLength,
-            float weaponInertia,
-            float weaponCoM,
-            float extraLinearSpeed)
+        public override float CalculateStrikeMagnitudeForSwing(BasicCharacterObject attackerCharacter, float swingSpeed,
+            float impactPointAsPercent, float weaponWeight, float weaponLength, float weaponInertia, float weaponCoM,
+            float extraLinearSpeed, bool doesAttackerHaveMount, WeaponClass weaponClass)
         {
-            return CombatStatCalculator.CalculateStrikeMagnitudeForSwing(swingSpeed, impactPoint, weaponWeight, weaponLength, weaponInertia, weaponCoM, extraLinearSpeed);
+            return CombatStatCalculator.CalculateStrikeMagnitudeForSwing(swingSpeed, impactPointAsPercent, weaponWeight, weaponLength, weaponInertia, weaponCoM, extraLinearSpeed);
         }
 
-        public override float CalculateStrikeMagnitudeForThrust(
-            float thrustWeaponSpeed,
-            float weaponWeight,
-            float extraLinearSpeed,
+        public override float CalculateStrikeMagnitudeForThrust(BasicCharacterObject attackerCharacter, float thrustWeaponSpeed,
+            float weaponWeight, float extraLinearSpeed, bool doesAttackerHaveMount, WeaponClass weaponClass,
             bool isThrown = false)
         {
             return CombatStatCalculator.CalculateStrikeMagnitudeForThrust(thrustWeaponSpeed, weaponWeight, extraLinearSpeed, isThrown);

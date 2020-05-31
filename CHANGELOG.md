@@ -1,7 +1,14 @@
 # Changelog
+## [e2.0.3 beta] - 2020-05-31
+### Fixed
+- Keep compatible with Bannerlord e1.4.1.
+
 ## [e2.0.2] - 2020-05-31
 ### Added
 - Add "change tactic level" feature.
+
+### Fixed
+- Fix "text doesn't exists" problem in occupation list.
 
 ## [e2.0.1] - 2020-05-31
 ### Added
