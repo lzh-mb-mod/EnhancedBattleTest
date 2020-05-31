@@ -17,7 +17,7 @@ namespace EnhancedBattleTest
         public CharacterConfig General;
         public bool HasGeneral;
 
-        public string BannerKey;
+        public string BannerKey = string.Empty;
 
         public int TacticLevel = 0;
 
