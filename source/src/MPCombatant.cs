@@ -37,9 +37,10 @@ namespace EnhancedBattleTest
             TeamConfig teamConfig, bool isPlayerTeam)
         {
             bool isAttacker = side == BattleSideEnum.Attacker;
+            uint color1 = Utility.BackgroundColor(culture, isAttacker);
+            uint color2 = Utility.ForegroundColor(culture, isAttacker);
             var combatant = new MPCombatant(side, teamConfig.TacticLevel, culture,
-                new Tuple<uint, uint>(Utility.BackgroundColor(culture, isAttacker),
-                    Utility.ForegroundColor(culture, isAttacker)), new Banner(culture.BannerKey));
+                new Tuple<uint, uint>(color1, color2), new Banner(culture.BannerKey, color1, color2));
             if (teamConfig.HasGeneral)
             {
                 if (teamConfig.General is MPCharacterConfig general)
