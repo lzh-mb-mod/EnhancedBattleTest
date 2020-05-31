@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
-using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.CustomBattle;
 using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle;
-using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest
 {
@@ -70,39 +65,39 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public MBBindingList<CustomBattleSiegeMachineVM> AttackerMeleeMachines
         {
-            get => this._attackerMeleeMachines;
+            get => _attackerMeleeMachines;
             set
             {
-                if (value == this._attackerMeleeMachines)
+                if (value == _attackerMeleeMachines)
                     return;
-                this._attackerMeleeMachines = value;
-                this.OnPropertyChanged(nameof(AttackerMeleeMachines));
+                _attackerMeleeMachines = value;
+                OnPropertyChanged(nameof(AttackerMeleeMachines));
             }
         }
 
         [DataSourceProperty]
         public MBBindingList<CustomBattleSiegeMachineVM> AttackerRangedMachines
         {
-            get => this._attackerRangedMachines;
+            get => _attackerRangedMachines;
             set
             {
-                if (value == this._attackerRangedMachines)
+                if (value == _attackerRangedMachines)
                     return;
-                this._attackerRangedMachines = value;
-                this.OnPropertyChanged(nameof(AttackerRangedMachines));
+                _attackerRangedMachines = value;
+                OnPropertyChanged(nameof(AttackerRangedMachines));
             }
         }
 
         [DataSourceProperty]
         public MBBindingList<CustomBattleSiegeMachineVM> DefenderMachines
         {
-            get => this._defenderMachines;
+            get => _defenderMachines;
             set
             {
-                if (value == this._defenderMachines)
+                if (value == _defenderMachines)
                     return;
-                this._defenderMachines = value;
-                this.OnPropertyChanged(nameof(DefenderMachines));
+                _defenderMachines = value;
+                OnPropertyChanged(nameof(DefenderMachines));
             }
         }
 
@@ -264,7 +259,8 @@ namespace EnhancedBattleTest
             if (!IsValid())
                 return;
 
-            ApplyConfig();
+            if (!ApplyConfig())
+                return;
             var sceneData = GetMap();
             if (sceneData == null)
                 return;
@@ -274,7 +270,7 @@ namespace EnhancedBattleTest
             EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
         }
 
-        private void ApplyConfig()
+        private bool ApplyConfig()
         {
             _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
@@ -290,6 +286,12 @@ namespace EnhancedBattleTest
                 AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
+            if (_config.BattleTypeConfig.BattleType == BattleType.Siege && !_config.PlayerTeamConfig.HasGeneral)
+            {
+                Utility.DisplayLocalizedText("str_ebt_siege_no_player");
+                return false;
+            }
+            return true;
         }
 
         private SceneData GetMap()
@@ -351,26 +353,26 @@ namespace EnhancedBattleTest
         [DataSourceProperty]
         public bool IsAttackerCustomMachineSelectionEnabled
         {
-            get => this._isAttackerCustomMachineSelectionEnabled;
+            get => _isAttackerCustomMachineSelectionEnabled;
             set
             {
-                if (value == this._isAttackerCustomMachineSelectionEnabled)
+                if (value == _isAttackerCustomMachineSelectionEnabled)
                     return;
-                this._isAttackerCustomMachineSelectionEnabled = value;
-                this.OnPropertyChanged(nameof(IsAttackerCustomMachineSelectionEnabled));
+                _isAttackerCustomMachineSelectionEnabled = value;
+                OnPropertyChanged(nameof(IsAttackerCustomMachineSelectionEnabled));
             }
         }
 
         [DataSourceProperty]
         public bool IsDefenderCustomMachineSelectionEnabled
         {
-            get => this._isDefenderCustomMachineSelectionEnabled;
+            get => _isDefenderCustomMachineSelectionEnabled;
             set
             {
-                if (value == this._isDefenderCustomMachineSelectionEnabled)
+                if (value == _isDefenderCustomMachineSelectionEnabled)
                     return;
-                this._isDefenderCustomMachineSelectionEnabled = value;
-                this.OnPropertyChanged(nameof(IsDefenderCustomMachineSelectionEnabled));
+                _isDefenderCustomMachineSelectionEnabled = value;
+                OnPropertyChanged(nameof(IsDefenderCustomMachineSelectionEnabled));
             }
         }
 
@@ -378,33 +380,33 @@ namespace EnhancedBattleTest
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement((object) null, "Empty", (ImageIdentifier) null)
+                new InquiryElement(null, "Empty", null)
             };
-            foreach (SiegeEngineType attackerMeleeMachine in this.GetAllAttackerMeleeMachines())
-                inquiryElements.Add(new InquiryElement((object)attackerMeleeMachine, attackerMeleeMachine.Name.ToString(), (ImageIdentifier)null));
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=MVOWsP48}Select a Melee Machine", (Dictionary<string, TextObject>)null).ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done", (string)null).ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements.First<InquiryElement>().Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""), false);
+            foreach (SiegeEngineType attackerMeleeMachine in GetAllAttackerMeleeMachines())
+                inquiryElements.Add(new InquiryElement(attackerMeleeMachine, attackerMeleeMachine.Name.ToString(), null));
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=MVOWsP48}Select a Melee Machine").ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done").ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements.First().Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""));
         }
 
         private void OnAttackerRangedMachineSelection(CustomBattleSiegeMachineVM selectedSlot)
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement((object) null, "Empty", (ImageIdentifier) null)
+                new InquiryElement(null, "Empty", null)
             };
-            foreach (SiegeEngineType attackerRangedMachine in this.GetAllAttackerRangedMachines())
-                inquiryElements.Add(new InquiryElement((object)attackerRangedMachine, attackerRangedMachine.Name.ToString(), (ImageIdentifier)null));
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=SLZzfNPr}Select a Ranged Machine", (Dictionary<string, TextObject>)null).ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done", (string)null).ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements[0].Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""), false);
+            foreach (SiegeEngineType attackerRangedMachine in GetAllAttackerRangedMachines())
+                inquiryElements.Add(new InquiryElement(attackerRangedMachine, attackerRangedMachine.Name.ToString(), null));
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=SLZzfNPr}Select a Ranged Machine").ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done").ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements[0].Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""));
         }
 
         private void OnDefenderRangedMachineSelection(CustomBattleSiegeMachineVM selectedSlot)
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement((object) null, "Empty", (ImageIdentifier) null)
+                new InquiryElement(null, "Empty", null)
             };
-            foreach (SiegeEngineType defenderRangedMachine in this.GetAllDefenderRangedMachines())
-                inquiryElements.Add(new InquiryElement((object)defenderRangedMachine, defenderRangedMachine.Name.ToString(), (ImageIdentifier)null));
-            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=SLZzfNPr}Select a Ranged Machine", (Dictionary<string, TextObject>)null).ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done", (string)null).ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements[0].Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""), false);
+            foreach (SiegeEngineType defenderRangedMachine in GetAllDefenderRangedMachines())
+                inquiryElements.Add(new InquiryElement(defenderRangedMachine, defenderRangedMachine.Name.ToString(), null));
+            InformationManager.ShowMultiSelectionInquiry(new MultiSelectionInquiryData(new TextObject("{=SLZzfNPr}Select a Ranged Machine").ToString(), string.Empty, inquiryElements, false, true, GameTexts.FindText("str_done").ToString(), "", (Action<List<InquiryElement>>)(selectedElements => selectedSlot.SetMachineType(selectedElements[0].Identifier as SiegeEngineType)), (Action<List<InquiryElement>>)null, ""));
         }
     }
 }

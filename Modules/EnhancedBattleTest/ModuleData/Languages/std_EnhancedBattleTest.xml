@@ -49,5 +49,7 @@
     <string id="EnhancedBattleTest_troop_group_general" text="General" />
 
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
+
+    <string id="EnhancedBattleTest_siegenoplayer" text="In siege, player team should have general." />
   </strings>
 </base>
