@@ -43,7 +43,7 @@ namespace EnhancedBattleTest
             Troops = new MBBindingList<TroopVM>();
             for (int i = 0; i < _config.Troops.Length; ++i)
             {
-                GameTexts.SetVariable("TroopIndex", i);
+                GameTexts.SetVariable("TroopIndex", i + 1);
                 Troops.Add(new TroopVM(teamConfig, _config.Troops[i], GameTexts.FindText("str_ebt_troop_role", "Soldiers"),
                     isPlayerSide, battleTypeConfig));
             }

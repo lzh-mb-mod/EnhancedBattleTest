@@ -44,5 +44,7 @@
     <string id="str_ebt_current_map" text="{=EnhancedBattleTest_current_map}Current map is {MapName}." />
 
     <string id="str_troop_group_name.8" text="{=EnhancedBattleTest_troop_group_general}General" />
+
+    <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
   </strings>
 </base>

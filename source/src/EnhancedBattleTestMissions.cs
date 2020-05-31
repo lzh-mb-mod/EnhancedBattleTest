@@ -171,6 +171,7 @@ namespace EnhancedBattleTest
             {
                 List<MissionBehaviour> missionBehaviourList = new List<MissionBehaviour>
                 {
+                    new CommanderLogic(config),
                     new BattleSpawnLogic(isSallyOut
                         ? "sally_out_set"
                         : (isReliefForceAttack ? "relief_force_attack_set" : "battle_set")),
@@ -251,9 +252,10 @@ namespace EnhancedBattleTest
                 AtmosphereOnCampaign = atmosphereInfo,
                 SceneLevels = "",
                 TimeOfDay = timeOfDay
-            }, missionController =>
-                new MissionBehaviour[19]
+            }, mission =>
+                new MissionBehaviour[]
                 {
+                    new CommanderLogic(config),
                     new MissionOptionsComponent(),
                     new BattleEndLogic(),
                     new MissionCombatantsLogic(null, playerParty,

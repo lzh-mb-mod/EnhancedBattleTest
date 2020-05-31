@@ -33,6 +33,9 @@ namespace EnhancedBattleTest
 
         public bool ShouldShowBanner => !EnhancedBattleTestSubModule.IsMultiplayer;
 
+        public TextVM TacticText { get; }
+        public NumberVM<float> TacticLevel { get; }
+
         public CharacterButtonVM General { get; }
 
         public TextVM EnableGeneralText { get; }
@@ -56,6 +59,9 @@ namespace EnhancedBattleTest
             Name = new TextVM(isPlayerSide ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY"));
             _config = config;
             Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
+            TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
+            TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 50, true);
+            TacticLevel.OnValueChanged += f => _config.TacticLevel = (int)f;
             General = new CharacterButtonVM(_config, _config.General,
                 GameTexts.FindText("str_ebt_troop_role", "general"), isPlayerSide, battleTypeConfig);
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));

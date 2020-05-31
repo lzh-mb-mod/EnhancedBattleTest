@@ -19,6 +19,8 @@ namespace EnhancedBattleTest
 
         public string BannerKey;
 
+        public int TacticLevel = 0;
+
         [XmlIgnore]
         public uint Color1 => Banner.BannerDataList.Count > 0
             ? BannerManager.GetColor(Banner.BannerDataList[0].ColorId)

@@ -47,5 +47,7 @@
     <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
 
     <string id="EnhancedBattleTest_troop_group_general" text="将军" />
+
+    <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
   </strings>
 </base>

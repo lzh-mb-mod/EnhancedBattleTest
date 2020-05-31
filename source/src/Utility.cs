@@ -145,5 +145,26 @@ namespace EnhancedBattleTest
         {
             return id.IsStringNoneOrEmpty() ? null : Game.Current.ObjectManager.GetObject<SiegeEngineType>(id);
         }
+
+        public static void SetPlayerAsCommander(bool isSergeant)
+        {
+            var mission = Mission.Current;
+            if (mission?.PlayerTeam == null)
+                return;
+            mission.PlayerTeam.PlayerOrderController.Owner = mission.MainAgent;
+            foreach (var formation in mission.PlayerTeam.FormationsIncludingEmpty)
+            {
+                if (!isSergeant || formation.PlayerOwner != null)
+                {
+                    bool isAIControlled = formation.IsAIControlled;
+                    formation.PlayerOwner = mission.MainAgent;
+                    formation.IsAIControlled = isAIControlled;
+                }
+            }
+        }
+
+        public static void CancelPlayerAsCommander()
+        {
+        }
     }
 }

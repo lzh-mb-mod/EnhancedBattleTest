@@ -12,26 +12,32 @@ namespace EnhancedBattleTest
     public class MPCombatant : EnhancedBattleTestCombatant
     {
         private readonly List<MPSpawnableCharacter> _characters = new List<MPSpawnableCharacter>();
+        private int _tacticLevel;
         public IEnumerable<MPSpawnableCharacter> MPCharacters => _characters.AsReadOnly();
         public override IEnumerable<BasicCharacterObject> Characters => MPCharacters.Select(character => character.Character);
 
         public override int NumberOfHealthyMembers => _characters.Count;
 
-        public MPCombatant(BattleSideEnum side, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
+        public MPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture,
+            Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
                 side, culture, primaryColorPair, alternativeColorPair, banner)
-        { }
+        {
+            _tacticLevel = tacticLevel;
+        }
 
-        public MPCombatant(BattleSideEnum side, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
+        public MPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
                 side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner)
-        { }
+        {
+            _tacticLevel = tacticLevel;
+        }
 
         public static MPCombatant CreateParty(BattleSideEnum side, BasicCultureObject culture,
             TeamConfig teamConfig, bool isPlayerTeam)
         {
             bool isAttacker = side == BattleSideEnum.Attacker;
-            var combatant = new MPCombatant(side, culture,
+            var combatant = new MPCombatant(side, teamConfig.TacticLevel, culture,
                 new Tuple<uint, uint>(Utility.BackgroundColor(culture, isAttacker),
                     Utility.ForegroundColor(culture, isAttacker)),
                 teamConfig.Banner);
@@ -60,7 +66,7 @@ namespace EnhancedBattleTest
 
         public override int GetTacticsSkillAmount()
         {
-            return 0;
+            return _tacticLevel;
         }
 
         public void AddCharacter(MPSpawnableCharacter character, int number)

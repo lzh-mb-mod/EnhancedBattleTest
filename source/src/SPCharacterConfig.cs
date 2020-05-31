@@ -51,5 +51,11 @@ namespace EnhancedBattleTest
         {
             CharacterId = Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>().First().StringId;
         }
+
+        public SPCharacterConfig(string id, float femaleRatio = 0)
+        {
+            CharacterId = id;
+            FemaleRatio = femaleRatio;
+        }
     }
 }

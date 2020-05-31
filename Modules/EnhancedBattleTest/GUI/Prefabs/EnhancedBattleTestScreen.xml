@@ -92,7 +92,7 @@
 
                         <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteSwapTeam" UpdateChildrenStates="true">
                           <Children>
-                            <TextWidget DataSource="{SwapTeamText}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                            <TextWidget DataSource="{SwapTeamText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                           </Children>
                         </ButtonWidget>
 

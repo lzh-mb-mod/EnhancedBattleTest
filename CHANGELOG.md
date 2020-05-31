@@ -1,4 +1,8 @@
 # Changelog
+## [e2.0.2] - 2020-05-31
+### Added
+- Add "change tactic level" feature.
+
 ## [e2.0.1] - 2020-05-31
 ### Added
 - Add "Swap team" feature.

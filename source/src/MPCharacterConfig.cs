@@ -64,5 +64,11 @@ namespace EnhancedBattleTest
             CharacterId = Game.Current.ObjectManager.GetObjectTypeList<MultiplayerClassDivisions.MPHeroClass>().First().StringId;
         }
 
+        public MPCharacterConfig(string id, float femaleRatio = 0)
+        {
+            CharacterId = id;
+            FemaleRatio = femaleRatio;
+        }
+
     }
 }

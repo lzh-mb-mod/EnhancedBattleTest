@@ -19,8 +19,43 @@ namespace EnhancedBattleTest
         {
             PlayerTeamConfig = new TeamConfig(isMultiplayer);
             EnemyTeamConfig = new TeamConfig(isMultiplayer);
-            PlayerTeamConfig.BannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
-            EnemyTeamConfig.BannerKey = "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0";
+            if (!isMultiplayer)
+            {
+                PlayerTeamConfig.General = CharacterConfig.Create(false, "lord_4_6", 1);
+                PlayerTeamConfig.HasGeneral = true;
+                PlayerTeamConfig.BannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
+                PlayerTeamConfig.Troops = new TroopGroupConfig
+                {
+                    Troops = new TroopConfig[8]
+                    {
+                        new TroopConfig(false, "vlandian_infantry", 40, 0),
+                        new TroopConfig(false, "vlandian_billman", 40, 0),
+                        new TroopConfig(false, "vlandian_sharpshooter", 30, 0),
+                        new TroopConfig(false, "vlandian_militia_archer", 30, 0),
+                        new TroopConfig(false, "vlandian_banner_knight", 30, 0),
+                        new TroopConfig(false, "vlandian_champion", 0),
+                        new TroopConfig(false, "lord_4_1", 0),
+                        new TroopConfig(false, "lord_4_25", 0),
+                    }
+                };
+                EnemyTeamConfig.General = CharacterConfig.Create(false, "lord_2_2", 1);
+                EnemyTeamConfig.HasGeneral = true;
+                EnemyTeamConfig.BannerKey = "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0";
+                EnemyTeamConfig.Troops = new TroopGroupConfig
+                {
+                    Troops = new TroopConfig[8]
+                    {
+                        new TroopConfig(false, "sturgian_veteran_warrior", 40, 0),
+                        new TroopConfig(false, "sturgian_spearman", 40, 0),
+                        new TroopConfig(false, "sturgian_militia_archer", 30, 0),
+                        new TroopConfig(false, "sturgian_archer", 30, 0),
+                        new TroopConfig(false, "druzhinnik", 30, 0),
+                        new TroopConfig(false, "sturgian_horse_raider", 0),
+                        new TroopConfig(false, "lord_2_4", 0),
+                        new TroopConfig(false, "lord_2_111", 0),
+                    }
+                };
+            }
         }
 
         public static BattleConfig Deserialize(bool isMultiplayer)

@@ -32,9 +32,31 @@ namespace EnhancedBattleTest
             Occupations = new SelectorVM<SelectorItemVM>(0, OnSelectedOccupationChanged);
             var list = new MBBindingList<SelectorItemVM>();
             foreach (var item in
-                _occupations.Select(occupation => new SelectorItemVM(GameTexts.FindText("str_occupation", occupation.ToString()))))
+                _occupations.Select(occupation =>
+                {
+                    switch (occupation)
+                    {
+                        case Occupation.GoodsTrader:
+                        case Occupation.BannerBearer:
+                            return new TextObject(occupation.ToString());
+                        case Occupation.Outlaw:
+                            return GameTexts.FindText("str_outlaw");
+                        case Occupation.RuralNotable:
+                            return GameTexts.FindText("str_rural_notable");
+                        case Occupation.Artisan:
+                        case Occupation.Preacher:
+                        case Occupation.Headman:
+                        case Occupation.GangLeader:
+                            return GameTexts.FindText("str_charactertype_" + occupation.ToString().ToLower());
+                        case Occupation.Judge:
+                            return new TextObject("{=ZRkceJx3}Judge");
+                        case Occupation.CaravanGuard:
+                            return new TextObject("{=jxNe8lH2}Caravan Guard");
+                    }
+                    return GameTexts.FindText("str_occupation", occupation.ToString()) ;
+                }))
             {
-                list.Add(item);
+                list.Add(new SelectorItemVM(item));
             }
 
             Occupations.ItemList = list;

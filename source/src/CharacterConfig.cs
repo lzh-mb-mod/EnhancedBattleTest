@@ -26,5 +26,10 @@ namespace EnhancedBattleTest
         {
             return isMultiplayer ? (CharacterConfig) new MPCharacterConfig() : new SPCharacterConfig();
         }
+
+        public static CharacterConfig Create(bool isMultiplayer, string id, float femaleRatio = 0)
+        {
+            return isMultiplayer ? (CharacterConfig) new MPCharacterConfig(id, femaleRatio) : new SPCharacterConfig(id, femaleRatio);
+        }
     }
 }
