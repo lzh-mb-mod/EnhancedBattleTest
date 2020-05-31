@@ -17,13 +17,18 @@ namespace EnhancedBattleTest
 
         public BattleConfig(bool isMultiplayer)
         {
-            PlayerTeamConfig = new TeamConfig(isMultiplayer);
-            EnemyTeamConfig = new TeamConfig(isMultiplayer);
+            PlayerTeamConfig = new TeamConfig(isMultiplayer)
+            {
+                BannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0"
+            };
+            EnemyTeamConfig = new TeamConfig(isMultiplayer)
+            {
+                BannerKey = "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0"
+            };
             if (!isMultiplayer)
             {
                 PlayerTeamConfig.General = CharacterConfig.Create(false, "lord_4_6", 1);
                 PlayerTeamConfig.HasGeneral = true;
-                PlayerTeamConfig.BannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
                 PlayerTeamConfig.Troops = new TroopGroupConfig
                 {
                     Troops = new TroopConfig[8]
@@ -40,7 +45,6 @@ namespace EnhancedBattleTest
                 };
                 EnemyTeamConfig.General = CharacterConfig.Create(false, "lord_2_2", 1);
                 EnemyTeamConfig.HasGeneral = true;
-                EnemyTeamConfig.BannerKey = "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0";
                 EnemyTeamConfig.Troops = new TroopGroupConfig
                 {
                     Troops = new TroopConfig[8]
