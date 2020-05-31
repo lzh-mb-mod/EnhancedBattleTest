@@ -49,5 +49,7 @@
     <string id="EnhancedBattleTest_troop_group_general" text="将军" />
 
     <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
+
+    <string id="EnhancedBattleTest_siegenoplayer" text="攻城模式中玩家方必须有将领。" />
   </strings>
 </base>

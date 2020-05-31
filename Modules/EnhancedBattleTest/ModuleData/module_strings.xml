@@ -46,5 +46,7 @@
     <string id="str_troop_group_name.8" text="{=EnhancedBattleTest_troop_group_general}General" />
 
     <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
+
+    <string id="str_ebt_siege_no_player" text="{=EnhancedBattleTest_siegenoplayer}In siege, player team should have general." />
   </strings>
 </base>
