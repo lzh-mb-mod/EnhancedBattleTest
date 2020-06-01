@@ -52,7 +52,7 @@ namespace EnhancedBattleTest
                         FormationClass formationClass = mpAgentOrigin.MPCharacter.FormationIndex;
                         if ((FormationClass) index == formationClass)
                         {
-                            SpawnTroop(mpAgentOrigin, ____side, true, ____spawnWithHorses, isReinforcement,
+                            SpawnTroop(mpAgentOrigin, ____side, !mpAgentOrigin.MPCharacter.IsPlayer, ____spawnWithHorses, isReinforcement,
                                 enforceSpawningOnInitialPoint, formationTroopCount, formationTroopIndex, true, true,
                                 false, null, new MatrixFrame?());
                             ++formationTroopIndex;
@@ -63,7 +63,7 @@ namespace EnhancedBattleTest
                         FormationClass formationClass = spAgentOrigin.SPCharacter.FormationIndex;
                         if ((FormationClass)index == formationClass)
                         {
-                            SpawnTroop(spAgentOrigin, ____side, true, ____spawnWithHorses, isReinforcement,
+                            SpawnTroop(spAgentOrigin, ____side, !spAgentOrigin.SPCharacter.IsPlayer, ____spawnWithHorses, isReinforcement,
                                 enforceSpawningOnInitialPoint, formationTroopCount, formationTroopIndex, true, true,
                                 false, null, new MatrixFrame?());
                             ++formationTroopIndex;
@@ -107,7 +107,7 @@ namespace EnhancedBattleTest
             var team = agentOrigin.IsUnderPlayersCommand ? Mission.Current.PlayerTeam : Mission.Current.PlayerEnemyTeam;
             MatrixFrame frame = initFrame ?? Mission.Current
                 .GetFormationSpawnFrame(team.Side, FormationClass.NumberOfRegularFormations, false).ToGroundMatrixFrame();
-            if (troop.IsPlayerCharacter && !forceDismounted)
+            if (agentOrigin.MPCharacter.IsPlayer && !forceDismounted)
                 spawnWithHorse = true;
             AgentBuildData agentBuildData = new AgentBuildData(agentOrigin).Team(team).Banner(agentOrigin.Banner)
                 .ClothingColor1(team.Color).ClothingColor2(team.Color2).TroopOrigin(agentOrigin)
@@ -118,14 +118,14 @@ namespace EnhancedBattleTest
                 agentOrigin.MPCharacter.IsHero, agentOrigin.Seed);
             agentBuildData.Equipment(equipment);
             agentBuildData.IsFemale(agentOrigin.MPCharacter.IsFemale);
-            if (!troop.IsPlayerCharacter)
+            if (!agentOrigin.MPCharacter.IsPlayer)
                 agentBuildData.IsReinforcement(isReinforcement).SpawnOnInitialPoint(enforceSpawningOnInitialPoint);
-            if (!hasFormation || troop.IsPlayerCharacter)
+            if (!hasFormation || agentOrigin.MPCharacter.IsPlayer)
                 agentBuildData.InitialFrame(frame);
             if (spawnWithHorse)
                 agentBuildData.MountKey(MountCreationKey.GetRandomMountKey(
                     troop.Equipment[EquipmentIndex.ArmorItemEndSlot].Item, troop.GetMountKeySeed()));
-            if (hasFormation)
+            if (hasFormation && !agentOrigin.MPCharacter.IsPlayer)
             {
                 Formation formation = team.GetFormation(agentOrigin.MPCharacter.FormationIndex);
                 agentBuildData.Formation(formation);
@@ -169,20 +169,20 @@ namespace EnhancedBattleTest
             var team = agentOrigin.IsUnderPlayersCommand ? Mission.Current.PlayerTeam : Mission.Current.PlayerEnemyTeam;
             MatrixFrame frame = initFrame ?? Mission.Current
                 .GetFormationSpawnFrame(team.Side, FormationClass.NumberOfRegularFormations, false).ToGroundMatrixFrame();
-            if (troop.IsPlayerCharacter && !forceDismounted)
+            if (agentOrigin.SPCharacter.IsPlayer && !forceDismounted)
                 spawnWithHorse = true;
             AgentBuildData agentBuildData = new AgentBuildData(agentOrigin).Team(team).Banner(agentOrigin.Banner)
                 .ClothingColor1(team.Color).ClothingColor2(team.Color2).TroopOrigin(agentOrigin)
                 .NoHorses(!spawnWithHorse).CivilianEquipment(Mission.Current.DoesMissionRequireCivilianEquipment);
             agentBuildData.IsFemale(agentOrigin.SPCharacter.IsFemale);
-            if (!troop.IsPlayerCharacter)
+            if (!agentOrigin.SPCharacter.IsPlayer)
                 agentBuildData.IsReinforcement(isReinforcement).SpawnOnInitialPoint(enforceSpawningOnInitialPoint);
-            if (!hasFormation || troop.IsPlayerCharacter)
+            if (!hasFormation || agentOrigin.SPCharacter.IsPlayer)
                 agentBuildData.InitialFrame(frame);
             if (spawnWithHorse)
                 agentBuildData.MountKey(MountCreationKey.GetRandomMountKey(
                     troop.Equipment[EquipmentIndex.ArmorItemEndSlot].Item, troop.GetMountKeySeed()));
-            if (hasFormation)
+            if (hasFormation && !agentOrigin.SPCharacter.IsPlayer)
             {
                 Formation formation = team.GetFormation(agentOrigin.SPCharacter.FormationIndex);
                 agentBuildData.Formation(formation);

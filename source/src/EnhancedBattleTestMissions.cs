@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -139,22 +140,39 @@ namespace EnhancedBattleTest
                 case 2:
                     levelString = "level_2";
                     break;
-                default:
+                case 3:
                     levelString = "level_3";
+                    break;
+                default:
+                    levelString = "";
                     break;
             }
 
             var sceneLevelString =
-                (!isSallyOut | isReliefForceAttack) ? levelString + " siege" : levelString + " sally";
+                !(isSallyOut | isReliefForceAttack) ? levelString + " siege" : levelString + " sally";
             var playerSide = config.BattleTypeConfig.PlayerSide;
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
+
+
+            var player = config.PlayerTeamConfig.General;
+            if (player == null)
+                return null;
+            bool hasPlayer = config.PlayerTeamConfig.HasGeneral;
+            var playerCharacter = player.CharacterObject;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
-            troopSuppliers[(int) playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
+            troopSuppliers[(int)playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
             troopSuppliers[(int)enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
-            bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander;
-            bool isPlayerSergeant = !isPlayerGeneral;
+            bool isPlayerGeneral = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
+            bool isPlayerSergeant = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
+
+            List<CharacterObject> charactersInPlayerSideByPriority = null;
+            if (!isMultiplayer)
+            {
+                charactersInPlayerSideByPriority = Utility.OrderHeroesByPriority(config.PlayerTeamConfig);
+            }
+
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
 
             var attackerSiegeWeapons =
@@ -201,7 +219,7 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false)
+                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, hasPlayer, charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList())
                 };
                 if (isSallyOut)
                 {
@@ -234,16 +252,34 @@ namespace EnhancedBattleTest
             var player = config.PlayerTeamConfig.General;
             if (player == null)
                 return null;
+
+            bool hasPlayer = config.PlayerTeamConfig.HasGeneral;
             var playerCharacter = player.CharacterObject;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
-            var playerSideLeaderExceptPlayer =
-                config.PlayerTeamConfig.Troops.Troops.FirstOrDefault(c => c.Number > 0)?.Character.CharacterObject;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
-            troopSuppliers[(int) playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
-            troopSuppliers[(int) enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
-            bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander;
-            bool isPlayerSergeant = !isPlayerGeneral;
+            troopSuppliers[(int)playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
+            troopSuppliers[(int)enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
+            bool isPlayerGeneral = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
+            bool isPlayerSergeant = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
+
+            List<CharacterObject> charactersInPlayerSideByPriority = null;
+            List<CharacterObject> charactersInEnemySideByPriority = null;
+            string playerTeamGeneralName = null;
+            string enemyTeamGeneralName = null;
+            if (!isMultiplayer)
+            {
+                charactersInPlayerSideByPriority = Utility.OrderHeroesByPriority(config.PlayerTeamConfig);
+                playerTeamGeneralName = hasPlayer && isPlayerGeneral
+                    ? playerCharacter.Name.ToString()
+                    : (hasPlayer && charactersInPlayerSideByPriority.First().Name == playerCharacter.Name
+                        ? charactersInPlayerSideByPriority.Skip(1).FirstOrDefault()
+                        : charactersInPlayerSideByPriority.FirstOrDefault())?.Name.ToString();
+                charactersInEnemySideByPriority = Utility.OrderHeroesByPriority(config.EnemyTeamConfig);
+                enemyTeamGeneralName = charactersInEnemySideByPriority.FirstOrDefault()?.Name.ToString();
+            }
+
+
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
             return MissionState.OpenNew("EnhancedBattleTestFieldBattle", new MissionInitializerRecord(scene)
             {
@@ -275,21 +311,12 @@ namespace EnhancedBattleTest
                     new BattleMissionAgentInteractionLogic(),
                     new AgentFadeOutLogic(),
                     new AgentMoraleInteractionLogic(),
-                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, false,
-                        isPlayerSergeant
-                            ? Enumerable.Repeat(playerCharacter.StringId, 1).ToList()
-                            : new List<string>()),
+                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, hasPlayer,
+                        charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList()),
                     new CreateBodyguardMissionBehavior(
-                        isPlayerAttacker & isPlayerGeneral
-                            ? playerCharacter.Name.ToString()
-                            : (isPlayerAttacker & isPlayerSergeant
-                                ? playerSideLeaderExceptPlayer?.GetName().ToString()
-                                : null),
-                        !isPlayerAttacker & isPlayerGeneral
-                            ? playerCharacter.GetName().ToString()
-                            : (!isPlayerAttacker & isPlayerSergeant
-                                ? playerSideLeaderExceptPlayer?.GetName().ToString()
-                                : null)),
+                        isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
+                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName, 
+                        null, null, !isMultiplayer),
                     new HighlightsController(),
                     new BattleHighlightsController()
                 });
@@ -298,7 +325,7 @@ namespace EnhancedBattleTest
         private static IEnhancedBattleTestTroopSupplier CreateTroopSupplier(IEnhancedBattleTestCombatant combatant, bool isMultiplayer)
         {
             return isMultiplayer
-                ? (IEnhancedBattleTestTroopSupplier) new MPTroopSupplier(combatant)
+                ? (IEnhancedBattleTestTroopSupplier)new MPTroopSupplier(combatant)
                 : new SPTroopSupplier(combatant);
         }
 

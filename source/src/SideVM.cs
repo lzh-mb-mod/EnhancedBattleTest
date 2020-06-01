@@ -60,7 +60,7 @@ namespace EnhancedBattleTest
             _config = config;
             Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
-            TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 50, true);
+            TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += f => _config.TacticLevel = (int)f;
             General = new CharacterButtonVM(_config, _config.General,
                 GameTexts.FindText("str_ebt_troop_role", "general"), isPlayerSide, battleTypeConfig);
