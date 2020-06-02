@@ -4,6 +4,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Missions.Handlers;
 using TaleWorlds.MountAndBlade.Source.Missions;
@@ -158,7 +159,6 @@ namespace EnhancedBattleTest
             if (player == null)
                 return null;
             bool hasPlayer = config.PlayerTeamConfig.HasGeneral;
-            var playerCharacter = player.CharacterObject;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
@@ -168,9 +168,39 @@ namespace EnhancedBattleTest
             bool isPlayerSergeant = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
 
             List<CharacterObject> charactersInPlayerSideByPriority = null;
+            List<CharacterObject> charactersInEnemySideByPriority = null;
+            string playerTeamGeneralName = null;
+            string enemyTeamGeneralName = null;
             if (!isMultiplayer)
             {
+                var playerCharacter = player.CharacterObject as CharacterObject;
+                if (playerCharacter == null)
+                    return null;
                 charactersInPlayerSideByPriority = Utility.OrderHeroesByPriority(config.PlayerTeamConfig);
+                var playerGeneral = hasPlayer && isPlayerGeneral
+                    ? playerCharacter
+                    : (hasPlayer && charactersInPlayerSideByPriority.First() == playerCharacter
+                        ? charactersInPlayerSideByPriority.Skip(1).FirstOrDefault()
+                        : charactersInPlayerSideByPriority.FirstOrDefault());
+                if (playerGeneral != null)
+                {
+                    charactersInPlayerSideByPriority.Remove(playerGeneral);
+                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    {
+                        playerGeneral.Name
+                    }).FirstOrDefault();
+                }
+                charactersInEnemySideByPriority = Utility.OrderHeroesByPriority(config.EnemyTeamConfig);
+                var enemyGeneral = charactersInEnemySideByPriority.FirstOrDefault();
+                if (enemyGeneral != null)
+                {
+                    charactersInEnemySideByPriority.Remove(enemyGeneral);
+                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    {
+                        enemyGeneral.Name
+                    }).FirstOrDefault();
+
+                }
             }
 
             AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
@@ -196,7 +226,7 @@ namespace EnhancedBattleTest
                     new MissionOptionsComponent(),
                     new BattleEndLogic(),
                     new MissionCombatantsLogic(null, playerParty,
-                        !isPlayerAttacker ? enemyParty : playerParty,
+                        !isPlayerAttacker ? playerParty : enemyParty,
                         isPlayerAttacker ? playerParty : enemyParty,
                         !isSallyOut ? Mission.MissionTeamAITypeEnum.Siege : Mission.MissionTeamAITypeEnum.SallyOut,
                         isPlayerSergeant),
@@ -219,7 +249,11 @@ namespace EnhancedBattleTest
                     new AgentMoraleInteractionLogic(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, hasPlayer, charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList())
+                    new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, hasPlayer, charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList()),
+                    new CreateBodyguardMissionBehavior(
+                        isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
+                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
+                        null, null, !isMultiplayer),
                 };
                 if (isSallyOut)
                 {
@@ -254,7 +288,7 @@ namespace EnhancedBattleTest
                 return null;
 
             bool hasPlayer = config.PlayerTeamConfig.HasGeneral;
-            var playerCharacter = player.CharacterObject;
+
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
             IMissionTroopSupplier[] troopSuppliers = new IMissionTroopSupplier[2];
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
@@ -269,14 +303,34 @@ namespace EnhancedBattleTest
             string enemyTeamGeneralName = null;
             if (!isMultiplayer)
             {
+                var playerCharacter = player.CharacterObject as CharacterObject;
+                if (playerCharacter == null)
+                    return null;
                 charactersInPlayerSideByPriority = Utility.OrderHeroesByPriority(config.PlayerTeamConfig);
-                playerTeamGeneralName = hasPlayer && isPlayerGeneral
-                    ? playerCharacter.Name.ToString()
-                    : (hasPlayer && charactersInPlayerSideByPriority.First().Name == playerCharacter.Name
+                var playerGeneral = hasPlayer && isPlayerGeneral
+                    ? playerCharacter
+                    : (hasPlayer && charactersInPlayerSideByPriority.First() == playerCharacter
                         ? charactersInPlayerSideByPriority.Skip(1).FirstOrDefault()
-                        : charactersInPlayerSideByPriority.FirstOrDefault())?.Name.ToString();
+                        : charactersInPlayerSideByPriority.FirstOrDefault());
+                if (playerGeneral != null)
+                {
+                    charactersInPlayerSideByPriority.Remove(playerGeneral);
+                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    {
+                        playerGeneral.Name
+                    }).FirstOrDefault();
+                }
                 charactersInEnemySideByPriority = Utility.OrderHeroesByPriority(config.EnemyTeamConfig);
-                enemyTeamGeneralName = charactersInEnemySideByPriority.FirstOrDefault()?.Name.ToString();
+                var enemyGeneral = charactersInEnemySideByPriority.FirstOrDefault();
+                if (enemyGeneral != null)
+                {
+                    charactersInEnemySideByPriority.Remove(enemyGeneral);
+                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    {
+                        enemyGeneral.Name
+                    }).FirstOrDefault();
+
+                }
             }
 
 
@@ -315,7 +369,7 @@ namespace EnhancedBattleTest
                         charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList()),
                     new CreateBodyguardMissionBehavior(
                         isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
-                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName, 
+                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
                         null, null, !isMultiplayer),
                     new HighlightsController(),
                     new BattleHighlightsController()

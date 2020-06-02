@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetworkMessages.FromServer;
 using TaleWorlds.Core;
-using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {
@@ -54,7 +50,7 @@ namespace EnhancedBattleTest
                 var mpCharacter = troopConfig.Character as MPCharacterConfig;
                 if (mpCharacter == null)
                     continue;
-                var femaleCount = (int)(troopConfig.Number * mpCharacter.FemaleRatio);
+                var femaleCount = (int)(troopConfig.Number * mpCharacter.FemaleRatio + 0.49);
                 var maleCount = troopConfig.Number - femaleCount;
                 combatant.AddCharacter(new MPSpawnableCharacter(mpCharacter, i, true),
                     femaleCount);

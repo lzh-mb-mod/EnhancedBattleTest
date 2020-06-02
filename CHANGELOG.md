@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.7] - 2020-06-02
+### Fixed
+- Fix wrong banner in siege.
+
+- Fix bodyguard logic.
+
+- Fix player role selection.
+
 ## [2.0.6] - 2020-06-02
 ### Changed
 - Now player can be spawned with horse in siege battle.
