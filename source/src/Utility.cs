@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using HarmonyLib;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -172,7 +174,7 @@ namespace EnhancedBattleTest
         {
             if (group == null)
                 return null;
-            var result = new ItemModifier {ID = string.Empty};
+            var result = new ItemModifier { ID = string.Empty };
             float sum = 1;
             foreach (var probability in group.ItemModifiersWithProbability.Values)
             {
@@ -215,7 +217,7 @@ namespace EnhancedBattleTest
                 chargeDamage += modifier.ItemModifier.ChargeDamage * modifier.Probability / sum;
             }
 
-            typeof(ItemModifier).GetField("Damage", bindingFlag)?.SetValue(result, (int) damage);
+            typeof(ItemModifier).GetField("Damage", bindingFlag)?.SetValue(result, (int)damage);
             typeof(ItemModifier).GetField("Speed", bindingFlag)?.SetValue(result, (int)speed);
             typeof(ItemModifier).GetField("MissileSpeed", bindingFlag)?.SetValue(result, (int)missileSpeed);
             typeof(ItemModifier).GetField("Armor", bindingFlag)?.SetValue(result, (int)armor);
@@ -230,6 +232,19 @@ namespace EnhancedBattleTest
             typeof(ItemModifier).GetField("Maneuver", bindingFlag)?.SetValue(result, (int)maneuver);
             typeof(ItemModifier).GetField("ChargeDamage", bindingFlag)?.SetValue(result, (int)chargeDamage);
             return result;
+        }
+
+        public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
+        {
+            var characters = teamConfig.Troops.Troops
+                .Select(troopConfig => troopConfig.Character);
+            if (teamConfig.HasGeneral)
+                characters = characters.Prepend(teamConfig.General);
+            return characters.Select(character => character.CharacterObject as CharacterObject)
+                .Where(character => character != null && character.IsHero).Select(character => character.HeroObject)
+                .OrderByDescending(hero =>
+                    TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetCharacterSergeantScore(hero))
+                .ToList().ConvertAll(hero => hero.CharacterObject);
         }
     }
 }

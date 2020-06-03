@@ -1,4 +1,29 @@
 # Changelog
+
+## [2.0.7] - 2020-06-02
+### Fixed
+- Fix wrong banner in siege.
+
+- Fix bodyguard logic.
+
+- Fix player role selection.
+
+## [2.0.6] - 2020-06-02
+### Changed
+- Now player can be spawned with horse in siege battle.
+
+### Added
+- Add player role selections view when player is sergeant.
+
+## [2.0.5] - 2020-05-31
+### Fixed
+- Fix banner color in mp mode.
+
+## [2.0.4] - 2020-05-31
+### Fixed
+- Fix crash in mp mode caused by banner.
+- Fix crash in siege when player general is not enabled.
+
 ## [e2.0.3 beta] - 2020-05-31
 ### Fixed
 - Keep compatible with Bannerlord e1.4.1.

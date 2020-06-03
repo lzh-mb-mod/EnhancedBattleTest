@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -54,7 +52,7 @@ namespace EnhancedBattleTest
                 var spCharacter = troopConfig.Character as SPCharacterConfig;
                 if (spCharacter == null)
                     continue;
-                var femaleCount = (int)(troopConfig.Number * spCharacter.FemaleRatio);
+                var femaleCount = (int)(troopConfig.Number * spCharacter.FemaleRatio + 0.49);
                 var maleCount = troopConfig.Number - femaleCount;
                 combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, true),
                     femaleCount);

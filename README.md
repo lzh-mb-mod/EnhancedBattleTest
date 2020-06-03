@@ -49,9 +49,10 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
     Optionally you can tell me the step to reproduce the crash.
 
-- If the mod exited without showing any message when loading battles:
+- If the game crashed when loading a siege battle or clicking "Begin assault", try to change the scene level. Some scenes lacks data for some scene level, so this may help.
 
-  - Try to reduce soldier numbers or graphic quality.
+## Source code
+The source code is available at [GitLab](https://gitlab.com/lzh_mb_mod/enhancedbattletest).
 
 ## Contact with me
 * Please mail to: lizhenhuan1019@qq.com
