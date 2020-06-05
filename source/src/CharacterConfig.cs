@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {
@@ -24,12 +17,12 @@ namespace EnhancedBattleTest
 
         public static CharacterConfig Create(bool isMultiplayer)
         {
-            return isMultiplayer ? (CharacterConfig) new MPCharacterConfig() : new SPCharacterConfig();
+            return isMultiplayer ? (CharacterConfig)new MPCharacterConfig() : new SPCharacterConfig();
         }
 
         public static CharacterConfig Create(bool isMultiplayer, string id, float femaleRatio = 0)
         {
-            return isMultiplayer ? (CharacterConfig) new MPCharacterConfig(id, femaleRatio) : new SPCharacterConfig(id, femaleRatio);
+            return isMultiplayer ? (CharacterConfig)new MPCharacterConfig(id, femaleRatio) : new SPCharacterConfig(id, femaleRatio);
         }
     }
 }

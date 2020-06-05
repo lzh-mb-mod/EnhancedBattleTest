@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
+﻿using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -26,7 +20,7 @@ namespace EnhancedBattleTest
             _config = config;
             CharacterButton = new CharacterButtonVM(teamConfig, _config.Character, troopRole, isPlayerSide, battleTypeConfig);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
-            Number = new NumberVM<int>(config.Number, 0,5000, true);
+            Number = new NumberVM<int>(config.Number, 0, 5000, true);
             Number.OnValueChanged += number => config.Number = number;
             InvalidText = new TextVM(GameTexts.FindText("str_ebt_invalid"));
         }

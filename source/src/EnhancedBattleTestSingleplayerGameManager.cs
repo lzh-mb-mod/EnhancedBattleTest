@@ -1,6 +1,4 @@
-﻿using System.IO;
-using SandBox;
-using TaleWorlds.CampaignSystem;
+﻿using SandBox;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -27,7 +25,7 @@ namespace EnhancedBattleTest.src
                     nextStep = GameManagerLoadingSteps.WaitSecondStep;
                     break;
                 case GameManagerLoadingSteps.WaitSecondStep:
-                        MBGameManager.StartNewGame();
+                    MBGameManager.StartNewGame();
                     nextStep = GameManagerLoadingSteps.SecondInitializeThirdState;
                     break;
                 case GameManagerLoadingSteps.SecondInitializeThirdState:
@@ -50,6 +48,7 @@ namespace EnhancedBattleTest.src
                     break;
                 case GameManagerLoadingSteps.FinishLoadingFifthStep:
                     nextStep = Game.Current.DoLoading() ? GameManagerLoadingSteps.None : GameManagerLoadingSteps.FinishLoadingFifthStep;
+                    EnhancedBattleTestPartyController.Initialize();
                     break;
             }
         }
@@ -59,6 +58,13 @@ namespace EnhancedBattleTest.src
             base.OnGameStart(game, gameStarter);
 
             InitializeGameTexts(Game.Current.GameTextManager);
+        }
+
+        public override void OnGameEnd(Game game)
+        {
+            base.OnGameEnd(game);
+
+            EnhancedBattleTestPartyController.OnGameEnd();
         }
 
         public override void OnLoadFinished()

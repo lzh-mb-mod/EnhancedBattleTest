@@ -69,7 +69,7 @@ namespace EnhancedBattleTest
                 XmlSerializer serializer = new XmlSerializer(typeof(BattleConfig));
                 var filePath = Path.Combine(SaveFolderPath(), isMultiplayer ? "mpconfig.xml" : "spconfig.xml");
                 using TextReader reader = new StreamReader(filePath);
-                return (BattleConfig) serializer.Deserialize(reader);
+                return (BattleConfig)serializer.Deserialize(reader);
             }
             catch
             {

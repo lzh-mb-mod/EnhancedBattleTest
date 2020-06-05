@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 using FaceGen = TaleWorlds.Core.FaceGen;
 
 namespace EnhancedBattleTest
@@ -131,7 +126,7 @@ namespace EnhancedBattleTest
             Character.BodyProperties = null;
             Character.BodyProperties = FaceGen.GetRandomBodyProperties(_config.FemaleRatio > 0.5,
                 character.GetBodyPropertiesMin(false), character.GetBodyPropertiesMax(),
-                (int) equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
+                (int)equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
                 character.TattooTags).ToString();
             Character.MountCreationKey =
                 MountCreationKey.GetRandomMountKey(equipment[10].Item, Common.GetDJB2(character.StringId));

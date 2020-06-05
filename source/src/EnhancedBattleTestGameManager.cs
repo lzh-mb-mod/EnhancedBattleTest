@@ -1,7 +1,4 @@
-﻿using System;
-using SandBox;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest

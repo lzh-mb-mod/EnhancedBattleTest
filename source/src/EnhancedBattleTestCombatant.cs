@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -29,7 +26,7 @@ namespace EnhancedBattleTest
         public Tuple<uint, uint> AlternativeColorPair { get; }
         public Banner Banner { get; }
         public int NumberOfAllMembers { get; protected set; }
-        public abstract int NumberOfHealthyMembers { get;}
+        public abstract int NumberOfHealthyMembers { get; }
         public abstract IEnumerable<BasicCharacterObject> Characters { get; }
     }
 }

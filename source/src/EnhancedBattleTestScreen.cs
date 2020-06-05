@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using TaleWorlds.Core;
+﻿using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Engine.Screens;
@@ -30,7 +26,7 @@ namespace EnhancedBattleTest
             _title = EnhancedBattleTestSubModule.IsMultiplayer
                 ? GameTexts.FindText("str_ebt_multiplayer_battle_option")
                 : GameTexts.FindText("str_ebt_singleplayer_battle_option");
-            
+
         }
         void IGameStateListener.OnActivate()
         {
@@ -52,7 +48,7 @@ namespace EnhancedBattleTest
         {
             base.OnInitialize();
             _dataSource = new EnhancedBattleTestVM(_state, _title);
-            _gauntletLayer = new GauntletLayer(1) {IsFocusLayer = true};
+            _gauntletLayer = new GauntletLayer(1) { IsFocusLayer = true };
             LoadMovie();
             _gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
             _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);

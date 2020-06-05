@@ -50,7 +50,7 @@ namespace EnhancedBattleTest
                     if (mpAgentOrigin != null)
                     {
                         FormationClass formationClass = mpAgentOrigin.MPCharacter.FormationIndex;
-                        if ((FormationClass) index == formationClass)
+                        if ((FormationClass)index == formationClass)
                         {
                             SpawnTroop(mpAgentOrigin, ____side, !mpAgentOrigin.MPCharacter.IsPlayer, ____spawnWithHorses, isReinforcement,
                                 enforceSpawningOnInitialPoint, formationTroopCount, formationTroopIndex, true, true,

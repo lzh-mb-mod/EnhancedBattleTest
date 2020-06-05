@@ -1,5 +1,4 @@
-﻿using TaleWorlds.Core;
-using TaleWorlds.MountAndBlade;
+﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions.Handlers;
 using TaleWorlds.MountAndBlade.ViewModelCollection;
 

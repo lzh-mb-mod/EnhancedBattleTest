@@ -8,5 +8,6 @@ namespace EnhancedBattleTest
             : base(CampaignGameMode.Campaign)
         {
         }
+
     }
 }

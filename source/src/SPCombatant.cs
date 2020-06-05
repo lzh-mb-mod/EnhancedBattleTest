@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 
@@ -8,8 +9,9 @@ namespace EnhancedBattleTest
 {
     public class SPCombatant : EnhancedBattleTestCombatant
     {
+        public PartyBase Combatant { get; }
         private readonly List<SPSpawnableCharacter> _characters = new List<SPSpawnableCharacter>();
-        private int _tacticLevel;
+        private readonly int _tacticLevel;
 
         public IEnumerable<SPSpawnableCharacter> SPCharacters => _characters.AsReadOnly();
 
@@ -18,25 +20,28 @@ namespace EnhancedBattleTest
         public override IEnumerable<BasicCharacterObject> Characters =>
             SPCharacters.Select(character => character.Character);
 
-        public SPCombatant(TextObject name, int tacticLevel, BattleSideEnum side, BasicCultureObject basicCulture,
+        public SPCombatant(PartyBase party, TextObject name, int tacticLevel, BattleSideEnum side, BasicCultureObject basicCulture,
             Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
             : base(name, side, basicCulture, primaryColorPair, alternativeColorPair, banner)
         {
+            Combatant = party;
             _tacticLevel = tacticLevel;
         }
 
-        public SPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
+        public SPCombatant(PartyBase party, BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
                 side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner)
         {
+            Combatant = party;
             _tacticLevel = tacticLevel;
         }
 
-        public static SPCombatant CreateParty(BattleSideEnum side, BasicCultureObject culture,
+        public static SPCombatant CreateParty(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
             TeamConfig teamConfig, bool isPlayerTeam)
         {
+            Utility.FillPartyMembers(party, side, culture, teamConfig, isPlayerTeam);
             bool isAttacker = side == BattleSideEnum.Attacker;
-            var combatant = new SPCombatant(side, teamConfig.TacticLevel, culture,
+            var combatant = new SPCombatant(party, side, teamConfig.TacticLevel, culture,
                 new Tuple<uint, uint>(teamConfig.Color1, teamConfig.Color2),
                 teamConfig.Banner);
             if (teamConfig.HasGeneral)

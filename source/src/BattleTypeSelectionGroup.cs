@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle;
 
 namespace EnhancedBattleTest
@@ -77,13 +73,13 @@ namespace EnhancedBattleTest
             _config.BattleType = (BattleType)selector.SelectedIndex;
             switch (selector.SelectedIndex)
             {
-                case (int) BattleType.Field:
+                case (int)BattleType.Field:
                     _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Battle);
                     break;
-                case (int) BattleType.Siege:
+                case (int)BattleType.Siege:
                     _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Siege);
                     break;
-                case (int) BattleType.Village:
+                case (int)BattleType.Village:
                     _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Village);
                     break;
             }

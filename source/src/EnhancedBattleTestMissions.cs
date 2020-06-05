@@ -79,8 +79,10 @@ namespace EnhancedBattleTest
             var enemySide = playerSide.GetOppositeSide();
             SPCombatant[] parties = new SPCombatant[2]
             {
-                SPCombatant.CreateParty(playerSide, playerCulture, config.PlayerTeamConfig, true),
-                SPCombatant.CreateParty(enemySide, enemyCulture, config.EnemyTeamConfig, false)
+                SPCombatant.CreateParty(EnhancedBattleTestPartyController.PlayerParty.Party, playerSide, playerCulture,
+                    config.PlayerTeamConfig, true),
+                SPCombatant.CreateParty(EnhancedBattleTestPartyController.EnemyParty.Party, enemySide, enemyCulture,
+                    config.EnemyTeamConfig, false)
             };
             return OpenMission(parties[0], parties[1], config, map);
         }

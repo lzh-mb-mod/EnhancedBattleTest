@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest
 {

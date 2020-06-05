@@ -266,6 +266,7 @@ namespace EnhancedBattleTest
             _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
             GameTexts.SetVariable("MapName", sceneData.Name);
             Utility.DisplayLocalizedText("str_ebt_current_map");
+            EnhancedBattleTestPartyController.BattleConfig = _config;
             EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
         }
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
@@ -53,7 +50,7 @@ namespace EnhancedBattleTest
                         case Occupation.CaravanGuard:
                             return new TextObject("{=jxNe8lH2}Caravan Guard");
                     }
-                    return GameTexts.FindText("str_occupation", occupation.ToString()) ;
+                    return GameTexts.FindText("str_occupation", occupation.ToString());
                 }))
             {
                 list.Add(new SelectorItemVM(item));

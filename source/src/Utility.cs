@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest
 {
@@ -245,6 +239,20 @@ namespace EnhancedBattleTest
                 .OrderByDescending(hero =>
                     TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetCharacterSergeantScore(hero))
                 .ToList().ConvertAll(hero => hero.CharacterObject);
+        }
+
+        public static void FillPartyMembers(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
+                TeamConfig teamConfig, bool isPlayerTeam)
+        {
+            party.MemberRoster.Clear();
+            party.MemberRoster.Add(new[]
+            {
+                new FlattenedTroopRosterElement(teamConfig.General.CharacterObject as CharacterObject,
+                    teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)
+            });
+            party.MemberRoster.Add(teamConfig.Troops.Troops.Select(troopConfig =>
+                new FlattenedTroopRosterElement(troopConfig.Character.CharacterObject as CharacterObject)));
+            party.Side = side;
         }
     }
 }

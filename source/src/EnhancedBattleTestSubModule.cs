@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using EnhancedBattleTest.src;
 using HarmonyLib;
+using System;
+using System.IO;
+using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;

@@ -41,7 +41,7 @@ namespace EnhancedBattleTest
             {
                 if (teamConfig.General is MPCharacterConfig general)
                     combatant.AddCharacter(
-                        new MPSpawnableCharacter(general, (int) general.CharacterObject.DefaultFormationGroup,
+                        new MPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
                             general.FemaleRatio > 0.5, isPlayerTeam), 1);
             }
             for (int i = 0; i < teamConfig.Troops.Troops.Length; ++i)
