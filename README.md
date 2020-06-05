@@ -34,6 +34,21 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
   - Click `Start` to enjoy the battle.
 
+## FAQ
+- Q: What does the "Tactic Level" option do?
+
+- A: Tactic level determines what tactics the AI will use, such as "Charge", "Protect flank", "Forming a skirmish line", etc. It has different effect when the value is in 0-20, 20-50 and higher than 50, respectively.
+
+- Q: What does the "Soldier Equipment Modifier" option do?
+
+- A: In singleplayer mode, including campaign mode and custom battle mode, a random modifier may be added to every equipment of each soldier when it's spawned, such as "fine", "heavy", "balanced", or no modifier at all.
+
+  - If you select "Random", then the behavior is the same as it is in Campaign mode: modifier will be randomly chosen and applied.
+
+  - If you select "Average", then the bonus of the applied modifier will be the mathematical expectation of bonus of all possible modifiers. In this way, all the soldiers with the same equipments will have the same armor. No random behavior any more. 
+
+  - If you select "None", then no modifier will be applied to equipment of soldiers.
+
 ## Troubleshoot
 - If the launcher can not start:
 

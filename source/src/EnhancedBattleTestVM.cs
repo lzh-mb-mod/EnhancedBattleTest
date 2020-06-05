@@ -146,6 +146,7 @@ namespace EnhancedBattleTest
         {
             _state = state;
             _config = BattleConfig.Deserialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            BattleConfig.Instance = _config;
             _scenes = _state.Scenes;
 
             TitleText = new TextVM(title);

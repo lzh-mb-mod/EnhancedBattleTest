@@ -15,7 +15,7 @@ namespace EnhancedBattleTest
     {
         private readonly Harmony harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
         private readonly MethodInfo original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
-        private readonly MethodInfo prefix = typeof(HarmonyPatchForSpawnLogic).GetMethod("SpawnTroops");
+        private readonly MethodInfo prefix = typeof(Patch_MissionAgentSpawnLogic).GetMethod("SpawnTroops_Prefix");
         public static EnhancedBattleTestSubModule Instance { get; private set; }
 
         public static string ModuleFolderName = "EnhancedBattleTest";

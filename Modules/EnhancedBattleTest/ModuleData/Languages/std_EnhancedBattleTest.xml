@@ -21,6 +21,11 @@
     <string id="EnhancedBattleTest_attacker" text="Attacker" />
     <string id="EnhancedBattleTest_defender" text="Defender" />
 
+    <string id="EnhancedBattleTest_equipment_modifier_type" text="Soldier Equipment Modifier type" />
+    <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
+    <string id="EnhancedBattleTest_modifier_type_average" text="Average" />
+    <string id="EnhancedBattleTest_modifier_type_none" text="None" />
+
     <string id="EnhancedBattleTest_swapteam" text="Swap Team" />
 
     <string id="EnhancedBattleTest_map" text="Map" />

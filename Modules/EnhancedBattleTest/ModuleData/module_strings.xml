@@ -18,6 +18,11 @@
     <string id="str_ebt_side.Attacker" text="{=EnhancedBattleTest_attacker}Attacker" />
     <string id="str_ebt_side.Defender" text="{=EnhancedBattleTest_defender}Defender" />
 
+    <string id="str_ebt_equipment_modifier_type" text="{=EnhancedBattleTest_equipment_modifier_type}Soldier Equipment Modifier type" />
+    <string id="str_ebt_modifier_type.Random" text="{=EnhancedBattleTest_modifier_type_random}Random" />
+    <string id="str_ebt_modifier_type.Average" text="{=EnhancedBattleTest_modifier_type_average}Average" />
+    <string id="str_ebt_modifier_type.None" text="{=EnhancedBattleTest_modifier_type_none}None" />
+
     <string id="str_ebt_swap_team" text="{=EnhancedBattleTest_swapteam}Swap Team" />
 
     <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />

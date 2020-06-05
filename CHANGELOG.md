@@ -1,6 +1,13 @@
 # Changelog
 
-## [2.0.7] - 2020-06-02
+## [e2.0.8] - 2020-06-05
+### Fixed
+- Fix possible crash when perk is added.
+
+### Added
+- Add an option to select the behavior of applying equipment modifiers.
+
+## [e2.0.7] - 2020-06-02
 ### Fixed
 - Fix wrong banner in siege.
 
@@ -8,18 +15,18 @@
 
 - Fix player role selection.
 
-## [2.0.6] - 2020-06-02
+## [e2.0.6] - 2020-06-02
 ### Changed
 - Now player can be spawned with horse in siege battle.
 
 ### Added
 - Add player role selections view when player is sergeant.
 
-## [2.0.5] - 2020-05-31
+## [e2.0.5] - 2020-05-31
 ### Fixed
 - Fix banner color in mp mode.
 
-## [2.0.4] - 2020-05-31
+## [e2.0.4] - 2020-05-31
 ### Fixed
 - Fix crash in mp mode caused by banner.
 - Fix crash in siege when player general is not enabled.

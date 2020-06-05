@@ -8,9 +8,9 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest
 {
-    public class HarmonyPatchForSpawnLogic
+    public class Patch_MissionAgentSpawnLogic
     {
-        public static bool SpawnTroops(int number, bool isReinforcement, bool enforceSpawningOnInitialPoint, ref int __result,
+        public static bool SpawnTroops_Prefix(int number, bool isReinforcement, bool enforceSpawningOnInitialPoint, ref int __result,
             IMissionTroopSupplier ____troopSupplier,
             bool ____spawnWithHorses, BattleSideEnum ____side)
         {
@@ -171,7 +171,8 @@ namespace EnhancedBattleTest
                 .GetFormationSpawnFrame(team.Side, FormationClass.NumberOfRegularFormations, false).ToGroundMatrixFrame();
             if (agentOrigin.SPCharacter.IsPlayer && !forceDismounted)
                 spawnWithHorse = true;
-            AgentBuildData agentBuildData = new AgentBuildData(agentOrigin).Team(team).Banner(agentOrigin.Banner)
+            AgentBuildData agentBuildData = new AgentBuildData(agentOrigin.PartyAgentOrigin)
+                .Team(team).Banner(agentOrigin.Banner)
                 .ClothingColor1(team.Color).ClothingColor2(team.Color2).TroopOrigin(agentOrigin)
                 .NoHorses(!spawnWithHorse).CivilianEquipment(Mission.Current.DoesMissionRequireCivilianEquipment);
             agentBuildData.IsFemale(agentOrigin.SPCharacter.IsFemale);
@@ -190,17 +191,17 @@ namespace EnhancedBattleTest
             }
             if (agentOrigin.SPCharacter.IsPlayer)
                 agentBuildData.Controller(Agent.ControllerType.Player);
-            bool averageModifier = false;
             if (troop.IsHero)
             {
                 agentBuildData.Equipment(troop.GetFirstEquipment(agentBuildData.AgentCivilianEquipment).Clone(false));
             }
             else
             {
-                var equipment = Equipment.GetRandomEquipmentElements(troop, false,
+                var equipmentModifierType = BattleConfig.Instance.BattleTypeConfig.EquipmentModifierType;
+                var equipment = Equipment.GetRandomEquipmentElements(troop, equipmentModifierType == EquipmentModifierType.Random,
                     agentBuildData.AgentCivilianEquipment,
                     agentBuildData.AgentEquipmentSeed);
-                if (averageModifier)
+                if (equipmentModifierType == EquipmentModifierType.Average)
                 {
                     for (EquipmentIndex index = EquipmentIndex.Weapon0;
                         index < EquipmentIndex.NumEquipmentSetSlots;

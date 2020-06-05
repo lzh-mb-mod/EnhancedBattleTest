@@ -90,6 +90,13 @@
                           </Children>
                         </Widget>
 
+                        <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <RichTextWidget DataSource="{EquipmentModifierTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{EquipmentModifierTypeSelection}" />
+                          </Children>
+                        </Widget>
+
                         <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteSwapTeam" UpdateChildrenStates="true">
                           <Children>
                             <TextWidget DataSource="{SwapTeamText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
@@ -229,7 +236,7 @@
                     </ListPanel>
 
                     <!--Search Text Bar-->
-                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="415" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
+                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="485" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
                       <Children>
                         <EditableTextWidget Id="SearchInputWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="298" SuggestedHeight="43" MarginLeft="5" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Search.TextBox" Text="@SearchText" />
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="24" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="10" Sprite="Encyclopedia\icon_search" IsDisabled="true" />

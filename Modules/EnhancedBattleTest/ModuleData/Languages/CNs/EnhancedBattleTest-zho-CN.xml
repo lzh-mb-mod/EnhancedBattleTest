@@ -21,6 +21,11 @@
     <string id="EnhancedBattleTest_attacker" text="进攻方" />
     <string id="EnhancedBattleTest_defender" text="防守方" />
 
+    <string id="EnhancedBattleTest_equipment_modifier_type" text="士兵装备前缀" />
+    <string id="EnhancedBattleTest_modifier_type_random" text="随机" />
+    <string id="EnhancedBattleTest_modifier_type_average" text="平均" />
+    <string id="EnhancedBattleTest_modifier_type_none" text="无" />
+
     <string id="EnhancedBattleTest_swapteam" text="交换队伍" />
 
     <string id="EnhancedBattleTest_map" text="地图" />
