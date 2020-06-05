@@ -11,7 +11,7 @@ namespace EnhancedBattleTest
     public class BattleTypeSelectionGroup : ViewModel
     {
         private readonly BattleTypeConfig _config;
-        private readonly MapSelectionGroup _mapSelectionGroup;
+        private readonly MapSelectionGroupVM _mapSelectionGroup;
         private readonly Action<bool> _onPlayerTypeChange;
         private SelectorVM<SelectorItemVM> _battleTypeSelection;
         private SelectorVM<SelectorItemVM> _playerTypeSelection;
@@ -27,7 +27,7 @@ namespace EnhancedBattleTest
 
         public BattleTypeSelectionGroup(
           BattleTypeConfig config,
-          MapSelectionGroup mapSelectionGroup,
+          MapSelectionGroupVM mapSelectionGroup,
           Action<bool> onPlayerTypeChange)
         {
             _config = config;
@@ -82,18 +82,7 @@ namespace EnhancedBattleTest
         private void OnBattleTypeSelection(SelectorVM<SelectorItemVM> selector)
         {
             _config.BattleType = (BattleType)selector.SelectedIndex;
-            switch (selector.SelectedIndex)
-            {
-                case (int)BattleType.Field:
-                    _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Battle);
-                    break;
-                case (int)BattleType.Siege:
-                    _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Siege);
-                    break;
-                case (int)BattleType.Village:
-                    _mapSelectionGroup.SetSearchMode(MapSelectionGroup.SearchMode.Village);
-                    break;
-            }
+            _mapSelectionGroup.OnGameTypeChange((CustomBattleGameType) selector.SelectedIndex);
         }
 
         private void OnPlayerTypeSelectionChange(SelectorVM<SelectorItemVM> selector)

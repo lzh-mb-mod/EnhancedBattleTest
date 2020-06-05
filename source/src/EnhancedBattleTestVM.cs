@@ -58,7 +58,7 @@ namespace EnhancedBattleTest
             }
         }
 
-        public MapSelectionGroup MapSelectionGroup { get; }
+        public MapSelectionGroupVM MapSelectionGroup { get; }
         public BattleTypeSelectionGroup BattleTypeSelectionGroup { get; }
 
         [DataSourceProperty]
@@ -164,10 +164,7 @@ namespace EnhancedBattleTest
             EnemySide = new SideVM(_config.EnemyTeamConfig, false,
                 _config.BattleTypeConfig);
 
-            MapSelectionGroup = new MapSelectionGroup("",
-                _scenes.Select(sceneData =>
-                    new MapSelectionElement(sceneData.Name.ToString(), sceneData.IsSiegeMap,
-                        sceneData.IsVillageMap)).ToList());
+            MapSelectionGroup = new MapSelectionGroupVM(_scenes);
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
 
             RecoverConfig();
@@ -279,7 +276,7 @@ namespace EnhancedBattleTest
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
                 _config.MapConfig.WallHitPoint = int.Parse(MapSelectionGroup.WallHitpointSelection.SelectedItem.StringItem);
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
-                _config.MapConfig.Season = MapSelectionGroup.SeasonSelection.SelectedItem.StringItem.ToLower();
+                _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
@@ -297,13 +294,10 @@ namespace EnhancedBattleTest
 
         private SceneData GetMap()
         {
-            MapSelectionElement selectedMap;
-            MapSelectionElement mapWithName = MapSelectionGroup.GetMapWithName(MapSelectionGroup.SearchText);
-            if (mapWithName != null)
-                selectedMap = mapWithName;
-            else
+            var selectedMap = MapSelectionGroup.SelectedMap;
+            if (selectedMap == null)
             {
-                MapSelectionGroup.ExecuteSelectRandomMap();
+                MapSelectionGroup.RandomizeMap();
                 selectedMap = MapSelectionGroup.SelectedMap;
                 if (selectedMap == null)
                 {
