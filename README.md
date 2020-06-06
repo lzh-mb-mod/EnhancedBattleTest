@@ -45,7 +45,7 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
   - If you select "Random", then the behavior is the same as it is in Campaign mode: modifier will be randomly chosen and applied.
 
-  - If you select "Average", then the bonus of the applied modifier will be the mathematical expectation of bonus of all possible modifiers. In this way, all the soldiers with the same equipments will have the same armor. No random behavior any more. 
+  - If you select "Average", then the bonus of the applied modifier will be the mathematical expectation of bonus of all possible modifiers. In this way, all the soldiers with the same equipment will have the same armor. No random behavior any more. 
 
   - If you select "None", then no modifier will be applied to equipment of soldiers.
 

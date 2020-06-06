@@ -1,5 +1,9 @@
 # Changelog
 
+## [e2.0.9] - 2020-06-06
+### Fixed
+- Fix a bug that selecting siege battle but finally enters a village battle.
+
 ## [e2.0.8] - 2020-06-05
 ### Fixed
 - Fix possible crash when perk is added.

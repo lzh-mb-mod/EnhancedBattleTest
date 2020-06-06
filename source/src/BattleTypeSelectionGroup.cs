@@ -82,7 +82,7 @@ namespace EnhancedBattleTest
         private void OnBattleTypeSelection(SelectorVM<SelectorItemVM> selector)
         {
             _config.BattleType = (BattleType)selector.SelectedIndex;
-            _mapSelectionGroup.OnGameTypeChange((CustomBattleGameType) selector.SelectedIndex);
+            _mapSelectionGroup.OnGameTypeChange((BattleType)selector.SelectedIndex);
         }
 
         private void OnPlayerTypeSelectionChange(SelectorVM<SelectorItemVM> selector)

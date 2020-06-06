@@ -140,22 +140,22 @@ namespace EnhancedBattleTest
             SelectedSeasonId = selector.SelectedItem.SeasonId;
         }
 
-        public void OnGameTypeChange(CustomBattleGameType gameType)
+        public void OnGameTypeChange(BattleType gameType)
         {
             MapSearchResults.Clear();
             switch (gameType)
             {
-                case CustomBattleGameType.Battle:
+                case BattleType.Field:
                     IsCurrentMapSiege = false;
                     _availableMaps = _battleMaps;
                     break;
-                case CustomBattleGameType.Village:
-                    IsCurrentMapSiege = false;
-                    _availableMaps = _villageMaps;
-                    break;
-                case CustomBattleGameType.Siege:
+                case BattleType.Siege:
                     IsCurrentMapSiege = true;
                     _availableMaps = _siegeMaps;
+                    break;
+                case BattleType.Village:
+                    IsCurrentMapSiege = false;
+                    _availableMaps = _villageMaps;
                     break;
             }
             foreach (MapItemVM availableMap in _availableMaps)
