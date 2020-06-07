@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -173,7 +174,7 @@ namespace EnhancedBattleTest
                 spawnWithHorse = true;
             AgentBuildData agentBuildData = new AgentBuildData(agentOrigin.PartyAgentOrigin)
                 .Team(team).Banner(agentOrigin.Banner)
-                .ClothingColor1(team.Color).ClothingColor2(team.Color2).TroopOrigin(agentOrigin)
+                .ClothingColor1(team.Color).ClothingColor2(team.Color2)
                 .NoHorses(!spawnWithHorse).CivilianEquipment(Mission.Current.DoesMissionRequireCivilianEquipment);
             agentBuildData.IsFemale(agentOrigin.SPCharacter.IsFemale);
             if (!agentOrigin.SPCharacter.IsPlayer)
@@ -221,6 +222,7 @@ namespace EnhancedBattleTest
                         }
                     }
                 }
+
                 agentBuildData.Equipment(equipment);
             }
             Agent agent = Mission.Current.SpawnAgent(agentBuildData, false, formationTroopCount);

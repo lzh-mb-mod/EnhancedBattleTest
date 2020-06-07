@@ -1,5 +1,9 @@
 # Changelog
 
+## [e2.0.10] - 2020-06-07
+### Fixed
+- Fix the bug that changing banner does not work.
+
 ## [e2.0.9] - 2020-06-06
 ### Fixed
 - Fix a bug that selecting siege battle but finally enters a village battle.

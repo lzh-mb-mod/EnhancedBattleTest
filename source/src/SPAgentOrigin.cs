@@ -14,7 +14,7 @@ namespace EnhancedBattleTest
         public PartyAgentOrigin PartyAgentOrigin;
 
         public SPAgentOrigin(SPCombatant combatant, SPSpawnableCharacter character, IEnhancedBattleTestTroopSupplier troopSupplier, BattleSideEnum side, int rank = -1, UniqueTroopDescriptor uniqueNo = default)
-            : base(combatant.Combatant, troopSupplier, side, rank, uniqueNo)
+            : base(combatant, troopSupplier, side, rank, uniqueNo)
         {
             SPCharacter = character;
             PartyAgentOrigin = new PartyAgentOrigin(combatant.Combatant, character.Character, rank,
