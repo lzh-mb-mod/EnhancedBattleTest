@@ -2,7 +2,13 @@
 {
     public class TroopConfig
     {
-        public CharacterConfig Character;
+        private CharacterConfig _character = CharacterConfig.Create(EnhancedBattleTestSubModule.IsMultiplayer);
+
+        public CharacterConfig Character
+        {
+            get => _character;
+            set => _character = value ?? _character;
+        }
         public int Number;
 
         public TroopConfig()

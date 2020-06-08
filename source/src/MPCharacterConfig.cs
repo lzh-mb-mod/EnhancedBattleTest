@@ -19,8 +19,13 @@ namespace EnhancedBattleTest
             get => _characterId;
             set
             {
+                if (value == null)
+                    return;
+                var heroClass = Game.Current.ObjectManager.GetObject<MultiplayerClassDivisions.MPHeroClass>(value);
+                if (heroClass == null)
+                    return;
                 _characterId = value;
-                HeroClass = Game.Current.ObjectManager.GetObject<MultiplayerClassDivisions.MPHeroClass>(_characterId);
+                HeroClass = heroClass;
                 Character = new MPCharacter(HeroClass,
                     new MPGroup(HeroClass.ClassGroup, HeroClass.HeroCharacter.CurrentFormationClass).Info);
             }

@@ -16,10 +16,15 @@ namespace EnhancedBattleTest
             get => _characterId;
             set
             {
+                if (value == null)
+                    return;
+                var characterObject = Game.Current.ObjectManager.GetObject<CharacterObject>(value);
+                if (characterObject == null)
+                    return;
                 _characterId = value;
-                ActualCharacterObject = Game.Current.ObjectManager.GetObject<CharacterObject>(_characterId);
-                Character = new SPCharacter(ActualCharacterObject, new SPGroup(CharacterObject.CurrentFormationClass).Info);
-
+                ActualCharacterObject = characterObject;
+                Character = new SPCharacter(ActualCharacterObject,
+                    new SPGroup(CharacterObject.CurrentFormationClass).Info);
             }
         }
 
