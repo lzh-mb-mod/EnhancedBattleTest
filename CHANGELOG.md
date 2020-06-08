@@ -1,5 +1,11 @@
 # Changelog
 
+## [e2.0.11] - 2020-06-08
+### Fixed
+- Fix potential crash when config file is corrupted.
+
+- Fix the problem that HP of hero is not recovered after a battle.
+
 ## [e2.0.10] - 2020-06-07
 ### Fixed
 - Fix the bug that changing banner does not work.
