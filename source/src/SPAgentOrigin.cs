@@ -12,11 +12,19 @@ namespace EnhancedBattleTest
         public SPSpawnableCharacter SPCharacter { get; }
 
         public PartyAgentOrigin PartyAgentOrigin;
+        public IBattleCombatant CultureCombatant { get; }
+
+        public override Banner Banner => CultureCombatant.Banner;
+
+        public override uint FactionColor => CultureCombatant.PrimaryColorPair.Item1;
+
+        public override uint FactionColor2 => CultureCombatant.PrimaryColorPair.Item2;
 
         public SPAgentOrigin(SPCombatant combatant, SPSpawnableCharacter character, IEnhancedBattleTestTroopSupplier troopSupplier, BattleSideEnum side, int rank = -1, UniqueTroopDescriptor uniqueNo = default)
-            : base(combatant, troopSupplier, side, rank, uniqueNo)
+            : base(combatant.Combatant, troopSupplier, side, rank, uniqueNo)
         {
             SPCharacter = character;
+            CultureCombatant = combatant;
             PartyAgentOrigin = new PartyAgentOrigin(combatant.Combatant, character.Character, rank,
                 uniqueNo);
         }
