@@ -29,15 +29,18 @@ namespace EnhancedBattleTest
         private void ArrangePriorities()
         {
             _characters = new PriorityQueue<float, SPSpawnableCharacter>(new GenericComparer<float>());
-            int[] numArray = new int[8];
+            int[] originalNumbers = new int[8];
             for (int i = 0; i < 8; i++)
-                numArray[i] = _combatant.SPCharacters.Count(character => character.FormationIndex == (FormationClass)i);
-            int num = 1000;
+                originalNumbers[i] = _combatant.SPCharacters.Count(character => character.FormationIndex == (FormationClass)i);
+            int[] queuedNumbers = new int[8];
+            int num = 2048;
             foreach (var character in _combatant.SPCharacters)
             {
-                FormationClass currentFormationClass = character.FormationIndex;
-                _characters.Enqueue(character.IsHero ? num-- : (float)numArray[(int)currentFormationClass] / numArray.Sum(), character);
-                --numArray[(int)currentFormationClass];
+                int formationIndex = (int)character.FormationIndex;
+                _characters.Enqueue(
+                    character.IsHero ? num-- : -(float) queuedNumbers[formationIndex] / originalNumbers[formationIndex],
+                    character);
+                ++queuedNumbers[formationIndex];
             }
         }
 

@@ -26,6 +26,8 @@
     <string id="EnhancedBattleTest_modifier_type_average" text="平均" />
     <string id="EnhancedBattleTest_modifier_type_none" text="无" />
 
+    <string id="EnhancedBattleTest_battle_size" text="战场规模" />
+
     <string id="EnhancedBattleTest_swapteam" text="交换队伍" />
 
     <string id="EnhancedBattleTest_map" text="地图" />
