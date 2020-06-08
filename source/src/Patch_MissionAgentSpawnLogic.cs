@@ -223,10 +223,6 @@ namespace EnhancedBattleTest
                     }
                 }
 
-                for (EquipmentIndex index = EquipmentIndex.Weapon0; index < EquipmentIndex.NumEquipmentSetSlots; ++index)
-                {
-                    var equipmentElement = equipment[index];
-                }
                 agentBuildData.Equipment(equipment);
             }
             Agent agent = Mission.Current.SpawnAgent(agentBuildData, false, formationTroopCount);

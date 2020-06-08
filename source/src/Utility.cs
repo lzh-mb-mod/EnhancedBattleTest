@@ -247,12 +247,22 @@ namespace EnhancedBattleTest
             party.MemberRoster.Clear();
             party.MemberRoster.Add(new[]
             {
-                new FlattenedTroopRosterElement(teamConfig.General.CharacterObject as CharacterObject,
+                new FlattenedTroopRosterElement(GetCharacterObject(teamConfig.General.CharacterObject),
                     teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)
             });
             party.MemberRoster.Add(teamConfig.Troops.Troops.Select(troopConfig =>
-                new FlattenedTroopRosterElement(troopConfig.Character.CharacterObject as CharacterObject)));
+                new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject))));
             party.Side = side;
+        }
+
+        public static CharacterObject GetCharacterObject(BasicCharacterObject character)
+        {
+            var characterObject = character as CharacterObject;
+            if (characterObject == null)
+                return null;
+            if (characterObject.IsHero)
+                characterObject.HeroObject.HitPoints = characterObject.MaxHitPoints();
+            return characterObject;
         }
     }
 }

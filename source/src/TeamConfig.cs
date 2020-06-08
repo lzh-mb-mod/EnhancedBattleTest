@@ -1,16 +1,36 @@
 ﻿using System.Xml.Serialization;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace EnhancedBattleTest
 {
     public class TeamConfig
     {
-        public TroopGroupConfig Troops;
+        [XmlIgnore]
+        private string _bannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
+        [XmlIgnore]
+        private CharacterConfig _general = CharacterConfig.Create(EnhancedBattleTestSubModule.IsMultiplayer);
+        [XmlIgnore]
+        private TroopGroupConfig _troops = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
 
-        public CharacterConfig General;
+        public string BannerKey
+        {
+            get => _bannerKey;
+            set => _bannerKey = !value.IsStringNoneOrEmpty() ? value : _bannerKey;
+        }
+
+        public CharacterConfig General
+        {
+            get => _general;
+            set => _general = value ?? _general;
+        }
         public bool HasGeneral;
 
-        public string BannerKey = string.Empty;
+        public TroopGroupConfig Troops
+        {
+            get => _troops;
+            set => _troops = value ?? _troops;
+        }
 
         public int TacticLevel = 0;
 
@@ -26,6 +46,7 @@ namespace EnhancedBattleTest
 
         [XmlIgnore]
         public Banner Banner => new Banner(BannerKey);
+
 
         public TeamConfig()
         { }
