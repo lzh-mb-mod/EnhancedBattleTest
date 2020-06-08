@@ -12,15 +12,15 @@ namespace EnhancedBattleTest
         private readonly BattleSideEnum _side;
 
         public bool IsUnderPlayersCommand => _side == Mission.Current.PlayerTeam.Side;
-        public uint FactionColor => BattleCombatant.BasicCulture.Color;
-        public uint FactionColor2 => BattleCombatant.BasicCulture.Color2;
+        public virtual uint FactionColor => BattleCombatant.BasicCulture.Color;
+        public virtual uint FactionColor2 => BattleCombatant.BasicCulture.Color2;
         public VirtualPlayer Peer => null;
         public IBattleCombatant BattleCombatant { get; }
         public int UniqueSeed => _descriptor.UniqueSeed;
         public int Seed => Troop.GetDefaultFaceSeed(Rank);
 
         public int Rank { get; }
-        public Banner Banner => BattleCombatant.Banner;
+        public virtual Banner Banner => BattleCombatant.Banner;
         public abstract BasicCharacterObject Troop { get; }
 
         public abstract FormationClass FormationIndex { get; }

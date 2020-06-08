@@ -1,5 +1,9 @@
 # Changelog
 
+## [e2.0.12] - 2020-06-09
+### Fixed
+- Fix crash when perk is applied.
+
 ## [e2.0.11] - 2020-06-08
 ### Fixed
 - Fix potential crash when config file is corrupted.
