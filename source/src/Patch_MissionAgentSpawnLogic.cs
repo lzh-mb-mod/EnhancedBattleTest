@@ -111,7 +111,7 @@ namespace EnhancedBattleTest
             if (agentOrigin.MPCharacter.IsPlayer && !forceDismounted)
                 spawnWithHorse = true;
             AgentBuildData agentBuildData = new AgentBuildData(agentOrigin).Team(team).Banner(agentOrigin.Banner)
-                .ClothingColor1(team.Color).ClothingColor2(team.Color2).TroopOrigin(agentOrigin)
+                .ClothingColor1(team.Color).ClothingColor2(team.Color2)
                 .NoHorses(!spawnWithHorse).CivilianEquipment(Mission.Current.DoesMissionRequireCivilianEquipment);
             var equipment = Utility.GetNewEquipmentsForPerks(agentOrigin.MPCharacter.HeroClass,
                 agentOrigin.MPCharacter.IsHero,
@@ -172,7 +172,7 @@ namespace EnhancedBattleTest
                 .GetFormationSpawnFrame(team.Side, FormationClass.NumberOfRegularFormations, false).ToGroundMatrixFrame();
             if (agentOrigin.SPCharacter.IsPlayer && !forceDismounted)
                 spawnWithHorse = true;
-            AgentBuildData agentBuildData = new AgentBuildData(agentOrigin.PartyAgentOrigin)
+            AgentBuildData agentBuildData = new AgentBuildData(agentOrigin)
                 .Team(team).Banner(agentOrigin.Banner)
                 .ClothingColor1(team.Color).ClothingColor2(team.Color2)
                 .NoHorses(!spawnWithHorse).CivilianEquipment(Mission.Current.DoesMissionRequireCivilianEquipment);

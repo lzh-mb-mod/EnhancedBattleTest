@@ -23,6 +23,8 @@
     <string id="str_ebt_modifier_type.Average" text="{=EnhancedBattleTest_modifier_type_average}Average" />
     <string id="str_ebt_modifier_type.None" text="{=EnhancedBattleTest_modifier_type_none}None" />
 
+    <string id="str_ebt_battle_size" text="{=EnhancedBattleTest_battle_size}Battle Size" />
+
     <string id="str_ebt_swap_team" text="{=EnhancedBattleTest_swapteam}Swap Team" />
 
     <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />

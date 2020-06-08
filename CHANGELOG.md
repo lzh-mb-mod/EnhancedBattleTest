@@ -6,6 +6,14 @@
 
 - Fix the problem that HP of hero is not recovered after a battle.
 
+- Fix spawning behavior: Now all groups will be spawned in proportion according to their respective numbers of soldiers in groups.
+
+- Fix the problem of no reinforcement.
+
+### Added
+
+- Add battle size unlocker.
+
 ## [e2.0.10] - 2020-06-07
 ### Fixed
 - Fix the bug that changing banner does not work.

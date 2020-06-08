@@ -26,6 +26,8 @@
     <string id="EnhancedBattleTest_modifier_type_average" text="Average" />
     <string id="EnhancedBattleTest_modifier_type_none" text="None" />
 
+    <string id="EnhancedBattleTest_battle_size" text="Battle Size" />
+
     <string id="EnhancedBattleTest_swapteam" text="Swap Team" />
 
     <string id="EnhancedBattleTest_map" text="Map" />
