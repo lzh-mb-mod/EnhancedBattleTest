@@ -25,7 +25,7 @@ namespace EnhancedBattleTest
                     Cultures.Add(culture);
                 }
 
-                var formationClass = characterObject.CurrentFormationClass;
+                var formationClass = characterObject.DefaultFormationClass;
                 var group = groupsInCurrentCulture.Find(g => g.Info.FormationClass == formationClass) as SPGroup;
                 if (group == null)
                 {

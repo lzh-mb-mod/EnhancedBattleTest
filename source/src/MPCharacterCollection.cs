@@ -32,7 +32,7 @@ namespace EnhancedBattleTest
                     if (group == null)
                     {
                         var newGroup = new MPGroup(mpHeroClass.ClassGroup,
-                            mpHeroClass.HeroCharacter.CurrentFormationClass);
+                            mpHeroClass.HeroCharacter.DefaultFormationClass);
                         groupsInCurrentCulture.Add(newGroup);
                         groupsInCurrentCulture.Sort((lhs, rhs) => lhs.Info.FormationClass - rhs.Info.FormationClass);
                         group = newGroup;

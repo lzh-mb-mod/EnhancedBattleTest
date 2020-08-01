@@ -1,5 +1,9 @@
 # Changelog
 
+## [e2.0.13] - 2020-08-02
+### Fixed
+- Keep compatible with Bannerlord e1.4.3
+
 ## [e2.0.12] - 2020-06-09
 ### Fixed
 - Fix crash when perk is applied.

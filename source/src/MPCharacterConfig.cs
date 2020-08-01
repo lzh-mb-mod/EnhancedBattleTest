@@ -27,7 +27,7 @@ namespace EnhancedBattleTest
                 _characterId = value;
                 HeroClass = heroClass;
                 Character = new MPCharacter(HeroClass,
-                    new MPGroup(HeroClass.ClassGroup, HeroClass.HeroCharacter.CurrentFormationClass).Info);
+                    new MPGroup(HeroClass.ClassGroup, HeroClass.HeroCharacter.DefaultFormationClass).Info);
             }
         }
 

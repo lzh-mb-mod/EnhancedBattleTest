@@ -84,6 +84,12 @@ namespace EnhancedBattleTest
                 SPCombatant.CreateParty(EnhancedBattleTestPartyController.EnemyParty.Party, enemySide, enemyCulture,
                     config.EnemyTeamConfig, false)
             };
+            if (playerSide == BattleSideEnum.Attacker)
+                Utility.SetMapEvents(EnhancedBattleTestPartyController.PlayerParty.Party,
+                    EnhancedBattleTestPartyController.EnemyParty.Party, config.BattleTypeConfig.BattleType);
+            else
+                Utility.SetMapEvents(EnhancedBattleTestPartyController.EnemyParty.Party,
+                    EnhancedBattleTestPartyController.PlayerParty.Party, config.BattleTypeConfig.BattleType);
             return OpenMission(parties[0], parties[1], config, map);
         }
 

@@ -281,9 +281,9 @@ namespace EnhancedBattleTest
         {
             _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
-                _config.MapConfig.SceneLevel = int.Parse(MapSelectionGroup.SceneLevelSelection.SelectedItem.StringItem);
+                _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
-                _config.MapConfig.WallHitPoint = int.Parse(MapSelectionGroup.WallHitpointSelection.SelectedItem.StringItem);
+                _config.MapConfig.WallHitPoint = MapSelectionGroup.WallHitpointSelection.SelectedItem.BreachedWallCount;
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
                 _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
 

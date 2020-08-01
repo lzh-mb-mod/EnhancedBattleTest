@@ -71,26 +71,26 @@ namespace EnhancedBattleTest
         public override void RefreshValues()
         {
             base.RefreshValues();
-            PrepareMapLists();
-            TitleText = new TextObject("{=*}Map").ToString();
-            SeasonText = new TextObject("{=*}Season").ToString();
-            SceneLevelText = new TextObject("{=*}Scene Level").ToString();
-            WallHitpointsText = new TextObject("{=*}Wall Hitpoints").ToString();
-            AttackerSiegeMachinesText = new TextObject("{=*}Attacker Siege Machines").ToString();
-            DefenderSiegeMachinesText = new TextObject("{=*}Defender Siege Machines").ToString();
-            SalloutText = new TextObject("{=*}Sallyout").ToString();
-            WallHitpointSelection.ItemList.Clear();
-            SceneLevelSelection.ItemList.Clear();
-            SeasonSelection.ItemList.Clear();
-            foreach (int wallHitpoint in CustomBattleData.WallHitpoints)
-                WallHitpointSelection.AddItem(new WallHitpointItemVM(wallHitpoint));
+            this.PrepareMapLists();
+            this.TitleText = new TextObject("{=w9m11T1y}Map", (Dictionary<string, TextObject>)null).ToString();
+            this.SeasonText = new TextObject("{=xTzDM5XE}Season", (Dictionary<string, TextObject>)null).ToString();
+            this.SceneLevelText = new TextObject("{=0s52GQJt}Scene Level", (Dictionary<string, TextObject>)null).ToString();
+            this.WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints", (Dictionary<string, TextObject>)null).ToString();
+            this.AttackerSiegeMachinesText = new TextObject("{=*}Choose Attacker Siege Machines", (Dictionary<string, TextObject>)null).ToString();
+            this.DefenderSiegeMachinesText = new TextObject("{=*}Choose Defender Siege Machines", (Dictionary<string, TextObject>)null).ToString();
+            this.SalloutText = new TextObject("{=EcKMGoFv}Sallyout", (Dictionary<string, TextObject>)null).ToString();
+            this.WallHitpointSelection.ItemList.Clear();
+            this.SceneLevelSelection.ItemList.Clear();
+            this.SeasonSelection.ItemList.Clear();
+            foreach (Tuple<string, int> wallHitpoint in CustomBattleData.WallHitpoints)
+                this.WallHitpointSelection.AddItem(new WallHitpointItemVM(wallHitpoint.Item1, wallHitpoint.Item2));
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
-                SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
+                this.SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
             foreach (Tuple<string, string> season in CustomBattleData.Seasons)
-                SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
-            WallHitpointSelection.SelectedIndex = 0;
-            SceneLevelSelection.SelectedIndex = 0;
-            SeasonSelection.SelectedIndex = 0;
+                this.SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
+            this.WallHitpointSelection.SelectedIndex = 0;
+            this.SceneLevelSelection.SelectedIndex = 0;
+            this.SeasonSelection.SelectedIndex = 0;
         }
 
         public void ExecuteSallyOutChange()
@@ -127,7 +127,7 @@ namespace EnhancedBattleTest
 
         private void OnWallHitpointSelection(SelectorVM<WallHitpointItemVM> selector)
         {
-            SelectedWallHitpoint = selector.SelectedItem.Hitpoint;
+            SelectedWallHitpoint = selector.SelectedItem.BreachedWallCount;
         }
 
         private void OnSceneLevelSelection(SelectorVM<SceneLevelItemVM> selector)

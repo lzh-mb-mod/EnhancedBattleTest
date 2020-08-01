@@ -24,7 +24,7 @@ namespace EnhancedBattleTest
                 _characterId = value;
                 ActualCharacterObject = characterObject;
                 Character = new SPCharacter(ActualCharacterObject,
-                    new SPGroup(CharacterObject.CurrentFormationClass).Info);
+                    new SPGroup(CharacterObject.DefaultFormationClass).Info);
             }
         }
 

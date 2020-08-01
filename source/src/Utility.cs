@@ -241,6 +241,14 @@ namespace EnhancedBattleTest
                 .ToList().ConvertAll(hero => hero.CharacterObject);
         }
 
+        public static void SetMapEvents(PartyBase attacker, PartyBase defender, BattleType battleType)
+        {
+            if (battleType == BattleType.Siege)
+                Campaign.Current.MapEventManager.StartSiegeMapEvent(attacker, defender);
+            else
+                Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
+        }
+
         public static void FillPartyMembers(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
                 TeamConfig teamConfig, bool isPlayerTeam)
         {
@@ -252,7 +260,6 @@ namespace EnhancedBattleTest
             });
             party.MemberRoster.Add(teamConfig.Troops.Troops.Select(troopConfig =>
                 new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject))));
-            party.Side = side;
         }
 
         public static CharacterObject GetCharacterObject(BasicCharacterObject character)
