@@ -48,6 +48,13 @@ namespace EnhancedBattleTest
                 }, false));
         }
 
+        protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
+        {
+            base.OnGameStart(game, gameStarterObject);
+
+            gameStarterObject.AddModel(new EnhancedBattleTestMoraleModel());
+        }
+
         protected override void OnSubModuleUnloaded()
         {
             EnhancedBattleTestSubModule.Instance = (EnhancedBattleTestSubModule)null;
