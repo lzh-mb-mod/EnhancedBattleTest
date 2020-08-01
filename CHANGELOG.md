@@ -1,5 +1,12 @@
 # Changelog
 
+## [e2.0.14] - 2020-08-02
+### Fixed
+- Fix crash when start siege battle.
+
+### Changed
+- Change default party morale to 100.
+
 ## [e2.0.13] - 2020-08-02
 ### Fixed
 - Keep compatible with Bannerlord e1.4.3.

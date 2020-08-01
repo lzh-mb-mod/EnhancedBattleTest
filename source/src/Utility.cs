@@ -243,10 +243,7 @@ namespace EnhancedBattleTest
 
         public static void SetMapEvents(PartyBase attacker, PartyBase defender, BattleType battleType)
         {
-            if (battleType == BattleType.Siege)
-                Campaign.Current.MapEventManager.StartSiegeMapEvent(attacker, defender);
-            else
-                Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
+            Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
         }
 
         public static void FillPartyMembers(PartyBase party, BattleSideEnum side, BasicCultureObject culture,

@@ -205,7 +205,7 @@ namespace EnhancedBattleTest
         {
             MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
             MapSelectionGroup.SceneLevelSelection.SelectedIndex = _config.MapConfig.SceneLevel - 1;
-            switch (_config.MapConfig.WallHitPoint)
+            switch (_config.MapConfig.BreachedWallCount)
             {
                 case 0:
                     MapSelectionGroup.WallHitpointSelection.SelectedIndex = 0;
@@ -283,7 +283,7 @@ namespace EnhancedBattleTest
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
-                _config.MapConfig.WallHitPoint = MapSelectionGroup.WallHitpointSelection.SelectedItem.BreachedWallCount;
+                _config.MapConfig.BreachedWallCount = MapSelectionGroup.WallHitpointSelection.SelectedItem.BreachedWallCount;
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
                 _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
 

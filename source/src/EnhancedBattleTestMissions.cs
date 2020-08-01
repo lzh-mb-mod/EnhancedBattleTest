@@ -103,18 +103,24 @@ namespace EnhancedBattleTest
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
                 var defenderSiegeWeaponCount = GetSiegeWeaponCount(config.SiegeMachineConfig.DefenderMachines);
 
-                int wallHitPoint = config.MapConfig.WallHitPoint;
+                int breachedWallCount = config.MapConfig.BreachedWallCount;
                 var hitPointPercentages = new float[2];
-                if (wallHitPoint == 50)
+
+                switch (breachedWallCount)
                 {
-                    int i = MBRandom.RandomInt(2);
-                    hitPointPercentages[i] = 0;
-                    hitPointPercentages[1 - i] = 1;
-                }
-                else
-                {
-                    hitPointPercentages[0] = wallHitPoint / 100.0f;
-                    hitPointPercentages[1] = wallHitPoint / 100.0f;
+                    case 0:
+                        hitPointPercentages[0] = 1;
+                        hitPointPercentages[1] = 1;
+                        break;
+                    case 1:
+                        int i = MBRandom.RandomInt(2);
+                        hitPointPercentages[i] = 0;
+                        hitPointPercentages[1 - i] = 1;
+                        break;
+                    default:
+                        hitPointPercentages[0] = 0;
+                        hitPointPercentages[1] = 0;
+                        break;
                 }
 
                 return OpenEnhancedBattleTestSiege(map, config, playerParty, enemyParty, hitPointPercentages,
