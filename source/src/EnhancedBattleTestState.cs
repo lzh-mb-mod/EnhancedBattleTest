@@ -15,7 +15,7 @@ namespace EnhancedBattleTest
         private const TerrainType DefaultTerrain = TerrainType.Plain;
         private const ForestDensity DefaultForestDensity = ForestDensity.None;
 
-        public override bool IsMenuState => true;
+        public override bool IsMusicMenuState => true;
         public List<SceneData> Scenes { get; private set; } = new List<SceneData>();
 
         public EnhancedBattleTestState()

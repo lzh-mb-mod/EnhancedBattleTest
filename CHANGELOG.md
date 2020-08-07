@@ -1,8 +1,15 @@
 # Changelog
 
+## [e2.0.15] - 2020-08-07
+### Fixed
+- Fix the problem that menu bgm keeps playing in battle.
+
+### Added
+- Add Turkish translation.
+
 ## [e2.0.14] - 2020-08-02
 ### Fixed
-- Fix crash when start siege battle.
+- Fix crash when starting siege battle.
 
 ### Changed
 - Change default party morale to 100.
