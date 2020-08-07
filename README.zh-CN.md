@@ -88,3 +88,6 @@
   bilibili：modbed帅
 
   website：modbed.cn
+
+## 致谢
+* 感谢 Murat Mansur Çıkıntoğlu 为本mod提供土耳其语的翻译。

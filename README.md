@@ -83,3 +83,6 @@ The source code is available at [GitLab](https://gitlab.com/lzh_mb_mod/enhancedb
   bilibili: modbed帅
   
   website: modbed.cn
+
+## Acknowledgments
+* Thanks to Murat Mansur Çıkıntoğlu for Turkish translation of this mod.
