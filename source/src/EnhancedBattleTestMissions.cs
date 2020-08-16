@@ -178,7 +178,7 @@ namespace EnhancedBattleTest
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
             troopSuppliers[(int)playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
             troopSuppliers[(int)enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
-            bool isPlayerGeneral = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
+            bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander || !hasPlayer;
             bool isPlayerSergeant = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
 
             List<CharacterObject> charactersInPlayerSideByPriority = null;
@@ -308,7 +308,7 @@ namespace EnhancedBattleTest
             bool isMultiplayer = EnhancedBattleTestSubModule.IsMultiplayer;
             troopSuppliers[(int)playerSide] = CreateTroopSupplier(playerParty, isMultiplayer);
             troopSuppliers[(int)enemySide] = CreateTroopSupplier(enemyParty, isMultiplayer);
-            bool isPlayerGeneral = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
+            bool isPlayerGeneral = config.BattleTypeConfig.PlayerType == PlayerType.Commander || !hasPlayer;
             bool isPlayerSergeant = hasPlayer && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
 
             List<CharacterObject> charactersInPlayerSideByPriority = null;
