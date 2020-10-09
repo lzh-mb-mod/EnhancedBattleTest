@@ -8,32 +8,29 @@ using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.UI
 {
-    public class CharacterSelectionLayer : GlobalLayer
+    public class CharacterSelectionView
     {
         private bool _isInitialized;
         private bool _isActive;
         private CharacterCollection _characterCollection;
         private CharacterSelectionVM _dataSource;
         private GauntletMovie _movie;
+        private ScreenBase _screen;
         private GauntletLayer _gauntletLayer;
         private bool _isLastActiveGameStateActive;
         private bool _isLastActiveGameStatePaused;
 
-        public void Initialize(CharacterCollection characterCollection, bool isMultiplayer)
+        public void Initialize(ScreenBase screen, CharacterCollection characterCollection, bool isMultiplayer)
         {
             if (!_isInitialized)
             {
                 _isInitialized = true;
+                _screen = screen;
                 _characterCollection = characterCollection;
                 _dataSource = new CharacterSelectionVM(_characterCollection, BeginSelection, EndSelection, isMultiplayer);
-                _gauntletLayer = new GauntletLayer(50, "GauntletLayer");
-                _movie = _gauntletLayer.LoadMovie(nameof(CharacterSelectionLayer), _dataSource);
-                Layer = _gauntletLayer;
-                ScreenManager.AddGlobalLayer((GlobalLayer)this, true);
             }
 
             _isActive = false;
-            ScreenManager.SetSuspendLayer(this.Layer, true);
         }
 
         public void OnFinalize()
@@ -41,14 +38,13 @@ namespace EnhancedBattleTest.UI
             if (!_isInitialized)
                 return;
             _isInitialized = false;
+            _screen = null;
             _isActive = false;
             _characterCollection = null;
-            ScreenManager.RemoveGlobalLayer(this);
             _dataSource.OnFinalize();
             _dataSource = null;
             _gauntletLayer = null;
             _movie = null;
-            Layer = null;
         }
 
         public void BeginSelection(CharacterSelectionData data)
@@ -56,10 +52,7 @@ namespace EnhancedBattleTest.UI
             if (_isActive)
                 return;
             _isActive = true;
-            ScreenManager.SetSuspendLayer(Layer, false);
-            Layer.IsFocusLayer = true;
-            ScreenManager.TrySetFocus(Layer);
-            Layer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+            CreateLayer();
             _isLastActiveGameStatePaused = data.PauseGameActiveState;
             if (!_isLastActiveGameStatePaused)
                 return;
@@ -73,14 +66,29 @@ namespace EnhancedBattleTest.UI
             if (!_isActive)
                 return;
             _isActive = false;
-            Layer.InputRestrictions.ResetInputRestrictions();
-            ScreenManager.SetSuspendLayer(Layer, true);
-            Layer.IsFocusLayer = false;
-            ScreenManager.TryLoseFocus(Layer);
+            RemoveLayer();
             if (!_isLastActiveGameStatePaused)
                 return;
             GameStateManager.Current.ActiveStateDisabledByUser = _isLastActiveGameStateActive;
             MBCommon.UnPauseGameEngine();
+        }
+
+        private void CreateLayer()
+        {
+            _gauntletLayer = new GauntletLayer(50, "GauntletLayer");
+            _movie = _gauntletLayer.LoadMovie(nameof(CharacterSelectionView), _dataSource);
+            _screen.AddLayer(_gauntletLayer);
+            _gauntletLayer.IsFocusLayer = true;
+            ScreenManager.TrySetFocus(_gauntletLayer);
+            _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);
+        }
+
+        private void RemoveLayer()
+        {
+            _gauntletLayer.InputRestrictions.ResetInputRestrictions();
+            _gauntletLayer.IsFocusLayer = false;
+            ScreenManager.TryLoseFocus(_gauntletLayer);
+            _screen.RemoveLayer(_gauntletLayer);
         }
     }
 }

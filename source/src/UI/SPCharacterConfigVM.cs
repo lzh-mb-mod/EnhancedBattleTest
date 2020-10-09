@@ -3,6 +3,7 @@ using EnhancedBattleTest.Data;
 using EnhancedBattleTest.SinglePlayer.Config;
 using EnhancedBattleTest.SinglePlayer.Data;
 using EnhancedBattleTest.UI.Basic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
@@ -24,10 +25,22 @@ namespace EnhancedBattleTest.UI
 
         public NumberVM<float> FemaleRatio { get; }
 
+        public TextVM OpenEncyclopediaText { get; }
+
+        public void OpenEncyclopedia()
+        {
+            var link = _config.ActualCharacterObject?.EncyclopediaLink;
+            if (link != null)
+                Campaign.Current.EncyclopediaManager.GoToLink(_config.ActualCharacterObject.EncyclopediaLink);
+            else
+                Campaign.Current.EncyclopediaManager.GoToLink("LastPage", null);
+        }
+
         public SPCharacterConfigVM()
         {
             MaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
             FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
+            OpenEncyclopediaText = new TextVM(GameTexts.FindText("str_ebt_open_encyclopedia"));
             FemaleRatio = new NumberVM<float>(_config.FemaleRatio, 0, 1, false);
             FemaleRatio.OnValueChanged += femaleRatio =>
             {

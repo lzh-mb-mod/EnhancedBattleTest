@@ -17,7 +17,6 @@ namespace EnhancedBattleTest.Config
     public enum EquipmentModifierType
     {
         Random,
-        Average,
         None,
     }
     public class BattleTypeConfig

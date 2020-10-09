@@ -1,5 +1,9 @@
 # Changelog
 
+## [e2.0.16] - 2020-10-10
+### Fixed
+- Keep compatible with Bannerlord e1.5.2 and e1.5.3.
+
 ## [e2.0.15] - 2020-08-07
 ### Fixed
 - Fix the problem that menu bgm keeps playing in battle.

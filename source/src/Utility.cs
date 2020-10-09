@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using EnhancedBattleTest.Config;
@@ -6,6 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.ObjectSystem;
 using Campaign = EnhancedBattleTest.GameMode.Campaign;
 
 namespace EnhancedBattleTest
@@ -238,14 +240,36 @@ namespace EnhancedBattleTest
                 characters = characters.Prepend(teamConfig.General);
             return characters.Select(character => character.CharacterObject as CharacterObject)
                 .Where(character => character != null && character.IsHero).Select(character => character.HeroObject)
-                .OrderByDescending(hero =>
-                    TaleWorlds.CampaignSystem.Campaign.Current.Models.DiplomacyModel.GetCharacterSergeantScore(hero))
                 .ToList().ConvertAll(hero => hero.CharacterObject);
         }
 
         public static void SetMapEvents(PartyBase attacker, PartyBase defender, BattleType battleType)
         {
-            Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
+            try
+            {
+                var mapEvent = attacker.MapEvent;
+                if (mapEvent != null)
+                {
+                    mapEvent.FinalizeEvent();
+                    MBObjectManager.Instance.UnregisterObject(mapEvent);
+                    var mapEvents = (List<MapEvent>)
+                        typeof(MapEventManager)
+                            .GetField("mapEvents", BindingFlags.Instance | BindingFlags.NonPublic)
+                            ?.GetValue(Campaign.Current.MapEventManager);
+                    if (mapEvents != null)
+                    {
+                        var index = mapEvents.FindIndex(m => m == mapEvent);
+                        if (index >= 0 && index < mapEvents.Count)
+                            mapEvents.RemoveAt(index);
+                    }
+                }
+
+                Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
+            }
+            catch (Exception e)
+            {
+                DisplayMessage(e.ToString());
+            }
         }
 
         public static void FillPartyMembers(PartyBase party, BattleSideEnum side, BasicCultureObject culture,

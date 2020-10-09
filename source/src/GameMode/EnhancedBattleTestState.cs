@@ -6,6 +6,7 @@ using EnhancedBattleTest.Data;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.CustomBattle;
 
 namespace EnhancedBattleTest.GameMode

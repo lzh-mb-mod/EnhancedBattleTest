@@ -54,6 +54,8 @@
     <string id="EnhancedBattleTest_maleside" text="男" />
     <string id="EnhancedBattleTest_femaleside" text="女" />
 
+    <string id="EnhancedBattleTest_open_encyclopedia" text="打开百科" />
+
     <string id="EnhancedBattleTest_no_map" text="无可用地图。" />
     <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
 

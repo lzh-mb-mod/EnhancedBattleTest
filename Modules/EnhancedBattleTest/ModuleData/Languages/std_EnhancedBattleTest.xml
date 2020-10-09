@@ -54,6 +54,8 @@
     <string id="EnhancedBattleTest_maleside" text="Male" />
     <string id="EnhancedBattleTest_femaleside" text="Female" />
 
+    <string id="EnhancedBattleTest_open_encyclopedia" text="Open Encyclopedia" />
+
     <string id="EnhancedBattleTest_no_map" text="No map available." />
     <string id="EnhancedBattleTest_current_map" text="Current map is {MapName}." />
 

@@ -1,4 +1,5 @@
-﻿using EnhancedBattleTest.GameMode;
+﻿using EnhancedBattleTest.Data;
+using EnhancedBattleTest.GameMode;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Engine.GauntletUI;
@@ -20,6 +21,8 @@ namespace EnhancedBattleTest.UI
         private GauntletLayer _gauntletLayer;
         private GauntletMovie _gauntletMovie;
         private bool _isMovieLoaded;
+
+        public CharacterSelectionView CharacterSelectionView;
 
         public EnhancedBattleTestScreen(EnhancedBattleTestState state)
         {
@@ -56,6 +59,11 @@ namespace EnhancedBattleTest.UI
             ScreenManager.TrySetFocus(_gauntletLayer);
             _dataSource.SetActiveState(true);
             AddLayer(_gauntletLayer);
+
+            var collection = CharacterCollection.Create(EnhancedBattleTestSubModule.IsMultiplayer);
+            collection.Initialize();
+            CharacterSelectionView = new CharacterSelectionView();
+            CharacterSelectionView.Initialize(this, collection, EnhancedBattleTestSubModule.IsMultiplayer);
         }
 
         protected override void OnFinalize()
@@ -64,6 +72,8 @@ namespace EnhancedBattleTest.UI
             RemoveLayer(this._gauntletLayer);
             _dataSource = null;
             _gauntletLayer = null;
+
+            CharacterSelectionView.OnFinalize();
             base.OnFinalize();
         }
 

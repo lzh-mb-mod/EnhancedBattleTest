@@ -262,7 +262,7 @@ namespace EnhancedBattleTest.UI
             ApplyConfig();
             _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
             _config = null;
-            TaleWorlds.Core.Game.Current.GameStateManager.PopState();
+            MBGameManager.EndGame();
         }
 
         public void ExecuteStart()

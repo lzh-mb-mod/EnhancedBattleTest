@@ -39,7 +39,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             {
                 int formationIndex = (int)character.FormationIndex;
                 _characters.Enqueue(
-                    character.IsHero ? num-- : -(float) queuedNumbers[formationIndex] / originalNumbers[formationIndex],
+                    character.IsHero || character.IsPlayer ? num-- : -(float) queuedNumbers[formationIndex] / originalNumbers[formationIndex],
                     character);
                 ++queuedNumbers[formationIndex];
             }

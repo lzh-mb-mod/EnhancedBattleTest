@@ -72,7 +72,7 @@ namespace EnhancedBattleTest.GameMode
             base.OnLoadFinished();
 
 
-            TaleWorlds.Core.Game.Current.GameStateManager.CleanAndPushState(TaleWorlds.Core.Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
+            Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
         }
         private void InitializeGameTexts(GameTextManager gameTextManager)
         {

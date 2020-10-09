@@ -51,6 +51,8 @@
     <string id="str_ebt_male_ratio" text="{=EnhancedBattleTest_maleside}Male" />
     <string id="str_ebt_female_ratio" text="{=EnhancedBattleTest_femaleside}Female" />
 
+    <string id="str_ebt_open_encyclopedia" text="{=EnhancedBattleTest_open_encyclopedia}Open Encyclopedia" />
+
     <string id="str_ebt_no_map" text="{=EnhancedBattleTest_no_map}No map available." />
     <string id="str_ebt_current_map" text="{=EnhancedBattleTest_current_map}Current map is {MapName}." />
 

@@ -28,8 +28,6 @@ namespace EnhancedBattleTest
 
         public static bool IsMultiplayer;
 
-        public CharacterSelectionLayer CharacterSelectionLayer;
-
         public event Action<CharacterSelectionData> OnSelectCharacter;
 
         protected override void OnSubModuleLoad()
@@ -71,10 +69,6 @@ namespace EnhancedBattleTest
 
             if (game.GameType is MultiplayerGame || game.GameType is Campaign)
             {
-                var collection = CharacterCollection.Create(IsMultiplayer);
-                collection.Initialize();
-                CharacterSelectionLayer = new CharacterSelectionLayer();
-                CharacterSelectionLayer.Initialize(collection, IsMultiplayer);
                 ApplyHarmonyPatch();
             }
         }
@@ -85,7 +79,6 @@ namespace EnhancedBattleTest
 
             if (game.GameType is MultiplayerGame || game.GameType is Campaign)
             {
-                CharacterSelectionLayer.OnFinalize();
                 Unpatch();
             }
         }

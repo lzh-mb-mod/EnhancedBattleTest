@@ -11,7 +11,7 @@
     <Exec Command="Copy &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;Copy &quot;$(TargetDir)0Harmony.dll&quot; &quot;$(SolutionDir)..\Modules\EnhancedBattleTest\bin\Win64_Shipping_Client\&quot;&#xD;&#xA;xcopy &quot;$(SolutionDir)..\Modules&quot; &quot;$(BinPath)\Modules&quot; /E /C /I /Y" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.0.1" />
+    <PackageReference Include="Lib.Harmony" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SandBox">

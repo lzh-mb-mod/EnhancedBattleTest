@@ -20,7 +20,7 @@ namespace EnhancedBattleTest.Data.MissionData
     public static class EnhancedBattleTestMissions
     {
 
-        private static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "")
+        private static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", float timeOfDay = 6f)
         {
             string[] strArray = new string[12]
             {
@@ -47,7 +47,7 @@ namespace EnhancedBattleTest.Data.MissionData
             return new AtmosphereInfo
             {
                 AtmosphereName = str,
-                TimeInfo = new TimeInformation { Season = num }
+                TimeInfo = new TimeInformation { Season = num, TimeOfDay = timeOfDay}
             };
         }
         public static Mission OpenMission(BattleConfig config, string mapName)
@@ -221,7 +221,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 }
             }
 
-            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
+            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
 
             var attackerSiegeWeapons =
                 GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers);
@@ -298,7 +298,7 @@ namespace EnhancedBattleTest.Data.MissionData
             BattleConfig config,
             IEnhancedBattleTestCombatant playerParty,
             IEnhancedBattleTestCombatant enemyParty,
-            float timeOfDay = 6f)
+            float timeOfDay = 12f)
         {
             var playerSide = config.BattleTypeConfig.PlayerSide;
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
@@ -353,7 +353,7 @@ namespace EnhancedBattleTest.Data.MissionData
             }
 
 
-            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season);
+            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
             return MissionState.OpenNew("EnhancedBattleTestFieldBattle", new MissionInitializerRecord(scene)
             {
                 DoNotUseLoadingScreen = false,
