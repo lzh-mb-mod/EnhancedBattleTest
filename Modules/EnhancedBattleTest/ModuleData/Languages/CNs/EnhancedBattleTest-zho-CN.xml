@@ -8,6 +8,10 @@
     <string id="EnhancedBattleTest_multiplayerbattleoption" text="多人战斗测试" />
     <string id="EnhancedBattleTest_singleplayerbattleoption" text="单人战斗测试" />
 
+    <string id="EnhancedBattleTest_all" text="所有" />
+
+    <string id="EnhancedBattleTest_null_culture" text="无" />
+
     <string id="EnhancedBattleTest_battletype" text="战斗类型" />
     <string id="EnhancedBattleTest_fieldbattle" text="野战" />
     <string id="EnhancedBattleTest_siegebattle" text="攻城" />
@@ -23,7 +27,7 @@
 
     <string id="EnhancedBattleTest_equipment_modifier_type" text="士兵装备前缀" />
     <string id="EnhancedBattleTest_modifier_type_random" text="随机" />
-    <string id="EnhancedBattleTest_modifier_type_average" text="平均" />
+    <!-- <string id="EnhancedBattleTest_modifier_type_average" text="平均" /> -->
     <string id="EnhancedBattleTest_modifier_type_none" text="无" />
 
     <string id="EnhancedBattleTest_battle_size" text="战场规模" />

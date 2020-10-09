@@ -8,6 +8,10 @@
     <string id="EnhancedBattleTest_multiplayerbattleoption" text="Multiplayer Battle Test" />
     <string id="EnhancedBattleTest_singleplayerbattleoption" text="Singleplayer Battle Test" />
 
+    <string id="EnhancedBattleTest_all" text="All" />
+
+    <string id="EnhancedBattleTest_null_culture" text="No culture" />
+
     <string id="EnhancedBattleTest_battletype" text="Battle Type" />
     <string id="EnhancedBattleTest_fieldbattle" text="Field Battle" />
     <string id="EnhancedBattleTest_siegebattle" text="Siege Battle" />
@@ -23,7 +27,7 @@
 
     <string id="EnhancedBattleTest_equipment_modifier_type" text="Soldier Equipment Modifier type" />
     <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
-    <string id="EnhancedBattleTest_modifier_type_average" text="Average" />
+    <!-- <string id="EnhancedBattleTest_modifier_type_average" text="Average" /> -->
     <string id="EnhancedBattleTest_modifier_type_none" text="None" />
 
     <string id="EnhancedBattleTest_battle_size" text="Battle Size" />

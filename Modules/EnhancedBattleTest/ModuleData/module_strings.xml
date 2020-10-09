@@ -5,6 +5,10 @@
     <string id="str_ebt_multiplayer_battle_option" text="{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test" />
     <string id="str_ebt_singleplayer_battle_option" text="{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test" />
 
+    <string id="str_ebt_all" text="{=EnhancedBattleTest_all}All" />
+
+    <string id="str_ebt_null_culture" text="{=EnhancedBattleTest_null_culture}No culture" />
+
     <string id="str_ebt_battle_type" text="{=EnhancedBattleTest_battletype}Battle Type" />
     <string id="str_ebt_battle_type.Field" text="{=EnhancedBattleTest_fieldbattle}Field Battle" />
     <string id="str_ebt_battle_type.Siege" text="{=EnhancedBattleTest_siegebattle}Siege Battle" />

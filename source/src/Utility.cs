@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using EnhancedBattleTest.Config;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using Campaign = EnhancedBattleTest.GameMode.Campaign;
 
 namespace EnhancedBattleTest
 {
@@ -164,69 +166,69 @@ namespace EnhancedBattleTest
         {
         }
 
-        public static ItemModifier AverageItemModifier(ItemModifierGroup group)
-        {
-            if (group == null)
-                return null;
-            var result = new ItemModifier { ID = string.Empty };
-            float sum = 1;
-            foreach (var probability in group.ItemModifiersWithProbability.Values)
-            {
-                sum += probability.Probability;
-            }
+        //public static ItemModifier AverageItemModifier(ItemModifierGroup group)
+        //{
+        //    if (group == null)
+        //        return null;
+        //    var result = new ItemModifier { StringId = string.Empty };
+        //    float sum = 1;
+        //    foreach (var probability in group.ItemModifiersWithProbability.Values)
+        //    {
+        //        sum += probability.Probability;
+        //    }
 
-            float damage = 0;
-            float speed = 0;
-            float missileSpeed = 0;
-            float armor = 0;
-            float rankIndex = 0;
-            float priceMultiplier = 0;
-            float weightMultiplier = 0;
-            float oldness = 0;
-            float factorOne = 0;
-            float factorTwo = 0;
-            float hitPoints = 0;
-            float horseSpeed = 0;
-            float maneuver = 0;
-            float chargeDamage = 0;
+        //    float damage = 0;
+        //    float speed = 0;
+        //    float missileSpeed = 0;
+        //    float armor = 0;
+        //    float rankIndex = 0;
+        //    float priceMultiplier = 0;
+        //    float weightMultiplier = 0;
+        //    float oldness = 0;
+        //    float factorOne = 0;
+        //    float factorTwo = 0;
+        //    float hitPoints = 0;
+        //    float horseSpeed = 0;
+        //    float maneuver = 0;
+        //    float chargeDamage = 0;
 
-            var bindingFlag = BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (var modifier in group.ItemModifiersWithProbability.Values)
-            {
-                if (modifier.ItemModifier == null)
-                    continue;
-                damage += modifier.ItemModifier.Damage * modifier.Probability / sum;
-                speed += modifier.ItemModifier.Speed * modifier.Probability / sum;
-                missileSpeed += modifier.ItemModifier.MissileSpeed * modifier.Probability / sum;
-                armor += modifier.ItemModifier.Armor * modifier.Probability / sum;
-                rankIndex += modifier.ItemModifier.RankIndex * modifier.Probability / sum;
-                priceMultiplier += modifier.ItemModifier.PriceMultiplier * modifier.Probability / sum;
-                weightMultiplier += modifier.ItemModifier.WeightMultiplier * modifier.Probability / sum;
-                oldness += modifier.ItemModifier.Oldness * modifier.Probability / sum;
-                factorOne += modifier.ItemModifier.FactorOne * modifier.Probability / sum;
-                factorTwo += modifier.ItemModifier.FactorTwo * modifier.Probability / sum;
-                hitPoints += modifier.ItemModifier.HitPoints * modifier.Probability / sum;
-                horseSpeed += modifier.ItemModifier.HorseSpeed * modifier.Probability / sum;
-                maneuver += modifier.ItemModifier.Maneuver * modifier.Probability / sum;
-                chargeDamage += modifier.ItemModifier.ChargeDamage * modifier.Probability / sum;
-            }
+        //    var bindingFlag = BindingFlags.NonPublic | BindingFlags.Instance;
+        //    foreach (var modifier in group.ItemModifiersWithProbability.Values)
+        //    {
+        //        if (modifier.ItemModifier == null)
+        //            continue;
+        //        damage += modifier.ItemModifier.Damage * modifier.Probability / sum;
+        //        speed += modifier.ItemModifier.Speed * modifier.Probability / sum;
+        //        missileSpeed += modifier.ItemModifier.MissileSpeed * modifier.Probability / sum;
+        //        armor += modifier.ItemModifier.Armor * modifier.Probability / sum;
+        //        rankIndex += modifier.ItemModifier.RankIndex * modifier.Probability / sum;
+        //        priceMultiplier += modifier.ItemModifier.PriceMultiplier * modifier.Probability / sum;
+        //        weightMultiplier += modifier.ItemModifier.WeightMultiplier * modifier.Probability / sum;
+        //        oldness += modifier.ItemModifier.Oldness * modifier.Probability / sum;
+        //        factorOne += modifier.ItemModifier.FactorOne * modifier.Probability / sum;
+        //        factorTwo += modifier.ItemModifier.FactorTwo * modifier.Probability / sum;
+        //        hitPoints += modifier.ItemModifier.HitPoints * modifier.Probability / sum;
+        //        horseSpeed += modifier.ItemModifier.HorseSpeed * modifier.Probability / sum;
+        //        maneuver += modifier.ItemModifier.Maneuver * modifier.Probability / sum;
+        //        chargeDamage += modifier.ItemModifier.ChargeDamage * modifier.Probability / sum;
+        //    }
 
-            typeof(ItemModifier).GetField("Damage", bindingFlag)?.SetValue(result, (int)damage);
-            typeof(ItemModifier).GetField("Speed", bindingFlag)?.SetValue(result, (int)speed);
-            typeof(ItemModifier).GetField("MissileSpeed", bindingFlag)?.SetValue(result, (int)missileSpeed);
-            typeof(ItemModifier).GetField("Armor", bindingFlag)?.SetValue(result, (int)armor);
-            typeof(ItemModifier).GetField("RankIndex", bindingFlag)?.SetValue(result, (int)rankIndex);
-            typeof(ItemModifier).GetField("PriceMultiplier", bindingFlag)?.SetValue(result, priceMultiplier);
-            typeof(ItemModifier).GetField("WeightMultiplier", bindingFlag)?.SetValue(result, weightMultiplier);
-            typeof(ItemModifier).GetField("Oldness", bindingFlag)?.SetValue(result, oldness);
-            typeof(ItemModifier).GetField("FactorOne", bindingFlag)?.SetValue(result, (uint)factorOne);
-            typeof(ItemModifier).GetField("FactorTwo", bindingFlag)?.SetValue(result, (uint)factorTwo);
-            typeof(ItemModifier).GetField("HitPoints", bindingFlag)?.SetValue(result, (int)hitPoints);
-            typeof(ItemModifier).GetField("HorseSpeed", bindingFlag)?.SetValue(result, (int)horseSpeed);
-            typeof(ItemModifier).GetField("Maneuver", bindingFlag)?.SetValue(result, (int)maneuver);
-            typeof(ItemModifier).GetField("ChargeDamage", bindingFlag)?.SetValue(result, (int)chargeDamage);
-            return result;
-        }
+        //    typeof(ItemModifier).GetField("Damage", bindingFlag)?.SetValue(result, (int)damage);
+        //    typeof(ItemModifier).GetField("Speed", bindingFlag)?.SetValue(result, (int)speed);
+        //    typeof(ItemModifier).GetField("MissileSpeed", bindingFlag)?.SetValue(result, (int)missileSpeed);
+        //    typeof(ItemModifier).GetField("Armor", bindingFlag)?.SetValue(result, (int)armor);
+        //    typeof(ItemModifier).GetField("RankIndex", bindingFlag)?.SetValue(result, (int)rankIndex);
+        //    typeof(ItemModifier).GetField("PriceMultiplier", bindingFlag)?.SetValue(result, priceMultiplier);
+        //    typeof(ItemModifier).GetField("WeightMultiplier", bindingFlag)?.SetValue(result, weightMultiplier);
+        //    typeof(ItemModifier).GetField("Oldness", bindingFlag)?.SetValue(result, oldness);
+        //    typeof(ItemModifier).GetField("FactorOne", bindingFlag)?.SetValue(result, (uint)factorOne);
+        //    typeof(ItemModifier).GetField("FactorTwo", bindingFlag)?.SetValue(result, (uint)factorTwo);
+        //    typeof(ItemModifier).GetField("HitPoints", bindingFlag)?.SetValue(result, (int)hitPoints);
+        //    typeof(ItemModifier).GetField("HorseSpeed", bindingFlag)?.SetValue(result, (int)horseSpeed);
+        //    typeof(ItemModifier).GetField("Maneuver", bindingFlag)?.SetValue(result, (int)maneuver);
+        //    typeof(ItemModifier).GetField("ChargeDamage", bindingFlag)?.SetValue(result, (int)chargeDamage);
+        //    return result;
+        //}
 
         public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
         {
