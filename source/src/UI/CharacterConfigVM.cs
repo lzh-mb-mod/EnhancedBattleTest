@@ -11,7 +11,14 @@ namespace EnhancedBattleTest.UI
 
         public static CharacterConfigVM Create(bool isMultiplayer)
         {
-            return isMultiplayer ? (CharacterConfigVM)new MPCharacterConfigVM() : new SPCharacterConfigVM();
+            if (isMultiplayer)
+            {
+                return new MPCharacterConfigVM();
+            }
+            else
+            {
+                return new SPCharacterConfigVM();
+            }
         }
     }
 }

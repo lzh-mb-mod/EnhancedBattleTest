@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using EnhancedBattleTest.Multiplayer.Data;
 using EnhancedBattleTest.SinglePlayer.Data;
-using TaleWorlds.Core;
 
 namespace EnhancedBattleTest.Data
 {
@@ -17,7 +16,14 @@ namespace EnhancedBattleTest.Data
 
         public static CharacterCollection Create(bool isMultiplayer)
         {
-            return isMultiplayer ? (CharacterCollection)new MPCharacterCollection() : new SPCharacterCollection();
+            if (isMultiplayer)
+            {
+                return new MPCharacterCollection();
+            }
+            else
+            {
+                return new SPCharacterCollection();
+            }
         }
     }
 }

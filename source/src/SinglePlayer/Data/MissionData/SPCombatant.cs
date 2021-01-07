@@ -57,21 +57,22 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             if (teamConfig.HasGeneral)
             {
                 if (teamConfig.General is SPCharacterConfig general)
+                {
                     combatant.AddCharacter(
                         new SPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
                             general.FemaleRatio > 0.5, isPlayerTeam), 1);
+                }
             }
             for (int i = 0; i < teamConfig.Troops.Troops.Length; ++i)
             {
                 var troopConfig = teamConfig.Troops.Troops[i];
-                var spCharacter = troopConfig.Character as SPCharacterConfig;
-                if (spCharacter == null)
-                    continue;
-                var femaleCount = (int)(troopConfig.Number * spCharacter.FemaleRatio + 0.49);
-                var maleCount = troopConfig.Number - femaleCount;
-                combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, true),
-                    femaleCount);
-                combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, false), maleCount);
+                if (troopConfig.Character is SPCharacterConfig spCharacter)
+                {
+                    var femaleCount = (int)(troopConfig.Number * spCharacter.FemaleRatio + 0.49);
+                    var maleCount = troopConfig.Number - femaleCount;
+                    combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, true), femaleCount);
+                    combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, false), maleCount);
+                }
             }
 
             return combatant;

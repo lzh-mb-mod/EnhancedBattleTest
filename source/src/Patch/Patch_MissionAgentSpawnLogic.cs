@@ -28,11 +28,10 @@ namespace EnhancedBattleTest.Patch
             }
             int formationTroopIndex = 0;
             List<IAgentOriginBase> list = ____troopSupplier.SupplyTroops(number).ToList();
-            List<EnhancedBattleTestAgentOrigin> originToSpawn = new List<EnhancedBattleTestAgentOrigin>();
             Mission.Current.ResetTotalWidth();
             for (int index = 0; index < 8; ++index)
             {
-                originToSpawn.Clear();
+                var originToSpawn = new List<EnhancedBattleTestAgentOrigin>();
                 EnhancedBattleTestAgentOrigin player = null;
                 bool isMounted = false;
                 FormationClass formationIndex = (FormationClass)index;
@@ -58,34 +57,35 @@ namespace EnhancedBattleTest.Patch
                 {
                     originToSpawn.Add(player);
                 }
+
                 int count = originToSpawn.Count;
-                if (count > 0)
+                if (count <= 0)
+                    continue;
+
+                float num1 = isMounted ? 3f : 1f;
+                float num2 = isMounted ? 0.75f : 0.6f;
+                Mission.Current.SetTotalWidthBeforeNewFormation(num1 * (float)Math.Pow(count, num2));
+                foreach (EnhancedBattleTestAgentOrigin agentOriginBase in originToSpawn)
                 {
-                    float num1 = isMounted ? 3f : 1f;
-                    float num2 = isMounted ? 0.75f : 0.6f;
-                    Mission.Current.SetTotalWidthBeforeNewFormation(num1 * (float)Math.Pow(count, num2));
-                    foreach (EnhancedBattleTestAgentOrigin agentOriginBase in originToSpawn)
+                    try
                     {
-                        try
+                        FormationClass formationClass = agentOriginBase.SpawnableCharacter.FormationIndex;
+                        var team = agentOriginBase.IsUnderPlayersCommand ? Mission.Current.PlayerTeam : Mission.Current.PlayerEnemyTeam;
+                        Formation formation = team.GetFormation(formationClass);
+                        if (formation != null && !(bool)HasBeenPositionedProperty.GetValue(formation))
                         {
-                            FormationClass formationClass = agentOriginBase.SpawnableCharacter.FormationIndex;
-                            var team = agentOriginBase.IsUnderPlayersCommand ? Mission.Current.PlayerTeam : Mission.Current.PlayerEnemyTeam;
-                            Formation formation = team.GetFormation(formationClass);
-                            if (formation != null && !(bool)HasBeenPositionedProperty.GetValue(formation))
-                            {
-                                formation.BeginSpawn(count, isMounted);
-                                Mission.Current.SpawnFormation(formation, count, ____spawnWithHorses, isMounted, isReinforcement);
-                                ____spawnedFormations.Add(formation);
-                            }
-                            agentOriginBase.SpawnTroop(____side, true, ____spawnWithHorses, isReinforcement,
+                            formation.BeginSpawn(count, isMounted);
+                            Mission.Current.SpawnFormation(formation, count, ____spawnWithHorses, isMounted, isReinforcement);
+                            ____spawnedFormations.Add(formation);
+                        }
+                        agentOriginBase.SpawnTroop(____side, true, ____spawnWithHorses, isReinforcement,
                                 enforceSpawningOnInitialPoint, count, formationTroopIndex, true, true,
                                 false, null, new MatrixFrame?());
-                            ++formationTroopIndex;
-                        }
-                        catch (Exception e)
-                        {
-                            Utility.DisplayMessage(e.ToString());
-                        }
+                        ++formationTroopIndex;
+                    }
+                    catch (Exception e)
+                    {
+                        Utility.DisplayMessage(e.ToString());
                     }
                 }
             }

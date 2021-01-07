@@ -52,12 +52,16 @@ namespace EnhancedBattleTest.Data.MissionData
         }
         public static Mission OpenMission(BattleConfig config, string mapName)
         {
-            return EnhancedBattleTestSubModule.IsMultiplayer
-                ? OpenMultiplayerMission(config, mapName)
-                : OpenSingleplayerMission(config, mapName);
+            //TODO: implement in multiplayer mode
+            if (EnhancedBattleTestSubModule.IsMultiplayer)
+            {
+                return OpenMultiplayerMission(config, mapName);
+            }
+            else
+            {
+                return OpenSingleplayerMission(config, mapName);
+            }
         }
-
-
 
         public static Mission OpenMultiplayerMission(BattleConfig config, string map)
         {
@@ -74,6 +78,7 @@ namespace EnhancedBattleTest.Data.MissionData
 
             return OpenMission(parties[0], parties[1], config, map);
         }
+
         public static Mission OpenSingleplayerMission(BattleConfig config, string map)
         {
             var playerCulture = Utility.GetCulture(config.PlayerTeamConfig);
@@ -130,8 +135,10 @@ namespace EnhancedBattleTest.Data.MissionData
                 return OpenEnhancedBattleTestSiege(map, config, playerParty, enemyParty, hitPointPercentages,
                     attackerSiegeWeaponCount, defenderSiegeWeaponCount);
             }
-
-            return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
+            else
+            {
+                return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
+            }
         }
 
 
@@ -399,9 +406,14 @@ namespace EnhancedBattleTest.Data.MissionData
 
         private static IEnhancedBattleTestTroopSupplier CreateTroopSupplier(IEnhancedBattleTestCombatant combatant, bool isMultiplayer)
         {
-            return isMultiplayer
-                ? (IEnhancedBattleTestTroopSupplier)new MPTroopSupplier(combatant)
-                : new SPTroopSupplier(combatant);
+            if (isMultiplayer)
+            {
+                return new MPTroopSupplier(combatant);
+            }
+            else
+            {
+                return new SPTroopSupplier(combatant);
+            }
         }
 
         private static Dictionary<SiegeEngineType, int> GetSiegeWeaponCount(List<string> siegeWeaponIds)

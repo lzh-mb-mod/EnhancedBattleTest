@@ -76,6 +76,26 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
                 var equipment = Equipment.GetRandomEquipmentElements(troop, equipmentModifierType == EquipmentModifierType.Random,
                     agentBuildData.AgentCivilianEquipment,
                     agentBuildData.AgentEquipmentSeed);
+                if (equipmentModifierType == EquipmentModifierType.Average)
+                {
+                    for (EquipmentIndex index = EquipmentIndex.Weapon0;
+                        index < EquipmentIndex.NumEquipmentSetSlots;
+                        ++index)
+                    {
+                        var equipmentElement = equipment.GetEquipmentFromSlot(index);
+                        if (equipmentElement.Item != null)
+                        {
+                            if (equipmentElement.Item.HasArmorComponent)
+                                equipmentElement.SetModifier(
+                                    Utility.AverageItemModifier(equipmentElement.Item.ArmorComponent
+                                        .ItemModifierGroup));
+                            else if (equipmentElement.Item.HasHorseComponent)
+                                equipmentElement.SetModifier(
+                                    Utility.AverageItemModifier(equipmentElement.Item.HorseComponent
+                                        .ItemModifierGroup));
+                        }
+                    }
+                }
 
                 agentBuildData.Equipment(equipment);
             }

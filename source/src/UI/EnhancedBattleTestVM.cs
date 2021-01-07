@@ -215,10 +215,10 @@ namespace EnhancedBattleTest.UI
                 case 0:
                     MapSelectionGroup.WallHitpointSelection.SelectedIndex = 0;
                     break;
-                case 50:
+                case 1:
                     MapSelectionGroup.WallHitpointSelection.SelectedIndex = 1;
                     break;
-                case 100:
+                case 2:
                     MapSelectionGroup.WallHitpointSelection.SelectedIndex = 2;
                     break;
             }
@@ -269,9 +269,9 @@ namespace EnhancedBattleTest.UI
         {
             if (!IsValid())
                 return;
-
             if (!ApplyConfig())
                 return;
+
             var sceneData = GetMap();
             if (sceneData == null)
                 return;

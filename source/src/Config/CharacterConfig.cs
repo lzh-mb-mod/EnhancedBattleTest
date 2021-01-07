@@ -20,12 +20,26 @@ namespace EnhancedBattleTest.Config
 
         public static CharacterConfig Create(bool isMultiplayer)
         {
-            return isMultiplayer ? (CharacterConfig)new MPCharacterConfig() : new SPCharacterConfig();
+            if (isMultiplayer)
+            {
+                return new MPCharacterConfig();
+            }
+            else
+            {
+                return new SPCharacterConfig();
+            }
         }
 
         public static CharacterConfig Create(bool isMultiplayer, string id, float femaleRatio = 0)
         {
-            return isMultiplayer ? (CharacterConfig)new MPCharacterConfig(id, femaleRatio) : new SPCharacterConfig(id, femaleRatio);
+            if (isMultiplayer)
+            {
+                return new MPCharacterConfig(id, femaleRatio);
+            }
+            else
+            {
+                return new SPCharacterConfig(id, femaleRatio);
+            }
         }
     }
 }

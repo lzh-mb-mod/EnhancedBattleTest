@@ -63,14 +63,10 @@ namespace EnhancedBattleTest.Data.MissionData
         {
         }
 
-        // for Bannerlord e1.4.2
-        public void OnScoreHit(BasicCharacterObject victim, int damage, bool isFatal, bool isTeamKill, int weaponKind,
-            int currentWeaponUsageIndex)
-        {
-        }
 
-        // for Bannerlord e1.4.3
-        public void OnScoreHit(BasicCharacterObject victim, int damage, bool isFatal, bool isTeamKill,
+        // for Bannerlord e1.5.5
+        public void OnScoreHit(BasicCharacterObject victim, BasicCharacterObject formationCaptain,
+            int damage, bool isFatal, bool isTeamKill,
             WeaponComponentData attackerWeapon)
         {
         }
