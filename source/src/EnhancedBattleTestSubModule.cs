@@ -34,6 +34,7 @@ namespace EnhancedBattleTest
         {
             base.OnSubModuleLoad();
             EnhancedBattleTestSubModule.Instance = this;
+            /*
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTMultiplayerTest",
                 new TextObject("{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test"), 3,
                 () =>
@@ -41,6 +42,7 @@ namespace EnhancedBattleTest
                     IsMultiplayer = true;
                     MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<MultiplayerGame>());
                 }, false));
+            */
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTSingleplayerTest",
                 new TextObject("{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test"), 3,
                 () =>
