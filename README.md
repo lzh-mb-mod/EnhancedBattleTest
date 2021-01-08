@@ -19,6 +19,10 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
   The configuration for multiplayer battle test is saved in "mpconfig.xml" and that for singleplayer battle test is saved in "spconfig.xml".
 
+## Dependencies
+
+This mod has a dependency on [Bannerlord.Harmony](https://www.nexusmods.com/mountandblade2bannerlord/mods/2006) now.
+
 ## How to install
 1. Copy `Modules` folder into Bannerlord installation folder(For example `C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`). It should be merged with `Modules` of the game. Or use Vortex to install it automatically.
 

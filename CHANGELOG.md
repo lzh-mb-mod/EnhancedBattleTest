@@ -1,5 +1,12 @@
 # Changelog
 
+## [e2.0.17] - 2021-01-09
+### Fixed
+- Keep compatible with Bannerlord e1.5.5 and e1.5.6.
+
+### Changed
+- Remove `0Harmony.dll` from release and add `Bannerlord.Harmony` as dependency, since it is a very common mod dependency.
+
 ## [e2.0.16] - 2020-10-10
 ### Fixed
 - Keep compatible with Bannerlord e1.5.2 and e1.5.3.

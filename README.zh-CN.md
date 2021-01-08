@@ -19,6 +19,10 @@
 
   多人战斗测试的配置保存在"mpconfig.xml"文件中，单人战斗测试的配置保存在"spconfig.xml"文件中。
 
+## Mod依赖
+
+本mod依赖于[Bannerlord.Harmony](https://www.nexusmods.com/mountandblade2bannerlord/mods/2006)，请先安装该mod。
+
 ## 如何安装
 1. 复制`Modules`文件夹到砍二的安装目录下（例如`C:\Program Files\Steam\steamapps\common\Mount & Blade II Bannerlord - Beta`)，和砍二本体的Modules文件夹合并。或者你可以用Vortex自动安装。
 
