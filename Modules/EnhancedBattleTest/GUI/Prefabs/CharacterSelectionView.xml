@@ -1,8 +1,7 @@
 <Prefab>
   <Window>
-    <ButtonWidget Command.Click="Close" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+    <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="EnhancedBattleTest.Popup">
       <Children>
-
         <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="100" Brush="EnhancedBattleTest.MissionMenuBrush">
           <Children>
 
@@ -14,28 +13,28 @@
 
                 <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{CultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <RichTextWidget DataSource="{CultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
                     <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Cultures}" />
                   </Children>
                 </ListPanel>
 
                 <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{GroupText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <RichTextWidget DataSource="{GroupText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
                     <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Groups}" />
                   </Children>
                 </ListPanel>
 
                 <ListPanel IsVisible="@IsSinglePlayer" DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{OccupationText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <RichTextWidget DataSource="{OccupationText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
                     <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Occupations}" />
                   </Children>
                 </ListPanel>
 
                 <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{CharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <RichTextWidget DataSource="{CharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
                     <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Characters}" />
                   </Children>
                 </ListPanel>
@@ -83,6 +82,6 @@
         </ListPanel>
 
       </Children>
-    </ButtonWidget>
+    </BrushWidget>
   </Window>
 </Prefab>

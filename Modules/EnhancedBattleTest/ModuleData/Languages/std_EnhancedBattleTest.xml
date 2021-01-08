@@ -27,7 +27,7 @@
 
     <string id="EnhancedBattleTest_equipment_modifier_type" text="Soldier Equipment Modifier type" />
     <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
-    <!-- <string id="EnhancedBattleTest_modifier_type_average" text="Average" /> -->
+    <string id="EnhancedBattleTest_modifier_type_average" text="Average" />
     <string id="EnhancedBattleTest_modifier_type_none" text="None" />
 
     <string id="EnhancedBattleTest_battle_size" text="Battle Size" />

@@ -23,7 +23,7 @@
 
     <string id="EnhancedBattleTest_equipment_modifier_type" text="Birlik Ekipmanı Değiştirme" />
     <string id="EnhancedBattleTest_modifier_type_random" text="Rastgele" />
-    <!-- <string id="EnhancedBattleTest_modifier_type_average" text="Ortalama" /> -->
+    <string id="EnhancedBattleTest_modifier_type_average" text="Ortalama" />
     <string id="EnhancedBattleTest_modifier_type_none" text="Değişiklik yok" />
 
     <string id="EnhancedBattleTest_battle_size" text="Savaş Boyutu" />

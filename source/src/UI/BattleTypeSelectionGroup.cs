@@ -64,6 +64,7 @@ namespace EnhancedBattleTest.UI
             EquipmentModifierTypeSelection = new SelectorVM<SelectorItemVM>(new List<TextObject>()
             {
                 GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.Random.ToString()),
+                GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.Average.ToString()),
                 GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.None.ToString()),
             }, (int)_config.EquipmentModifierType, OnEquipmentModifierType);
             BattleTypeText.RefreshValues();
