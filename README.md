@@ -15,7 +15,7 @@ A mod for Mount&Blade Bannerlord that provides more powerful custom battle.
 
 - You can customize the banner of each team in banner editor in singleplayer battle test, with copy-paste feature.
 
-- Configuration saving. The battle configuration is saved in "(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\".
+- Configuration saving. The battle configuration is saved in `(user directory)\Documents\Mount and Blade II Bannerlord\Configs\EnhancedBattleTest\`.
 
   The configuration for multiplayer battle test is saved in "mpconfig.xml" and that for singleplayer battle test is saved in "spconfig.xml".
 
