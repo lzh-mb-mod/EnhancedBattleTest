@@ -72,13 +72,13 @@ namespace EnhancedBattleTest.UI
         {
             base.RefreshValues();
             this.PrepareMapLists();
-            this.TitleText = new TextObject("{=w9m11T1y}Map", (Dictionary<string, TextObject>)null).ToString();
-            this.SeasonText = new TextObject("{=xTzDM5XE}Season", (Dictionary<string, TextObject>)null).ToString();
-            this.SceneLevelText = new TextObject("{=0s52GQJt}Scene Level", (Dictionary<string, TextObject>)null).ToString();
-            this.WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints", (Dictionary<string, TextObject>)null).ToString();
-            this.AttackerSiegeMachinesText = new TextObject("{=*}Choose Attacker Siege Machines", (Dictionary<string, TextObject>)null).ToString();
-            this.DefenderSiegeMachinesText = new TextObject("{=*}Choose Defender Siege Machines", (Dictionary<string, TextObject>)null).ToString();
-            this.SalloutText = new TextObject("{=EcKMGoFv}Sallyout", (Dictionary<string, TextObject>)null).ToString();
+            this.TitleText = new TextObject("{=w9m11T1y}Map").ToString();
+            this.SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
+            this.SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
+            this.WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
+            this.AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
+            this.DefenderSiegeMachinesText = new TextObject("{=UoiSWe87}Choose Defender Siege Machines").ToString();
+            this.SalloutText = new TextObject("{=EcKMGoFv}Sallyout").ToString();
             this.WallHitpointSelection.ItemList.Clear();
             this.SceneLevelSelection.ItemList.Clear();
             this.SeasonSelection.ItemList.Clear();
@@ -160,7 +160,7 @@ namespace EnhancedBattleTest.UI
             }
             foreach (MapItemVM availableMap in _availableMaps)
                 MapSearchResults.Add(availableMap);
-            _searchText = new TextObject("{=*}Select a Map").ToString();
+            _searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
             OnPropertyChanged(nameof(SearchText));
         }
 

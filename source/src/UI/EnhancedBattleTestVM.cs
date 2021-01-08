@@ -15,6 +15,10 @@ namespace EnhancedBattleTest.UI
 {
     public class EnhancedBattleTestVM : ViewModel
     {
+        private const int MAX_ATTACKER_MELEE_MACHINE_COUNT = 3;
+        private const int MAX_ATTACKER_RANGED_MACHINE_COUNT = 4;
+        private const int MAX_DEFENDER_MACHINE_COUNT = 4;
+
         private readonly EnhancedBattleTestState _state;
         private BattleConfig _config;
         private readonly List<SceneData> _scenes;
@@ -333,17 +337,17 @@ namespace EnhancedBattleTest.UI
         private void InitializeSiegeMachines()
         {
             AttackerMeleeMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
-            for (var index = 0; index < 3; ++index)
+            for (var index = 0; index < MAX_ATTACKER_MELEE_MACHINE_COUNT; ++index)
                 AttackerMeleeMachines.Add(new CustomBattleSiegeMachineVM(
                     Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerMeleeMachines.ElementAtOrDefault(index)),
                     OnMeleeMachineSelection));
             AttackerRangedMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
-            for (var index = 0; index < 4; ++index)
+            for (var index = 0; index < MAX_ATTACKER_RANGED_MACHINE_COUNT; ++index)
                 AttackerRangedMachines.Add(new CustomBattleSiegeMachineVM(
                     Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerRangedMachines.ElementAtOrDefault(index)),
                     OnAttackerRangedMachineSelection));
             DefenderMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
-            for (var index = 0; index < 4; ++index)
+            for (var index = 0; index < MAX_DEFENDER_MACHINE_COUNT; ++index)
                 DefenderMachines.Add(new CustomBattleSiegeMachineVM(
                     Utility.GetSiegeEngineType(_config.SiegeMachineConfig.DefenderMachines.ElementAtOrDefault(index)),
                     OnDefenderRangedMachineSelection));
@@ -389,7 +393,7 @@ namespace EnhancedBattleTest.UI
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement(null, "Empty", null)
+                new InquiryElement(null, GameTexts.FindText("str_empty").ToString(), null)
             };
             foreach (SiegeEngineType attackerMeleeMachine in GetAllAttackerMeleeMachines())
                 inquiryElements.Add(new InquiryElement(attackerMeleeMachine, attackerMeleeMachine.Name.ToString(), null));
@@ -400,7 +404,7 @@ namespace EnhancedBattleTest.UI
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement(null, "Empty", null)
+                new InquiryElement(null, GameTexts.FindText("str_empty").ToString(), null)
             };
             foreach (SiegeEngineType attackerRangedMachine in GetAllAttackerRangedMachines())
                 inquiryElements.Add(new InquiryElement(attackerRangedMachine, attackerRangedMachine.Name.ToString(), null));
@@ -411,7 +415,7 @@ namespace EnhancedBattleTest.UI
         {
             List<InquiryElement> inquiryElements = new List<InquiryElement>
             {
-                new InquiryElement(null, "Empty", null)
+                new InquiryElement(null, GameTexts.FindText("str_empty").ToString(), null)
             };
             foreach (SiegeEngineType defenderRangedMachine in GetAllDefenderRangedMachines())
                 inquiryElements.Add(new InquiryElement(defenderRangedMachine, defenderRangedMachine.Name.ToString(), null));
