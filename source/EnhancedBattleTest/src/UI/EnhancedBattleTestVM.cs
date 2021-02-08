@@ -68,9 +68,6 @@ namespace EnhancedBattleTest.UI
             }
         }
         public BattleTypeSelectionGroup BattleTypeSelectionGroup { get; }
-
-        public TextVM BattleSizeText { get; }
-        public NumberVM<float> BattleSize { get; }
         public MapSelectionGroupVM MapSelectionGroup { get; }
 
         [DataSourceProperty]
@@ -178,9 +175,6 @@ namespace EnhancedBattleTest.UI
 
             MapSelectionGroup = new MapSelectionGroupVM(_scenes);
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
-            BattleSizeText = new TextVM(GameTexts.FindText("str_ebt_battle_size"));
-            BattleSize = new NumberVM<float>(BannerlordConfig.BattleSize, 1, 2047, true);
-            BattleSize.OnValueChanged += battleSize => BannerlordConfig.BattleSize = (int)battleSize;
 
             RecoverConfig();
             InitializeSiegeMachines();
@@ -199,10 +193,6 @@ namespace EnhancedBattleTest.UI
 
         public void SetActiveState(bool isActive)
         {
-            if (isActive)
-            {
-                BattleSize.Value = BannerlordConfig.BattleSize;
-            }
         }
 
         public bool IsValid()
