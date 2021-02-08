@@ -1,31 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Module>
-	<Name value = "EnhancedBattleTest"/>
-	<Id value = "EnhancedBattleTest"/>
-	<Version value = "e2.0.17"/>
-	<SingleplayerModule value="true"/>
-	<MultiplayerModule value="false"/>
-	<DependedModules>
-		<DependedModule Id="Native"/>
-		<DependedModule Id="SandBoxCore"/>
-		<DependedModule Id="Sandbox"/>
-		<DependedModule Id="CustomBattle"/>
-        <DependedModule Id="Bannerlord.Harmony"/>
-	</DependedModules>
-	<SubModules>
-		<SubModule>
-			<Name value = "EnhancedBattleTestSubModule"/>
-			<DLLName value = "EnhancedBattleTest.dll"/>
-			<SubModuleClassType value = "EnhancedBattleTest.EnhancedBattleTestSubModule"/>
-			<Tags>
-				<Tag key="DedicatedServerType" value ="none" />
-				<Tag key="IsNoRenderModeElement" value ="false" />
-			</Tags>
-		</SubModule>
-	</SubModules>
+  <Name value="EnhancedBattleTest"/>
+  <Id value="EnhancedBattleTest"/>
+  <Version value="e2.0.18"/>
+  <SingleplayerModule value="true"/>
+  <MultiplayerModule value="false"/>
+  <DependedModules>
+    <DependedModule Id="Native" DependentVersion="e1.5.7" />
+    <DependedModule Id="SandBoxCore" DependentVersion="e1.5.7" />
+    <DependedModule Id="Sandbox" DependentVersion="e1.5.7" />
+    <DependedModule Id="StoryMode" DependentVersion="e1.5.7" />
+    <DependedModule Id="Bannerlord.Harmony"/>
+  </DependedModules>
+  <SubModules>
+    <SubModule>
+      <Name value="EnhancedBattleTestSubModule"/>
+      <DLLName value="EnhancedBattleTest.dll"/>
+      <SubModuleClassType value="EnhancedBattleTest.EnhancedBattleTestSubModule"/>
+      <Tags>
+        <Tag key="DedicatedServerType" value="none" />
+        <Tag key="IsNoRenderModeElement" value="false" />
+      </Tags>
+    </SubModule>
+  </SubModules>
 
-	<Xmls>
-		<!-- <XmlNode>
+  <Xmls>
+    <!-- <XmlNode>
 			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
 			<IncludedGameTypes>
 				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
@@ -209,5 +209,5 @@
 				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
 			</IncludedGameTypes>
 		</XmlNode> -->
-	</Xmls>
+  </Xmls>
 </Module>
