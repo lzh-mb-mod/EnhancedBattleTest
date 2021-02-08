@@ -1,5 +1,5 @@
 <Project>
   <PropertyGroup>
-	  <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\</GamePath>
+	  <GamePath>C:\lzh\develop\Bannerlord Binnary\e1.5.8\</GamePath>
   </PropertyGroup>
 </Project>

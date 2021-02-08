@@ -49,7 +49,7 @@ namespace EnhancedBattleTest
                 {
                     IsMultiplayer = false;
                     MBGameManager.StartNewGame(new EnhancedBattleTestSingleplayerGameManager());
-                }, false));
+                }, () => false));
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
