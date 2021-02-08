@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <PackagePath>$(SolutionDir)package\</PackagePath>
-    <ModuleAlias>BattleMiniMap</ModuleAlias>
+    <ModuleAlias>EnhancedBattleTest</ModuleAlias>
     <ModulePackagePath>$(PackagePath)$(ModuleAlias)\</ModulePackagePath>
   </PropertyGroup>
 </Project>
