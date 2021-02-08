@@ -18,7 +18,7 @@ namespace EnhancedBattleTest.Patch
             typeof(Formation).GetField("HasBeenPositioned", BindingFlags.Instance | BindingFlags.NonPublic);
 
         public static bool SpawnTroops_Prefix(int number, bool isReinforcement, bool enforceSpawningOnInitialPoint, ref int __result,
-            IMissionTroopSupplier ____troopSupplier,
+            IMissionTroopSupplier ____troopSupplier, List<IAgentOriginBase> ____preSuppliedTroops,
             bool ____spawnWithHorses, BattleSideEnum ____side, MBList<Formation> ____spawnedFormations)
         {
             if (number <= 0)
@@ -27,7 +27,15 @@ namespace EnhancedBattleTest.Patch
                 return false;
             }
             int formationTroopIndex = 0;
-            List<IAgentOriginBase> list = ____troopSupplier.SupplyTroops(number).ToList();
+            List<IAgentOriginBase> list = new List<IAgentOriginBase>();
+            int preSuppliedCount = Math.Min(____preSuppliedTroops.Count, number);
+            if (preSuppliedCount > 0)
+            {
+                for (int index = 0; index < preSuppliedCount; ++index)
+                    list.Add(____preSuppliedTroops[index]);
+                ____preSuppliedTroops.RemoveRange(0, preSuppliedCount);
+            }
+            list.AddRange(____troopSupplier.SupplyTroops(number - preSuppliedCount));
             for (int index = 0; index < 8; ++index)
             {
                 var originToSpawn = new List<EnhancedBattleTestAgentOrigin>();
