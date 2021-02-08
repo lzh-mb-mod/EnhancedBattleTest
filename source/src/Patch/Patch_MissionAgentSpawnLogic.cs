@@ -28,7 +28,6 @@ namespace EnhancedBattleTest.Patch
             }
             int formationTroopIndex = 0;
             List<IAgentOriginBase> list = ____troopSupplier.SupplyTroops(number).ToList();
-            Mission.Current.ResetTotalWidth();
             for (int index = 0; index < 8; ++index)
             {
                 var originToSpawn = new List<EnhancedBattleTestAgentOrigin>();
@@ -62,9 +61,6 @@ namespace EnhancedBattleTest.Patch
                 if (count <= 0)
                     continue;
 
-                float num1 = isMounted ? 3f : 1f;
-                float num2 = isMounted ? 0.75f : 0.6f;
-                Mission.Current.SetTotalWidthBeforeNewFormation(num1 * (float)Math.Pow(count, num2));
                 foreach (EnhancedBattleTestAgentOrigin agentOriginBase in originToSpawn)
                 {
                     try

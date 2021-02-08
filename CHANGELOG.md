@@ -2,7 +2,7 @@
 
 ## [e2.0.18] - 2021-02-08
 ### Fixed
-- Keep compatible with Bannerlord e1.5.7.
+- Keep compatible with Bannerlord e1.5.7 and Bannerlord e1.5.8".
 
 ## [e2.0.17] - 2021-01-09
 ### Fixed
