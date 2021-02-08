@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Module>
+  <Name value="EnhancedBattleTest"/>
+  <Id value="EnhancedBattleTest"/>
+  <Version value="e2.0.18"/>
+  <SingleplayerModule value="true"/>
+  <MultiplayerModule value="false"/>
+  <DependedModules>
+    <DependedModule Id="Native" DependentVersion="e1.5.7" />
+    <DependedModule Id="SandBoxCore" DependentVersion="e1.5.7" />
+    <DependedModule Id="Sandbox" DependentVersion="e1.5.7" />
+    <DependedModule Id="StoryMode" DependentVersion="e1.5.7" />
+    <DependedModule Id="Bannerlord.Harmony"/>
+  </DependedModules>
+  <SubModules>
+    <SubModule>
+      <Name value="EnhancedBattleTestSubModule"/>
+      <DLLName value="EnhancedBattleTest.dll"/>
+      <SubModuleClassType value="EnhancedBattleTest.EnhancedBattleTestSubModule"/>
+      <Tags>
+        <Tag key="DedicatedServerType" value="none" />
+        <Tag key="IsNoRenderModeElement" value="false" />
+      </Tags>
+    </SubModule>
+  </SubModules>
+
+  <Xmls>
+    <!-- <XmlNode>
+			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Items" path="customitems"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedFreeBattleGame"/>
+				<GameType value = "EnhancedCustomBattleGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="MPCharacters" path="../../Native/ModuleData/mpcharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="MPCharacters" path="customcharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedFreeBattleGame"/>
+				<GameType value = "EnhancedCustomBattleGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="BasicCultures" path="../../Native/ModuleData/mpcultures"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="BasicCultures" path="customcultures"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedFreeBattleGame"/>
+				<GameType value = "EnhancedCustomBattleGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+
+		<XmlNode>
+			<XmlName id="MPClassDivisions" path="../../Native/ModuleData/mpclassdivisions"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="CraftingPieces" path="../../Native/ModuleData/mp_crafting_pieces"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestMultiplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+
+
+
+		<XmlNode>
+			<XmlName id="CraftingPieces" path="../../Native/ModuleData/crafting_pieces"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+
+		<XmlNode>
+			<XmlName id="Items" path="../../SandBoxCore/ModuleData/spitems"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="SPCultures" path="../../SandBoxCore/ModuleData/spcultures"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBoxCore/ModuleData/spnpccharactertemplates"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBoxCore/ModuleData/spnpccharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+
+
+		<XmlNode>
+			<XmlName id="Items" path="../../SandBox/ModuleData/spitems"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="SPCultures" path="../../SandBox/ModuleData/spcultures"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/spnpccharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="partyTemplates" path="../../SandBox/ModuleData/partyTemplates"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/lords"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/companions"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/bandits"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Heroes" path="../../SandBox/ModuleData/heroes"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/caravans"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="NPCCharacters" path="../../SandBox/ModuleData/spspecialcharacters"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Kingdoms" path="../../SandBox/ModuleData/spkingdoms"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Factions" path="../../SandBox/ModuleData/spclans"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="WorkshopTypes" path="../../SandBox/ModuleData/spworkshops"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="LocationComplexTemplates" path="../../SandBox/ModuleData/location_complex_templates"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Concepts" path="../../SandBox/ModuleData/concept_strings"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode>
+		<XmlNode>
+			<XmlName id="Settlements" path="../../SandBox/ModuleData/settlements"/>
+			<IncludedGameTypes>
+				<GameType value = "EnhancedBattleTestSingleplayerGame"/>
+			</IncludedGameTypes>
+		</XmlNode> -->
+  </Xmls>
+</Module>

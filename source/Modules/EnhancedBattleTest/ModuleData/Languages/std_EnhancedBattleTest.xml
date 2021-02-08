@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <string id="EnhancedBattleTest_multiplayerbattleoption" text="Multiplayer Battle Test" />
+    <string id="EnhancedBattleTest_singleplayerbattleoption" text="Singleplayer Battle Test" />
+
+    <string id="EnhancedBattleTest_all" text="All" />
+
+    <string id="EnhancedBattleTest_null_culture" text="No culture" />
+
+    <string id="EnhancedBattleTest_battletype" text="Battle Type" />
+    <string id="EnhancedBattleTest_fieldbattle" text="Field Battle" />
+    <string id="EnhancedBattleTest_siegebattle" text="Siege Battle" />
+    <string id="EnhancedBattleTest_villagebattle" text="village Battle" />
+
+    <string id="EnhancedBattleTest_playertype" text="Player Role" />
+    <string id="EnhancedBattleTest_commander" text="Commander" />
+    <string id="EnhancedBattleTest_sergeant" text="Sergeant" />
+
+    <string id="EnhancedBattleTest_playerside" text="Player Side" />
+    <string id="EnhancedBattleTest_attacker" text="Attacker" />
+    <string id="EnhancedBattleTest_defender" text="Defender" />
+
+    <string id="EnhancedBattleTest_equipment_modifier_type" text="Soldier Equipment Modifier type" />
+    <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
+    <string id="EnhancedBattleTest_modifier_type_average" text="Average" />
+    <string id="EnhancedBattleTest_modifier_type_none" text="None" />
+
+    <string id="EnhancedBattleTest_battle_size" text="Battle Size" />
+
+    <string id="EnhancedBattleTest_swapteam" text="Swap Team" />
+
+    <string id="EnhancedBattleTest_map" text="Map" />
+    <string id="EnhancedBattleTest_season" text="Season" />
+
+    <string id="EnhancedBattleTest_trooprolegeneral" text="General" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="Troop {TroopIndex}" />
+
+    <string id="EnhancedBattleTest_enabled" text="Enable" />
+    <string id="EnhancedBattleTest_number" text="Count" />
+    <string id="EnhancedBattleTest_invalid" text="Invalid" />
+
+    <string id="EnhancedBattleTest_selectcharacter" text="Select Character" />
+
+    <string id="EnhancedBattleTest_culture" text="Culture" />
+    <string id="EnhancedBattleTest_group" text="Group" />
+    <string id="EnhancedBattleTest_character" text="Character" />
+
+    <string id="EnhancedBattleTest_ishero" text="Is Hero" />
+    <string id="EnhancedBattleTest_maleside" text="Male" />
+    <string id="EnhancedBattleTest_femaleside" text="Female" />
+
+    <string id="EnhancedBattleTest_open_encyclopedia" text="Open Encyclopedia" />
+
+    <string id="EnhancedBattleTest_no_map" text="No map available." />
+    <string id="EnhancedBattleTest_current_map" text="Current map is {MapName}." />
+
+    <string id="EnhancedBattleTest_troop_group_general" text="General" />
+
+    <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
+
+    <string id="EnhancedBattleTest_siegenoplayer" text="In siege, player team should have general." />
+  </strings>
+</base>

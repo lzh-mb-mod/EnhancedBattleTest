@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="简体中文" />
+  </tags>
+  <strings>
+    <string id="EnhancedBattleTest_multiplayerbattleoption" text="多人战斗测试" />
+    <string id="EnhancedBattleTest_singleplayerbattleoption" text="单人战斗测试" />
+
+    <string id="EnhancedBattleTest_all" text="所有" />
+
+    <string id="EnhancedBattleTest_null_culture" text="无" />
+
+    <string id="EnhancedBattleTest_battletype" text="战斗类型" />
+    <string id="EnhancedBattleTest_fieldbattle" text="野战" />
+    <string id="EnhancedBattleTest_siegebattle" text="攻城" />
+    <string id="EnhancedBattleTest_villagebattle" text="村战" />
+
+    <string id="EnhancedBattleTest_playertype" text="玩家角色" />
+    <string id="EnhancedBattleTest_commander" text="指挥官" />
+    <string id="EnhancedBattleTest_sergeant" text="军士" />
+
+    <string id="EnhancedBattleTest_playerside" text="玩家方" />
+    <string id="EnhancedBattleTest_attacker" text="进攻方" />
+    <string id="EnhancedBattleTest_defender" text="防守方" />
+
+    <string id="EnhancedBattleTest_equipment_modifier_type" text="士兵装备前缀" />
+    <string id="EnhancedBattleTest_modifier_type_random" text="随机" />
+    <string id="EnhancedBattleTest_modifier_type_average" text="平均" />
+    <string id="EnhancedBattleTest_modifier_type_none" text="无" />
+
+    <string id="EnhancedBattleTest_battle_size" text="战场规模" />
+
+    <string id="EnhancedBattleTest_swapteam" text="交换队伍" />
+
+    <string id="EnhancedBattleTest_map" text="地图" />
+    <string id="EnhancedBattleTest_season" text="季节" />
+
+    <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="部队 {TroopIndex}" />
+
+    <string id="EnhancedBattleTest_enabled" text="启用" />
+    <string id="EnhancedBattleTest_number" text="数量" />
+    <string id="EnhancedBattleTest_invalid" text="无效" />
+
+    <string id="EnhancedBattleTest_selectcharacter" text="选择角色" />
+
+    <string id="EnhancedBattleTest_culture" text="文化" />
+    <string id="EnhancedBattleTest_group" text="分类" />
+    <string id="EnhancedBattleTest_character" text="角色" />
+
+    <string id="EnhancedBattleTest_ishero" text="英雄" />
+    <string id="EnhancedBattleTest_maleside" text="男" />
+    <string id="EnhancedBattleTest_femaleside" text="女" />
+
+    <string id="EnhancedBattleTest_open_encyclopedia" text="打开百科" />
+
+    <string id="EnhancedBattleTest_no_map" text="无可用地图。" />
+    <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
+
+    <string id="EnhancedBattleTest_troop_group_general" text="将军" />
+
+    <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
+
+    <string id="EnhancedBattleTest_siegenoplayer" text="攻城模式中玩家方必须有将领。" />
+  </strings>
+</base>
