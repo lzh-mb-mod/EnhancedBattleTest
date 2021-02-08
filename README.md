@@ -71,7 +71,13 @@ This mod has a dependency on [Bannerlord.Harmony](https://www.nexusmods.com/moun
 - If the game crashed when loading a siege battle or clicking "Begin assault", try to change the scene level. Some scenes lacks data for some scene level, so this may help.
 
 ## Source code
-The source code is available at [GitLab](https://gitlab.com/lzh_mb_mod/enhancedbattletest).
+The source code is available at [GitHub](https://github.com/lzh-mb-mod/EnhancedBattleTest).
+
+## Contributor
+The contributors to this project are:
+* [LiZhenhuan1019](https://github.com/LiZhenhuan1019)
+
+* [jffifa](https://github.com/jffifa)
 
 ## Contact with me
 * Please mail to: lizhenhuan1019@qq.com

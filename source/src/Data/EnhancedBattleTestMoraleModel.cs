@@ -31,10 +31,12 @@ namespace EnhancedBattleTest.Data
             return 0;
         }
 
-        public override float GetEffectivePartyMorale(MobileParty party, StatExplainer explanation = null)
+        public override ExplainedNumber GetEffectivePartyMorale(
+            MobileParty mobileParty,
+            bool includeDescription = false)
         {
-            ExplainedNumber explainedNumber = new ExplainedNumber(100f, explanation, (TextObject)null);
-            return explainedNumber.ResultNumber;
+            ExplainedNumber explainedNumber = new ExplainedNumber(100f, includeDescription);
+            return explainedNumber;
         }
 
         public override int NumberOfDesertersDueToPaymentRatio(MobileParty mobileParty)

@@ -75,7 +75,7 @@
   - 尝试减少士兵数量或降低画质。
 
 ## 源代码
-源代码可从[GitLab](https://gitlab.com/lzh_mb_mod/enhancedbattletest)获得。
+源代码可从[GitHub](https://github.com/lzh-mb-mod/EnhancedBattleTest)获得。
 
 
 ## 联系我
