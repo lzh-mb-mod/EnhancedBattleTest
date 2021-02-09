@@ -119,12 +119,12 @@
                         </Widget>
 
                         <!--Time Of Day Selection-->
-                        <!--<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
                           <Children>
                             <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Time of Day" />
                             <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{TimeOfDaySelection}" />
                           </Children>
-                        </Widget>-->
+                        </Widget>
 
                         <!--Scene Level Selection-->
                         <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@IsCurrentMapSiege">
@@ -236,7 +236,7 @@
                     </ListPanel>
 
                     <!--Search Text Bar-->
-                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="535" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
+                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="475" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
                       <Children>
                         <EditableTextWidget Id="SearchInputWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="298" SuggestedHeight="43" MarginLeft="5" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Search.TextBox" Text="@SearchText" />
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="24" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="10" Sprite="Encyclopedia\icon_search" IsDisabled="true" />
@@ -249,7 +249,7 @@
                       </Children>
                     </ScrollbarWidget>
 
-                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="570" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
+                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="510" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
                       <Children>
 
                         <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">
