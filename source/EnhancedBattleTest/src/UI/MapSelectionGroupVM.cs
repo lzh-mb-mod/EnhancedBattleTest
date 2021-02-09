@@ -20,9 +20,11 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<SceneLevelItemVM> _sceneLevelSelection;
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
         private SelectorVM<SeasonItemVM> _seasonSelection;
+        private SelectorVM<TimeOfDayItemVM> _timeOfDaySelection;
         private MBBindingList<MapItemVM> _mapSearchResults;
         private string _titleText;
         private string _seasonText;
+        private string _timeOfDayText;
         private string _sceneLevelText;
         private string _wallHitpointsText;
         private string _attackerSiegeMachinesText;
@@ -33,6 +35,8 @@ namespace EnhancedBattleTest.UI
         public int SelectedWallHitpoint { get; private set; }
 
         public int SelectedSceneLevel { get; private set; }
+
+        public int SelectedTimeOfDay { get; private set; }
 
         public string SelectedSeasonId { get; private set; }
 
@@ -65,32 +69,38 @@ namespace EnhancedBattleTest.UI
             WallHitpointSelection = new SelectorVM<WallHitpointItemVM>(0, OnWallHitpointSelection);
             SceneLevelSelection = new SelectorVM<SceneLevelItemVM>(0, OnSceneLevelSelection);
             SeasonSelection = new SelectorVM<SeasonItemVM>(0, OnSeasonSelection);
+            TimeOfDaySelection = new SelectorVM<TimeOfDayItemVM>(0, OnTimeOfDaySelection);
             RefreshValues();
         }
 
         public override void RefreshValues()
         {
             base.RefreshValues();
-            this.PrepareMapLists();
-            this.TitleText = new TextObject("{=w9m11T1y}Map").ToString();
-            this.SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
-            this.SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
-            this.WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
-            this.AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
-            this.DefenderSiegeMachinesText = new TextObject("{=UoiSWe87}Choose Defender Siege Machines").ToString();
-            this.SalloutText = new TextObject("{=EcKMGoFv}Sallyout").ToString();
-            this.WallHitpointSelection.ItemList.Clear();
-            this.SceneLevelSelection.ItemList.Clear();
-            this.SeasonSelection.ItemList.Clear();
+            PrepareMapLists();
+            TitleText = new TextObject("{=w9m11T1y}Map").ToString();
+            SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
+            TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
+            SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
+            WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
+            AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
+            DefenderSiegeMachinesText = new TextObject("{=UoiSWe87}Choose Defender Siege Machines").ToString();
+            SalloutText = new TextObject("{=EcKMGoFv}Sallyout").ToString();
+            WallHitpointSelection.ItemList.Clear();
+            SceneLevelSelection.ItemList.Clear();
+            SeasonSelection.ItemList.Clear();
+            TimeOfDaySelection.ItemList.Clear();
             foreach (Tuple<string, int> wallHitpoint in CustomBattleData.WallHitpoints)
-                this.WallHitpointSelection.AddItem(new WallHitpointItemVM(wallHitpoint.Item1, wallHitpoint.Item2));
+                WallHitpointSelection.AddItem(new WallHitpointItemVM(wallHitpoint.Item1, wallHitpoint.Item2));
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
-                this.SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
+                SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
             foreach (Tuple<string, string> season in CustomBattleData.Seasons)
-                this.SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
-            this.WallHitpointSelection.SelectedIndex = 0;
-            this.SceneLevelSelection.SelectedIndex = 0;
-            this.SeasonSelection.SelectedIndex = 0;
+                SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
+            foreach (Tuple<string, CustomBattleTimeOfDay> tuple in CustomBattleData.TimesOfDay)
+                TimeOfDaySelection.AddItem(new TimeOfDayItemVM(tuple.Item1, (int)tuple.Item2));
+            WallHitpointSelection.SelectedIndex = 0;
+            SceneLevelSelection.SelectedIndex = 0;
+            SeasonSelection.SelectedIndex = 0;
+            TimeOfDaySelection.SelectedIndex = 0;
         }
 
         public void ExecuteSallyOutChange()
@@ -138,6 +148,11 @@ namespace EnhancedBattleTest.UI
         private void OnSeasonSelection(SelectorVM<SeasonItemVM> selector)
         {
             SelectedSeasonId = selector.SelectedItem.SeasonId;
+        }
+
+        private void OnTimeOfDaySelection(SelectorVM<TimeOfDayItemVM> selector)
+        {
+            SelectedTimeOfDay = selector.SelectedItem.TimeOfDay;
         }
 
         public void OnGameTypeChange(BattleType gameType)
@@ -265,6 +280,19 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
+        public SelectorVM<TimeOfDayItemVM> TimeOfDaySelection
+        {
+            get => _timeOfDaySelection;
+            set
+            {
+                if (value == _timeOfDaySelection)
+                    return;
+                _timeOfDaySelection = value;
+                OnPropertyChangedWithValue(value, nameof(TimeOfDaySelection));
+            }
+        }
+
+        [DataSourceProperty]
         public bool IsCurrentMapSiege
         {
             get => _isCurrentMapSiege;
@@ -330,6 +358,19 @@ namespace EnhancedBattleTest.UI
                     return;
                 _seasonText = value;
                 OnPropertyChanged(nameof(SeasonText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string TimeOfDayText
+        {
+            get => _timeOfDayText;
+            set
+            {
+                if (!(value != _timeOfDayText))
+                    return;
+                _timeOfDayText = value;
+                OnPropertyChangedWithValue(value, nameof(TimeOfDayText));
             }
         }
 

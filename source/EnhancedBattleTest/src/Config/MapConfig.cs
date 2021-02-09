@@ -8,5 +8,6 @@ namespace EnhancedBattleTest.Config
         public int BreachedWallCount = 0;
         public int SceneLevel = 1;
         public string Season = String.Empty;
+        public int TimeOfDay;
     }
 }

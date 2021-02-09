@@ -6,6 +6,7 @@ using EnhancedBattleTest.Data.MissionData.Logic;
 using EnhancedBattleTest.Multiplayer.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Data.MissionData;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -19,37 +20,30 @@ namespace EnhancedBattleTest.Data.MissionData
     [MissionManager]
     public static class EnhancedBattleTestMissions
     {
+        //private static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", int timeOfDay = 6)
+        //{
+        //    Dictionary<int, string> strArray = new Dictionary<int, string>
+        //    {
+        //        {6, "TOD_06_00_SemiCloudy"},
+        //        {12, "TOD_12_00_SemiCloudy"},
+        //        {15, "TOD_04_00_SemiCloudy"},
+        //        {18, "TOD_03_00_SemiCloudy"},
+        //        {22, "TOD_01_00_SemiCloudy"}
+        //    };
+        //    string str = "field_battle";
+        //    strArray.TryGetValue(timeOfDay, out str);
+        //    Dictionary<string, int> dictionary = new Dictionary<string, int>
+        //    {
+        //        {"spring", 0}, {"summer", 1}, {"fall", 2}, {"winter", 3}
+        //    };
+        //    dictionary.TryGetValue(seasonString, out var num);
+        //    return new AtmosphereInfo
+        //    {
+        //        AtmosphereName = str,
+        //        TimeInfo = new TimeInformation { Season = num, TimeOfDay = timeOfDay }
+        //    };
+        //}
 
-        private static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", float timeOfDay = 6f)
-        {
-            string[] strArray = new string[12]
-            {
-                "TOD_01_00_SemiCloudy",
-                "TOD_02_00_SemiCloudy",
-                "TOD_03_00_SemiCloudy",
-                "TOD_04_00_SemiCloudy",
-                "TOD_05_00_SemiCloudy",
-                "TOD_06_00_SemiCloudy",
-                "TOD_07_00_SemiCloudy",
-                "TOD_08_00_SemiCloudy",
-                "TOD_09_00_SemiCloudy",
-                "TOD_10_00_SemiCloudy",
-                "TOD_11_00_SemiCloudy",
-                "TOD_12_00_SemiCloudy"
-            };
-            int index = new Random().Next(0, strArray.Length);
-            string str = strArray[index];
-            Dictionary<string, int> dictionary = new Dictionary<string, int>
-            {
-                {"spring", 0}, {"summer", 1}, {"fall", 2}, {"winter", 3}
-            };
-            dictionary.TryGetValue(seasonString, out var num);
-            return new AtmosphereInfo
-            {
-                AtmosphereName = str,
-                TimeInfo = new TimeInformation { Season = num, TimeOfDay = timeOfDay}
-            };
-        }
         public static Mission OpenMission(BattleConfig config, string mapName)
         {
             //TODO: implement in multiplayer mode
@@ -57,10 +51,8 @@ namespace EnhancedBattleTest.Data.MissionData
             {
                 return OpenMultiplayerMission(config, mapName);
             }
-            else
-            {
-                return OpenSingleplayerMission(config, mapName);
-            }
+
+            return OpenSingleplayerMission(config, mapName);
         }
 
         public static Mission OpenMultiplayerMission(BattleConfig config, string map)
@@ -133,12 +125,10 @@ namespace EnhancedBattleTest.Data.MissionData
                 }
 
                 return OpenEnhancedBattleTestSiege(map, config, playerParty, enemyParty, hitPointPercentages,
-                    attackerSiegeWeaponCount, defenderSiegeWeaponCount);
+                    attackerSiegeWeaponCount, defenderSiegeWeaponCount, false, false, config.MapConfig.TimeOfDay);
             }
-            else
-            {
-                return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty);
-            }
+
+            return OpenEnhancedBattleTestField(map, config, playerParty, enemyParty, config.MapConfig.TimeOfDay);
         }
 
 
@@ -210,7 +200,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (playerGeneral != null)
                 {
                     charactersInPlayerSideByPriority.Remove(playerGeneral);
-                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
                     {
                         playerGeneral.Name
                     }).FirstOrDefault();
@@ -220,7 +210,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (enemyGeneral != null)
                 {
                     charactersInEnemySideByPriority.Remove(enemyGeneral);
-                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
                     {
                         enemyGeneral.Name
                     }).FirstOrDefault();
@@ -228,7 +218,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 }
             }
 
-            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
+            AtmosphereInfo atmosphereInfo = AtmosphereModel.CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
 
             var attackerSiegeWeapons =
                 GetSiegeWeaponTypes(siegeWeaponsCountOfAttackers);
@@ -341,7 +331,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (playerGeneral != null)
                 {
                     charactersInPlayerSideByPriority.Remove(playerGeneral);
-                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
                     {
                         playerGeneral.Name
                     }).FirstOrDefault();
@@ -351,22 +341,20 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (enemyGeneral != null)
                 {
                     charactersInEnemySideByPriority.Remove(enemyGeneral);
-                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>()
+                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
                     {
                         enemyGeneral.Name
                     }).FirstOrDefault();
-
                 }
             }
 
 
-            AtmosphereInfo atmosphereInfo = CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
+            AtmosphereInfo atmosphereInfo = AtmosphereModel.CreateAtmosphereInfoForMission(config.MapConfig.Season, timeOfDay);
             return MissionState.OpenNew("EnhancedBattleTestFieldBattle", new MissionInitializerRecord(scene)
             {
                 DoNotUseLoadingScreen = false,
                 PlayingInCampaignMode = false,
                 AtmosphereOnCampaign = atmosphereInfo,
-                SceneLevels = "",
                 TimeOfDay = timeOfDay
             }, mission =>
                 new MissionBehaviour[]
@@ -378,6 +366,7 @@ namespace EnhancedBattleTest.Data.MissionData
                         !isPlayerAttacker ? playerParty : enemyParty,
                         isPlayerAttacker ? playerParty : enemyParty,
                         Mission.MissionTeamAITypeEnum.FieldBattle, isPlayerSergeant),
+                    new MissionDefaultCaptainAssignmentLogic(),
                     new BattleObserverMissionLogic(),
                     new CustomBattleAgentLogic(),
                     new MissionAgentSpawnLogic(troopSuppliers, playerSide),
@@ -397,8 +386,7 @@ namespace EnhancedBattleTest.Data.MissionData
                         charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList()),
                     new CreateBodyguardMissionBehavior(
                         isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
-                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName,
-                        null, null, true),
+                        !isPlayerAttacker ? playerTeamGeneralName : enemyTeamGeneralName),
                     new HighlightsController(),
                     new BattleHighlightsController()
                 });
@@ -410,10 +398,8 @@ namespace EnhancedBattleTest.Data.MissionData
             {
                 return new MPTroopSupplier(combatant);
             }
-            else
-            {
-                return new SPTroopSupplier(combatant);
-            }
+
+            return new SPTroopSupplier(combatant);
         }
 
         private static Dictionary<SiegeEngineType, int> GetSiegeWeaponCount(List<string> siegeWeaponIds)

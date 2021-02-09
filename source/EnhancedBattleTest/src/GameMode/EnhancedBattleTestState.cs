@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -40,6 +41,7 @@ namespace EnhancedBattleTest.GameMode
                 Scenes.AddRange(customGame.CustomBattleScenes.Select(data => new SceneData(data)));
                 GameSceneDataManager.Instance.LoadSPBattleScenes(BasePath.Name + "Modules/Sandbox/ModuleData/sp_battle_scenes.xml");
                 Scenes.AddRange(GameSceneDataManager.Instance.SingleplayerBattleScenes.Select(data => new SceneData(data)));
+                Scenes = Scenes.Distinct(new SceneDataComparer()).ToList();
             }
             catch
             {

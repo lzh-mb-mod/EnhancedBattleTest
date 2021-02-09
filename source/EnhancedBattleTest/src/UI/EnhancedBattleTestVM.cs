@@ -232,6 +232,11 @@ namespace EnhancedBattleTest.UI
                     MapSelectionGroup.SeasonSelection.SelectedIndex = 3;
                     break;
             }
+
+            MapSelectionGroup.TimeOfDaySelection.SelectedItem =
+                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault(vm =>
+                    vm.TimeOfDay == _config.MapConfig.TimeOfDay) ??
+                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault();
         }
 
         public void ExecuteSwapTeam()
@@ -285,6 +290,10 @@ namespace EnhancedBattleTest.UI
                 _config.MapConfig.BreachedWallCount = MapSelectionGroup.WallHitpointSelection.SelectedItem.BreachedWallCount;
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
                 _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
+            if (MapSelectionGroup.TimeOfDaySelection.SelectedItem != null)
+            {
+                _config.MapConfig.TimeOfDay = MapSelectionGroup.SelectedTimeOfDay;
+            }
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
