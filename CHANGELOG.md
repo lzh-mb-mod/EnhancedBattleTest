@@ -1,6 +1,13 @@
 # Changelog
 
-## [e2.0.18] - 2021-02-08
+## [v2.1.19] - 2021-02-09
+### Fixed
+- Fix spawning issue in Bannerlord e1.5.8
+
+### Added
+- Add "Time of day" option.
+
+## [v2.0.18] - 2021-02-08
 ### Fixed
 - Keep compatible with Bannerlord e1.5.7 and Bannerlord e1.5.8".
 
