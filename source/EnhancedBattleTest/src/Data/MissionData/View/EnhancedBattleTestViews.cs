@@ -33,6 +33,7 @@ namespace EnhancedBattleTest.Data.MissionData.View
                 ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(),
+                ViewCreator.CreatePhotoModeView(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
@@ -66,6 +67,7 @@ namespace EnhancedBattleTest.Data.MissionData.View
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 new SiegeDeploymentVisualizationMissionView(),
                 ViewCreator.CreatePlayerRoleSelectionUIHandler(),
+                ViewCreator.CreatePhotoModeView(),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
                 new EnhancedBattleTestPreloadView()
