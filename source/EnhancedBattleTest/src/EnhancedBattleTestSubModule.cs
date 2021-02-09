@@ -22,9 +22,9 @@ namespace EnhancedBattleTest
         private readonly MethodInfo prefix = typeof(Patch_MissionAgentSpawnLogic).GetMethod("SpawnTroops_Prefix");
         public static EnhancedBattleTestSubModule Instance { get; private set; }
 
-        public static string ModuleFolderName = "EnhancedBattleTest";
+        public static string ModuleId = "EnhancedBattleTest";
 
-        public static string ModuleFolderPath = Path.Combine(BasePath.Name, "Modules", ModuleFolderName);
+        public static string ModuleFolderPath = Path.Combine(BasePath.Name, "Modules", ModuleId);
 
         public static bool IsMultiplayer;
 
