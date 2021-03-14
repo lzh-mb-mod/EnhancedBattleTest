@@ -70,6 +70,13 @@ namespace EnhancedBattleTest.GameMode
 
         public override void OnLoadFinished()
         {
+            var active = Game.Current.GameStateManager.ActiveStateDisabledByUser;
+
+            base.OnLoadFinished();
+
+            // revert the effects in TaleWorlds.CampaignSystem.CharacterCreationContent.CharacterCreationState.OnInitialize
+            Game.Current.GameStateManager.ActiveStateDisabledByUser = active;
+
             if (CampaignSiegeTestStatic.IsSiegeTestBuild)
                 CampaignSiegeTestStatic.DisableSiegeTest();
             Game.Current.GameStateManager.OnSavedGameLoadFinished();
