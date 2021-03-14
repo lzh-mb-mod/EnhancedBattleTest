@@ -1,5 +1,6 @@
 ﻿using EnhancedBattleTest.Data;
 using SandBox;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
@@ -69,7 +70,17 @@ namespace EnhancedBattleTest.GameMode
 
         public override void OnLoadFinished()
         {
-            base.OnLoadFinished();
+            if (CampaignSiegeTestStatic.IsSiegeTestBuild)
+                CampaignSiegeTestStatic.DisableSiegeTest();
+            Game.Current.GameStateManager.OnSavedGameLoadFinished();
+            Game.Current.GameStateManager.CleanAndPushState((GameState)Game.Current.GameStateManager.CreateState<MapState>());
+            if (Game.Current.GameStateManager.ActiveState is MapState activeState)
+                activeState.OnLoadingFinished();
+            PartyBase.MainParty.Visuals?.SetMapIconAsDirty();
+            TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.OnGameLoaded();
+            foreach (Settlement settlement in Settlement.All)
+                settlement.Party.Visuals.RefreshLevelMask(settlement.Party);
+            CampaignEvents.Instance.OnGameLoadFinished();
 
 
             Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
