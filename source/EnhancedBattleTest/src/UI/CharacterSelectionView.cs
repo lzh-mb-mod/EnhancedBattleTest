@@ -14,7 +14,7 @@ namespace EnhancedBattleTest.UI
         private bool _isActive;
         private CharacterCollection _characterCollection;
         private CharacterSelectionVM _dataSource;
-        private GauntletMovie _movie;
+        private IGauntletMovie _movie;
         private ScreenBase _screen;
         private GauntletLayer _gauntletLayer;
         private bool _isLastActiveGameStateActive;

@@ -19,7 +19,7 @@ namespace EnhancedBattleTest.UI
         private readonly TextObject _title;
         private EnhancedBattleTestVM _dataSource;
         private GauntletLayer _gauntletLayer;
-        private GauntletMovie _gauntletMovie;
+        private IGauntletMovie _gauntletMovie;
         private bool _isMovieLoaded;
 
         public CharacterSelectionView CharacterSelectionView;

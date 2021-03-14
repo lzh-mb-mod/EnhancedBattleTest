@@ -233,10 +233,10 @@ namespace EnhancedBattleTest.UI
                     break;
             }
 
-            MapSelectionGroup.TimeOfDaySelection.SelectedItem =
+            MapSelectionGroup.TimeOfDaySelection.SelectedIndex = MapSelectionGroup.TimeOfDaySelection.ItemList.IndexOf(
                 MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault(vm =>
                     vm.TimeOfDay == _config.MapConfig.TimeOfDay) ??
-                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault();
+                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault());
         }
 
         public void ExecuteSwapTeam()
