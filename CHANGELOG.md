@@ -1,9 +1,9 @@
 # Changelog
 
-## [v2.1.20] - 2021-03-14
+## [v2.0.20] - 2021-03-14
 - Fix compatibility with Bannerlord e1.5.9.
 
-## [v2.1.19] - 2021-02-09
+## [v2.0.19] - 2021-02-09
 ### Fixed
 - Fix spawning issue in Bannerlord e1.5.8
 
