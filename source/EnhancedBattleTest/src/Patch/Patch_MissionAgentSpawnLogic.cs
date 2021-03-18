@@ -78,8 +78,8 @@ namespace EnhancedBattleTest.Patch
                         Formation formation = team.GetFormation(formationClass);
                         if (formation != null && !(bool)HasBeenPositionedProperty.GetValue(formation))
                         {
-                            formation.BeginSpawn(count, isMounted);
-                            Mission.Current.SpawnFormation(formation, count, ____spawnWithHorses, isMounted, isReinforcement);
+                            formation.BeginSpawn(count, isMounted && ____spawnWithHorses);
+                            Mission.Current.SpawnFormation(formation, count, ____spawnWithHorses, isMounted && ____spawnWithHorses, isReinforcement);
                             ____spawnedFormations.Add(formation);
                         }
                         agentOriginBase.SpawnTroop(____side, true, ____spawnWithHorses, isReinforcement,
