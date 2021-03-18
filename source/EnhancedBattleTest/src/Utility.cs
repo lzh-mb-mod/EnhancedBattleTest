@@ -144,10 +144,21 @@ namespace EnhancedBattleTest
         public static BasicCultureObject GetCulture(TeamConfig config)
         {
             if (config.HasGeneral)
-                return config.General.Character.Culture;
-            else
-                return config.Troops.Troops.FirstOrDefault(troopConfig => troopConfig.Number != 0)?.Character.Character
-                           .Culture ?? Game.Current.ObjectManager.GetObject<BasicCultureObject>(culture => true);
+            {
+                var character = config.Generals.Troops.FirstOrDefault();
+                if (character != null)
+                    return character.Character.CharacterObject.Culture;
+            }
+
+            foreach (var troopGroupConfig in config.TroopGroups)
+            {
+                foreach (var troopConfig in troopGroupConfig.Troops)
+                {
+                    if (troopConfig.Number > 0)
+                        return troopConfig.Character.CharacterObject.Culture;
+                }
+            }
+            return Game.Current.ObjectManager.GetObject<BasicCultureObject>(culture => true);
         }
 
         public static SiegeEngineType GetSiegeEngineType(string id)
@@ -267,10 +278,10 @@ namespace EnhancedBattleTest
 
         public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
         {
-            var characters = teamConfig.Troops.Troops
-                .Select(troopConfig => troopConfig.Character);
+            var characters = teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
+                troopGroupConfig.Troops.Select(troopConfig => troopConfig.Character));
             if (teamConfig.HasGeneral)
-                characters = characters.Prepend(teamConfig.General);
+                characters = characters.Concat(teamConfig.Generals.Troops.Select(troopConfig => troopConfig.Character));
             return characters.Select(character => character.CharacterObject as CharacterObject)
                 .Where(character => character != null && character.IsHero).Select(character => character.HeroObject)
                 .ToList().ConvertAll(hero => hero.CharacterObject);
@@ -309,13 +320,15 @@ namespace EnhancedBattleTest
                 TeamConfig teamConfig, bool isPlayerTeam)
         {
             party.MemberRoster.Clear();
-            party.MemberRoster.Add(new[]
-            {
-                new FlattenedTroopRosterElement(GetCharacterObject(teamConfig.General.CharacterObject),
-                    teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)
-            });
-            party.MemberRoster.Add(teamConfig.Troops.Troops.Select(troopConfig =>
-                new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject))));
+            party.MemberRoster.Add(teamConfig.Generals.Troops.Select(troopConfig => 
+                new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject),
+                    teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)).ToArray());
+
+            party.MemberRoster.Add(teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
+                troopGroupConfig.Troops.SelectMany(troopConfig =>
+                    Enumerable.Repeat(
+                        new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject)),
+                        troopConfig.Number))));
         }
 
         public static CharacterObject GetCharacterObject(BasicCharacterObject character)

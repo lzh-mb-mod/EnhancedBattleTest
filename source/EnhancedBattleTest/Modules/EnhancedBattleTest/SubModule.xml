@@ -2,7 +2,7 @@
 <Module>
   <Name value="EnhancedBattleTest"/>
   <Id value="EnhancedBattleTest"/>
-  <Version value="v2.0.19"/>
+  <Version value="v2.1.0"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>

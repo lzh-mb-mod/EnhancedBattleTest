@@ -8,10 +8,6 @@ namespace EnhancedBattleTest.Config
     {
         [XmlIgnore]
         private string _bannerKey = "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0";
-        [XmlIgnore]
-        private CharacterConfig _general = CharacterConfig.Create(EnhancedBattleTestSubModule.IsMultiplayer);
-        [XmlIgnore]
-        private TroopGroupConfig _troops = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
 
         public string BannerKey
         {
@@ -19,18 +15,13 @@ namespace EnhancedBattleTest.Config
             set => _bannerKey = !value.IsStringNoneOrEmpty() ? value : _bannerKey;
         }
 
-        public CharacterConfig General
-        {
-            get => _general;
-            set => _general = value ?? _general;
-        }
+        [field: XmlIgnore]
+        public TroopGroupConfig Generals { get; set; } = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+
         public bool HasGeneral;
 
-        public TroopGroupConfig Troops
-        {
-            get => _troops;
-            set => _troops = value ?? _troops;
-        }
+        [field: XmlIgnore]
+        public TroopGroupConfig[] TroopGroups { get; set; } = new TroopGroupConfig[8];
 
         public int TacticLevel = 0;
 
@@ -49,12 +40,13 @@ namespace EnhancedBattleTest.Config
 
 
         public TeamConfig()
-        { }
+        {
+        }
 
         public TeamConfig(bool isMultiplayer)
         {
-            Troops = new TroopGroupConfig(isMultiplayer);
-            General = CharacterConfig.Create(isMultiplayer);
+            for (int i = 0; i < TroopGroups.Length; ++i)
+                TroopGroups[i] = new TroopGroupConfig(isMultiplayer);
         }
     }
 }

@@ -301,11 +301,13 @@ namespace EnhancedBattleTest.UI
                 AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
-            if (_config.BattleTypeConfig.BattleType == BattleType.Siege && !_config.PlayerTeamConfig.HasGeneral)
+            if (_config.BattleTypeConfig.BattleType == BattleType.Siege &&
+                (!_config.PlayerTeamConfig.HasGeneral || _config.PlayerTeamConfig.Generals.Troops.Count == 0))
             {
                 Utility.DisplayLocalizedText("str_ebt_siege_no_player");
                 return false;
             }
+
             return true;
         }
 

@@ -1,26 +1,21 @@
-﻿namespace EnhancedBattleTest.Config
+﻿using System.Collections.Generic;
+
+namespace EnhancedBattleTest.Config
 {
     public class TroopGroupConfig
     {
-        private TroopConfig[] _troops = new TroopConfig[8];
-
-        public TroopConfig[] Troops
-        {
-            get => _troops;
-            set => _troops = value != null && value.Length == 8 ? value : _troops;
-        }
+        public List<TroopConfig> Troops { get; set; }
 
         public TroopGroupConfig()
         {
-            for (int i = 0; i < _troops.Length; ++i)
-            {
-                Troops[i] = new TroopConfig(EnhancedBattleTestSubModule.IsMultiplayer);
-            }
+            Troops = new List<TroopConfig>();
         }
-        public TroopGroupConfig(bool isMultiplayer)
+
+        public TroopGroupConfig(bool isMultiplayer, bool isGeneralTroopGroup = false)
         {
-            for (int i = 0; i < Troops.Length; ++i)
-                Troops[i] = new TroopConfig(isMultiplayer);
+            Troops = isGeneralTroopGroup
+                ? new List<TroopConfig>(1) {new TroopConfig(isMultiplayer)}
+                : new List<TroopConfig>();
         }
     }
 }
