@@ -1,6 +1,7 @@
 ﻿using EnhancedBattleTest.BannerEditor;
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
+using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -32,21 +33,24 @@ namespace EnhancedBattleTest.UI
         public TextVM TacticText { get; }
         public NumberVM<float> TacticLevel { get; }
 
-        public CharacterButtonVM General { get; }
+        public TroopGroupVM Generals { get; }
 
         public TextVM EnableGeneralText { get; }
 
         public BoolVM EnableGeneral { get; }
 
-        public TroopGroup TroopGroup { get; }
+        public MBBindingList<TroopGroupVM> TroopGroups { get; }
 
         public bool IsPlayerSide
         {
             set
             {
                 Name.TextObject = value ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY");
-                General.IsPlayerSide = value;
-                TroopGroup.IsPlayerSide = value;
+                Generals.IsPlayerSide = value;
+                foreach (var troopGroup in TroopGroups)
+                {
+                    troopGroup.IsPlayerSide = value;
+                }
             }
         }
 
@@ -58,13 +62,19 @@ namespace EnhancedBattleTest.UI
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
             TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += f => _config.TacticLevel = (int)f;
-            General = new CharacterButtonVM(_config, _config.General,
-                GameTexts.FindText("str_ebt_troop_role", "general"), isPlayerSide, battleTypeConfig);
+            Generals = new TroopGroupVM(_config, _config.Generals, GameTexts.FindText("str_ebt_troop_role", "General"),
+                true, isPlayerSide, battleTypeConfig);
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
             EnableGeneral = new BoolVM(_config.HasGeneral);
             EnableGeneral.OnValueChanged += OnEnableGeneralChanged;
 
-            TroopGroup = new TroopGroup(config, config.Troops, isPlayerSide, battleTypeConfig);
+            TroopGroups = new MBBindingList<TroopGroupVM>();
+            for (int i = 0; i < _config.TroopGroups.Length; ++i)
+            {
+                TroopGroups.Add(new TroopGroupVM(config, _config.TroopGroups[i],
+                    GameTexts.FindText("str_ebt_troop_role", "Soldiers").SetTextVariable("TroopIndex", i + 1), false,
+                    isPlayerSide, battleTypeConfig));
+            }
         }
 
         private void OnEnableGeneralChanged(bool value)
@@ -74,14 +84,14 @@ namespace EnhancedBattleTest.UI
 
         public bool IsValid()
         {
-            return TroopGroup.IsValid();
+            return Generals.IsValid() && TroopGroups.All(troopGroup => troopGroup.IsValid());
         }
 
         public void EditBanner()
         {
             BannerEditorState.Config = _config;
             BannerEditorState.OnDone = () => Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
-            TaleWorlds.Core.Game.Current.GameStateManager.PushState(TaleWorlds.Core.Game.Current.GameStateManager.CreateState<BannerEditorState>());
+            Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<BannerEditorState>());
         }
 
         public override void RefreshValues()
@@ -89,8 +99,11 @@ namespace EnhancedBattleTest.UI
             base.RefreshValues();
 
             Name.RefreshValues();
-            General.RefreshValues();
-            TroopGroup.RefreshValues();
+            Generals.RefreshValues();
+            foreach (var troopGroupVm in TroopGroups)
+            {
+                troopGroupVm.RefreshValues();
+            }
         }
     }
 }

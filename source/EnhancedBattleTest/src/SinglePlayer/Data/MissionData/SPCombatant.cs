@@ -6,6 +6,7 @@ using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Config;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
@@ -45,7 +46,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             party.Owner = null;
             if (teamConfig.HasGeneral)
             {
-                var characterObject = (teamConfig.General as SPCharacterConfig)?.ActualCharacterObject;
+                var characterObject = (teamConfig.Generals.Troops.FirstOrDefault()?.Character as SPCharacterConfig)?.ActualCharacterObject;
                 if (characterObject?.IsHero ?? false)
                     party.Owner = characterObject.HeroObject;
             }
@@ -56,23 +57,72 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
                 teamConfig.Banner);
             if (teamConfig.HasGeneral)
             {
-                if (teamConfig.General is SPCharacterConfig general)
+                bool hasPlayer = false;
+                foreach (var generalTroop in teamConfig.Generals.Troops)
                 {
-                    combatant.AddCharacter(
-                        new SPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
-                            general.FemaleRatio > 0.5, isPlayerTeam), 1);
+                    if (generalTroop.Character is SPCharacterConfig general)
+                    {
+                        combatant.AddCharacter(
+                            new SPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
+                                general.FemaleRatio > 0.5, !hasPlayer && isPlayerTeam), 1);
+                        hasPlayer = isPlayerTeam;
+                    }
                 }
             }
-            for (int i = 0; i < teamConfig.Troops.Troops.Length; ++i)
+
+            var queue = new PriorityQueue<float, SPSpawnableCharacter>(new GenericComparer<float>());
+
+            for (int i = 0; i < teamConfig.TroopGroups.Length; i++)
             {
-                var troopConfig = teamConfig.Troops.Troops[i];
-                if (troopConfig.Character is SPCharacterConfig spCharacter)
+                var originalNumbers = new Dictionary<string, TroopCountPair>();
+                var queuedNumbers = new Dictionary<string, TroopCountPair>();
+                foreach (var troop in teamConfig.TroopGroups[i].Troops)
                 {
-                    var femaleCount = (int)(troopConfig.Number * spCharacter.FemaleRatio + 0.49);
-                    var maleCount = troopConfig.Number - femaleCount;
-                    combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, true), femaleCount);
-                    combatant.AddCharacter(new SPSpawnableCharacter(spCharacter, i, false), maleCount);
+                    if (troop.Character is SPCharacterConfig spCharacter)
+                    {
+                        var femaleCount = (int)(troop.Number * spCharacter.FemaleRatio + 0.49);
+                        var maleCount = troop.Number - femaleCount;
+                        if (originalNumbers.ContainsKey(spCharacter.CharacterId))
+                        {
+                            originalNumbers[spCharacter.CharacterId].FemaleCount += femaleCount;
+                            originalNumbers[spCharacter.CharacterId].MaleCount += maleCount;
+                        }
+                        else
+                        {
+                            originalNumbers[spCharacter.CharacterId] = new TroopCountPair(femaleCount, maleCount);
+                            queuedNumbers[spCharacter.CharacterId] = new TroopCountPair(0, 0);
+                        }
+                    }
                 }
+                foreach (var troop in teamConfig.TroopGroups[i].Troops)
+                {
+                    if (troop.Character is SPCharacterConfig spCharacter)
+                    {
+                        var femaleCount = (int)(troop.Number * spCharacter.FemaleRatio + 0.49);
+                        var maleCount = troop.Number - femaleCount;
+                        for (int j = 0; j < femaleCount; j++)
+                        {
+                            queue.Enqueue(
+                                -(float) queuedNumbers[spCharacter.CharacterId].FemaleCount /
+                                originalNumbers[spCharacter.CharacterId].FemaleCount,
+                                new SPSpawnableCharacter(spCharacter, i, true));
+                            ++queuedNumbers[spCharacter.CharacterId].FemaleCount;
+                        }
+                        for (int j = 0; j < maleCount; j++)
+                        {
+                            queue.Enqueue(
+                                -(float)queuedNumbers[spCharacter.CharacterId].MaleCount /
+                                originalNumbers[spCharacter.CharacterId].MaleCount,
+                                new SPSpawnableCharacter(spCharacter, i, false));
+                            ++queuedNumbers[spCharacter.CharacterId].MaleCount;
+                        }
+                    }
+                }
+            }
+
+            while (!queue.IsEmpty)
+            {
+                combatant.AddCharacter(queue.DequeueValue(), 1);
             }
 
             return combatant;

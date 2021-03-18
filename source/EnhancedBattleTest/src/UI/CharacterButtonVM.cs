@@ -14,8 +14,6 @@ namespace EnhancedBattleTest.UI
         public bool IsPlayerSide { get; set; }
         private StringItemWithActionVM _name;
 
-        public TextVM CharacterRole { get; }
-
         [DataSourceProperty]
         public StringItemWithActionVM Name
         {
@@ -29,10 +27,9 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        public CharacterButtonVM(TeamConfig teamConfig, CharacterConfig config, TextObject characterRole, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public CharacterButtonVM(TeamConfig teamConfig, CharacterConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
         {
             _battleTypeConfig = battleTypeConfig;
-            CharacterRole = new TextVM(characterRole);
             IsPlayerSide = isPlayerSide;
             SetConfig(teamConfig, config);
         }
@@ -40,7 +37,6 @@ namespace EnhancedBattleTest.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            CharacterRole.RefreshValues();
             Name.ActionText = _config.Character.Name.ToString();
         }
 

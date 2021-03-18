@@ -170,7 +170,7 @@ namespace EnhancedBattleTest.Data.MissionData
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
 
 
-            var player = config.PlayerTeamConfig.General;
+            var player = config.PlayerTeamConfig.Generals.Troops.FirstOrDefault()?.Character;
             if (player == null)
                 return null;
             bool hasPlayer = config.PlayerTeamConfig.HasGeneral;
@@ -299,7 +299,7 @@ namespace EnhancedBattleTest.Data.MissionData
         {
             var playerSide = config.BattleTypeConfig.PlayerSide;
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
-            var player = config.PlayerTeamConfig.General;
+            var player = config.PlayerTeamConfig.Generals;
             if (player == null)
                 return null;
 
@@ -319,7 +319,7 @@ namespace EnhancedBattleTest.Data.MissionData
             string enemyTeamGeneralName = null;
             if (!isMultiplayer)
             {
-                var playerCharacter = player.CharacterObject as CharacterObject;
+                var playerCharacter = config.PlayerTeamConfig.Generals.Troops.FirstOrDefault()?.Character.CharacterObject as CharacterObject;
                 if (playerCharacter == null)
                     return null;
                 charactersInPlayerSideByPriority = Utility.OrderHeroesByPriority(config.PlayerTeamConfig);

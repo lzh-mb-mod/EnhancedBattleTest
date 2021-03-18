@@ -5,6 +5,17 @@ using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest.Data.MissionData
 {
+    public class TroopCountPair
+    {
+        public int FemaleCount;
+        public int MaleCount;
+
+        public TroopCountPair(int femaleCount, int maleCount)
+        {
+            FemaleCount = femaleCount;
+            MaleCount = maleCount;
+        }
+    }
     public abstract class EnhancedBattleTestCombatant : IEnhancedBattleTestCombatant
     {
         protected EnhancedBattleTestCombatant(TextObject name, BattleSideEnum side, BasicCultureObject basicCulture, Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
