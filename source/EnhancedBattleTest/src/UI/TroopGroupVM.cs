@@ -70,7 +70,7 @@ namespace EnhancedBattleTest.UI
                 Troops.Add(new TroopVM(teamConfig, troopConfig,
                     isPlayerSide, battleTypeConfig));
             }
-            
+
             UpdateEnabled();
         }
 
@@ -98,7 +98,9 @@ namespace EnhancedBattleTest.UI
 
         public void PushTroop()
         {
-            var newTroop = new TroopConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+            var newTroop = _config.Troops.Count == 0
+                ? new TroopConfig(EnhancedBattleTestSubModule.IsMultiplayer)
+                : new TroopConfig(_config.Troops[_config.Troops.Count - 1]);
             _config.Troops.Add(newTroop);
             Troops.Add(new TroopVM(_teamConfig, newTroop, _isPlayerSide, _battleTypeConfig));
             UpdateEnabled();
