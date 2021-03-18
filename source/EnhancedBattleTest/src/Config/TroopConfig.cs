@@ -24,5 +24,11 @@
             Character = CharacterConfig.Create(isMultiplayer, id, femaleRatio);
             Number = number;
         }
+
+        public TroopConfig(TroopConfig other)
+        {
+            Character = other.Character.Clone();
+            Number = other.Number;
+        }
     }
 }
