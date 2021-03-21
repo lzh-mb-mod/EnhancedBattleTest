@@ -68,7 +68,7 @@ namespace EnhancedBattleTest.UI
             foreach (var troopConfig in config.Troops)
             {
                 Troops.Add(new TroopVM(teamConfig, troopConfig,
-                    isPlayerSide, battleTypeConfig));
+                    isPlayerSide, battleTypeConfig, isGeneralTroopGroup));
             }
 
             UpdateEnabled();
@@ -102,7 +102,7 @@ namespace EnhancedBattleTest.UI
                 ? new TroopConfig(EnhancedBattleTestSubModule.IsMultiplayer)
                 : new TroopConfig(_config.Troops[_config.Troops.Count - 1]);
             _config.Troops.Add(newTroop);
-            Troops.Add(new TroopVM(_teamConfig, newTroop, _isPlayerSide, _battleTypeConfig));
+            Troops.Add(new TroopVM(_teamConfig, newTroop, _isPlayerSide, _battleTypeConfig, IsGeneralTroopGroup));
             UpdateEnabled();
         }
 

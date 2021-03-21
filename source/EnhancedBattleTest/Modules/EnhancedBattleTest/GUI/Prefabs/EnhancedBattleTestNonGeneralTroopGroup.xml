@@ -1,0 +1,40 @@
+<Prefab>
+  <Window>
+    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="585" HeightSizePolicy="CoverChildren" MarginLeft="50" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+      <Children>
+
+        <PartyHeaderToggleWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginLeft="10" MarginRight="10" CollapseIndicator="Description\CollapseParent\GroupTitle\CollapseIndicator" WidgetToClose="..\TroopsList" ListPanel="..\TroopsList" RenderLate="true" UpdateChildrenStates="true">
+          <Children>
+
+            <ListPanel Id="Description" DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight" UpdateChildrenStates="true">
+              <Children>
+
+                <Widget Id="CollapseParent" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="120" HorizontalAlignment="Center" UpdateChildrenStates="true">
+                  <Children>
+                    <TextWidget Id="GroupTitle" DataSource="{TroopGroupName}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" Brush="SPOptions.GameKeysGroup.Title.Text" ClipContents="false">
+                      <Children>
+                        <BrushWidget Id="CollapseIndicator" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="19" SuggestedWidth="19" VerticalAlignment="Center" PositionXOffset="-26" PositionYOffset="-3" Brush="SPOptions.GameKeysgroup.ExpandIndicator" OverrideDefaultStateSwitchingEnabled="true" />
+                      </Children>
+                    </TextWidget>
+                  </Children>
+                </Widget>
+
+                <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" VerticalAlignment="Center" MarginLeft="15" Brush="SPOptions.CollapserLine" />
+              </Children>
+            </ListPanel>
+
+          </Children>
+        </PartyHeaderToggleWidget>
+
+        <ListPanel Id="TroopsList" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="35" LayoutImp.LayoutMethod="VerticalBottomToTop">
+          <Children>
+            
+            <EnhancedBattleTestTroopList />
+
+          </Children>
+        </ListPanel>
+
+      </Children>
+    </ListPanel>
+  </Window>
+</Prefab>

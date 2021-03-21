@@ -1,8 +1,8 @@
-﻿using System;
+﻿using EnhancedBattleTest.Config;
+using EnhancedBattleTest.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using EnhancedBattleTest.Config;
-using EnhancedBattleTest.Data;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
 using TaleWorlds.Library;
@@ -175,8 +175,16 @@ namespace EnhancedBattleTest.UI
             }
             foreach (MapItemVM availableMap in _availableMaps)
                 MapSearchResults.Add(availableMap);
-            _searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
-            OnPropertyChanged(nameof(SearchText));
+            if (_availableMaps.Count == 0)
+            {
+                Utility.DisplayLocalizedText("str_ebt_no_map");
+            }
+            else
+            {
+                SelectedMap = _availableMaps[_availableMaps.Count - 1];
+                _searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
+                OnPropertyChanged(nameof(SearchText));
+            }
         }
 
         public void RandomizeAll()
@@ -199,6 +207,7 @@ namespace EnhancedBattleTest.UI
             // ISSUE: explicit non-virtual call
             if (mapSearchResults != null && mapSearchResults.Count > 0)
             {
+                SearchText = "";
                 MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)].ExecuteSelection();
             }
         }
@@ -224,6 +233,7 @@ namespace EnhancedBattleTest.UI
                     if (map.MapName.IndexOf(_searchText, StringComparison.OrdinalIgnoreCase) >= 0 && MapSearchResults.All(m => m.MapName != map.MapName))
                         MapSearchResults.Add(map);
                 }
+                _availableMaps.ForEach(m => m.UpdateSearchedText(_searchText));
             }
         }
 
@@ -367,7 +377,7 @@ namespace EnhancedBattleTest.UI
             get => _timeOfDayText;
             set
             {
-                if (!(value != _timeOfDayText))
+                if (value == _timeOfDayText)
                     return;
                 _timeOfDayText = value;
                 OnPropertyChangedWithValue(value, nameof(TimeOfDayText));

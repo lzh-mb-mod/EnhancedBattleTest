@@ -56,7 +56,7 @@ namespace EnhancedBattleTest.SinglePlayer.Config
 
         public SPCharacterConfig()
         {
-            CharacterId = TaleWorlds.Core.Game.Current.ObjectManager.GetObjectTypeList<CharacterObject>().First().StringId;
+            CharacterId = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().First().BasicTroop.StringId;
         }
 
         public SPCharacterConfig(string id, float femaleRatio = 0)

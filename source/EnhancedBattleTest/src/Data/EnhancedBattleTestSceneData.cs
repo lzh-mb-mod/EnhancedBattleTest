@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -88,7 +89,7 @@ namespace EnhancedBattleTest.Data
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return x.Id == y.Id && x.Terrain == y.Terrain && Equals(x.TerrainTypes, y.TerrainTypes) && x.ForestDensity == y.ForestDensity && x.IsSiegeMap == y.IsSiegeMap && x.IsVillageMap == y.IsVillageMap;
+            return string.Equals(x.Id, y.Id, StringComparison.Ordinal) && x.Terrain == y.Terrain && x.IsSiegeMap == y.IsSiegeMap && x.IsVillageMap == y.IsVillageMap;
         }
 
         public int GetHashCode(SceneData obj)
@@ -97,8 +98,6 @@ namespace EnhancedBattleTest.Data
             {
                 var hashCode = (obj.Id != null ? obj.Id.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (int) obj.Terrain;
-                hashCode = (hashCode * 397) ^ (obj.TerrainTypes != null ? obj.TerrainTypes.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (int) obj.ForestDensity;
                 hashCode = (hashCode * 397) ^ obj.IsSiegeMap.GetHashCode();
                 hashCode = (hashCode * 397) ^ obj.IsVillageMap.GetHashCode();
                 return hashCode;

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v2.1.0] - 2021-03-21
+## Added
+- Add support to add multiple troop types into one formation group.
+
 ## [v2.0.20] - 2021-03-14
 - Fix compatibility with Bannerlord e1.5.9.
 

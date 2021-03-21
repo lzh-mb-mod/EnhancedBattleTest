@@ -203,6 +203,10 @@ namespace EnhancedBattleTest.UI
         private void RecoverConfig()
         {
             MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
+            if (MapSelectionGroup.SearchText.IsStringNoneOrEmpty())
+            {
+                MapSelectionGroup.SearchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
+            }
             MapSelectionGroup.SceneLevelSelection.SelectedIndex = _config.MapConfig.SceneLevel - 1;
             switch (_config.MapConfig.BreachedWallCount)
             {

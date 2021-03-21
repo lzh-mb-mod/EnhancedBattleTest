@@ -45,25 +45,15 @@
                     <Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" ClipContents="true">
                       <Children>
 
-                        <ListPanel Id="TroopGroups" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="20" MarginBottom="50">
+                        <ListPanel Id="TroopGroups" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
                           <Children>
 
-                            <EnhancedBattleTestTroopGroup DataSource="{Generals}" />
-                            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="50" LayoutImp.LayoutMethod="HorizontalLeftToRight">
-                              <Children>
-                                <RichTextWidget DataSource="{EnableGeneralText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
-                                <ButtonWidget DataSource="{EnableGeneral}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
-                                  <Children>
-                                    <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
-                                  </Children>
-                                </ButtonWidget>
-                              </Children>
+                            <EnhancedBattleTestGeneralTroopGroup DataSource="{Generals}" />
+                            <ListPanel DataSource="{TroopGroups}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="20" MarginBottom="50">
+                              <ItemTemplate>
+                                <EnhancedBattleTestNonGeneralTroopGroup />
+                              </ItemTemplate>
                             </ListPanel>
-                            <ListPanel DataSource="{TroopGroups}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="20">
-                                  <ItemTemplate>
-                                    <EnhancedBattleTestTroopGroup />
-                                  </ItemTemplate>
-                                </ListPanel>
                           </Children>
                         </ListPanel>
 
