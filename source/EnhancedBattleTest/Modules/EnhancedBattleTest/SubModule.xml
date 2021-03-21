@@ -10,7 +10,6 @@
     <DependedModule Id="SandBoxCore" DependentVersion="e1.5.8" />
     <DependedModule Id="Sandbox" DependentVersion="e1.5.8" />
     <DependedModule Id="StoryMode" DependentVersion="e1.5.8" />
-    <DependedModule Id="Bannerlord.Harmony"/>
   </DependedModules>
   <SubModules>
     <SubModule>
