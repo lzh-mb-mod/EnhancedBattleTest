@@ -15,13 +15,16 @@ namespace EnhancedBattleTest.UI
 
         public TextVM InvalidText { get; }
 
-        public TroopVM(TeamConfig teamConfig, TroopConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public bool IsGeneralTroop { get; }
+
+        public TroopVM(TeamConfig teamConfig, TroopConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig, bool isGeneralTroop = false)
         {
             CharacterButton = new CharacterButtonVM(teamConfig, config.Character, isPlayerSide, battleTypeConfig);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0, 5000, true);
             Number.OnValueChanged += number => config.Number = number;
             InvalidText = new TextVM(GameTexts.FindText("str_ebt_invalid"));
+            IsGeneralTroop = isGeneralTroop;
         }
 
         public override void RefreshValues()

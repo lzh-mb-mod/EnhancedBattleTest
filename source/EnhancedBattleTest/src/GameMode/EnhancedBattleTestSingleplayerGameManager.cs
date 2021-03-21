@@ -2,6 +2,7 @@
 using SandBox;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
+using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
 using Path = System.IO.Path;
 
@@ -80,8 +81,8 @@ namespace EnhancedBattleTest.GameMode
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
-            gameTextManager.LoadGameTexts(Path.Combine(EnhancedBattleTestSubModule.ModuleFolderPath, "ModuleData",
-                "module_strings.xml"));
+            gameTextManager.LoadGameTexts(ModuleHelper.GetXmlPath(EnhancedBattleTestSubModule.ModuleId,
+                "module_strings"));
         }
     }
 }

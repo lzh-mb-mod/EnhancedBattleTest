@@ -41,12 +41,8 @@ namespace EnhancedBattleTest.Config
 
         public TeamConfig()
         {
-        }
-
-        public TeamConfig(bool isMultiplayer)
-        {
             for (int i = 0; i < TroopGroups.Length; ++i)
-                TroopGroups[i] = new TroopGroupConfig(isMultiplayer);
+                TroopGroups[i] = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
         }
     }
 }
