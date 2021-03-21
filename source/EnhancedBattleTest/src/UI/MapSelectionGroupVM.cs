@@ -181,7 +181,6 @@ namespace EnhancedBattleTest.UI
             }
             else
             {
-                SelectedMap = _availableMaps[_availableMaps.Count - 1];
                 _searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
                 OnPropertyChanged(nameof(SearchText));
             }
@@ -207,7 +206,6 @@ namespace EnhancedBattleTest.UI
             // ISSUE: explicit non-virtual call
             if (mapSearchResults != null && mapSearchResults.Count > 0)
             {
-                SearchText = "";
                 MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)].ExecuteSelection();
             }
         }
