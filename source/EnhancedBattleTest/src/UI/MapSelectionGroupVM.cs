@@ -158,6 +158,7 @@ namespace EnhancedBattleTest.UI
         public void OnGameTypeChange(BattleType gameType)
         {
             MapSearchResults.Clear();
+            SelectedMap = null;
             switch (gameType)
             {
                 case BattleType.Field:
@@ -181,7 +182,8 @@ namespace EnhancedBattleTest.UI
             }
             else
             {
-                _searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
+                //_searchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
+                _searchText = "";
                 OnPropertyChanged(nameof(SearchText));
             }
         }
