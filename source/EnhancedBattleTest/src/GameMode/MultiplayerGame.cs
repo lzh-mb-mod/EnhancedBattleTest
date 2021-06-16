@@ -27,12 +27,11 @@ namespace EnhancedBattleTest.GameMode
             currentGame.CreateGameManager();
             GameManager.BeginGameStart(currentGame);
             currentGame.ThirdInitialize();
-            currentGame.CreateObjects();
             currentGame.InitializeDefaultGameObjects();
             currentGame.LoadBasicFiles(false);
             LoadXmls();
+            objectManager.ClearEmptyObjects();
             currentGame.SetDefaultEquipments((IReadOnlyDictionary<string, Equipment>)new Dictionary<string, Equipment>());
-            currentGame.CreateLists();
             ObjectManager.LoadXML("MPClassDivisions");
             objectManager.ClearEmptyObjects();
             MultiplayerClassDivisions.Initialize();
@@ -60,7 +59,6 @@ namespace EnhancedBattleTest.GameMode
             gameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             gameStarter.AddModel(new DefaultRidingModel());
             gameStarter.AddModel(new MultiplayerStrikeMagnitudeModel());
-            gameStarter.AddModel(new DefaultSkillList());
             gameStarter.AddModel(new MultiplayerBattleMoraleModel());
         }
 

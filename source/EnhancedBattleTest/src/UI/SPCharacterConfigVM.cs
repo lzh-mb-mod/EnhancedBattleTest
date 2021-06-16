@@ -101,7 +101,7 @@ namespace EnhancedBattleTest.UI
                 (int)equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
                 character.TattooTags).ToString();
             Character.MountCreationKey =
-                MountCreationKey.GetRandomMountKey(equipment[10].Item, Common.GetDJB2(character.StringId));
+                MountCreationKey.GetRandomMountKey(equipment[10].Item, Common.GetDJB2(character.StringId)).ToString();
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data.MissionData.Logic;
 using EnhancedBattleTest.Multiplayer.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Data.MissionData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -283,8 +282,10 @@ namespace EnhancedBattleTest.Data.MissionData
                     missionBehaviourList.Add(new EnhancedBattleTestSiegeMissionSpawnHandler(
                         isPlayerAttacker ? enemyParty : playerParty,
                         isPlayerAttacker ? playerParty : enemyParty));
-                    missionBehaviourList.Add(new AgentFadeOutLogic());
                 }
+                //Settlement currentTown = SandBoxMissions.GetCurrentTown();
+                //if (currentTown != null)
+                //    missionBehaviourList.Add((MissionBehaviour)new WorkshopMissionHandler(currentTown));
                 return missionBehaviourList;
             });
         }
@@ -382,7 +383,6 @@ namespace EnhancedBattleTest.Data.MissionData
                     new MissionBoundaryCrossingHandler(),
                     new BattleMissionAgentInteractionLogic(),
                     new FieldBattleController(),
-                    new AgentFadeOutLogic(),
                     new AgentMoraleInteractionLogic(),
                     new AssignPlayerRoleInTeamMissionController(isPlayerGeneral, isPlayerSergeant, hasPlayer,
                         charactersInPlayerSideByPriority?.Select(character => character.StringId).ToList()),

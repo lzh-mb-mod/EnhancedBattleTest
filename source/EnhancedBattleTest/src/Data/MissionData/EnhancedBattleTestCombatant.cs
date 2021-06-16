@@ -33,6 +33,7 @@ namespace EnhancedBattleTest.Data.MissionData
         public TextObject Name { get; }
         public BattleSideEnum Side { get; set; }
         public BasicCultureObject BasicCulture { get; }
+        public BasicCharacterObject General { get; set; }
         public Tuple<uint, uint> PrimaryColorPair { get; }
         public Tuple<uint, uint> AlternativeColorPair { get; }
         public Banner Banner { get; }

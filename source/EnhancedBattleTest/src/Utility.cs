@@ -163,7 +163,7 @@ namespace EnhancedBattleTest
 
         public static SiegeEngineType GetSiegeEngineType(string id)
         {
-            return id.IsStringNoneOrEmpty() ? null : Game.Current.ObjectManager.GetObject<SiegeEngineType>(id);
+            return string.IsNullOrEmpty(id) ? null : Game.Current.ObjectManager.GetObject<SiegeEngineType>(id);
         }
 
         public static void SetPlayerAsCommander(bool isSergeant)

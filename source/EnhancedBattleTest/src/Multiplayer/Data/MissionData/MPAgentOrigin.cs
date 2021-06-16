@@ -46,7 +46,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                 agentBuildData.InitialFrame(frame);
             if (spawnWithHorse)
                 agentBuildData.MountKey(MountCreationKey.GetRandomMountKey(
-                    troop.Equipment[EquipmentIndex.ArmorItemEndSlot].Item, troop.GetMountKeySeed()));
+                    troop.Equipment[EquipmentIndex.ArmorItemEndSlot].Item, troop.GetMountKeySeed()).ToString());
             if (hasFormation && !MPCharacter.IsPlayer)
             {
                 Formation formation = team.GetFormation(MPCharacter.FormationIndex);
@@ -57,10 +57,10 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                 agentBuildData.Controller(Agent.ControllerType.Player);
             Agent agent = Mission.Current.SpawnAgent(agentBuildData, false, formationTroopCount);
             if (agent.IsAIControlled & isAlarmed)
-                agent.SetWatchState(AgentAIStateFlagComponent.WatchState.Alarmed);
+                agent.SetWatchState(Agent.WatchState.Alarmed);
             if (wieldInitialWeapons)
                 agent.WieldInitialWeapons();
-            if (!specialActionSet.IsStringNoneOrEmpty())
+            if (!string.IsNullOrEmpty(specialActionSet))
             {
                 AnimationSystemData animationSystemData =
                     agentBuildData.AgentMonster.FillAnimationSystemData(MBGlobals.GetActionSet(specialActionSet),

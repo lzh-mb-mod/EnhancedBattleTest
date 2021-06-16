@@ -12,7 +12,7 @@ namespace EnhancedBattleTest.Config
         public string BannerKey
         {
             get => _bannerKey;
-            set => _bannerKey = !value.IsStringNoneOrEmpty() ? value : _bannerKey;
+            set => _bannerKey = !string.IsNullOrEmpty(value) ? value : _bannerKey;
         }
 
         [field: XmlIgnore]

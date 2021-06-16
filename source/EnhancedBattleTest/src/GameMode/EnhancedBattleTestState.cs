@@ -38,10 +38,6 @@ namespace EnhancedBattleTest.GameMode
                 Scenes = ((List<SerializedSceneData>)serializer.Deserialize(reader))
                     .Select(data => new SceneData(data))
                     .ToList();
-                var customGame = new CustomGame();
-                customGame.LoadCustomBattleScenes(ModuleHelper.GetXmlPath("CustomBattle",
-                    "custom_battle_scenes"));
-                Scenes.AddRange(customGame.CustomBattleScenes.Select(data => new SceneData(data)));
                 //GameSceneDataManager.Instance.LoadSPBattleScenes(
                 //    ModuleHelper.GetXmlPath("SandBox", "sp_battle_scenes"));
                 ClearSceneDataManager();

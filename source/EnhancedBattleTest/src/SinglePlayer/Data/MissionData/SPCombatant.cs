@@ -30,6 +30,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         {
             Combatant = party;
             _tacticLevel = tacticLevel;
+            General = party.General;
         }
 
         public SPCombatant(PartyBase party, BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
@@ -38,6 +39,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         {
             Combatant = party;
             _tacticLevel = tacticLevel;
+            General = party.General;
         }
 
         public static SPCombatant CreateParty(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
