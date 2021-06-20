@@ -9,7 +9,7 @@ using Path = System.IO.Path;
 
 namespace EnhancedBattleTest.GameMode
 {
-    public class EnhancedBattleTestSingleplayerGameManager : CampaignGameManager
+    public class EnhancedBattleTestSingleplayerGameManager : SandBoxGameManager
     {
         private int _seed = 1234;
         protected override void DoLoadingForGameManager(
@@ -71,26 +71,19 @@ namespace EnhancedBattleTest.GameMode
 
         public override void OnLoadFinished()
         {
-            var active = Game.Current.GameStateManager.ActiveStateDisabledByUser;
-
-            base.OnLoadFinished();
-
-            // revert the effects in TaleWorlds.CampaignSystem.CharacterCreationContent.CharacterCreationState.OnInitialize
-            Game.Current.GameStateManager.ActiveStateDisabledByUser = active;
-
             if (CampaignSiegeTestStatic.IsSiegeTestBuild)
                 CampaignSiegeTestStatic.DisableSiegeTest();
             Game.Current.GameStateManager.OnSavedGameLoadFinished();
             Game.Current.GameStateManager.CleanAndPushState((GameState)Game.Current.GameStateManager.CreateState<MapState>());
-            if (Game.Current.GameStateManager.ActiveState is MapState activeState)
-                activeState.OnLoadingFinished();
             PartyBase.MainParty.Visuals?.SetMapIconAsDirty();
             TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.OnGameLoaded();
             foreach (Settlement settlement in Settlement.All)
                 settlement.Party.Visuals.RefreshLevelMask(settlement.Party);
-            CampaignEvents.Instance.OnGameLoadFinished();
+            CampaignEventDispatcher.Instance.OnGameLoadFinished();
+            if (Game.Current.GameStateManager.ActiveState is MapState activeState)
+                activeState.OnLoadingFinished();
 
-
+            IsLoaded = true;
             Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
         }
         private void InitializeGameTexts(GameTextManager gameTextManager)

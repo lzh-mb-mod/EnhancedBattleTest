@@ -14,9 +14,6 @@ namespace EnhancedBattleTest.Patch
 {
     public class Patch_MissionAgentSpawnLogic
     {
-        private static readonly FieldInfo HasBeenPositionedProperty =
-            typeof(Formation).GetField("HasBeenPositioned", BindingFlags.Instance | BindingFlags.NonPublic);
-
         public static bool SpawnTroops_Prefix(int number, bool isReinforcement, bool enforceSpawningOnInitialPoint, ref int __result,
             IMissionTroopSupplier ____troopSupplier, List<IAgentOriginBase> ____preSuppliedTroops,
             bool ____spawnWithHorses, BattleSideEnum ____side, MBList<Formation> ____spawnedFormations)
@@ -76,7 +73,7 @@ namespace EnhancedBattleTest.Patch
                         FormationClass formationClass = agentOriginBase.SpawnableCharacter.FormationIndex;
                         var team = agentOriginBase.IsUnderPlayersCommand ? Mission.Current.PlayerTeam : Mission.Current.PlayerEnemyTeam;
                         Formation formation = team.GetFormation(formationClass);
-                        if (formation != null && !(bool)HasBeenPositionedProperty.GetValue(formation))
+                        if (formation != null && !formation.HasBeenPositioned)
                         {
                             formation.BeginSpawn(count, isMounted && ____spawnWithHorses);
                             Mission.Current.SpawnFormation(formation, count, ____spawnWithHorses, isMounted && ____spawnWithHorses, isReinforcement);
@@ -103,7 +100,7 @@ namespace EnhancedBattleTest.Patch
             {
                 foreach (Formation formation in team.Formations)
                 {
-                    typeof(Formation).GetField("GroupSpawnIndex", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(formation, 0);
+                    formation.GroupSpawnIndex = 0;
                 }
             }
             __result = formationTroopIndex;

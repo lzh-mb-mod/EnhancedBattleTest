@@ -2,6 +2,7 @@
 using EnhancedBattleTest.Data.MissionData.Logic;
 using EnhancedBattleTest.Multiplayer.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Data.MissionData;
+using SandBox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,7 +143,7 @@ namespace EnhancedBattleTest.Data.MissionData
             Dictionary<SiegeEngineType, int> siegeWeaponsCountOfDefenders,
             bool isSallyOut = false,
             bool isReliefForceAttack = false,
-            float timeOfDay = 6f)
+            int timeOfDay = 6)
         {
             bool hasAnySiegeTower = siegeWeaponsCountOfAttackers.ContainsKey(DefaultSiegeEngineTypes.SiegeTower);
 
@@ -297,7 +298,7 @@ namespace EnhancedBattleTest.Data.MissionData
             BattleConfig config,
             IEnhancedBattleTestCombatant playerParty,
             IEnhancedBattleTestCombatant enemyParty,
-            float timeOfDay = 12f)
+            int timeOfDay = 12)
         {
             var playerSide = config.BattleTypeConfig.PlayerSide;
             var enemySide = config.BattleTypeConfig.PlayerSide.GetOppositeSide();
@@ -355,13 +356,14 @@ namespace EnhancedBattleTest.Data.MissionData
             return MissionState.OpenNew("EnhancedBattleTestFieldBattle", new MissionInitializerRecord(scene)
             {
                 DoNotUseLoadingScreen = false,
-                PlayingInCampaignMode = true,
+                PlayingInCampaignMode = false,
                 AtmosphereOnCampaign = atmosphereInfo,
                 TimeOfDay = timeOfDay
             }, mission =>
                 new MissionBehaviour[]
                 {
                     new RemoveRetreatOption(),
+                    new CampaignMissionComponent(),
                     new CommanderLogic(config),
                     new MissionOptionsComponent(),
                     new BattleEndLogic(),

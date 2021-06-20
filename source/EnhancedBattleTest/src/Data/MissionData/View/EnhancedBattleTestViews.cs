@@ -16,7 +16,7 @@ namespace EnhancedBattleTest.Data.MissionData.View
         {
             return new List<MissionView>
             {
-                ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateMissionSingleplayerEscapeMenu(false),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
                 ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
@@ -46,7 +46,7 @@ namespace EnhancedBattleTest.Data.MissionData.View
             ISiegeDeploymentView siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
             List<MissionView> missionViewList = new List<MissionView>
             {
-                ViewCreator.CreateMissionSingleplayerEscapeMenu(),
+                ViewCreator.CreateMissionSingleplayerEscapeMenu(false),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
                 ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
                 ViewCreator.CreateOptionsUIHandler(),

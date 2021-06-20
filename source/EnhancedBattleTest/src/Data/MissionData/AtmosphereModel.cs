@@ -27,119 +27,27 @@ namespace EnhancedBattleTest.Data.MissionData
             public bool IsMoon;
         }
 
-        public static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", float timeOfDay = 6, bool isInSettlement = false)
+        public static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", int timeOfDay = 6, bool isInSettlement = false)
         {
-            Dictionary<int, string> strArray = new Dictionary<int, string>
+            Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
+            dictionary1.Add("spring", 0);
+            dictionary1.Add("summer", 1);
+            dictionary1.Add("fall", 2);
+            dictionary1.Add("winter", 3);
+            int num = 0;
+            dictionary1.TryGetValue(seasonString, out num);
+            Dictionary<int, string> dictionary2 = new Dictionary<int, string>();
+            dictionary2.Add(6, "TOD_06_00_SemiCloudy");
+            dictionary2.Add(12, "TOD_12_00_SemiCloudy");
+            dictionary2.Add(15, "TOD_04_00_SemiCloudy");
+            dictionary2.Add(18, "TOD_03_00_SemiCloudy");
+            dictionary2.Add(22, "TOD_01_00_SemiCloudy");
+            string str = "field_battle";
+            dictionary2.TryGetValue(timeOfDay, out str);
+            return new AtmosphereInfo()
             {
-                {6, "TOD_06_00_SemiCloudy"},
-                {12, "TOD_12_00_SemiCloudy"},
-                {15, "TOD_04_00_SemiCloudy"},
-                {18, "TOD_03_00_SemiCloudy"},
-                {22, "TOD_01_00_SemiCloudy"}
-            };
-            strArray.TryGetValue((int)timeOfDay, out string atmosphereName);
-            //string atmosphereName = "field_battle";
-            Dictionary<string, int> dictionary = new Dictionary<string, int>
-            {
-                {"spring", 0}, {"summer", 1}, {"fall", 2}, {"winter", 3}
-            };
-            dictionary.TryGetValue(seasonString, out var seasonNum);
-            float seasonOfYear = seasonNum;
-            var seasonTimeFactor = GetSeasonTimeFactor(seasonNum);
-            var sunInfo = GetSunInfo(timeOfDay / 24f, seasonTimeFactor);
-            float environmentMultiplier = GetEnvironmentMultiplier(sunInfo.SunPosition, seasonTimeFactor, sunInfo.IsMoon);
-            float num1 =
-                Math.Max((float) Math.Pow(GetModifiedEnvironmentMultiplier(environmentMultiplier, sunInfo.IsMoon), 1.5),
-                    1f / 1000f);
-            Vec3 sunColor = GetSunColor(environmentMultiplier, sunInfo.IsMoon);
-            int num2 = -1;
-            var currentCultureId = "";
-            if (isInSettlement)
-            {
-                atmosphereName = currentCultureId;
-                if (atmosphereName != "empire" && atmosphereName != "aserai" && (atmosphereName != "sturgia" && atmosphereName != "vlandia") && (atmosphereName != "khuzait" && atmosphereName != "battania"))
-                    atmosphereName = "field_battle";
-                if (atmosphereName == "aserai")
-                    num2 = 1;
-            }
-
-            AtmosphereState interpolatedAtmosphereState = new AtmosphereState(Vec3.Zero, 40, 20, 0, 10, "");
-            float temperature = GetTemperature(ref interpolatedAtmosphereState, seasonTimeFactor);
-            float humidity = GetHumidity(ref interpolatedAtmosphereState, seasonTimeFactor);
-            int num3 = 0;
-            if (humidity > 20.0)
-                num3 = 1;
-            if (humidity > 40.0)
-                num3 = 2;
-            if (humidity > 60.0)
-                num3 = 3;
-            int num4 = seasonNum;
-            float num5 = 0.0f;
-            if (num2 != -1)
-            {
-                num4 = num2;
-            }
-            //else
-            //{
-            //    float normalizedSnowValueInPos = this.GetNormalizedSnowValueInPos(pos);
-            //    if (normalizedSnowValueInPos > 0.55)
-            //    {
-            //        num4 = 3;
-            //        num5 = MBMath.SmoothStep(0.6f, 1f, normalizedSnowValueInPos);
-            //    }
-            //    else if (num4 == 3)
-            //        num4 = 1;
-            //}
-            return new AtmosphereInfo
-            {
-                AtmosphereName = atmosphereName,
-                //SunInfo = {
-                //    Altitude = sunInfo.SunPosition.Altitude,
-                //    Angle = sunInfo.SunPosition.Angle,
-                //    Color = sunColor,
-                //    Brightness = GetSunBrightness(environmentMultiplier, sunInfo.IsMoon),
-                //    Size = GetSunSize(environmentMultiplier),
-                //    RayStrength = GetSunRayStrength(environmentMultiplier),
-                //    MaxBrightness = GetSunBrightness(1f, true)
-                //},
-                //RainInfo = {
-                //    Density = num5
-                //},
-                //SnowInfo = {
-                //    Density = num5
-                //},
-                //AmbientInfo = {
-                //    EnvironmentMultiplier = Math.Max(num1 * 0.5f, 1f / 1000f),
-                //    AmbientColor = GetAmbientFogColor(num1),
-                //    MieScatterStrength = GetMieScatterStrength(environmentMultiplier),
-                //    RayleighConstant = GetRayleighConstant(environmentMultiplier)
-                //},
-                //SkyInfo = {
-                //    Brightness = GetSkyBrightness(timeOfDay, environmentMultiplier, sunInfo.IsMoon)
-                //},
-                //FogInfo = {
-                //    Density = GetFogDensity(environmentMultiplier, new Vec3(0, 0, 130), sunInfo.IsMoon),
-                //    Color = GetFogColor(num1, sunInfo.IsMoon),
-                //    Falloff = 1.48f
-                //},
-                TimeInfo = {
-                    TimeOfDay = timeOfDay,
-                    //WinterTimeFactor = GetWinterTimeFactor(seasonOfYear),
-                    //DrynessFactor = GetDrynessFactor(seasonOfYear),
-                    //NightTimeFactor = GetNightTimeFactor(timeOfDay),
-                    Season = num4
-                },
-                //AreaInfo = {
-                //    Temperature = temperature,
-                //    Humidity = humidity,
-                //    AreaType = num3
-                //},
-                //PostProInfo = {
-                //    MinExposure = MBMath.Lerp(-3f, -2f, GetExposureCoefBetweenDayNight(timeOfDay)),
-                //    MaxExposure = MBMath.Lerp(2f, 0.0f, num1),
-                //    BrightpassThreshold = MBMath.Lerp(0.7f, 0.9f, num1),
-                //    MiddleGray = 0.1f
-                //},
+                AtmosphereName = str,
+                TimeInfo = new TimeInformation() { Season = num }
             };
         }
 
