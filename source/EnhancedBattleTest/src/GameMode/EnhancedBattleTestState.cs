@@ -10,6 +10,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade.CustomBattle;
+using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest.GameMode
 {
@@ -38,6 +39,9 @@ namespace EnhancedBattleTest.GameMode
                 Scenes = ((List<SerializedSceneData>)serializer.Deserialize(reader))
                     .Select(data => new SceneData(data))
                     .ToList();
+                var customGame = new CustomGame();
+                typeof(CustomGame).GetMethod("InitializeScenes", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.Invoke(customGame, new object []{});
+                Scenes.AddRange(customGame.CustomBattleScenes.Select(data => new SceneData(data)));
                 //GameSceneDataManager.Instance.LoadSPBattleScenes(
                 //    ModuleHelper.GetXmlPath("SandBox", "sp_battle_scenes"));
                 ClearSceneDataManager();
