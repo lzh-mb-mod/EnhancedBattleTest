@@ -226,7 +226,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 GetSiegeWeaponTypes(siegeWeaponsCountOfDefenders);
             return MissionState.OpenNew("EnhancedBattleTestSiegeBattle", new MissionInitializerRecord(scene)
             {
-                PlayingInCampaignMode = true,
+                PlayingInCampaignMode = false,
                 AtmosphereOnCampaign = atmosphereInfo,
                 SceneLevels = sceneLevelString,
                 TimeOfDay = timeOfDay
@@ -235,6 +235,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 List<MissionBehaviour> missionBehaviourList = new List<MissionBehaviour>
                 {
                     new RemoveRetreatOption(),
+                    new CampaignMissionComponent(),
                     new CommanderLogic(config),
                     new BattleSpawnLogic(isSallyOut
                         ? "sally_out_set"
