@@ -35,7 +35,7 @@ namespace EnhancedBattleTest.Data
             MobileParty mobileParty,
             bool includeDescription = false)
         {
-            ExplainedNumber explainedNumber = new ExplainedNumber(100f, includeDescription);
+            ExplainedNumber explainedNumber = new ExplainedNumber(50f, includeDescription);
             return explainedNumber;
         }
 
