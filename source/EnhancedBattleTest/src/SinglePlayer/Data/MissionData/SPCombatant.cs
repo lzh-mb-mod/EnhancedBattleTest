@@ -45,12 +45,12 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         public static SPCombatant CreateParty(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
             TeamConfig teamConfig, bool isPlayerTeam)
         {
-            party.Owner = null;
+            party.SetCustomOwner(null);
             if (teamConfig.HasGeneral)
             {
                 var characterObject = (teamConfig.Generals.Troops.FirstOrDefault()?.Character as SPCharacterConfig)?.ActualCharacterObject;
                 if (characterObject?.IsHero ?? false)
-                    party.Owner = characterObject.HeroObject;
+                    party.SetCustomOwner(characterObject.HeroObject);
             }
             Utility.FillPartyMembers(party, side, culture, teamConfig, isPlayerTeam);
             bool isAttacker = side == BattleSideEnum.Attacker;

@@ -249,7 +249,7 @@
                       </Children>
                     </ScrollbarWidget>
 
-                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="510" Sprite="SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
+                    <ScrollablePanel Id="SearchResultListScrollablePanel" DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="330" SuggestedHeight="380" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="510" Sprite="SPGeneral\SPOptions\standart_dropdown_extension" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="SearchResultListRect" InnerPanel="SearchResultListRect\SearchResultList" MouseScrollAxis="Vertical" VerticalScrollbar="..\SearchResultListScrollbar">
                       <Children>
 
                         <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">

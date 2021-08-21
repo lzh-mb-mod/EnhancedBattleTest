@@ -184,8 +184,8 @@ namespace EnhancedBattleTest.Data.MissionData
 
             List<CharacterObject> charactersInPlayerSideByPriority = null;
             List<CharacterObject> charactersInEnemySideByPriority = null;
-            string playerTeamGeneralName = null;
-            string enemyTeamGeneralName = null;
+            TextObject playerTeamGeneralName = null;
+            TextObject enemyTeamGeneralName = null;
             if (!isMultiplayer)
             {
                 var playerCharacter = player.CharacterObject as CharacterObject;
@@ -200,20 +200,14 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (playerGeneral != null)
                 {
                     charactersInPlayerSideByPriority.Remove(playerGeneral);
-                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
-                    {
-                        playerGeneral.Name
-                    }).FirstOrDefault();
+                    playerTeamGeneralName = playerGeneral.Name;
                 }
                 charactersInEnemySideByPriority = Utility.OrderHeroesByPriority(config.EnemyTeamConfig);
                 var enemyGeneral = charactersInEnemySideByPriority.FirstOrDefault();
                 if (enemyGeneral != null)
                 {
                     charactersInEnemySideByPriority.Remove(enemyGeneral);
-                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
-                    {
-                        enemyGeneral.Name
-                    }).FirstOrDefault();
+                    enemyTeamGeneralName = enemyGeneral.Name;
 
                 }
             }
@@ -319,8 +313,8 @@ namespace EnhancedBattleTest.Data.MissionData
 
             List<CharacterObject> charactersInPlayerSideByPriority = null;
             List<CharacterObject> charactersInEnemySideByPriority = null;
-            string playerTeamGeneralName = null;
-            string enemyTeamGeneralName = null;
+            TextObject playerTeamGeneralName = null;
+            TextObject enemyTeamGeneralName = null;
             if (!isMultiplayer)
             {
                 var playerCharacter = config.PlayerTeamConfig.Generals.Troops.FirstOrDefault()?.Character.CharacterObject as CharacterObject;
@@ -335,20 +329,14 @@ namespace EnhancedBattleTest.Data.MissionData
                 if (playerGeneral != null)
                 {
                     charactersInPlayerSideByPriority.Remove(playerGeneral);
-                    playerTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
-                    {
-                        playerGeneral.Name
-                    }).FirstOrDefault();
+                    playerTeamGeneralName = playerGeneral.Name;
                 }
                 charactersInEnemySideByPriority = Utility.OrderHeroesByPriority(config.EnemyTeamConfig);
                 var enemyGeneral = charactersInEnemySideByPriority.FirstOrDefault();
                 if (enemyGeneral != null)
                 {
                     charactersInEnemySideByPriority.Remove(enemyGeneral);
-                    enemyTeamGeneralName = TextObject.ConvertToStringList(new List<TextObject>
-                    {
-                        enemyGeneral.Name
-                    }).FirstOrDefault();
+                    enemyTeamGeneralName = enemyGeneral.Name;
                 }
             }
 
