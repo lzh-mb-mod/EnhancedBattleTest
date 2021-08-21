@@ -13,10 +13,13 @@ namespace EnhancedBattleTest.Multiplayer.Data
         public bool IsHero;
         public bool IsFemale { get; }
         public FormationClass FormationIndex { get; }
+
+        public bool IsGeneral { get; }
+
         public bool IsPlayer { get; }
 
         public BasicCharacterObject Character => IsHero ? HeroClass.HeroCharacter : HeroClass.TroopCharacter;
-        public MPSpawnableCharacter(MPCharacterConfig config, int formationIndex, bool isFemale, bool isPlayer = false)
+        public MPSpawnableCharacter(MPCharacterConfig config, int formationIndex, bool isFemale, bool isGeneral = false, bool isPlayer = false)
         {
             HeroClass = config.HeroClass;
             SelectedFirstPerk = config.SelectedFirstPerk;
@@ -24,6 +27,7 @@ namespace EnhancedBattleTest.Multiplayer.Data
             IsHero = config.IsHero;
             IsFemale = isFemale;
             FormationIndex = (FormationClass)formationIndex;
+            IsGeneral = isGeneral;
             IsPlayer = isPlayer;
         }
     }

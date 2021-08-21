@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using EnhancedBattleTest.Data;
+using System.Collections.Generic;
 using System.IO;
-using EnhancedBattleTest.Data;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Map;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -12,32 +11,32 @@ namespace EnhancedBattleTest.GameMode
 {
     public class MultiplayerGame : GameType
     {
-        public static MultiplayerGame Current => TaleWorlds.Core.Game.Current.GameType as MultiplayerGame;
+        public static MultiplayerGame Current => Game.Current.GameType as MultiplayerGame;
 
         protected override void OnInitialize()
         {
-            TaleWorlds.Core.Game currentGame = this.CurrentGame;
-            currentGame.FirstInitialize(false);
+            Game currentGame = CurrentGame;
             InitializeGameTexts(currentGame.GameTextManager);
             IGameStarter gameStarter = new BasicGameStarter();
             InitializeGameModels(gameStarter);
+            GameManager.InitializeGameStarter(currentGame, gameStarter);
             GameManager.OnGameStart(currentGame, gameStarter);
             MBObjectManager objectManager = currentGame.ObjectManager;
-            currentGame.SecondInitialize(gameStarter.Models);
+            currentGame.SetBasicModels(gameStarter.Models);
             currentGame.CreateGameManager();
             GameManager.BeginGameStart(currentGame);
-            currentGame.ThirdInitialize();
+            CurrentGame.SetRandomGenerators();
             currentGame.InitializeDefaultGameObjects();
-            currentGame.LoadBasicFiles(false);
+            currentGame.LoadBasicFiles();
             LoadXmls();
-            objectManager.ClearEmptyObjects();
-            currentGame.SetDefaultEquipments((IReadOnlyDictionary<string, Equipment>)new Dictionary<string, Equipment>());
+            objectManager.UnregisterNonReadyObjects();
+            currentGame.SetDefaultEquipments(new Dictionary<string, Equipment>());
             ObjectManager.LoadXML("MPClassDivisions");
-            objectManager.ClearEmptyObjects();
+            objectManager.UnregisterNonReadyObjects();
             MultiplayerClassDivisions.Initialize();
-            GameManager.OnCampaignStart(this.CurrentGame, (object)null);
-            GameManager.OnAfterCampaignStart(this.CurrentGame);
-            GameManager.OnGameInitializationFinished(this.CurrentGame);
+            GameManager.OnNewCampaignStart(CurrentGame, (object)null);
+            GameManager.OnAfterCampaignStart(CurrentGame);
+            GameManager.OnGameInitializationFinished(CurrentGame);
             CurrentGame.AddGameHandler<ChatBox>();
         }
 
@@ -71,15 +70,15 @@ namespace EnhancedBattleTest.GameMode
 
         protected override void BeforeRegisterTypes(MBObjectManager objectManager)
         {
-            objectManager.RegisterNonSerializedType<FeatObject>("Feat", "Feats", 0U, true);
+            objectManager.RegisterNonSerializedType<FeatObject>("Feat", "Feats", 0U);
         }
 
         protected override void OnRegisterTypes(MBObjectManager objectManager)
         {
-            objectManager.RegisterType<BasicCharacterObject>("NPCCharacter", "MPCharacters", 43U, true);
-            objectManager.RegisterType<BasicCultureObject>("Culture", "BasicCultures", 17U, true);
+            objectManager.RegisterType<BasicCharacterObject>("NPCCharacter", "MPCharacters", 43U);
+            objectManager.RegisterType<BasicCultureObject>("Culture", "BasicCultures", 17U);
             objectManager.RegisterType<MultiplayerClassDivisions.MPHeroClass>("MPClassDivision", "MPClassDivisions",
-                45U, true);
+                45U);
         }
 
         public override void OnStateChanged(GameState oldState)

@@ -9,6 +9,7 @@ namespace EnhancedBattleTest.Data
         BasicCharacterObject Character { get; }
         bool IsFemale { get; }
         FormationClass FormationIndex { get; }
+        bool IsGeneral { get; }
         bool IsPlayer { get; }
     }
 }

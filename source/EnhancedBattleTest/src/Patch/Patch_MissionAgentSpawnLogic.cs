@@ -81,7 +81,7 @@ namespace EnhancedBattleTest.Patch
                         }
                         agentOriginBase.SpawnTroop(____side, true, ____spawnWithHorses, isReinforcement,
                                 enforceSpawningOnInitialPoint, count, formationTroopIndex, true, true,
-                                false, null, new MatrixFrame?());
+                                false, null, null);
                         ++formationTroopIndex;
                     }
                     catch (Exception e)

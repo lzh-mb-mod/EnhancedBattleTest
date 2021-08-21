@@ -66,7 +66,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
                     {
                         combatant.AddCharacter(
                             new SPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
-                                general.FemaleRatio > 0.5, !hasPlayer && isPlayerTeam), 1);
+                                general.FemaleRatio > 0.5, true,!hasPlayer && isPlayerTeam), 1);
                         hasPlayer = isPlayerTeam;
                     }
                 }

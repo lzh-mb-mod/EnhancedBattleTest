@@ -50,7 +50,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                     {
                         combatant.AddCharacter(
                             new MPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationClass,
-                                general.FemaleRatio > 0.5, !hasPlayer && isPlayerTeam), 1);
+                                general.FemaleRatio > 0.5, true, !hasPlayer && isPlayerTeam), 1);
                         hasPlayer = isPlayerTeam;
                     }
                 }

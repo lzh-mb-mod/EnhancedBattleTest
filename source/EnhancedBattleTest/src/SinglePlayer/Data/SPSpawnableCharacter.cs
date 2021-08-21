@@ -11,14 +11,17 @@ namespace EnhancedBattleTest.SinglePlayer.Data
         public BasicCharacterObject Character { get; }
         public bool IsFemale { get; }
         public FormationClass FormationIndex { get; }
+
+        public bool IsGeneral { get; }
         public bool IsPlayer { get; }
         public bool IsHero => Character.IsHero;
 
-        public SPSpawnableCharacter(SPCharacterConfig config, int formationIndex, bool isFemale, bool isPlayer = false)
+        public SPSpawnableCharacter(SPCharacterConfig config, int formationIndex, bool isFemale, bool isGeneral = false, bool isPlayer = false)
         {
             Character = config.ActualCharacterObject;
             IsFemale = isFemale;
             FormationIndex = (FormationClass)formationIndex;
+            IsGeneral = isGeneral;
             IsPlayer = isPlayer;
         }
     }
