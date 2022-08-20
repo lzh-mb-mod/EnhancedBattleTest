@@ -19,10 +19,10 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             };
         }
 
-        public override void OnBehaviourInitialize()
+        public override void OnBehaviorInitialize()
         {
-            base.OnBehaviourInitialize();
-            _missionAgentSpawnLogic = Mission.GetMissionBehaviour<MissionAgentSpawnLogic>();
+            base.OnBehaviorInitialize();
+            _missionAgentSpawnLogic = Mission.GetMissionBehavior<MissionAgentSpawnLogic>();
         }
 
         public override void AfterStart()

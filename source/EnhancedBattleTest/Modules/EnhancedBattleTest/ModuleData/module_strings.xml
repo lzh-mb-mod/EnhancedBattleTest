@@ -34,8 +34,10 @@
     <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />
     <string id="str_ebt_season" text="{=EnhancedBattleTest_season}Season" />
 
+    <string id="str_ebt_party_name" text="{=EnhancedBattleTest_party_name}{PARTY_TEXT} {INDEX}"/>
+
     <string id="str_ebt_troop_role.General" text="{=EnhancedBattleTest_trooprolegeneral}General" />
-    <string id="str_ebt_troop_role.Soldiers" text="{=EnhancedBattleTest_trooprolesoldiers}Troop {TroopIndex}" />
+    <string id="str_ebt_troop_role.Soldiers" text="{=EnhancedBattleTest_trooprolesoldiers}Soldiers" />
 
     <string id="str_ebt_enable" text="{=EnhancedBattleTest_enabled}Enable" />
     <string id="str_ebt_number" text="{=EnhancedBattleTest_number}Number" />

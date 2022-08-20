@@ -4,12 +4,18 @@ using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
 using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.GameMode;
+using EnhancedBattleTest.SinglePlayer;
 using EnhancedBattleTest.UI.Basic;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.Map;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle;
+using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle.SelectionItem;
+using Campaign = TaleWorlds.CampaignSystem.Campaign;
 
 namespace EnhancedBattleTest.UI
 {
@@ -168,9 +174,9 @@ namespace EnhancedBattleTest.UI
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
 
-            PlayerSide = new SideVM(_config.PlayerTeamConfig, true,
+            PlayerSide = new SideVM(_config.PlayerSideConfig, true,
                 _config.BattleTypeConfig);
-            EnemySide = new SideVM(_config.EnemyTeamConfig, false,
+            EnemySide = new SideVM(_config.EnemySideConfig, false,
                 _config.BattleTypeConfig);
 
             MapSelectionGroup = new MapSelectionGroupVM(_scenes);
@@ -202,7 +208,20 @@ namespace EnhancedBattleTest.UI
 
         private void RecoverConfig()
         {
-            MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
+            if (_config.MapConfig.OverridesCampaignMap || Campaign.Current == null || MobileParty.MainParty == null)
+            {
+                MapSelectionGroup.MapSelection.SelectedIndex = MapSelectionGroup.MapSelection.ItemList.FindIndex(vm => vm.MapId == _config.MapConfig.SelectedMapId);
+            }
+            else
+            {
+                MapPatchData mapPatchAtPosition = Campaign.Current.MapSceneWrapper.GetMapPatchAtPosition(MobileParty.MainParty.Position2D);
+                MapSelectionGroup.MapSelection.SelectedIndex = MapSelectionGroup.MapSelection.ItemList.FindIndex(vm =>
+                    vm.MapId == PlayerEncounter.GetBattleSceneForMapPatch(mapPatchAtPosition));
+            }
+            if (MapSelectionGroup.SelectedMap == null)
+            {
+                MapSelectionGroup.MapSelection.SelectedIndex = 0;
+            }
             //if (MapSelectionGroup.SearchText.IsStringNoneOrEmpty())
             //{
             //    MapSelectionGroup.SearchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
@@ -245,17 +264,9 @@ namespace EnhancedBattleTest.UI
 
         public void ExecuteSwapTeam()
         {
-            {
-                var tmp = _config.PlayerTeamConfig;
-                _config.PlayerTeamConfig = _config.EnemyTeamConfig;
-                _config.EnemyTeamConfig = tmp;
-            }
+            (_config.PlayerSideConfig, _config.EnemySideConfig) = (_config.EnemySideConfig, _config.PlayerSideConfig);
             BattleTypeSelectionGroup.SwapSide();
-            {
-                var tmp = PlayerSide;
-                PlayerSide = EnemySide;
-                EnemySide = tmp;
-            }
+            (PlayerSide, EnemySide) = (EnemySide, PlayerSide);
             PlayerSide.IsPlayerSide = true;
             EnemySide.IsPlayerSide = false;
         }
@@ -265,7 +276,7 @@ namespace EnhancedBattleTest.UI
             ApplyConfig();
             _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
             _config = null;
-            MBGameManager.EndGame();
+            GameStateManager.Current.PopState();
         }
 
         public void ExecuteStart()
@@ -275,19 +286,20 @@ namespace EnhancedBattleTest.UI
             if (!ApplyConfig())
                 return;
 
-            var sceneData = GetMap();
-            if (sceneData == null)
+            var mapItem = GetMap();
+            if (mapItem == null)
                 return;
             _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
-            GameTexts.SetVariable("MapName", sceneData.Name);
+            GameTexts.SetVariable("MapName", mapItem.MapName);
             Utility.DisplayLocalizedText("str_ebt_current_map");
             EnhancedBattleTestPartyController.BattleConfig = _config;
-            EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
+            //EnhancedBattleTestMissions.OpenMission(_config, mapItem.MapId);
+            BattleStarter.Start(_config, mapItem.MapId);
         }
 
         private bool ApplyConfig()
         {
-            _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
+            _config.MapConfig.SelectedMapId = MapSelectionGroup.SelectedMap.MapId;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
@@ -306,7 +318,7 @@ namespace EnhancedBattleTest.UI
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege &&
-                (!_config.PlayerTeamConfig.HasGeneral || _config.PlayerTeamConfig.Generals.Troops.Count == 0))
+                _config.PlayerSideConfig.Teams.All(team => !team.HasGeneral || team.Generals.Troops.Count == 0))
             {
                 Utility.DisplayLocalizedText("str_ebt_siege_no_player");
                 return false;
@@ -315,23 +327,21 @@ namespace EnhancedBattleTest.UI
             return true;
         }
 
-        private SceneData GetMap()
+        private MapItemVM GetMap()
         {
             var selectedMap = MapSelectionGroup.SelectedMap;
             if (selectedMap == null)
             {
-                MapSelectionGroup.RandomizeMap();
+                MapSelectionGroup.MapSelection.ExecuteRandomize();
                 selectedMap = MapSelectionGroup.SelectedMap;
                 if (selectedMap == null)
                 {
                     Utility.DisplayLocalizedText("str_ebt_no_map");
                     return null;
                 }
-
-                // Keep search text not changed.
-                MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
             }
-            return _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
+
+            return selectedMap;
         }
 
         private void OnPlayerTypeChange(bool isCommander)

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EnhancedBattleTest.Data.MissionData;
+using System.Collections.Generic;
 using System.Linq;
-using EnhancedBattleTest.Data.MissionData;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -14,6 +14,12 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
         private int _numWounded;
         private int _numKilled;
         private int _numRouted;
+        public int GetNumberOfPlayerControllableTroops()
+        {
+            // TODO
+            throw new System.NotImplementedException();
+        }
+
         public int NumActiveTroops => _numAllocated - (_numWounded + _numKilled + _numRouted);
 
         public int NumRemovedTroops => _numWounded + _numKilled + _numRouted;

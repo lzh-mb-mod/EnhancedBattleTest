@@ -1,7 +1,7 @@
 ﻿using EnhancedBattleTest.Data;
 using System.Collections.Generic;
 using System.IO;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;

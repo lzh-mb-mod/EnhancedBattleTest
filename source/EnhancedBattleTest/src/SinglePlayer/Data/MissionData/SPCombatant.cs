@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Config;
-using TaleWorlds.CampaignSystem;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -45,89 +45,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         public static SPCombatant CreateParty(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
             TeamConfig teamConfig, bool isPlayerTeam)
         {
-            party.SetCustomOwner(null);
-            if (teamConfig.HasGeneral)
-            {
-                var characterObject = (teamConfig.Generals.Troops.FirstOrDefault()?.Character as SPCharacterConfig)?.ActualCharacterObject;
-                if (characterObject?.IsHero ?? false)
-                    party.SetCustomOwner(characterObject.HeroObject);
-            }
-            Utility.FillPartyMembers(party, side, culture, teamConfig, isPlayerTeam);
-            bool isAttacker = side == BattleSideEnum.Attacker;
-            var combatant = new SPCombatant(party, side, teamConfig.TacticLevel, culture,
-                new Tuple<uint, uint>(teamConfig.Color1, teamConfig.Color2),
-                teamConfig.Banner);
-            if (teamConfig.HasGeneral)
-            {
-                bool hasPlayer = false;
-                foreach (var generalTroop in teamConfig.Generals.Troops)
-                {
-                    if (generalTroop.Character is SPCharacterConfig general)
-                    {
-                        combatant.AddCharacter(
-                            new SPSpawnableCharacter(general, (int)general.CharacterObject.DefaultFormationGroup,
-                                general.FemaleRatio > 0.5, true,!hasPlayer && isPlayerTeam), 1);
-                        hasPlayer = isPlayerTeam;
-                    }
-                }
-            }
-
-            var queue = new PriorityQueue<float, SPSpawnableCharacter>(new GenericComparer<float>());
-
-            for (int i = 0; i < teamConfig.TroopGroups.Length; i++)
-            {
-                var originalNumbers = new Dictionary<string, TroopCountPair>();
-                var queuedNumbers = new Dictionary<string, TroopCountPair>();
-                foreach (var troop in teamConfig.TroopGroups[i].Troops)
-                {
-                    if (troop.Character is SPCharacterConfig spCharacter)
-                    {
-                        var femaleCount = (int)(troop.Number * spCharacter.FemaleRatio + 0.49);
-                        var maleCount = troop.Number - femaleCount;
-                        if (originalNumbers.ContainsKey(spCharacter.CharacterId))
-                        {
-                            originalNumbers[spCharacter.CharacterId].FemaleCount += femaleCount;
-                            originalNumbers[spCharacter.CharacterId].MaleCount += maleCount;
-                        }
-                        else
-                        {
-                            originalNumbers[spCharacter.CharacterId] = new TroopCountPair(femaleCount, maleCount);
-                            queuedNumbers[spCharacter.CharacterId] = new TroopCountPair(0, 0);
-                        }
-                    }
-                }
-                foreach (var troop in teamConfig.TroopGroups[i].Troops)
-                {
-                    if (troop.Character is SPCharacterConfig spCharacter)
-                    {
-                        var femaleCount = (int)(troop.Number * spCharacter.FemaleRatio + 0.49);
-                        var maleCount = troop.Number - femaleCount;
-                        for (int j = 0; j < femaleCount; j++)
-                        {
-                            queue.Enqueue(
-                                -(float) queuedNumbers[spCharacter.CharacterId].FemaleCount /
-                                originalNumbers[spCharacter.CharacterId].FemaleCount,
-                                new SPSpawnableCharacter(spCharacter, i, true));
-                            ++queuedNumbers[spCharacter.CharacterId].FemaleCount;
-                        }
-                        for (int j = 0; j < maleCount; j++)
-                        {
-                            queue.Enqueue(
-                                -(float)queuedNumbers[spCharacter.CharacterId].MaleCount /
-                                originalNumbers[spCharacter.CharacterId].MaleCount,
-                                new SPSpawnableCharacter(spCharacter, i, false));
-                            ++queuedNumbers[spCharacter.CharacterId].MaleCount;
-                        }
-                    }
-                }
-            }
-
-            while (!queue.IsEmpty)
-            {
-                combatant.AddCharacter(queue.DequeueValue(), 1);
-            }
-
-            return combatant;
+            return null;
         }
 
         public override int GetTacticsSkillAmount()

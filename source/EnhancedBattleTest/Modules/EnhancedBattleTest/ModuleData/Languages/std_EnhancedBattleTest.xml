@@ -38,7 +38,7 @@
     <string id="EnhancedBattleTest_season" text="Season" />
 
     <string id="EnhancedBattleTest_trooprolegeneral" text="General" />
-    <string id="EnhancedBattleTest_trooprolesoldiers" text="Troop {TroopIndex}" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="Soldiers" />
 
     <string id="EnhancedBattleTest_enabled" text="Enable" />
     <string id="EnhancedBattleTest_number" text="Count" />

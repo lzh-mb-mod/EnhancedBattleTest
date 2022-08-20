@@ -8,9 +8,9 @@ namespace EnhancedBattleTest.UI.MissionUI
     {
         public override void ExecuteQuitAction()
         {
-            BattleEndLogic battleEndLogic = _mission.GetMissionBehaviour<BattleEndLogic>();
-            BasicMissionHandler basicMissionHandler = _mission.GetMissionBehaviour<BasicMissionHandler>();
-            BattleEndLogic.ExitResult exitResult = battleEndLogic?.TryExit() ?? (_mission.MissionEnded() ? BattleEndLogic.ExitResult.True : BattleEndLogic.ExitResult.NeedsPlayerConfirmation);
+            BattleEndLogic battleEndLogic = _mission.GetMissionBehavior<BattleEndLogic>();
+            BasicMissionHandler basicMissionHandler = _mission.GetMissionBehavior<BasicMissionHandler>();
+            BattleEndLogic.ExitResult exitResult = battleEndLogic?.TryExit() ?? (_mission.MissionEnded ? BattleEndLogic.ExitResult.True : BattleEndLogic.ExitResult.NeedsPlayerConfirmation);
             switch (exitResult)
             {
                 case BattleEndLogic.ExitResult.False:

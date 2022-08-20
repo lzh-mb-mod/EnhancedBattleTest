@@ -12,7 +12,7 @@
     <PackageReference Include="Lib.Harmony" Version="2.0.4" />
   </ItemGroup>
   <ItemGroup>
-	  <DotNetCliToolReference Include="dotnet-md2html" Version="1.0.0.1-preview1" />
+      <DotNetCliToolReference Include="dotnet-md2html" Version="1.0.0.1-preview1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SandBox">
@@ -25,6 +25,10 @@
     </Reference>
     <Reference Include="SandBox.View">
       <HintPath>$(GamePath)\Modules\SandBox\bin\Win64_Shipping_Client\SandBox.View.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SandBox.ViewModelCollection">
+      <HintPath>$(GamePath)\Modules\SandBox\bin\Win64_Shipping_Client\SandBox.ViewModelCollection.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="TaleWorlds.CampaignSystem">
@@ -95,6 +99,14 @@
     </Reference>
     <Reference Include="TaleWorlds.ObjectSystem">
       <HintPath>$(GamePath)\bin\Win64_Shipping_Client\TaleWorlds.ObjectSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.PlayerServices">
+      <HintPath>$(GamePath)bin\Win64_Shipping_Client\TaleWorlds.PlayerServices.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="TaleWorlds.ScreenSystem">
+      <HintPath>$(GamePath)bin\Win64_Shipping_Client\TaleWorlds.ScreenSystem.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

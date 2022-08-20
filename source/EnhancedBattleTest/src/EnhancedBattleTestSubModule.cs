@@ -1,15 +1,19 @@
-using EnhancedBattleTest.Data;
-using EnhancedBattleTest.GameMode;
-using EnhancedBattleTest.Patch;
-using EnhancedBattleTest.UI;
-using HarmonyLib;
 using System;
 using System.IO;
 using System.Reflection;
+using EnhancedBattleTest.Data;
+using EnhancedBattleTest.GameMode;
+using EnhancedBattleTest.Patch;
+using EnhancedBattleTest.Patch.Fix;
+using EnhancedBattleTest.SinglePlayer;
+using EnhancedBattleTest.UI;
+using HarmonyLib;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
+using Campaign = TaleWorlds.CampaignSystem.Campaign;
 using Module = TaleWorlds.MountAndBlade.Module;
 using MultiplayerGame = EnhancedBattleTest.GameMode.MultiplayerGame;
 
@@ -33,7 +37,7 @@ namespace EnhancedBattleTest
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
-            EnhancedBattleTestSubModule.Instance = this;
+            Instance = this;
             /*
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTMultiplayerTest",
                 new TextObject("{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test"), 3,
@@ -50,26 +54,38 @@ namespace EnhancedBattleTest
                     IsMultiplayer = false;
                     MBGameManager.StartNewGame(new EnhancedBattleTestSingleplayerGameManager());
                 }, () => (false, new TextObject())));
+            Patch_MapScreen.Patch();
+            Patch_Hero.Patch();
+            Patch_AssignPlayerRoleInTeamMissionController.Patch();
+            Patch_DeploymentMissionController.Patch();
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
             base.OnGameStart(game, gameStarterObject);
 
+            game.GameTextManager.LoadGameTexts(ModuleHelper.GetXmlPath(ModuleId, "module_strings"));
+
             gameStarterObject.AddModel(new EnhancedBattleTestMoraleModel());
         }
 
         protected override void OnSubModuleUnloaded()
         {
-            EnhancedBattleTestSubModule.Instance = (EnhancedBattleTestSubModule)null;
+            Instance = null;
             base.OnSubModuleUnloaded();
         }
 
         public override void OnGameInitializationFinished(Game game)
         {
             base.OnGameInitializationFinished(game);
+            if (game.GameType is Campaign campaign)
+            {
+                IsMultiplayer = false;
+                BattleStarter.IsEnhancedBattleTestBattle = false;
+                campaign.AddCampaignEventReceiver(new EnhancedBattleTestCampaignEventReceiver());
+            }
 
-            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
+            if (game.GameType is MultiplayerGame || game.GameType is GameMode.Campaign)
             {
                 ApplyHarmonyPatch();
             }
@@ -79,7 +95,8 @@ namespace EnhancedBattleTest
         {
             base.OnGameEnd(game);
 
-            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
+            BattleStarter.IsEnhancedBattleTestBattle = false;
+            if (game.GameType is MultiplayerGame || game.GameType is GameMode.Campaign)
             {
                 Unpatch();
             }
@@ -98,6 +115,16 @@ namespace EnhancedBattleTest
         private void Unpatch()
         {
             harmony.UnpatchAll(harmony.Id);
+        }
+
+        public override void OnMissionBehaviorInitialize(Mission mission)
+        {
+            base.OnMissionBehaviorInitialize(mission);
+
+            if (BattleStarter.IsEnhancedBattleTestBattle)
+            {
+                mission.AddMissionBehavior(new EnhancedBattleTestMissionBehavior());
+            }
         }
     }
 }

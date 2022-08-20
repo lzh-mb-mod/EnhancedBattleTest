@@ -13,16 +13,16 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             _config = config;
         }
 
-        public override void OnBehaviourInitialize()
+        public override void OnBehaviorInitialize()
         {
-            base.OnBehaviourInitialize();
+            base.OnBehaviorInitialize();
 
             this.Mission.OnMainAgentChanged += OnMainAgentChanged;
         }
 
-        public override void OnRemoveBehaviour()
+        public override void OnRemoveBehavior()
         {
-            base.OnRemoveBehaviour();
+            base.OnRemoveBehavior();
 
             Mission.OnMainAgentChanged -= OnMainAgentChanged;
         }

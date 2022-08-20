@@ -1,97 +1,80 @@
-﻿using EnhancedBattleTest.BannerEditor;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
 using System.Linq;
-using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.UI
 {
     public class SideVM : ViewModel
     {
-        private TeamConfig _config;
-        private ImageIdentifierVM _banner;
+        private readonly SideConfig _config;
+        private bool _isPlayerSide;
+        private bool _isRemoveTeamEnabled;
+        private bool _isAddTeamEnabled;
+        private BattleTypeConfig _battleTypeConfig;
 
         public TextVM Name { get; }
 
-        [DataSourceProperty]
-        public ImageIdentifierVM Banner
-        {
-            get => _banner;
-            set
-            {
-                if (_banner == value)
-                    return;
-                _banner = value;
-                OnPropertyChanged(nameof(Banner));
-            }
-        }
-
-        public bool ShouldShowBanner => !EnhancedBattleTestSubModule.IsMultiplayer;
-
-        public TextVM TacticText { get; }
-        public NumberVM<float> TacticLevel { get; }
-
-        public TroopGroupVM Generals { get; }
-
-        public TextVM EnableGeneralText { get; }
-
-        public BoolVM EnableGeneral { get; }
-
-        public MBBindingList<TroopGroupVM> TroopGroups { get; }
+        public MBBindingList<TeamVM> Teams { get; }
 
         public bool IsPlayerSide
         {
+            get => _isPlayerSide;
             set
             {
+                _isPlayerSide = value;
                 Name.TextObject = value ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY");
-                Generals.IsPlayerSide = value;
-                foreach (var troopGroup in TroopGroups)
+                foreach (var team in Teams)
                 {
-                    troopGroup.IsPlayerSide = value;
+                    team.IsPlayerSide = value;
                 }
             }
         }
 
-        public SideVM(TeamConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public bool IsAddTeamEnabled
         {
-            Name = new TextVM(isPlayerSide ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY"));
-            _config = config;
-            Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
-            TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
-            TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
-            TacticLevel.OnValueChanged += f => _config.TacticLevel = (int)f;
-            Generals = new TroopGroupVM(_config, _config.Generals, GameTexts.FindText("str_ebt_troop_role", "General"),
-                true, isPlayerSide, battleTypeConfig);
-            EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
-            EnableGeneral = new BoolVM(_config.HasGeneral);
-            EnableGeneral.OnValueChanged += OnEnableGeneralChanged;
-
-            TroopGroups = new MBBindingList<TroopGroupVM>();
-            for (int i = 0; i < _config.TroopGroups.Length; ++i)
+            get => _isAddTeamEnabled;
+            set
             {
-                TroopGroups.Add(new TroopGroupVM(config, _config.TroopGroups[i],
-                    GameTexts.FindText("str_ebt_troop_role", "Soldiers").SetTextVariable("TroopIndex", i + 1), false,
-                    isPlayerSide, battleTypeConfig));
+                if (_isAddTeamEnabled == value)
+                    return;
+                _isAddTeamEnabled = value;
+                OnPropertyChanged(nameof(IsAddTeamEnabled));
             }
         }
 
-        private void OnEnableGeneralChanged(bool value)
+        public bool IsRemoveTeamEnabled
         {
-            _config.HasGeneral = value;
+            get => _isRemoveTeamEnabled;
+            set
+            {
+                if (_isRemoveTeamEnabled == value)
+                    return;
+                _isRemoveTeamEnabled = value;
+                OnPropertyChanged(nameof(IsRemoveTeamEnabled));
+            }
+        }
+
+        public SideVM(SideConfig sideConfig, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        {
+            Name = new TextVM(isPlayerSide ? new TextObject("{=BC7n6qxk}PLAYER") : new TextObject("{=35IHscBa}ENEMY"));
+            _config = sideConfig;
+            _battleTypeConfig = battleTypeConfig;
+
+            Teams = new MBBindingList<TeamVM>();
+            IsPlayerSide = isPlayerSide;
+            for (int i = 0; i < _config.Teams.Count; ++i)
+            {
+                Teams.Add(new TeamVM(sideConfig.Teams[i], isPlayerSide, i, battleTypeConfig));
+            }
+            TeamCountChanged();
         }
 
         public bool IsValid()
         {
-            return Generals.IsValid() && TroopGroups.All(troopGroup => troopGroup.IsValid());
-        }
-
-        public void EditBanner()
-        {
-            BannerEditorState.Config = _config;
-            BannerEditorState.OnDone = () => Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
-            Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<BannerEditorState>());
+            return Teams.All(team => team.IsValid());
         }
 
         public override void RefreshValues()
@@ -99,11 +82,31 @@ namespace EnhancedBattleTest.UI
             base.RefreshValues();
 
             Name.RefreshValues();
-            Generals.RefreshValues();
-            foreach (var troopGroupVm in TroopGroups)
+            foreach (var team in Teams)
             {
-                troopGroupVm.RefreshValues();
+                team.RefreshValues();
             }
+        }
+
+        public void AddTeam()
+        {
+            var newConfig = new TeamConfig();
+            _config.Teams.Add(newConfig);
+            Teams.Add(new TeamVM(newConfig, IsPlayerSide, _config.Teams.Count - 1, _battleTypeConfig));
+            TeamCountChanged();
+        }
+
+        public void RemoveTeam()
+        {
+            _config.Teams.RemoveAt(_config.Teams.Count - 1);
+            Teams.RemoveAt(Teams.Count - 1);
+            TeamCountChanged();
+        }
+
+        private void TeamCountChanged()
+        {
+            IsAddTeamEnabled = Teams.Count < 10;
+            IsRemoveTeamEnabled = Teams.Count > 1;
         }
     }
 }

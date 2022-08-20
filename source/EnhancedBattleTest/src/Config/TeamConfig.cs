@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace EnhancedBattleTest.Config
 {
@@ -16,14 +15,16 @@ namespace EnhancedBattleTest.Config
         }
 
         [field: XmlIgnore]
-        public TroopGroupConfig Generals { get; set; } = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+        public TroopGroupConfig Generals { get; set; } =
+            new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer, true);
 
-        public bool HasGeneral;
+        public bool HasGeneral { get; set; }
 
         [field: XmlIgnore]
-        public TroopGroupConfig[] TroopGroups { get; set; } = new TroopGroupConfig[8];
+        public TroopGroupConfig Troops { get; set; } =
+            new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
 
-        public int TacticLevel = 0;
+        public int TacticLevel { get; set; } = 0;
 
         [XmlIgnore]
         public uint Color1 => Banner.BannerDataList.Count > 0
@@ -41,8 +42,6 @@ namespace EnhancedBattleTest.Config
 
         public TeamConfig()
         {
-            for (int i = 0; i < TroopGroups.Length; ++i)
-                TroopGroups[i] = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
         }
     }
 }

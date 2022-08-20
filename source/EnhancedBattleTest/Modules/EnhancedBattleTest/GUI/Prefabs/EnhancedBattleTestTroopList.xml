@@ -2,20 +2,6 @@
   <Window>
     <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
       <Children>
-        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
-          <Children>
-            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="PushTroop" IsEnabled="@PushEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
-              <Children>
-                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="+" />
-              </Children>
-            </ButtonWidget>
-            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="PopTroop" IsEnabled="@PopEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
-              <Children>
-                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="-" />
-              </Children>
-            </ButtonWidget>
-          </Children>
-        </ListPanel>
 
         <ListPanel DataSource="{Troops}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
           <ItemTemplate>
@@ -43,6 +29,22 @@
             </ListPanel>
           </ItemTemplate>
         </ListPanel>
+
+        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="PushTroop" IsEnabled="@PushEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+              <Children>
+                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="+" />
+              </Children>
+            </ButtonWidget>
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="PopTroop" IsEnabled="@PopEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+              <Children>
+                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="-" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+
       </Children>
     </ListPanel>
 

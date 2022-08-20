@@ -9,7 +9,7 @@
             <ListPanel Id="Description" DoNotAcceptEvents="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight" UpdateChildrenStates="true">
               <Children>
 
-                <Widget Id="CollapseParent" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="120" HorizontalAlignment="Center" UpdateChildrenStates="true">
+                <Widget Id="CollapseParent" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" UpdateChildrenStates="true">
                   <Children>
                     <TextWidget Id="GroupTitle" DataSource="{TroopGroupName}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" Brush="SPOptions.GameKeysGroup.Title.Text" ClipContents="false">
                       <Children>

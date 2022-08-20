@@ -4,79 +4,57 @@
       <Children>
         <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Character.Title.Text" />
 
-        <!--Banner-->
-        <ButtonWidget IsVisible="@ShouldShowBanner" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110" SuggestedHeight="180" HorizontalAlignment="Left" VerticalAlignment="Top" PositionXOffset="20" PositionYOffset="-8" Command.Click="EditBanner" IsEnabled="true" UpdateChildrenStates="true">
+        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
-            <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="105" SuggestedHeight="126" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Clan.TornBanner" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="1.8" />
-          </Children>
-        </ButtonWidget>
-
-        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="150">
-          <Children>
-
-            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="AddTeam" IsEnabled="@IsAddTeamEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="150" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
               <Children>
-
-                <RichTextWidget DataSource="{TacticText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
-
-                <SliderWidget DataSource="{TacticLevel}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="338" SuggestedHeight="42" MarginLeft="20" VerticalAlignment="Center" DoNotUpdateHandleSize="true" Filler="Filler" Handle="SliderHandle" IsDiscrete="@IsDiscrete" MaxValueFloat="@Max" MinValueFloat="@Min" ValueFloat="@Value">
-                  <Children>
-                    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="362" SuggestedHeight="38" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_canvas" IsEnabled="false" />
-                    <Widget Id="Filler" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="345" SuggestedHeight="35" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_fill" ClipContents="true">
-                      <Children>
-                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="345" SuggestedHeight="35" HorizontalAlignment="Left" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_fill" />
-                      </Children>
-                    </Widget>
-                    <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="400" SuggestedHeight="65" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_frame" IsEnabled="false" />
-                    <Widget Id="SliderHandle" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="14" SuggestedHeight="38" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="SPOptions.Slider.Handle" />
-                  </Children>
-                </SliderWidget>
-
-                <RichTextWidget DataSource="{TacticLevel}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="50" MarginLeft="20" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
-
+                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="Add Team" />
               </Children>
-            </ListPanel>
+            </ButtonWidget>
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="RemoveTeam" IsEnabled="@IsRemoveTeamEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="150" SuggestedHeight="40" MarginLeft="30" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+              <Children>
+                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Dropdown.Center.Text" Text="Remove Team" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+        
+        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="50">
+          <Children>
 
             <Widget Id="TroopPanel" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
               <Children>
-
-                <ScrollablePanel Id="TroopsScrollablePanel" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" AutoHideScrollBarHandle="false" AutoHideScrollBars="false" ClipRect="ClipRect" InnerPanel="ClipRect\TroopGroups" VerticalScrollbar="..\VerticalScrollbar">
+                <ScrollablePanel Id="TroopsScrollablePanel" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" AutoHideScrollBarHandle="true" AutoHideScrollBars="false" ClipRect="ClipRect" InnerPanel="ClipRect\InnerPanel" VerticalScrollbar="..\VerticalScrollbar">
                   <Children>
                     <Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" ClipContents="true">
                       <Children>
-
-                        <ListPanel Id="TroopGroups" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                        <Widget Id="InnerPanel" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" VerticalAlignment="Top" HorizontalAlignment="Center" MarginLeft="15" MarginRight="15">
                           <Children>
-
-                            <EnhancedBattleTestGeneralTroopGroup DataSource="{Generals}" />
-                            <ListPanel DataSource="{TroopGroups}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="20" MarginBottom="50">
+                            <ListPanel Id="TroopGroups" DataSource="{Teams}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="30" MarginBottom="30">
                               <ItemTemplate>
-                                <EnhancedBattleTestNonGeneralTroopGroup />
+                                <EnhancedBattleTestTeam />
                               </ItemTemplate>
                             </ListPanel>
                           </Children>
-                        </ListPanel>
-
+                        </Widget>
                       </Children>
+
                     </Widget>
-
                     <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="150" VerticalAlignment="Bottom" Sprite="StdAssets\Popup\scrollable_field_gradient" IsEnabled="false" />
-
                   </Children>
                 </ScrollablePanel>
-
                 <ScrollbarWidget Id="VerticalScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="8" HorizontalAlignment="Right" VerticalAlignment="Center" MarginTop="26" MarginBottom="85" AlignmentAxis="Vertical" Handle="VerticalScrollbarHandle" MaxValue="100" MinValue="0">
                   <Children>
                     <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center" Sprite="MPLobby\CustomServer\lobby_slider_bed" AlphaFactor="0.4" />
                     <ImageWidget Id="VerticalScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="8" SuggestedHeight="10" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
                   </Children>
                 </ScrollbarWidget>
-
               </Children>
             </Widget>
 
           </Children>
-        </ListPanel>
+        </Widget>
+
       </Children>
     </Widget>
   </Window>

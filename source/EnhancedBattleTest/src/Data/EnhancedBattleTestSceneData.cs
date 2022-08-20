@@ -16,6 +16,7 @@ namespace EnhancedBattleTest.Data
         public ForestDensity ForestDensity { get; set; }
         public bool IsSiegeMap { get; set; }
         public bool IsVillageMap { get; set; }
+        public bool IsLordsHallMap { get; set; }
 
         public SerializedSceneData()
         { }
@@ -30,6 +31,7 @@ namespace EnhancedBattleTest.Data
             ForestDensity = data.ForestDensity;
             IsSiegeMap = data.IsSiegeMap;
             IsVillageMap = data.IsVillageMap;
+            IsLordsHallMap = data.IsLordsHallMap;
         }
     }
     public class SceneData
@@ -41,6 +43,7 @@ namespace EnhancedBattleTest.Data
         public ForestDensity ForestDensity { get; set; }
         public bool IsSiegeMap { get; set; }
         public bool IsVillageMap { get; set; }
+        public bool IsLordsHallMap { get; set; }
 
         public SceneData()
         { }
@@ -54,6 +57,7 @@ namespace EnhancedBattleTest.Data
             ForestDensity = data.ForestDensity;
             IsSiegeMap = data.IsSiegeMap;
             IsVillageMap = data.IsVillageMap;
+            IsLordsHallMap = data.IsLordsHallMap;
         }
 
         public SceneData(SingleplayerBattleSceneData data)
@@ -66,6 +70,7 @@ namespace EnhancedBattleTest.Data
             ForestDensity = data.ForestDensity;
             IsSiegeMap = false;
             IsVillageMap = false;
+            IsLordsHallMap = false;
         }
 
         public SceneData(CustomBattleSceneData data)
@@ -78,6 +83,7 @@ namespace EnhancedBattleTest.Data
             ForestDensity = data.ForestDensity;
             IsSiegeMap = data.IsSiegeMap;
             IsVillageMap = data.IsVillageMap;
+            IsLordsHallMap = data.IsLordsHallMap;
         }
     }
 
@@ -89,7 +95,7 @@ namespace EnhancedBattleTest.Data
             if (ReferenceEquals(x, null)) return false;
             if (ReferenceEquals(y, null)) return false;
             if (x.GetType() != y.GetType()) return false;
-            return string.Equals(x.Id, y.Id, StringComparison.Ordinal) && x.Terrain == y.Terrain && x.IsSiegeMap == y.IsSiegeMap && x.IsVillageMap == y.IsVillageMap;
+            return string.Equals(x.Id, y.Id, StringComparison.Ordinal) && x.Terrain == y.Terrain && x.IsSiegeMap == y.IsSiegeMap && x.IsVillageMap == y.IsVillageMap && x.IsLordsHallMap == y.IsLordsHallMap;
         }
 
         public int GetHashCode(SceneData obj)
@@ -100,6 +106,7 @@ namespace EnhancedBattleTest.Data
                 hashCode = (hashCode * 397) ^ (int) obj.Terrain;
                 hashCode = (hashCode * 397) ^ obj.IsSiegeMap.GetHashCode();
                 hashCode = (hashCode * 397) ^ obj.IsVillageMap.GetHashCode();
+                hashCode = (hashCode * 397) ^ obj.IsLordsHallMap.GetHashCode();
                 return hashCode;
             }
         }

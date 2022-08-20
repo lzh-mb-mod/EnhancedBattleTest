@@ -110,6 +110,14 @@
 
                         <!--<Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="310" SuggestedHeight="175" HorizontalAlignment="Center" MarginTop="40" Sprite="BlankWhiteSquare_9" Brush.Color="#FF00FF33" />-->
 
+                        <!--Map Selection-->
+                        <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+                          <Children>
+                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="@MapText" />
+                            <Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{MapSelection}" />
+                          </Children>
+                        </Widget>
+
                         <!--Season Selection-->
                         <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="60">
                           <Children>
@@ -236,7 +244,7 @@
                     </ListPanel>
 
                     <!--Search Text Bar-->
-                    <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="475" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
+                    <!-- <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="475" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">
                       <Children>
                         <EditableTextWidget Id="SearchInputWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="298" SuggestedHeight="43" MarginLeft="5" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Search.TextBox" Text="@SearchText" />
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="25" SuggestedHeight="24" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="10" Sprite="Encyclopedia\icon_search" IsDisabled="true" />
@@ -271,7 +279,7 @@
                         </Widget>
 
                       </Children>
-                    </ScrollablePanel>
+                    </ScrollablePanel> -->
 
                     <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom">
                       <Children>

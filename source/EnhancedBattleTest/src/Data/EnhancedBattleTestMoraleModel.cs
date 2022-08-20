@@ -1,6 +1,6 @@
 ﻿using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.SandBox.GameComponents.Party;
-using TaleWorlds.Localization;
+using TaleWorlds.CampaignSystem.GameComponents;
+using TaleWorlds.CampaignSystem.Party;
 
 namespace EnhancedBattleTest.Data
 {
@@ -37,11 +37,6 @@ namespace EnhancedBattleTest.Data
         {
             ExplainedNumber explainedNumber = new ExplainedNumber(50f, includeDescription);
             return explainedNumber;
-        }
-
-        public override int NumberOfDesertersDueToPaymentRatio(MobileParty mobileParty)
-        {
-            return 0;
         }
     }
 }

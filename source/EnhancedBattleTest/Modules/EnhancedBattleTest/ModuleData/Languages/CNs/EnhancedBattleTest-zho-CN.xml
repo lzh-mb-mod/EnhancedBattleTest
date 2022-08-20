@@ -38,7 +38,7 @@
     <string id="EnhancedBattleTest_season" text="季节" />
 
     <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
-    <string id="EnhancedBattleTest_trooprolesoldiers" text="部队 {TroopIndex}" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="士兵" />
 
     <string id="EnhancedBattleTest_enabled" text="启用" />
     <string id="EnhancedBattleTest_number" text="数量" />

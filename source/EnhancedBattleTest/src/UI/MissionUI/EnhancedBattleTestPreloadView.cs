@@ -14,9 +14,9 @@ namespace EnhancedBattleTest.UI.MissionUI
         {
             if (_preloadDone)
                 return;
-            MissionCombatantsLogic missionBehaviour = Mission.GetMissionBehaviour<MissionCombatantsLogic>();
+            MissionCombatantsLogic MissionBehavior = Mission.GetMissionBehavior<MissionCombatantsLogic>();
             List<BasicCharacterObject> characters = new List<BasicCharacterObject>();
-            foreach (IBattleCombatant allCombatant in missionBehaviour.GetAllCombatants())
+            foreach (IBattleCombatant allCombatant in MissionBehavior.GetAllCombatants())
                 characters.AddRange(((IEnhancedBattleTestCombatant)allCombatant).Characters);
 
             _helperInstance.PreloadCharacters(characters);

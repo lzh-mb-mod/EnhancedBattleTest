@@ -1,9 +1,12 @@
-﻿using System;
+﻿using EnhancedBattleTest.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using EnhancedBattleTest.Config;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -149,14 +152,11 @@ namespace EnhancedBattleTest
                 if (character != null)
                     return character.Character.CharacterObject.Culture;
             }
-
-            foreach (var troopGroupConfig in config.TroopGroups)
+            
+            foreach (var troopConfig in config.Troops.Troops)
             {
-                foreach (var troopConfig in troopGroupConfig.Troops)
-                {
-                    if (troopConfig.Number > 0)
-                        return troopConfig.Character.CharacterObject.Culture;
-                }
+                if (troopConfig.Number > 0)
+                    return troopConfig.Character.CharacterObject.Culture;
             }
             return Game.Current.ObjectManager.GetObject<BasicCultureObject>(culture => true);
         }
@@ -177,8 +177,9 @@ namespace EnhancedBattleTest
                 if (!isSergeant || formation.PlayerOwner != null)
                 {
                     bool isAIControlled = formation.IsAIControlled;
+                    bool isSplittableByAI = formation.IsSplittableByAI;
                     formation.PlayerOwner = mission.MainAgent;
-                    formation.IsAIControlled = isAIControlled;
+                    formation.SetControlledByAI(isAIControlled, isSplittableByAI);
                 }
             }
         }
@@ -278,8 +279,7 @@ namespace EnhancedBattleTest
 
         public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
         {
-            var characters = teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
-                troopGroupConfig.Troops.Select(troopConfig => troopConfig.Character));
+            var characters = teamConfig.Troops.Troops.Select(troopConfig => troopConfig.Character);
             if (teamConfig.HasGeneral)
                 characters = characters.Concat(teamConfig.Generals.Troops.Select(troopConfig => troopConfig.Character));
             return characters.Select(character => character.CharacterObject as CharacterObject)
@@ -324,11 +324,10 @@ namespace EnhancedBattleTest
                 new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject),
                     teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)).ToArray());
 
-            party.MemberRoster.Add(teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
-                troopGroupConfig.Troops.SelectMany(troopConfig =>
+            party.MemberRoster.Add(teamConfig.Troops.Troops.SelectMany(troopConfig =>
                     Enumerable.Repeat(
                         new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject)),
-                        troopConfig.Number))));
+                        troopConfig.Number)));
         }
 
         public static CharacterObject GetCharacterObject(BasicCharacterObject character)
