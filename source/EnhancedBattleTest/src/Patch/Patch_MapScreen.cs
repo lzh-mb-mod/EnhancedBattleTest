@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using EnhancedBattleTest.GameMode;
+﻿using EnhancedBattleTest.GameMode;
 using HarmonyLib;
 using SandBox.View.Map;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
+using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
 
 namespace EnhancedBattleTest.Patch
 {

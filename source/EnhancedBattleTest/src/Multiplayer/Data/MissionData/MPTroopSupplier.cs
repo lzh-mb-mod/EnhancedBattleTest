@@ -93,5 +93,9 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
             ++_numRouted;
         }
 
+        public IEnumerable<IAgentOriginBase> GetAllTroops()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

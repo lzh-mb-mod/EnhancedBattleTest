@@ -25,7 +25,7 @@ namespace EnhancedBattleTest.GameMode
             currentGame.SetBasicModels(gameStarter.Models);
             currentGame.CreateGameManager();
             GameManager.BeginGameStart(currentGame);
-            CurrentGame.SetRandomGenerators();
+            //CurrentGame.SetRandomGenerators();
             currentGame.InitializeDefaultGameObjects();
             currentGame.LoadBasicFiles();
             LoadXmls();
@@ -42,20 +42,15 @@ namespace EnhancedBattleTest.GameMode
 
         private void InitializeGameTexts(GameTextManager currentGameGameTextManager)
         {
-            currentGameGameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/multiplayer_strings.xml");
-            currentGameGameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
-            currentGameGameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
-            currentGameGameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
-            currentGameGameTextManager.LoadGameTexts(Path.Combine(EnhancedBattleTestSubModule.ModuleFolderPath, "ModuleData",
-                "module_strings.xml"));
+            currentGameGameTextManager.LoadGameTexts();
         }
 
         private void InitializeGameModels(IGameStarter gameStarter)
         {
-            gameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
+            //gameStarter.AddModel(new MultiplayerAgentDecideKilledOrUnconsciousModel());
             gameStarter.AddModel(new MultiplayerAgentStatCalculateModel());
             gameStarter.AddModel(new MultiplayerApplyWeatherEffectsModel());
-            gameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
+            //gameStarter.AddModel(new MultiplayerAgentApplyDamageModel());
             gameStarter.AddModel(new DefaultRidingModel());
             gameStarter.AddModel(new MultiplayerStrikeMagnitudeModel());
             gameStarter.AddModel(new MultiplayerBattleMoraleModel());
@@ -70,7 +65,7 @@ namespace EnhancedBattleTest.GameMode
 
         protected override void BeforeRegisterTypes(MBObjectManager objectManager)
         {
-            objectManager.RegisterNonSerializedType<FeatObject>("Feat", "Feats", 0U);
+            //objectManager.RegisterNonSerializedType<FeatObject>("Feat", "Feats", 0U);
         }
 
         protected override void OnRegisterTypes(MBObjectManager objectManager)

@@ -57,7 +57,7 @@ namespace EnhancedBattleTest.UI
             if (!_isLastActiveGameStatePaused)
                 return;
             _isLastActiveGameStateActive = GameStateManager.Current.ActiveStateDisabledByUser;
-            GameStateManager.Current.ActiveStateDisabledByUser = true;
+            GameStateManager.Current.RegisterActiveStateDisableRequest(this);
             MBCommon.PauseGameEngine();
         }
 
@@ -69,7 +69,7 @@ namespace EnhancedBattleTest.UI
             RemoveLayer();
             if (!_isLastActiveGameStatePaused)
                 return;
-            GameStateManager.Current.ActiveStateDisabledByUser = _isLastActiveGameStateActive;
+            GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
             MBCommon.UnPauseGameEngine();
         }
 

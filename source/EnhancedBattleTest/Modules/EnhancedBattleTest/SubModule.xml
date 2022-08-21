@@ -2,15 +2,15 @@
 <Module>
   <Name value="EnhancedBattleTest"/>
   <Id value="EnhancedBattleTest"/>
-  <Version value="v2.1.4"/>
+  <Version value="v3.0.0"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>
-    <DependedModule Id="Native" DependentVersion="e1.6.2" />
-    <DependedModule Id="SandBoxCore" DependentVersion="e1.6.2" />
-    <DependedModule Id="Sandbox" DependentVersion="e1.6.2" />
-	<DependedModule Id="CustomBattle" DependentVersion="e1.6.2"/>
-    <DependedModule Id="StoryMode" DependentVersion="e1.6.2" />
+    <DependedModule Id="Native" DependentVersion="e1.8.0" />
+    <DependedModule Id="SandBoxCore" DependentVersion="e1.8.0" />
+    <DependedModule Id="Sandbox" DependentVersion="e1.8.0" />
+	<DependedModule Id="CustomBattle" DependentVersion="e1.8.0"/>
+    <DependedModule Id="StoryMode" DependentVersion="e1.8.0" />
   </DependedModules>
   <SubModules>
     <SubModule>
@@ -25,6 +25,9 @@
   </SubModules>
 
   <Xmls>
+    <XmlNode>
+      <XmlName id="GameText" path="module_strings"/>
+    </XmlNode>
     <!-- <XmlNode>
 			<XmlName id="Items" path="../../Native/ModuleData/mpitems"/>
 			<IncludedGameTypes>

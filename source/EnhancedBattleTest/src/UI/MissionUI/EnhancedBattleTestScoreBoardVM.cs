@@ -1,6 +1,6 @@
 ﻿using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.Source.Missions.Handlers;
-using TaleWorlds.MountAndBlade.ViewModelCollection;
+using TaleWorlds.MountAndBlade.ViewModelCollection.Scoreboard;
 
 namespace EnhancedBattleTest.UI.MissionUI
 {

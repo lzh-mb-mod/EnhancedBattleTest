@@ -35,7 +35,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             int attackerInitialSpawn = ofHealthyMembers2;
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Defender, true);
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Attacker, true);
-            _missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, true, true);
+            //_missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, true, true);
         }
     }
 }

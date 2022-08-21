@@ -1,20 +1,10 @@
 ﻿using EnhancedBattleTest.Config;
-using EnhancedBattleTest.Data.MissionData.Logic;
 using EnhancedBattleTest.Multiplayer.Data.MissionData;
-using EnhancedBattleTest.SinglePlayer.Data.MissionData;
-using SandBox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SandBox.Missions.MissionLogics;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.Missions.Handlers;
-using TaleWorlds.MountAndBlade.Source.Missions;
-using TaleWorlds.MountAndBlade.Source.Missions.Handlers.Logic;
 
 namespace EnhancedBattleTest.Data.MissionData
 {
@@ -53,7 +43,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 return OpenMultiplayerMission(config, mapName);
             }
 
-            return OpenSingleplayerMission(config, mapName);
+            return null;
         }
 
         public static Mission OpenMultiplayerMission(BattleConfig config, string map)
@@ -69,29 +59,6 @@ namespace EnhancedBattleTest.Data.MissionData
                 MPCombatant.CreateParty(enemySide, enemyCulture, config.EnemySideConfig.Teams[0], false)
             };
 
-            return OpenMission(parties[0], parties[1], config, map);
-        }
-
-        public static Mission OpenSingleplayerMission(BattleConfig config, string map)
-        {
-            var playerCulture = Utility.GetCulture(config.PlayerSideConfig.Teams[0]);
-            var playerSide = config.BattleTypeConfig.PlayerSide;
-
-            var enemyCulture = Utility.GetCulture(config.EnemySideConfig.Teams[0]);
-            var enemySide = playerSide.GetOppositeSide();
-            SPCombatant[] parties = new SPCombatant[2]
-            {
-                SPCombatant.CreateParty(EnhancedBattleTestPartyController.PlayerParty.Party, playerSide, playerCulture,
-                    config.PlayerSideConfig.Teams[0], true),
-                SPCombatant.CreateParty(EnhancedBattleTestPartyController.EnemyParty.Party, enemySide, enemyCulture,
-                    config.EnemySideConfig.Teams[0], false)
-            };
-            if (playerSide == BattleSideEnum.Attacker)
-                Utility.SetMapEvents(EnhancedBattleTestPartyController.PlayerParty.Party,
-                    EnhancedBattleTestPartyController.EnemyParty.Party, config.BattleTypeConfig.BattleType);
-            else
-                Utility.SetMapEvents(EnhancedBattleTestPartyController.EnemyParty.Party,
-                    EnhancedBattleTestPartyController.PlayerParty.Party, config.BattleTypeConfig.BattleType);
             return OpenMission(parties[0], parties[1], config, map);
         }
 
@@ -168,7 +135,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 return new MPTroopSupplier(combatant);
             }
 
-            return new SPTroopSupplier(combatant);
+            return null;
         }
 
         private static Dictionary<SiegeEngineType, int> GetSiegeWeaponCount(List<string> siegeWeaponIds)

@@ -46,7 +46,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
             agentBuildData.Equipment(equipment);
             agentBuildData.IsFemale(MPCharacter.IsFemale);
             if (!MPCharacter.IsPlayer)
-                agentBuildData.IsReinforcement(isReinforcement).SpawnOnInitialPoint(enforceSpawningOnInitialPoint);
+                //agentBuildData.IsReinforcement(isReinforcement).SpawnOnInitialPoint(enforceSpawningOnInitialPoint);
             if (initialPosition.HasValue && initialDirection.HasValue)
             {
                 Vec3 vec3 = initialPosition.Value;
@@ -54,7 +54,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                 Vec2 vec2 = initialDirection.Value;
                 agentBuildData.InitialDirection(in vec2);
             }
-            else if (SpawnableCharacter.IsGeneral && Mission.Current.GetFormationSpawnClass(team.Side, FormationClass.NumberOfRegularFormations) == FormationClass.NumberOfRegularFormations)
+            else if (SpawnableCharacter.IsGeneral && Mission.Current.GetFormationSpawnClass(team.Side, FormationClass.NumberOfRegularFormations, isReinforcement) == FormationClass.NumberOfRegularFormations)
             {
                 Mission.Current.GetFormationSpawnFrame(team.Side, FormationClass.NumberOfRegularFormations, false, out var spawnPosition, out var direction);
                 Vec3 groundVec3 = spawnPosition.GetGroundVec3();

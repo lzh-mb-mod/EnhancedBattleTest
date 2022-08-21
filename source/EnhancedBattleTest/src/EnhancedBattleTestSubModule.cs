@@ -47,13 +47,13 @@ namespace EnhancedBattleTest
                     MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<MultiplayerGame>());
                 }, false));
             */
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTSingleplayerTest",
-                new TextObject("{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test"), 3,
-                () =>
-                {
-                    IsMultiplayer = false;
-                    MBGameManager.StartNewGame(new EnhancedBattleTestSingleplayerGameManager());
-                }, () => (false, new TextObject())));
+            //Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTSingleplayerTest",
+            //    new TextObject("{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test"), 3,
+            //    () =>
+            //    {
+            //        IsMultiplayer = false;
+            //        MBGameManager.StartNewGame(new EnhancedBattleTestSingleplayerGameManager());
+            //    }, () => (false, new TextObject())));
             Patch_MapScreen.Patch();
             Patch_Hero.Patch();
             Patch_AssignPlayerRoleInTeamMissionController.Patch();
@@ -64,7 +64,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameStart(game, gameStarterObject);
 
-            game.GameTextManager.LoadGameTexts(ModuleHelper.GetXmlPath(ModuleId, "module_strings"));
+            game.GameTextManager.LoadGameTexts();
 
             gameStarterObject.AddModel(new EnhancedBattleTestMoraleModel());
         }

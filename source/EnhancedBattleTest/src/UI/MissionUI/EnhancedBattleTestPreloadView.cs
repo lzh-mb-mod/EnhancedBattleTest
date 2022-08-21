@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using EnhancedBattleTest.Data.MissionData;
+﻿using EnhancedBattleTest.Data.MissionData;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View.Missions;
+using TaleWorlds.MountAndBlade.View;
+using TaleWorlds.MountAndBlade.View.MissionViews;
 
 namespace EnhancedBattleTest.UI.MissionUI
 {

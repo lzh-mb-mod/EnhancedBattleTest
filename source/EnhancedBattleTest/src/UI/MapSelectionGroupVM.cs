@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
-using TaleWorlds.Core.ViewModelCollection;
+using System;
+using System.Collections.Generic;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle;
