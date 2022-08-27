@@ -30,6 +30,7 @@
   <string id="str_ebt_swap_team" text="{=EnhancedBattleTest_swapteam}Swap Team" />
 
   <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />
+  <string id="str_ebt_use_campaign_map" text="{=EnhancedBattleTest_use_campaign_map}Generate map based on position" />
   <string id="str_ebt_season" text="{=EnhancedBattleTest_season}Season" />
 
   <string id="str_ebt_party_name" text="{=EnhancedBattleTest_party_name}{PARTY_TEXT} {INDEX}"/>
