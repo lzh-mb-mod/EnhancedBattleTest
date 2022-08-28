@@ -58,6 +58,8 @@ namespace EnhancedBattleTest
             Patch_Hero.Patch();
             Patch_AssignPlayerRoleInTeamMissionController.Patch();
             Patch_DeploymentMissionController.Patch();
+            // Patch for correct weather in custom sieges            
+            Patch_Initializer.Patch();
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
