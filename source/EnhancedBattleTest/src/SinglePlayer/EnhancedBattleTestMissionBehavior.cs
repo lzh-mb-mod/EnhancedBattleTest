@@ -7,11 +7,16 @@ namespace EnhancedBattleTest.SinglePlayer
 {
     public class EnhancedBattleTestMissionBehavior : MissionLogic
     {
+        public override void OnBattleEnded()
+        {
+            base.OnBattleEnded();
+
+            BattleStarter.MissionEnded();
+        }
+
         public override void OnRemoveBehavior()
         {
             base.OnRemoveBehavior();
-
-            BattleStarter.MissionEnded();
         }
 
         public override void OnEarlyAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)
