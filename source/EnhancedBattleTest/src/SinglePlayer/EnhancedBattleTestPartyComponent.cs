@@ -54,14 +54,14 @@ namespace EnhancedBattleTest.SinglePlayer
                 switch (pair.Value.Value)
                 {
                     case MemberState.Leader:
-                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 0);
                         pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
                         break;
                     case MemberState.Prisoner:
-                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);
+                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 0);
                         break;
                     case MemberState.Original:
-                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 0);
                         break;
                 }
             }
