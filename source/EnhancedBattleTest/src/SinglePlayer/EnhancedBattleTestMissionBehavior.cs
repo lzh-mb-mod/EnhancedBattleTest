@@ -1,22 +1,43 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.SinglePlayer
 {
     public class EnhancedBattleTestMissionBehavior : MissionLogic
     {
-        public override void OnBattleEnded()
-        {
-            base.OnBattleEnded();
+        private bool ended = false;
 
-            BattleStarter.MissionEnded();
+        // Called when leaving battle before end
+        public override void OnRetreatMission()
+        {
+            base.OnRetreatMission();
+            if(!ended)
+            {
+                ended = true;
+                BattleStarter.BeforeMissionEnded();                
+            }
+        }
+
+        // Called on battle end score
+        public override void OnMissionResultReady(MissionResult missionResult)
+        {
+            if (!ended)
+            {
+                ended = true;
+                BattleStarter.BeforeMissionEnded();
+            }
         }
 
         public override void OnRemoveBehavior()
         {
             base.OnRemoveBehavior();
+            BattleStarter.MissionEnded();
         }
 
         public override void OnEarlyAgentRemoved(Agent affectedAgent, Agent affectorAgent, AgentState agentState, KillingBlow blow)

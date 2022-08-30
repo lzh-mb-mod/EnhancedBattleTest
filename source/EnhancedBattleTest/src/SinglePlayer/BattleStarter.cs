@@ -26,6 +26,7 @@ namespace EnhancedBattleTest.SinglePlayer
         private static BasicCharacterObject _oldPlayerCharacter;
         public static bool IsEnhancedBattleTestBattle = false;        
         private static Dictionary<Banner, String> bannerSave = new Dictionary<Banner, String>();
+        private static MapEvent mapEvent;
 
         public static void Start(BattleConfig config, string mapId)
         {            
@@ -114,10 +115,24 @@ namespace EnhancedBattleTest.SinglePlayer
             }
         }
 
+        public static void BeforeMissionEnded()
+        {
+            RollbackPartyBanners();
+
+            if (_oldPlayerCharacter != null)
+            {
+                Game.Current.PlayerTroop = _oldPlayerCharacter;
+            }
+
+            mapEvent = MapEvent.PlayerMapEvent;
+
+            typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
+        }
+
         public static void MissionEnded()
         {
             IsEnhancedBattleTestBattle = false;
-            RollbackPartyBanners();
+
             for (int i = _enemySideParties.Count - 1; i > 0; --i)
             {
                 (_enemySideParties[i].MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
@@ -132,13 +147,11 @@ namespace EnhancedBattleTest.SinglePlayer
             }
             (_enemyParty.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
             (_playerParty.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
-                if (_oldPlayerCharacter != null)
+            if (_oldPlayerCharacter != null)
             {
                 Game.Current.PlayerTroop = _oldPlayerCharacter;
             }
             _oldPlayerCharacter = null;
-
-            var mapEvent = MapEvent.PlayerMapEvent;
             _playerParty.MapEventSide = null;
             _enemyParty.MapEventSide = null;
             mapEvent.FinalizeEvent();
@@ -147,7 +160,6 @@ namespace EnhancedBattleTest.SinglePlayer
                 .GetValue(Campaign.Current.MapEventManager);
             mapEvents.Remove(mapEvent);
             PlayerEncounter.Finish();
-            typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
             _oldMainParty = null;
             _playerParty.MobileParty?.RemoveParty();
             _enemyParty.MobileParty?.RemoveParty();
