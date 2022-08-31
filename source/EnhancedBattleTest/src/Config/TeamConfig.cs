@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace EnhancedBattleTest.Config
@@ -14,6 +15,8 @@ namespace EnhancedBattleTest.Config
             set => _bannerKey = !string.IsNullOrEmpty(value) ? value : _bannerKey;
         }
 
+        public bool CustomBanner { get; set; }
+
         [field: XmlIgnore]
         public TroopGroupConfig Generals { get; set; } =
             new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer, true);
@@ -23,6 +26,8 @@ namespace EnhancedBattleTest.Config
         [field: XmlIgnore]
         public TroopGroupConfig Troops { get; set; } =
             new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+
+        public bool CustomTacticLevel { get; set; }
 
         public int TacticLevel { get; set; } = 0;
 
@@ -39,6 +44,14 @@ namespace EnhancedBattleTest.Config
         [XmlIgnore]
         public Banner Banner => new Banner(BannerKey);
 
+        public Banner GetPreviewBanner()
+        {
+            return CustomBanner || EnhancedBattleTestSubModule.IsMultiplayer
+                ? new Banner(BannerKey)
+                : (HasGeneral
+                    ? (Generals.Troops[0].Character.CharacterObject as CharacterObject).HeroObject?.ClanBanner
+                    : null) ?? CampaignData.NeutralFaction.Banner;
+        }
 
         public TeamConfig()
         {

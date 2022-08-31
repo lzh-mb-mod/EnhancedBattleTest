@@ -29,25 +29,31 @@ namespace EnhancedBattleTest.Data.MissionData
 
         public static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", int timeOfDay = 6, bool isInSettlement = false)
         {
-            Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
-            dictionary1.Add("spring", 0);
-            dictionary1.Add("summer", 1);
-            dictionary1.Add("fall", 2);
-            dictionary1.Add("winter", 3);
-            int num = 0;
-            dictionary1.TryGetValue(seasonString, out num);
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
+            dictionary.Add("spring", 0);
+            dictionary.Add("summer", 1);
+            dictionary.Add("fall", 2);
+            dictionary.Add("winter", 3);
+            int season = 0;
+            dictionary.TryGetValue(seasonString, out season);
             Dictionary<int, string> dictionary2 = new Dictionary<int, string>();
             dictionary2.Add(6, "TOD_06_00_SemiCloudy");
             dictionary2.Add(12, "TOD_12_00_SemiCloudy");
             dictionary2.Add(15, "TOD_04_00_SemiCloudy");
             dictionary2.Add(18, "TOD_03_00_SemiCloudy");
             dictionary2.Add(22, "TOD_01_00_SemiCloudy");
-            string str = "field_battle";
-            dictionary2.TryGetValue(timeOfDay, out str);
+            string atmosphereName = "field_battle";
+            dictionary2.TryGetValue(timeOfDay, out atmosphereName);
+            string atmosphereTypeName = isInSettlement ? "empire" : "field_battle";
             return new AtmosphereInfo()
             {
-                AtmosphereName = str,
-                TimeInfo = new TimeInformation() { Season = num }
+                AtmosphereTypeName = atmosphereTypeName,
+                AtmosphereName = atmosphereName,
+                TimeInfo = new TimeInformation
+                {
+                    Season = season,
+                    TimeOfDay = timeOfDay
+                }
             };
         }
 

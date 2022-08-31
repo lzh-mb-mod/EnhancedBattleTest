@@ -208,7 +208,9 @@ namespace EnhancedBattleTest.UI
 
         private void RecoverConfig()
         {
-            if (_config.MapConfig.OverridesCampaignMap || Campaign.Current == null || MobileParty.MainParty == null)
+            MapSelectionGroup.OverridesPlayerPosition = _config.MapConfig.OverridesPlayerPosition;
+            MapSelectionGroup.IsSallyOutSelected = _config.MapConfig.IsSallyOutSelected;
+            if (_config.MapConfig.OverridesPlayerPosition || Campaign.Current == null || MobileParty.MainParty == null)
             {
                 MapSelectionGroup.MapSelection.SelectedIndex = MapSelectionGroup.MapSelection.ItemList.FindIndex(vm => vm.MapId == _config.MapConfig.SelectedMapId);
             }
@@ -289,9 +291,7 @@ namespace EnhancedBattleTest.UI
             var mapItem = GetMap();
             if (mapItem == null)
                 return;
-            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
-            GameTexts.SetVariable("MapName", mapItem.MapName);
-            Utility.DisplayLocalizedText("str_ebt_current_map");
+            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);            
             EnhancedBattleTestPartyController.BattleConfig = _config;
             //EnhancedBattleTestMissions.OpenMission(_config, mapItem.MapId);
             BattleStarter.Start(_config, mapItem.MapId);
@@ -300,6 +300,8 @@ namespace EnhancedBattleTest.UI
         private bool ApplyConfig()
         {
             _config.MapConfig.SelectedMapId = MapSelectionGroup.SelectedMap.MapId;
+            _config.MapConfig.OverridesPlayerPosition = MapSelectionGroup.OverridesPlayerPosition;
+            _config.MapConfig.IsSallyOutSelected = MapSelectionGroup.IsSallyOutSelected;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
@@ -318,7 +320,7 @@ namespace EnhancedBattleTest.UI
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege &&
-                _config.PlayerSideConfig.Teams.All(team => !team.HasGeneral || team.Generals.Troops.Count == 0))
+                !_config.PlayerSideConfig.Teams[0].HasGeneral || _config.PlayerSideConfig.Teams[0].Generals.Troops.Count == 0)
             {
                 Utility.DisplayLocalizedText("str_ebt_siege_no_player");
                 return false;
@@ -328,7 +330,7 @@ namespace EnhancedBattleTest.UI
         }
 
         private MapItemVM GetMap()
-        {
+        {            
             var selectedMap = MapSelectionGroup.SelectedMap;
             if (selectedMap == null)
             {

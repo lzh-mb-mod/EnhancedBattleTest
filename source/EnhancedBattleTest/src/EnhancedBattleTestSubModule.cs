@@ -58,6 +58,10 @@ namespace EnhancedBattleTest
             Patch_Hero.Patch();
             Patch_AssignPlayerRoleInTeamMissionController.Patch();
             Patch_DeploymentMissionController.Patch();
+            Patch_BesiegerCamp.Patch();
+            Patch_PartyBase.Patch();
+            // Patch for correct weather in custom sieges            
+            Patch_Initializer.Patch();
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
@@ -85,7 +89,7 @@ namespace EnhancedBattleTest
                 campaign.AddCampaignEventReceiver(new EnhancedBattleTestCampaignEventReceiver());
             }
 
-            if (game.GameType is MultiplayerGame || game.GameType is GameMode.Campaign)
+            if (game.GameType is MultiplayerGame)
             {
                 ApplyHarmonyPatch();
             }
@@ -96,7 +100,7 @@ namespace EnhancedBattleTest
             base.OnGameEnd(game);
 
             BattleStarter.IsEnhancedBattleTestBattle = false;
-            if (game.GameType is MultiplayerGame || game.GameType is GameMode.Campaign)
+            if (game.GameType is MultiplayerGame)
             {
                 Unpatch();
             }

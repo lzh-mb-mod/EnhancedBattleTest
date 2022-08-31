@@ -81,9 +81,14 @@ namespace EnhancedBattleTest.UI
         {
             if (_teamConfig != null)
             {
-                Character.ArmorColor1 = _teamConfig.Color1;
-                Character.ArmorColor2 = _teamConfig.Color2;
-                Character.BannerCodeText = _teamConfig.BannerKey;
+                var banner = _teamConfig.GetPreviewBanner();
+                Character.BannerCodeText = banner.Serialize();
+                Character.ArmorColor1 = banner.BannerDataList.Count > 0
+                    ? BannerManager.GetColor(banner.BannerDataList[0].ColorId)
+                    : uint.MaxValue;
+                Character.ArmorColor2 = banner.BannerDataList.Count > 1
+                    ? BannerManager.GetColor(banner.BannerDataList[1].ColorId)
+                    : uint.MaxValue;
             }
             else
             {

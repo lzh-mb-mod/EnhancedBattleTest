@@ -35,6 +35,7 @@
     <string id="EnhancedBattleTest_swapteam" text="交换队伍" />
 
     <string id="EnhancedBattleTest_map" text="地图" />
+    <string id="EnhancedBattleTest_custom_map" text="自定义地图" />
     <string id="EnhancedBattleTest_season" text="季节" />
 
     <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
@@ -60,6 +61,10 @@
     <string id="EnhancedBattleTest_current_map" text="当前地图是 {MapName}." />
 
     <string id="EnhancedBattleTest_troop_group_general" text="将军" />
+
+    <string id="EnahncedBattletest_custom_banner" text="自定义纹章" />
+
+    <string id="EnahncedBattletest_custom_tactic_level" text="自定义战术等级" />
 
     <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
 

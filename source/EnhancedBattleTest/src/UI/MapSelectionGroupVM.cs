@@ -1,7 +1,9 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
+using EnhancedBattleTest.UI.Basic;
 using System;
 using System.Collections.Generic;
+using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -13,6 +15,9 @@ namespace EnhancedBattleTest.UI
     public class MapSelectionGroupVM : ViewModel
     {
         private bool _isCurrentMapSiege;
+        private bool _isCurrentMapField;
+        private bool _showMapOptions = true;
+        private bool _overridesPlayerPosition;
         private bool _isSallyOutSelected;
         private SelectorVM<MapItemVM> _mapSelection;
         private SelectorVM<SceneLevelItemVM> _sceneLevelSelection;
@@ -21,6 +26,7 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<TimeOfDayItemVM> _timeOfDaySelection;
         private string _titleText;
         private string _mapText;
+        private string _useCustomMap;
         private string _seasonText;
         private string _timeOfDayText;
         private string _sceneLevelText;
@@ -68,14 +74,15 @@ namespace EnhancedBattleTest.UI
             base.RefreshValues();
             PrepareMapLists();
             TitleText = new TextObject("{=w9m11T1y}Map").ToString();
-            this.MapText = new TextObject("{=w9m11T1y}Map").ToString();
+            MapText = new TextObject("{=w9m11T1y}Map").ToString();
+            UseCustomMap = GameTexts.FindText("str_ebt_custom_map").ToString();
             SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
             SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
             WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
             AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
             DefenderSiegeMachinesText = new TextObject("{=UoiSWe87}Choose Defender Siege Machines").ToString();
-            SalloutText = new TextObject("{=EcKMGoFv}Sallyout").ToString();
+            SallyoutText = new TextObject("{=KKB2vNFr}Sally Out").ToString();
             MapSelection.ItemList.Clear();
             WallHitpointSelection.ItemList.Clear();
             SceneLevelSelection.ItemList.Clear();
@@ -157,17 +164,21 @@ namespace EnhancedBattleTest.UI
             {
                 case BattleType.Field:
                     IsCurrentMapSiege = false;
+                    IsCurrentMapField = true;
                     _availableMaps = _battleMaps;
                     break;
                 case BattleType.Siege:
                     IsCurrentMapSiege = true;
+                    IsCurrentMapField = false;
                     _availableMaps = _siegeMaps;
                     break;
                 case BattleType.Village:
                     IsCurrentMapSiege = false;
+                    IsCurrentMapField = false;
                     _availableMaps = _villageMaps;
                     break;
             }
+            ToggleShowMapPosAndTimeOptions();
             foreach (MapItemVM availableMap in _availableMaps)
                 MapSelection.AddItem(availableMap);
             if (_availableMaps.Count == 0)
@@ -268,6 +279,51 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
+        public bool IsCurrentMapField
+        {
+            get => _isCurrentMapField;
+            set
+            {
+                if (value == _isCurrentMapField)
+                    return;
+                _isCurrentMapField = value;
+                OnPropertyChanged(nameof(IsCurrentMapField));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool ShowMapOptions
+        {
+            get => _showMapOptions;
+            set
+            {
+                if (value == _showMapOptions)
+                    return;
+                _showMapOptions = value;
+                OnPropertyChanged(nameof(ShowMapOptions));
+            }
+        }
+
+        public void ToggleShowMapPosAndTimeOptions()
+        {
+            ShowMapOptions = OverridesPlayerPosition || !IsCurrentMapField;
+        }
+
+        [DataSourceProperty]
+        public bool OverridesPlayerPosition
+        {
+            get => _overridesPlayerPosition;
+            set
+            {
+                if (value == _overridesPlayerPosition)
+                    return;
+                _overridesPlayerPosition = value;
+                OnPropertyChanged(nameof(OverridesPlayerPosition));
+                ToggleShowMapPosAndTimeOptions();
+            }
+        }
+
+        [DataSourceProperty]
         public bool IsSallyOutSelected
         {
             get => _isSallyOutSelected;
@@ -290,6 +346,19 @@ namespace EnhancedBattleTest.UI
                     return;
                 _titleText = value;
                 OnPropertyChanged(nameof(TitleText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string UseCustomMap
+        {
+            get => _useCustomMap;
+            set
+            {
+                if (value == _useCustomMap)
+                    return;
+                _useCustomMap = value;
+                OnPropertyChangedWithValue(value, nameof(UseCustomMap));
             }
         }
 
@@ -385,7 +454,7 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public string SalloutText
+        public string SallyoutText
         {
             get => _sallyoutText;
             set
@@ -393,7 +462,7 @@ namespace EnhancedBattleTest.UI
                 if (value == _sallyoutText)
                     return;
                 _sallyoutText = value;
-                OnPropertyChanged(nameof(SalloutText));
+                OnPropertyChanged(nameof(SallyoutText));
             }
         }
     }

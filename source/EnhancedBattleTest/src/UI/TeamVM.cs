@@ -12,7 +12,12 @@ namespace EnhancedBattleTest.UI
         private int _index;
         private readonly TeamConfig _config;
         private ImageIdentifierVM _banner;
+        private bool _isBannerVisible;
         public TextVM Name { get; }
+
+        public TextVM CustomBannerText { get; }
+
+        public BoolVM CustomBanner { get; }
 
         [DataSourceProperty]
         public ImageIdentifierVM Banner
@@ -29,8 +34,13 @@ namespace EnhancedBattleTest.UI
 
         public bool ShouldShowBanner => !EnhancedBattleTestSubModule.IsMultiplayer;
 
+        public TextVM CustomTacticLevelText { get; }
+
+        public BoolVM CustomTacticLevel { get; }
+
         public TextVM TacticText { get; }
         public NumberVM<float> TacticLevel { get; }
+
         public TroopGroupVM Generals { get; }
 
         public TextVM EnableGeneralText { get; }
@@ -53,11 +63,18 @@ namespace EnhancedBattleTest.UI
         public TeamVM(TeamConfig teamConfig, bool isPlayerSide, int index, BattleTypeConfig battleTypeConfig)
         {
             _index = index;
+            _config = teamConfig;
             Name = new TextVM(GameTexts.FindText("str_ebt_party_name").SetTextVariable("PARTY_TEXT", isPlayerSide
                 ? new TextObject("{=sSJSTe5p}Player Party")
                 : new TextObject("{=0xC75dN6}Enemy Party")).SetTextVariable("INDEX", _index));
-            _config = teamConfig;
+            CustomBannerText = new TextVM(GameTexts.FindText("str_ebt_custom_banner"));
+            IsBannerVisible = teamConfig.CustomBanner;
+            CustomBanner = new BoolVM(teamConfig.CustomBanner);
+            CustomBanner.OnValueChanged += b => _config.CustomBanner = IsBannerVisible = b;
             Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
+            CustomTacticLevelText = new TextVM(GameTexts.FindText("str_ebt_custom_tactic_level"));
+            CustomTacticLevel = new BoolVM(teamConfig.CustomTacticLevel);
+            CustomTacticLevel.OnValueChanged += b => _config.CustomTacticLevel = b;
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
             TacticLevel = new NumberVM<float>(_config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += f => _config.TacticLevel = (int)f;
@@ -94,6 +111,19 @@ namespace EnhancedBattleTest.UI
             Name.RefreshValues();
             Generals.RefreshValues();
             Troops.RefreshValues();
+        }
+
+        [DataSourceProperty]
+        public bool IsBannerVisible
+        {
+            get => _isBannerVisible;
+            set
+            {
+                if (_isBannerVisible == value)
+                    return;
+                _isBannerVisible = value;
+                OnPropertyChanged(nameof(IsBannerVisible));
+            }
         }
     }
 }

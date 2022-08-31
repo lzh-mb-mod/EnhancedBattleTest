@@ -29,22 +29,53 @@
 
         <ListPanel Id="TeamContent" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
           <Children>
+
             <!--Banner-->
-            <ButtonWidget IsVisible="@ShouldShowBanner" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110" SuggestedHeight="180" HorizontalAlignment="Left" VerticalAlignment="Top" PositionXOffset="20" PositionYOffset="-8" Command.Click="EditBanner" IsEnabled="true" UpdateChildrenStates="true">
+            <ListPanel IsVisible="@ShouldShowBanner" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" MarginLeft="10">
               <Children>
-                <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="105" SuggestedHeight="126" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Clan.TornBanner" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="1.8" />
+
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="180" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+
+                    <RichTextWidget DataSource="{CustomBannerText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <ButtonWidget DataSource="{CustomBanner}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+
+                  </Children>
+                </ListPanel>
+
+                <ButtonWidget IsVisible="@IsBannerVisible" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="110" SuggestedHeight="180" HorizontalAlignment="Left" VerticalAlignment="Top" PositionXOffset="20" PositionYOffset="-8" Command.Click="EditBanner" IsEnabled="true" UpdateChildrenStates="true">
+                  <Children>
+                    <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="105" SuggestedHeight="126" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Clan.TornBanner" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" OverlayTextureScale="1.8" />
+                  </Children>
+                </ButtonWidget>
+
               </Children>
-            </ButtonWidget>
+            </ListPanel>
 
             <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="10">
               <Children>
 
                 <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" MarginLeft="10">
                   <Children>
+                    <RichTextWidget DataSource="{CustomTacticLevelText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
+                    <ButtonWidget DataSource="{CustomTacticLevel}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+                      <Children>
+                        <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                      </Children>
+                    </ButtonWidget>
+                  </Children>
+                </ListPanel>
 
-                    <RichTextWidget DataSource="{TacticText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
+                <ListPanel DataSource="{CustomTacticLevel}" IsVisible="@Value" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight" MarginLeft="10">
+                  <Children>
 
-                    <SliderWidget DataSource="{TacticLevel}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="338" SuggestedHeight="42" MarginLeft="20" VerticalAlignment="Center" DoNotUpdateHandleSize="true" Filler="Filler" Handle="SliderHandle" IsDiscrete="@IsDiscrete" MaxValueFloat="@Max" MinValueFloat="@Min" ValueFloat="@Value">
+                    <RichTextWidget DataSource="{..\TacticText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
+
+                    <SliderWidget DataSource="{..\TacticLevel}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="338" SuggestedHeight="42" MarginLeft="20" VerticalAlignment="Center" DoNotUpdateHandleSize="true" Filler="Filler" Handle="SliderHandle" IsDiscrete="@IsDiscrete" MaxValueFloat="@Max" MinValueFloat="@Min" ValueFloat="@Value">
                       <Children>
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="362" SuggestedHeight="38" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_canvas" IsEnabled="false" />
                         <Widget Id="Filler" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="345" SuggestedHeight="35" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_fill" ClipContents="true">
@@ -53,11 +84,11 @@
                           </Children>
                         </Widget>
                         <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="400" SuggestedHeight="65" HorizontalAlignment="Center" VerticalAlignment="Center" Sprite="SPGeneral\SPOptions\standart_slider_frame" IsEnabled="false" />
-                        <Widget Id="SliderHandle" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="14" SuggestedHeight="38" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="SPOptions.Slider.Handle" />
+                        <ImageWidget Id="SliderHandle" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="14" SuggestedHeight="38" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="SPOptions.Slider.Handle" />
                       </Children>
                     </SliderWidget>
 
-                    <RichTextWidget DataSource="{TacticLevel}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="50" MarginLeft="20" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
+                    <RichTextWidget DataSource="{..\TacticLevel}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="50" MarginLeft="20" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
 
                   </Children>
                 </ListPanel>
