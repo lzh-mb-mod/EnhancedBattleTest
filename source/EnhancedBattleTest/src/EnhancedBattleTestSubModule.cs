@@ -1,20 +1,16 @@
-using System;
-using System.IO;
-using System.Reflection;
 using EnhancedBattleTest.Data;
-using EnhancedBattleTest.GameMode;
 using EnhancedBattleTest.Patch;
 using EnhancedBattleTest.Patch.Fix;
 using EnhancedBattleTest.SinglePlayer;
 using EnhancedBattleTest.UI;
 using HarmonyLib;
+using System;
+using System.IO;
+using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
-using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
 using Campaign = TaleWorlds.CampaignSystem.Campaign;
-using Module = TaleWorlds.MountAndBlade.Module;
 using MultiplayerGame = EnhancedBattleTest.GameMode.MultiplayerGame;
 
 namespace EnhancedBattleTest

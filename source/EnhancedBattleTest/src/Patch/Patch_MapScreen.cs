@@ -4,6 +4,9 @@ using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
@@ -37,6 +40,13 @@ namespace EnhancedBattleTest.Patch
                 o =>
                 {
                     __instance.CloseEscapeMenu();
+                    if (PlayerEncounter.Current != null)
+                    {
+                        PlayerEncounter.Finish();
+                        typeof(MapScreen).GetMethod("ExitMenuContext", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(__instance, new object[] { });
+                    }
+
                     Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
                 }, null, () => new Tuple<bool, TextObject>(false, TextObject.Empty)));
         }
