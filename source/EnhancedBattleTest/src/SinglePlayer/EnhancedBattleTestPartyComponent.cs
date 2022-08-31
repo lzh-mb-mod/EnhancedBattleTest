@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.SinglePlayer.Config;
 using TaleWorlds.CampaignSystem;
@@ -11,15 +12,6 @@ namespace EnhancedBattleTest.SinglePlayer
 {
     public class EnhancedBattleTestPartyComponent : PartyComponent
     {
-        private enum MemberState
-        {
-            Original,
-            Leader,
-            Prisoner
-        }
-        private readonly Dictionary<Hero, KeyValuePair<PartyBase, MemberState>> _originalParties = new Dictionary<Hero, KeyValuePair<PartyBase, MemberState>>();
-        private readonly Dictionary<Hero, Settlement> _originalSettlements = new Dictionary<Hero, Settlement>();
-        private readonly Dictionary<Hero, int> _originalHitPoints = new Dictionary<Hero, int>();
 
         public override Hero PartyOwner { get; }
         public override TextObject Name { get; }
@@ -42,38 +34,18 @@ namespace EnhancedBattleTest.SinglePlayer
             _config = config;
         }
 
-        public void RecoverHeroes()
+        public void RemoveHeroes()
         {
-            foreach (var originalHitPoint in _originalHitPoints)
+            var heroes = MobileParty.MemberRoster.GetTroopRoster().Where(r => r.Character.IsHero).ToList();
+            foreach (var hero in heroes)
             {
-                MobileParty.AddElementToMemberRoster(originalHitPoint.Key.CharacterObject, -1);
-                originalHitPoint.Key.HitPoints = originalHitPoint.Value;
+                MobileParty.AddElementToMemberRoster(hero.Character, -1);
             }
-            foreach (var pair in _originalParties)
-            {
-                if (pair.Value.Value == MemberState.Leader)
-                {
-                    pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
-                }
-                /* switch (pair.Value.Value)
-                {
-                    case MemberState.Leader:
-                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 0);
-                        pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
-                        break;
-                    case MemberState.Prisoner:
-                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 0);
-                        break;
-                    case MemberState.Original:
-                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 0);
-                        break;
-                }*/
-            }
+        }
 
-            foreach (var pair in _originalSettlements)
-            {
-                pair.Key.StayingInSettlement = pair.Value;
-            }
+        public int? GetTacticLevel()
+        {
+            return _config.CustomTacticLevel ? _config.TacticLevel : (int?)null;
         }
 
         protected override void OnInitialize()
@@ -99,31 +71,16 @@ namespace EnhancedBattleTest.SinglePlayer
         {
             if (character.IsHero)
             {
-                if (!_originalHitPoints.ContainsKey(character.HeroObject))
+                BattleStarter.RegisterHero(character.HeroObject);
+                if (character.HeroObject.PartyBelongedTo != MobileParty)
                 {
-                    _originalHitPoints[character.HeroObject] = character.HeroObject.HitPoints;
-                    character.HeroObject.HitPoints = character.HeroObject.MaxHitPoints;
-                }
-                if (!_originalSettlements.ContainsKey(character.HeroObject) && !_originalParties.ContainsKey(character.HeroObject))
-                {
-                    if (character.HeroObject.StayingInSettlement != null)
-                    {
-                        _originalSettlements[character.HeroObject] = character.HeroObject.StayingInSettlement;
-                    }
-                    else if (character.HeroObject.PartyBelongedTo != null)
-                    {
-                        _originalParties[character.HeroObject] = new KeyValuePair<PartyBase, MemberState>(
-                            character.HeroObject.PartyBelongedTo.Party,
-                            character.HeroObject.PartyBelongedTo.LeaderHero == character.HeroObject ? MemberState.Leader: MemberState.Original);
-                    }
-                    else if (character.HeroObject.PartyBelongedToAsPrisoner != null)
-                    {
-                        _originalParties[character.HeroObject] = new KeyValuePair<PartyBase, MemberState>(
-                            character.HeroObject.PartyBelongedToAsPrisoner, MemberState.Prisoner);
-                    }
+                    MobileParty.AddElementToMemberRoster(character, 1);
                 }
             }
-            MobileParty.AddElementToMemberRoster(character, number);
+            else
+            {
+                MobileParty.AddElementToMemberRoster(character, number);
+            }
         }
     }
 }

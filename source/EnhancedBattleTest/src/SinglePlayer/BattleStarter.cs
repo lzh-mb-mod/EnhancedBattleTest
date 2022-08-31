@@ -1,184 +1,328 @@
-﻿using System;
+﻿using EnhancedBattleTest.Config;
+using EnhancedBattleTest.Data.MissionData;
+using EnhancedBattleTest.Patch;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using EnhancedBattleTest.Config;
-using EnhancedBattleTest.Data.MissionData;
-using EnhancedBattleTest.Patch;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.Map;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.SinglePlayer
 {
     public class BattleStarter
     {
+        private enum MemberState
+        {
+            Original,
+            Leader,
+            Prisoner
+        }
+        private static readonly Dictionary<Hero, KeyValuePair<PartyBase, MemberState>> _originalParties = new Dictionary<Hero, KeyValuePair<PartyBase, MemberState>>();
+        private static readonly Dictionary<Hero, Settlement> _originalSettlements = new Dictionary<Hero, Settlement>();
+        private static readonly Dictionary<Hero, int> _originalHitPoints = new Dictionary<Hero, int>();
+        private static readonly Dictionary<Banner, String> _bannerSave = new Dictionary<Banner, String>();
         private static PartyBase _playerParty;
         private static PartyBase _enemyParty;
         private static List<PartyBase> _playerSideParties;
         private static List<PartyBase> _enemySideParties;
         private static MobileParty _oldMainParty;
         private static BasicCharacterObject _oldPlayerCharacter;
-        public static bool IsEnhancedBattleTestBattle = false;        
-        private static Dictionary<Banner, String> bannerSave = new Dictionary<Banner, String>();
-        private static MapEvent mapEvent;
+        public static bool IsEnhancedBattleTestBattle = false;
+        private static MapEvent _mapEvent;
+        private static SiegeEvent _siegeEvent;
+
+        private static Hero FindAHeroNotInConfig(BattleConfig config)
+        {
+            var troops =
+                config.PlayerSideConfig.Teams.SelectMany(team => team.Generals.Troops.Concat(team.Troops.Troops))
+                    .Concat(config.EnemySideConfig.Teams.SelectMany(team =>
+                        team.Generals.Troops.Concat(team.Troops.Troops)));
+            var heroes = troops.Select(troop => troop.Character.CharacterObject as CharacterObject)
+                .Where(character => character != null)
+                .Select(character => character.HeroObject).Where(hero => hero != null).ToList();
+            if (heroes.GroupBy(hero => hero).Any(group => group.Count() > 1))
+            {
+                Utility.DisplayMessage("Hero should not be duplicated.");
+                return null;
+            }
+            return Campaign.Current.AliveHeroes.FirstOrDefault(hero => !heroes.Contains(hero) && hero.CharacterObject != null);
+        }
 
         public static void Start(BattleConfig config, string mapId)
-        {            
-            //var rec = CreateMissionInitializerRecord(config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker, mapId, overrideMap);
-            var rec = CreateMissionInitializerRecord(config, mapId);
-
-            if (config.PlayerSideConfig.Teams[0].HasGeneral && config.PlayerSideConfig.Teams[0].Generals.Troops.Count > 0)
+        {
+            try
             {
+                var rec = CreateMissionInitializerRecord(config, mapId);
+                
                 _oldPlayerCharacter = Game.Current.PlayerTroop;
-                Game.Current.PlayerTroop = config.PlayerSideConfig.Teams[0].Generals.Troops[0].Character.CharacterObject;
-            }
-            _oldMainParty = Campaign.Current.MainParty;
-            
-            _playerParty = CreateParty(config.PlayerSideConfig.Teams[0], true, 0);
-            _playerSideParties = new List<PartyBase>() { _playerParty };
-            _enemyParty = CreateParty(config.EnemySideConfig.Teams[0], false, 0);
-            _enemySideParties = new List<PartyBase>() { _enemyParty };
-            typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _playerParty.MobileParty);
-            PlayerEncounter.RestartPlayerEncounter(
-                config.BattleTypeConfig.PlayerSide == BattleSideEnum.Defender ? _playerParty : _enemyParty,
-                config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker ? _playerParty : _enemyParty);
-
-            IsEnhancedBattleTestBattle = true;
-            PlayerEncounter.StartBattle();
-            for (int i = 1; i < config.PlayerSideConfig.Teams.Count; ++i)
-            {
-                _playerSideParties.Add(CreateParty(config.PlayerSideConfig.Teams[i], true, i));
-                _playerSideParties[i].MobileParty.MapEventSide = _playerParty.MapEventSide;
-            }
-            for (int i = 1; i < config.EnemySideConfig.Teams.Count; ++i)
-            {
-                _enemySideParties.Add(CreateParty(config.EnemySideConfig.Teams[i], false, i));
-                _enemySideParties[i].MobileParty.MapEventSide = _enemyParty.MapEventSide;
-            }                    
-
-            if (config.BattleTypeConfig.BattleType == BattleType.Siege)
-            {
-                var siegeWeaponsCountOfAttackers = new Dictionary<SiegeEngineType, int>();
-                foreach (String machine in config.SiegeMachineConfig.AttackerMeleeMachines.Concat(config.SiegeMachineConfig.AttackerRangedMachines).ToList())
+                // First team and general troop always contains at least one item.
+                var newPlayerCharacter =
+                    config.PlayerSideConfig.Teams[0].Generals.Troops[0].Character.CharacterObject as CharacterObject;
+                // Player Character must be hero, or PartyGroupAgentOrigin.IsUnderPlayersCommand would throw.
+                if (newPlayerCharacter?.IsHero ?? false)
                 {
-                    SiegeEngineType machineType = Game.Current.ObjectManager.GetObject<SiegeEngineType>(machine);
-                    if (machineType != null)
-                    {
-                        siegeWeaponsCountOfAttackers.TryGetValue(machineType, out var machineCount);
-                        siegeWeaponsCountOfAttackers[machineType] = machineCount + 1;
-                    }
+                    Game.Current.PlayerTroop =
+                        config.PlayerSideConfig.Teams[0].Generals.Troops[0].Character.CharacterObject;
                 }
-
-                var siegeWeaponsCountOfDefenders = new Dictionary<SiegeEngineType, int>();                
-                foreach (String machine in config.SiegeMachineConfig.DefenderMachines)
+                else
                 {
-                    SiegeEngineType machineType = Game.Current.ObjectManager.GetObject<SiegeEngineType>(machine);
-                    if (machineType != null)
-                    {
-                        siegeWeaponsCountOfDefenders.TryGetValue(machineType, out var machineCount);
-                        siegeWeaponsCountOfDefenders[machineType] = machineCount + 1;
-                    }
+                    // However if player team first character is not hero, we still need to set PlayerTroop,
+                    // because the player character may be in the enemy team, in which case PartyGroupAgentOrigin.IsUnderPlayersCommand
+                    // may think that the enemy soldier is under player command.
+                    var hero = FindAHeroNotInConfig(config);
+                    if (hero == null)
+                        return;
+                    Game.Current.PlayerTroop = hero.CharacterObject;
                 }
 
-                bool hasAnySiegeTower = siegeWeaponsCountOfAttackers.ContainsKey(DefaultSiegeEngineTypes.SiegeTower) || siegeWeaponsCountOfAttackers.ContainsKey(DefaultSiegeEngineTypes.HeavySiegeTower);
+                _oldMainParty = Campaign.Current.MainParty;
 
-                float[] wallHitPointsPerc = new float[] { 100, 100 };
-                for (int i = 0; i < config.MapConfig.BreachedWallCount; i++) {
-                    wallHitPointsPerc[i] = 0;
+                _playerParty = CreateParty(config.PlayerSideConfig.Teams[0], true, 0);
+                _playerSideParties = new List<PartyBase>() { _playerParty };
+                _enemyParty = CreateParty(config.EnemySideConfig.Teams[0], false, 0);
+                _enemySideParties = new List<PartyBase>() { _enemyParty };
+                typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _playerParty.MobileParty);
+                IsEnhancedBattleTestBattle = true;
+
+                Mission mission = null;
+                switch (config.BattleTypeConfig.BattleType)
+                {
+                    case BattleType.Village:
+                    case BattleType.Field:
+                        PlayerEncounter.RestartPlayerEncounter(
+                            config.BattleTypeConfig.PlayerSide == BattleSideEnum.Defender ? _playerParty : _enemyParty,
+                            config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker ? _playerParty : _enemyParty);
+
+                        PlayerEncounter.StartBattle();
+                        for (int i = 1; i < config.PlayerSideConfig.Teams.Count; ++i)
+                        {
+                            _playerSideParties.Add(CreateParty(config.PlayerSideConfig.Teams[i], true, i));
+                            _playerSideParties[i].MobileParty.MapEventSide = _playerParty.MapEventSide;
+                        }
+
+                        for (int i = 1; i < config.EnemySideConfig.Teams.Count; ++i)
+                        {
+                            _enemySideParties.Add(CreateParty(config.EnemySideConfig.Teams[i], false, i));
+                            _enemySideParties[i].MobileParty.MapEventSide = _enemyParty.MapEventSide;
+                        } 
+
+                        mission = CampaignMission.OpenBattleMission(rec) as Mission;
+                        break;
+                    case BattleType.Siege:
+                        var (attackerParty, defenderParty) =
+                            config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker
+                                ? (_playerParty, _enemyParty)
+                                : (_enemyParty, _playerParty);
+                        var (attackerParties, defenderParties) =
+                            config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker
+                                ? (_playerSideParties, _enemySideParties)
+                                : (_enemySideParties, _playerSideParties);
+
+                        var settlement = new Settlement
+                        {
+                            Town = new Town(),
+                            Culture = Campaign.Current.ObjectManager.GetObject<CultureObject>("empire")
+                        };
+                        // avoid Town.Owner == null
+                        typeof(Town).GetProperty(nameof(Town.Owner)).SetValue(settlement.Town, settlement.Party);
+                        // avoid Settlement.Town == null
+                        typeof(Settlement).GetProperty(nameof(Settlement.SettlementComponent))
+                            .SetValue(settlement, settlement.Town);
+
+                        _siegeEvent =
+                            Campaign.Current.SiegeEventManager.StartSiegeEvent(settlement, attackerParty.MobileParty);
+                        // avoid Settlement.OwnerClan == null
+                        // set this after siege event created to avoid relation impact, and also avoid crash when owner clan is neutral clan.
+                        typeof(Town).GetField("_ownerClan", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .SetValue(settlement.Town, GetSettlementClan(config));
+
+                        PlayerEncounter.RestartPlayerEncounter(settlement.Party, attackerParty, true);
+                        if (config.MapConfig.IsSallyOutSelected)
+                        {
+                            PlayerEncounter.Current.ForceSallyOut = true;
+                        }
+                        PlayerEncounter.StartBattle();
+                        defenderParty.MapEventSide = attackerParty.MapEvent.GetMapEventSide(BattleSideEnum.Defender);
+
+                        for (int i = 1; i < config.PlayerSideConfig.Teams.Count; ++i)
+                        {
+                            _playerSideParties.Add(CreateParty(config.PlayerSideConfig.Teams[i], true, i));
+                            _playerSideParties[i].MobileParty.MapEventSide = _playerParty.MapEventSide;
+                        }
+
+                        for (int i = 1; i < config.EnemySideConfig.Teams.Count; ++i)
+                        {
+                            _enemySideParties.Add(CreateParty(config.EnemySideConfig.Teams[i], false, i));
+                            _enemySideParties[i].MobileParty.MapEventSide = _enemyParty.MapEventSide;
+                        }
+
+                        foreach (var partyBase in attackerParties)
+                        {
+                            partyBase.MobileParty.BesiegerCamp = _siegeEvent.BesiegerCamp;
+                        }
+
+                        foreach (var partyBase in defenderParties)
+                        {
+                            partyBase.MobileParty.CurrentSettlement = settlement;
+                        }
+
+                        Dictionary<SiegeEngineType, int> siegeWeaponsCountOfAttackers = new Dictionary<SiegeEngineType, int>();
+                        Dictionary<SiegeEngineType, int> siegeWeaponsCountOfDefenders = new Dictionary<SiegeEngineType, int>();
+                        FillSiegeMachineCounts(siegeWeaponsCountOfAttackers, config.SiegeMachineConfig.AttackerMeleeMachines.Concat(config.SiegeMachineConfig.AttackerRangedMachines));
+                        FillSiegeMachineCounts(siegeWeaponsCountOfDefenders, config.SiegeMachineConfig.DefenderMachines);
+
+
+                        // Fix for weather/time settings being ignored in SiegeMission
+                        Patch_Initializer.Init(rec.AtmosphereOnCampaign, rec.TimeOfDay);
+
+                        mission = CampaignMission.OpenSiegeMissionWithDeployment(mapId,
+                            GetWallHitpointPercentages(config.MapConfig.BreachedWallCount),
+                            HasAnySiegeTower(siegeWeaponsCountOfAttackers),
+                            siegeWeaponsCountOfAttackers,
+                            siegeWeaponsCountOfDefenders,
+                            config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker,
+                            config.MapConfig.SceneLevel,
+                            config.MapConfig.IsSallyOutSelected,
+                            false) as Mission;
+                        break;
                 }
-
-                // Fix for weather/time settings being ignored in SiegeMission
-                Patch_Initializer.Init(rec.AtmosphereOnCampaign, rec.TimeOfDay);
-
-                CampaignMission.OpenSiegeMissionWithDeployment(mapId,
-                        wallHitPointsPerc,
-                        hasAnySiegeTower,
-                        siegeWeaponsCountOfAttackers,
-                        siegeWeaponsCountOfDefenders,
-                        config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker,
-                        config.MapConfig.SceneLevel,
-                        config.MapConfig.IsSallyOutSelected,
-                        false);
-
+            }
+            catch (Exception e)
+            {
+                Utility.DisplayMessage(e.ToString());
+                // clean objects on exception
+                BeforeMissionEnded();
+                MissionEnded();
+            }
+            finally
+            {
                 // Reset Initializer behavior after Mission is created
                 Patch_Initializer.Reset();
-            }
-            else
-            {
-                CampaignMission.OpenBattleMission(rec);
             }
         }
 
         public static void BeforeMissionEnded()
         {
-            RollbackPartyBanners();
+            //RollbackPartyBanners();
 
-            if (_oldPlayerCharacter != null)
-            {
-                Game.Current.PlayerTroop = _oldPlayerCharacter;
-            }
+            //if (_oldPlayerCharacter != null)
+            //{
+            //    Game.Current.PlayerTroop = _oldPlayerCharacter;
+            //}
 
-            mapEvent = MapEvent.PlayerMapEvent;
+            //_mapEvent = MapEvent.PlayerMapEvent;
 
-            typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
+            //typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
         }
 
         public static void MissionEnded()
         {
-            IsEnhancedBattleTestBattle = false;
+            try
+            {
+                IsEnhancedBattleTestBattle = false;
+                RollbackPartyBanners();
 
-            for (int i = _enemySideParties.Count - 1; i > 0; --i)
-            {
-                (_enemySideParties[i].MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
-                _enemySideParties[i].MapEventSide = null;
-                _enemySideParties[i].MobileParty?.RemoveParty();
+                for (int i = _enemySideParties.Count - 1; i > 0; --i)
+                {
+                    (_enemySideParties[i].MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RemoveHeroes();
+                    _enemySideParties[i].MapEventSide = null;
+                    _enemySideParties[i].MobileParty?.RemoveParty();
+                }
+                for (int i = _playerSideParties.Count - 1; i > 0; --i)
+                {
+                    (_playerSideParties[i].MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RemoveHeroes();
+                    _playerSideParties[i].MapEventSide = null;
+                    _playerSideParties[i].MobileParty?.RemoveParty();
+                }
+                (_enemyParty?.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent)?.RemoveHeroes();
+                (_playerParty?.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent)?.RemoveHeroes();
+                RecoverHeroes();
+                if (_oldPlayerCharacter != null)
+                {
+                    Game.Current.PlayerTroop = _oldPlayerCharacter;
+                }
+                _oldPlayerCharacter = null;
+                ResetMapEventSide(_playerParty);
+                ResetMapEventSide(_enemyParty);
+
+                _siegeEvent?.BesiegerCamp.FinalizeSiegeEvent();
+                _siegeEvent?.BesiegedSettlement.FinalizeSiegeEvent();
+                List<SiegeEvent> siegeEvents = (List<SiegeEvent>)typeof(SiegeEventManager)
+                    .GetField("_siegeEvents", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(Campaign.Current.SiegeEventManager);
+                siegeEvents.Remove(_siegeEvent);
+                _siegeEvent = null;
+                _mapEvent?.FinalizeEvent();
+                List<MapEvent> mapEvents = (List<MapEvent>)typeof(MapEventManager)
+                    .GetField("_mapEvents", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(Campaign.Current.MapEventManager);
+                mapEvents.Remove(_mapEvent);
+                _mapEvent = null;
+                PlayerEncounter.Finish();
+                typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
+                _oldMainParty = null;
+                _playerParty?.MobileParty?.RemoveParty();
+                _enemyParty?.MobileParty?.RemoveParty();
+                _playerSideParties.Clear();
+                _enemySideParties.Clear();
+                _playerParty = null;
+                _enemyParty = null;
+                _originalHitPoints.Clear();
+                _originalParties.Clear();
+                _originalSettlements.Clear();
+                _bannerSave.Clear();
+                Campaign.Current.MainParty.Party.Visuals?.SetMapIconAsDirty();
             }
-            for (int i = _playerSideParties.Count - 1; i > 0; --i)
+            catch (Exception e)
             {
-                (_playerSideParties[i].MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
-                _playerSideParties[i].MapEventSide = null;
-                _playerSideParties[i].MobileParty?.RemoveParty();
+                Utility.DisplayMessage(e.ToString());
             }
-            (_enemyParty.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
-            (_playerParty.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent).RecoverHeroes();
-            if (_oldPlayerCharacter != null)
-            {
-                Game.Current.PlayerTroop = _oldPlayerCharacter;
-            }
-            _oldPlayerCharacter = null;
-            _playerParty.MapEventSide = null;
-            _enemyParty.MapEventSide = null;
-            mapEvent.FinalizeEvent();
-            List<MapEvent> mapEvents = (List<MapEvent>)typeof(MapEventManager)
-                .GetField("_mapEvents", BindingFlags.Instance | BindingFlags.NonPublic)
-                .GetValue(Campaign.Current.MapEventManager);
-            mapEvents.Remove(mapEvent);
-            PlayerEncounter.Finish();
-            _oldMainParty = null;
-            _playerParty.MobileParty?.RemoveParty();
-            _enemyParty.MobileParty?.RemoveParty();
-            _playerSideParties.Clear();
-            _enemySideParties.Clear();
-            _playerParty = null;
-            _enemyParty = null;
-            Campaign.Current.MainParty.Party.Visuals?.SetMapIconAsDirty();
         }
-                
+
+        private static Clan GetSettlementClan(BattleConfig config)
+        {
+            var defenderPrimaryTeam = (config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker
+                ? config.EnemySideConfig
+                : config.PlayerSideConfig).Teams[0];
+            if (defenderPrimaryTeam.HasGeneral)
+            {
+                var character = defenderPrimaryTeam.Generals.Troops[0].Character.CharacterObject as CharacterObject;
+                if (character?.IsHero ?? false)
+                {
+                    return character.HeroObject.Clan;
+                }
+            }
+
+            return CampaignData.NeutralFaction;
+        }
+
+        private static void ResetMapEventSide(PartyBase partyBase)
+        {
+            if (partyBase != null)
+                partyBase.MapEventSide = null;
+        }
+
         private static MissionInitializerRecord CreateMissionInitializerRecord(BattleConfig config, string map)
         {
             string scene;
             MapPatchData mapPatchAtPosition = Campaign.Current.MapSceneWrapper.GetMapPatchAtPosition(MobileParty.MainParty.Position2D);
-            // When OverridesMap is toggled and battle is Battle Field type, use player position to generate a map
-            if (config.BattleTypeConfig.BattleType == BattleType.Field && config.MapConfig.OverridesCampaignMap)
+            // When in field battle if overrides campaign map is not turned on, use player position to generate a map
+            if (config.BattleTypeConfig.BattleType == BattleType.Field && !config.MapConfig.OverridesPlayerPosition)
             {
                 scene = PlayerEncounter.GetBattleSceneForMapPatch(mapPatchAtPosition);
-            } else {
+            }
+            else
+            {
                 scene = map;
             }
             MissionInitializerRecord rec = new MissionInitializerRecord(scene);
@@ -189,21 +333,28 @@ namespace EnhancedBattleTest.SinglePlayer
             rec.NeedsRandomTerrain = false;
             rec.PlayingInCampaignMode = true;
             rec.RandomTerrainSeed = MBRandom.RandomInt(10000);
-            //rec.AtmosphereOnCampaign = Campaign.Current.Models.MapWeatherModel.GetAtmosphereModel(CampaignTime.Now, MobileParty.MainParty.GetLogicalPosition());
             rec.AtmosphereOnCampaign = AtmosphereModel.CreateAtmosphereInfoForMission(config.MapConfig.Season, config.MapConfig.TimeOfDay, true);
-            rec.SceneHasMapPatch = true;
             rec.AtlasGroup = 2;
-            rec.PatchCoordinates = mapPatchAtPosition.normalizedCoordinates;
-            Vec2 direction = Campaign.Current.MainParty.Bearing;
-            if (config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker)
+            if (config.BattleTypeConfig.BattleType == BattleType.Field && !config.MapConfig.OverridesPlayerPosition)
             {
-                direction.RotateCCW(MBMath.PI);
+                rec.AtmosphereOnCampaign = Campaign.Current.Models.MapWeatherModel.GetAtmosphereModel(CampaignTime.Now, MobileParty.MainParty.GetLogicalPosition());
+                float num = Campaign.CurrentTime % 24f;
+                if (Campaign.Current != null)
+                    rec.TimeOfDay = num;
+                rec.SceneHasMapPatch = true;
+                rec.PatchCoordinates = mapPatchAtPosition.normalizedCoordinates;
+                Vec2 direction = Campaign.Current.MainParty.Bearing;
+                if (config.BattleTypeConfig.PlayerSide == BattleSideEnum.Attacker)
+                {
+                    direction.RotateCCW(MBMath.PI);
+                }
+                rec.PatchEncounterDir = direction;
             }
-            rec.PatchEncounterDir = direction;            
-            rec.TimeOfDay = config.MapConfig.TimeOfDay;
-            //float num = Campaign.CurrentTime % 24f;
-            //if (Campaign.Current != null)
-            //    rec.TimeOfDay = num;
+            else
+            {
+                rec.AtmosphereOnCampaign = AtmosphereModel.CreateAtmosphereInfoForMission(config.MapConfig.Season, config.MapConfig.TimeOfDay, true);
+                rec.TimeOfDay = config.MapConfig.TimeOfDay;
+            }
 
             GameTexts.SetVariable("MapName", scene);
             Utility.DisplayLocalizedText("str_ebt_current_map");
@@ -212,37 +363,41 @@ namespace EnhancedBattleTest.SinglePlayer
         }
 
         private static PartyBase CreateParty(TeamConfig teamConfig, bool isPlayerSide, int index = 0)
-        {      
+        {
             PartyBase party = MobileParty.CreateParty("EnhancedBattleTestParty",
                 new EnhancedBattleTestPartyComponent(GetPartyName(isPlayerSide, index), teamConfig)).Party;
-            EditPartyBanner(party, teamConfig);
+            TryOverridePartyBanner(party, teamConfig);
             return party;
         }
 
-        private static void EditPartyBanner(PartyBase party, TeamConfig config = null)
+        private static void TryOverridePartyBanner(PartyBase party, TeamConfig config)
         {
-            if (config != null && !bannerSave.ContainsKey(party.Banner))
+            if (config.CustomBanner)
             {
-                bannerSave.Add(party.Banner, party.Banner.Serialize());
+                _bannerSave.Add(party.Banner, party.Banner.Serialize());
                 party.Banner.Deserialize(config.BannerKey);
             }
-            else if (config == null && bannerSave.ContainsKey(party.Banner))
+        }
+
+        private static void TryRecoverPartyBanner(PartyBase party)
+        {
+            if (_bannerSave.TryGetValue(party.Banner, out var bannerValue))
             {
-                party.Banner.Deserialize(bannerSave[party.Banner]);
-                bannerSave.Remove(party.Banner);
+                party.Banner.Deserialize(bannerValue);
+                _bannerSave.Remove(party.Banner);
             }
         }
 
         // Rollback party banners to their initial value
         private static void RollbackPartyBanners()
         {
-            foreach(PartyBase party in _playerSideParties)
+            foreach (PartyBase party in _playerSideParties)
             {
-                EditPartyBanner(party);
+                TryRecoverPartyBanner(party);
             }
             foreach (PartyBase party in _enemySideParties)
             {
-                EditPartyBanner(party);
+                TryRecoverPartyBanner(party);
             }
         }
 
@@ -251,6 +406,111 @@ namespace EnhancedBattleTest.SinglePlayer
             return GameTexts.FindText("str_ebt_party_name").SetTextVariable("PARTY_TEXT", isPlayerSide
                 ? new TextObject("{=sSJSTe5p}Player Party")
                 : new TextObject("{=0xC75dN6}Enemy Party")).SetTextVariable("INDEX", index);
+        }
+
+        public static void RecoverHeroes()
+        {
+            foreach (var originalHitPoint in _originalHitPoints)
+            {
+                originalHitPoint.Key.HitPoints = originalHitPoint.Value;
+            }
+            foreach (var pair in _originalParties)
+            {
+                switch (pair.Value.Value)
+                {
+                    case MemberState.Leader:
+                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
+                            continue;
+                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
+                        break;
+                    case MemberState.Prisoner:
+                        if (pair.Key.PartyBelongedToAsPrisoner == pair.Value.Key)
+                            continue;
+                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);
+                        break;
+                    case MemberState.Original:
+                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
+                            continue;
+                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        break;
+                }
+            }
+
+            foreach (var pair in _originalSettlements)
+            {
+                pair.Key.StayingInSettlement = pair.Value;
+            }
+        }
+
+        public static void RegisterHero(Hero hero)
+        {
+            if (!_originalHitPoints.ContainsKey(hero))
+            {
+                _originalHitPoints[hero] = hero.HitPoints;
+                hero.HitPoints = hero.MaxHitPoints;
+            }
+            if (!_originalSettlements.ContainsKey(hero) && !_originalParties.ContainsKey(hero))
+            {
+                if (hero.StayingInSettlement != null)
+                {
+                    _originalSettlements[hero] = hero.StayingInSettlement;
+                }
+                else if (hero.PartyBelongedTo != null)
+                {
+                    _originalParties[hero] = new KeyValuePair<PartyBase, MemberState>(
+                        hero.PartyBelongedTo.Party,
+                        hero.PartyBelongedTo.LeaderHero == hero ? MemberState.Leader : MemberState.Original);
+                }
+                else if (hero.PartyBelongedToAsPrisoner != null)
+                {
+                    _originalParties[hero] = new KeyValuePair<PartyBase, MemberState>(
+                        hero.PartyBelongedToAsPrisoner, MemberState.Prisoner);
+                }
+            }
+        }
+
+        private static float[] GetWallHitpointPercentages(int breachedWallCount)
+        {
+            float[] hitpointPercentages = new float[2];
+            switch (breachedWallCount)
+            {
+                case 0:
+                    hitpointPercentages[0] = 1f;
+                    hitpointPercentages[1] = 1f;
+                    break;
+                case 1:
+                    int index = MBRandom.RandomInt(2);
+                    hitpointPercentages[index] = 0.0f;
+                    hitpointPercentages[1 - index] = 1f;
+                    break;
+                default:
+                    hitpointPercentages[0] = 0.0f;
+                    hitpointPercentages[1] = 0.0f;
+                    break;
+            }
+            return hitpointPercentages;
+        }
+        private static void FillSiegeMachineCounts(
+            Dictionary<SiegeEngineType, int> machineCounts,
+            IEnumerable<string> machines)
+        {
+            foreach (var machine in machines)
+            {
+                SiegeEngineType siegeWeaponType = Utility.GetSiegeEngineType(machine);
+                if (siegeWeaponType == null)
+                    continue;
+                if (!machineCounts.ContainsKey(siegeWeaponType))
+                    machineCounts.Add(siegeWeaponType, 0);
+                machineCounts[siegeWeaponType]++;
+            }
+        }
+
+        private static bool HasAnySiegeTower(Dictionary<SiegeEngineType, int> attackerMachines)
+        {
+
+            return attackerMachines.ContainsKey(DefaultSiegeEngineTypes.SiegeTower) ||
+                   attackerMachines.ContainsKey(DefaultSiegeEngineTypes.HeavySiegeTower);
         }
     }
 }

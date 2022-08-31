@@ -11,8 +11,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
-using Campaign = EnhancedBattleTest.GameMode.Campaign;
-
 namespace EnhancedBattleTest
 {
     public static class Utility

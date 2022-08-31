@@ -16,8 +16,8 @@ namespace EnhancedBattleTest.UI
     {
         private bool _isCurrentMapSiege;
         private bool _isCurrentMapField;
-        private bool _showMapList = true;
-        private bool _overridesCampaignMap;
+        private bool _showMapOptions = true;
+        private bool _overridesPlayerPosition;
         private bool _isSallyOutSelected;
         private SelectorVM<MapItemVM> _mapSelection;
         private SelectorVM<SceneLevelItemVM> _sceneLevelSelection;
@@ -26,7 +26,7 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<TimeOfDayItemVM> _timeOfDaySelection;
         private string _titleText;
         private string _mapText;
-        private string _useCampaignMapText;
+        private string _useCustomMap;
         private string _seasonText;
         private string _timeOfDayText;
         private string _sceneLevelText;
@@ -75,14 +75,14 @@ namespace EnhancedBattleTest.UI
             PrepareMapLists();
             TitleText = new TextObject("{=w9m11T1y}Map").ToString();
             MapText = new TextObject("{=w9m11T1y}Map").ToString();
-            UseCampaignMapText = GameTexts.FindText("str_ebt_use_campaign_map").ToString();
+            UseCustomMap = GameTexts.FindText("str_ebt_custom_map").ToString();
             SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
             SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
             WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
             AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
             DefenderSiegeMachinesText = new TextObject("{=UoiSWe87}Choose Defender Siege Machines").ToString();
-            SallyoutText = new TextObject("{=EcKMGoFv}Sallyout").ToString();
+            SallyoutText = new TextObject("{=KKB2vNFr}Sally Out").ToString();
             MapSelection.ItemList.Clear();
             WallHitpointSelection.ItemList.Clear();
             SceneLevelSelection.ItemList.Clear();
@@ -178,7 +178,7 @@ namespace EnhancedBattleTest.UI
                     _availableMaps = _villageMaps;
                     break;
             }
-            ToggleShowMapList();
+            ToggleShowMapPosAndTimeOptions();
             foreach (MapItemVM availableMap in _availableMaps)
                 MapSelection.AddItem(availableMap);
             if (_availableMaps.Count == 0)
@@ -292,37 +292,34 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public bool ShowMapList
+        public bool ShowMapOptions
         {
-            get => _showMapList;
+            get => _showMapOptions;
             set
             {
-                if (value == _showMapList)
+                if (value == _showMapOptions)
                     return;
-                _showMapList = value;
-                OnPropertyChanged(nameof(ShowMapList));
+                _showMapOptions = value;
+                OnPropertyChanged(nameof(ShowMapOptions));
             }
         }
 
-        public void ToggleShowMapList()
+        public void ToggleShowMapPosAndTimeOptions()
         {
-            if (OverridesCampaignMap && IsCurrentMapField)
-                ShowMapList = false;
-            else
-                ShowMapList = true;
+            ShowMapOptions = OverridesPlayerPosition || !IsCurrentMapField;
         }
 
         [DataSourceProperty]
-        public bool OverridesCampaignMap
+        public bool OverridesPlayerPosition
         {
-            get => _overridesCampaignMap;
+            get => _overridesPlayerPosition;
             set
             {
-                if (value == _overridesCampaignMap)
+                if (value == _overridesPlayerPosition)
                     return;
-                _overridesCampaignMap = value;
-                OnPropertyChanged(nameof(OverridesCampaignMap));
-                ToggleShowMapList();
+                _overridesPlayerPosition = value;
+                OnPropertyChanged(nameof(OverridesPlayerPosition));
+                ToggleShowMapPosAndTimeOptions();
             }
         }
 
@@ -353,15 +350,15 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public string UseCampaignMapText
+        public string UseCustomMap
         {
-            get => _useCampaignMapText;
+            get => _useCustomMap;
             set
             {
-                if (value == _useCampaignMapText)
+                if (value == _useCustomMap)
                     return;
-                _useCampaignMapText = value;
-                OnPropertyChangedWithValue(value, nameof(UseCampaignMapText));
+                _useCustomMap = value;
+                OnPropertyChangedWithValue(value, nameof(UseCustomMap));
             }
         }
 

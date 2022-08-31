@@ -208,9 +208,9 @@ namespace EnhancedBattleTest.UI
 
         private void RecoverConfig()
         {
-            MapSelectionGroup.OverridesCampaignMap = _config.MapConfig.OverridesCampaignMap;
+            MapSelectionGroup.OverridesPlayerPosition = _config.MapConfig.OverridesPlayerPosition;
             MapSelectionGroup.IsSallyOutSelected = _config.MapConfig.IsSallyOutSelected;
-            if (_config.MapConfig.OverridesCampaignMap || Campaign.Current == null || MobileParty.MainParty == null)
+            if (_config.MapConfig.OverridesPlayerPosition || Campaign.Current == null || MobileParty.MainParty == null)
             {
                 MapSelectionGroup.MapSelection.SelectedIndex = MapSelectionGroup.MapSelection.ItemList.FindIndex(vm => vm.MapId == _config.MapConfig.SelectedMapId);
             }
@@ -300,7 +300,7 @@ namespace EnhancedBattleTest.UI
         private bool ApplyConfig()
         {
             _config.MapConfig.SelectedMapId = MapSelectionGroup.SelectedMap.MapId;
-            _config.MapConfig.OverridesCampaignMap = MapSelectionGroup.OverridesCampaignMap;
+            _config.MapConfig.OverridesPlayerPosition = MapSelectionGroup.OverridesPlayerPosition;
             _config.MapConfig.IsSallyOutSelected = MapSelectionGroup.IsSallyOutSelected;
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
@@ -320,7 +320,7 @@ namespace EnhancedBattleTest.UI
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege &&
-                _config.PlayerSideConfig.Teams.All(team => !team.HasGeneral || team.Generals.Troops.Count == 0))
+                !_config.PlayerSideConfig.Teams[0].HasGeneral || _config.PlayerSideConfig.Teams[0].Generals.Troops.Count == 0)
             {
                 Utility.DisplayLocalizedText("str_ebt_siege_no_player");
                 return false;

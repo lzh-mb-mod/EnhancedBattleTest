@@ -30,7 +30,7 @@
   <string id="str_ebt_swap_team" text="{=EnhancedBattleTest_swapteam}Swap Team" />
 
   <string id="str_ebt_map" text="{=EnhancedBattleTest_map}Map" />
-  <string id="str_ebt_use_campaign_map" text="{=EnhancedBattleTest_use_campaign_map}Generate map based on position" />
+  <string id="str_ebt_custom_map" text="{=EnhancedBattleTest_custom_map}Custom Map" />
   <string id="str_ebt_season" text="{=EnhancedBattleTest_season}Season" />
 
   <string id="str_ebt_party_name" text="{=EnhancedBattleTest_party_name}{PARTY_TEXT} {INDEX}"/>
@@ -58,6 +58,10 @@
   <string id="str_ebt_current_map" text="{=EnhancedBattleTest_current_map}Current map is {MapName}." />
 
   <string id="str_troop_group_name.8" text="{=EnhancedBattleTest_troop_group_general}General" />
+
+  <string id="str_ebt_custom_banner" text="{=EnahncedBattletest_custom_banner}Custom Banner" />
+
+  <string id="str_ebt_custom_tactic_level" text="{=EnahncedBattletest_custom_tactic_level}Custom Tactic Level" />
 
   <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
 

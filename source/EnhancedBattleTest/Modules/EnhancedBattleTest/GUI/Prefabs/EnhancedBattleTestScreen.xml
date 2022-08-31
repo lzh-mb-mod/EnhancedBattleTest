@@ -76,12 +76,12 @@
 													</Children>
 												</Widget>
 
-												<Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+												<!-- <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
 													<Children>
 														<RichTextWidget DataSource="{PlayerTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
 														<Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{PlayerTypeSelection}" />
 													</Children>
-												</Widget>
+												</Widget> -->
 
 												<Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
 													<Children>
@@ -90,12 +90,12 @@
 													</Children>
 												</Widget>
 
-												<Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+												<!-- <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
 													<Children>
 														<RichTextWidget DataSource="{EquipmentModifierTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
 														<Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{EquipmentModifierTypeSelection}" />
 													</Children>
-												</Widget>
+												</Widget> -->
 
 												<ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteSwapTeam" UpdateChildrenStates="true">
 													<Children>
@@ -112,8 +112,8 @@
 												<!--Generate Map based on position option -->
 												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@IsCurrentMapField">
 													<Children>
-														<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="@UseCampaignMapText" />
-														<ButtonWidget IsSelected="@OverridesCampaignMap" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="SPOptions.Checkbox.Empty.Button" UpdateChildrenStates="true">
+														<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="@UseCustomMap" />
+														<ButtonWidget IsSelected="@OverridesPlayerPosition" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" HorizontalAlignment="Center" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="40" SuggestedHeight="40" Brush="SPOptions.Checkbox.Empty.Button" UpdateChildrenStates="true">
 															<Children>
 																<ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
 															</Children>
@@ -122,7 +122,7 @@
 												</Widget>
 
 												<!--Map Selection-->
-												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@ShowMapList">
+												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@ShowMapOptions">
 													<Children>
 														<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="@MapText" />
 														<Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{MapSelection}" />
@@ -130,7 +130,7 @@
 												</Widget>
 
 												<!--Season Selection-->
-												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@ShowMapOptions">
 													<Children>
 														<TextWidget DataSource="{..\SeasonText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
 														<Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{SeasonSelection}" />
@@ -138,7 +138,7 @@
 												</Widget>
 
 												<!--Time Of Day Selection-->
-												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
+												<Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="@ShowMapOptions">
 													<Children>
 														<TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" Text="Time of Day" />
 														<Standard.DropdownWithHorizontalControl HorizontalAlignment="Right" Parameter.SelectorDataSource="{TimeOfDaySelection}" />

@@ -5,6 +5,7 @@ using SandBox.View.Map;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using EnhancedBattleTest.SinglePlayer;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Library;
@@ -29,7 +30,7 @@ namespace EnhancedBattleTest.Patch
             try
             {
                 _harmony.Patch(
-                    typeof(SandBoxMissions).GetMethod("CreateSandBoxMissionInitializerRecord", BindingFlags.Static | BindingFlags.Public),
+                    typeof(SandBoxMissions).GetMethod(nameof(SandBoxMissions.CreateSandBoxMissionInitializerRecord), BindingFlags.Static | BindingFlags.Public),
                     postfix: new HarmonyMethod(typeof(Patch_Initializer).GetMethod(nameof(Postfix_CreateSandBoxMissionInitializerRecord),
                         BindingFlags.Static | BindingFlags.Public)));
             }
@@ -55,7 +56,7 @@ namespace EnhancedBattleTest.Patch
 
         public static void Postfix_CreateSandBoxMissionInitializerRecord(ref MissionInitializerRecord __result)
         {
-            if (Atmosphere != null && TimeOfDay != null)
+            if (BattleStarter.IsEnhancedBattleTestBattle && Atmosphere != null && TimeOfDay != null)
             {
                 __result.AtmosphereOnCampaign = Atmosphere;
                 __result.TimeOfDay = (float)TimeOfDay;
