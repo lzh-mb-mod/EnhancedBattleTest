@@ -41,6 +41,24 @@ namespace EnhancedBattleTest.SinglePlayer
         private static MapEvent _mapEvent;
         private static SiegeEvent _siegeEvent;
 
+        private static bool ValidateNoDuplicateHero(BattleConfig config)
+        {
+            var troops =
+                config.PlayerSideConfig.Teams.SelectMany(team => team.Generals.Troops.Concat(team.Troops.Troops))
+                    .Concat(config.EnemySideConfig.Teams.SelectMany(team =>
+                        team.Generals.Troops.Concat(team.Troops.Troops)));
+            var heroes = troops.Select(troop => troop.Character.CharacterObject as CharacterObject)
+                .Where(character => character != null)
+                .Select(character => character.HeroObject).Where(hero => hero != null).ToList();
+            if (heroes.GroupBy(hero => hero).Any(group => group.Count() > 1))
+            {
+                Utility.DisplayMessage("Hero should not be duplicated.");
+                return false;
+            }
+
+            return true;
+        }
+
         private static Hero FindAHeroNotInConfig(BattleConfig config)
         {
             var troops =
@@ -71,6 +89,8 @@ namespace EnhancedBattleTest.SinglePlayer
                 // Player Character must be hero, or PartyGroupAgentOrigin.IsUnderPlayersCommand would throw.
                 if (newPlayerCharacter?.IsHero ?? false)
                 {
+                    if (!ValidateNoDuplicateHero(config))
+                        return;
                     Game.Current.PlayerTroop =
                         config.PlayerSideConfig.Teams[0].Generals.Troops[0].Character.CharacterObject;
                 }
