@@ -231,18 +231,19 @@ namespace EnhancedBattleTest.SinglePlayer
             }
         }
 
+        // Revert main character and party slightly before MissionEnded to prevent mod conflict
         public static void BeforeMissionEnded()
         {
-            //RollbackPartyBanners();
+            RollbackPartyBanners();
 
-            //if (_oldPlayerCharacter != null)
-            //{
-            //    Game.Current.PlayerTroop = _oldPlayerCharacter;
-            //}
+            if (_oldPlayerCharacter != null)
+            {
+                Game.Current.PlayerTroop = _oldPlayerCharacter;
+            }
 
-            //_mapEvent = MapEvent.PlayerMapEvent;
+            _mapEvent = MapEvent.PlayerMapEvent;
 
-            //typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
+            typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
         }
 
         public static void MissionEnded()
@@ -250,7 +251,7 @@ namespace EnhancedBattleTest.SinglePlayer
             try
             {
                 IsEnhancedBattleTestBattle = false;
-                RollbackPartyBanners();
+                //RollbackPartyBanners();
 
                 for (int i = _enemySideParties.Count - 1; i > 0; --i)
                 {
@@ -267,10 +268,10 @@ namespace EnhancedBattleTest.SinglePlayer
                 (_enemyParty?.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent)?.RemoveHeroes();
                 (_playerParty?.MobileParty.PartyComponent as EnhancedBattleTestPartyComponent)?.RemoveHeroes();
                 RecoverHeroes();
-                if (_oldPlayerCharacter != null)
-                {
-                    Game.Current.PlayerTroop = _oldPlayerCharacter;
-                }
+                //if (_oldPlayerCharacter != null)
+                //{
+                //    Game.Current.PlayerTroop = _oldPlayerCharacter;
+                //}
                 _oldPlayerCharacter = null;
                 ResetMapEventSide(_playerParty);
                 ResetMapEventSide(_enemyParty);
@@ -289,7 +290,7 @@ namespace EnhancedBattleTest.SinglePlayer
                 mapEvents.Remove(_mapEvent);
                 _mapEvent = null;
                 PlayerEncounter.Finish();
-                typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
+                //typeof(Campaign).GetProperty("MainParty").SetValue(Campaign.Current, _oldMainParty);
                 _oldMainParty = null;
                 _playerParty?.MobileParty?.RemoveParty();
                 _enemyParty?.MobileParty?.RemoveParty();
