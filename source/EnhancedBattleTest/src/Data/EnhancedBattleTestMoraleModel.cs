@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem;
+﻿using EnhancedBattleTest.SinglePlayer;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
 
@@ -8,35 +9,41 @@ namespace EnhancedBattleTest.Data
     {
         public override int GetDailyStarvationMoralePenalty(PartyBase party)
         {
-            return 0;
+            return BattleStarter.IsEnhancedBattleTestBattle ? 0 : base.GetDailyStarvationMoralePenalty(party);            
         }
 
         public override int GetDailyNoWageMoralePenalty(MobileParty party)
         {
-            return 0;
+            return BattleStarter.IsEnhancedBattleTestBattle ? 0 : base.GetDailyNoWageMoralePenalty(party);
         }
 
         public override float GetStandardBaseMorale(PartyBase party)
         {
-            return 100;
+            return BattleStarter.IsEnhancedBattleTestBattle ? 100 : base.GetStandardBaseMorale(party);            
         }
 
         public override float GetVictoryMoraleChange(PartyBase party)
         {
-            return 0;
+            return BattleStarter.IsEnhancedBattleTestBattle ? 0 : base.GetVictoryMoraleChange(party);
         }
 
         public override float GetDefeatMoraleChange(PartyBase party)
         {
-            return 0;
+            return BattleStarter.IsEnhancedBattleTestBattle ? 0 : base.GetDefeatMoraleChange(party);
         }
 
         public override ExplainedNumber GetEffectivePartyMorale(
             MobileParty mobileParty,
             bool includeDescription = false)
         {
-            ExplainedNumber explainedNumber = new ExplainedNumber(50f, includeDescription);
-            return explainedNumber;
+            if (BattleStarter.IsEnhancedBattleTestBattle)
+            {
+                ExplainedNumber explainedNumber = new ExplainedNumber(50f, includeDescription);
+                return explainedNumber;
+            } else
+            {
+                return base.GetEffectivePartyMorale(mobileParty, includeDescription);
+            }
         }
     }
 }
