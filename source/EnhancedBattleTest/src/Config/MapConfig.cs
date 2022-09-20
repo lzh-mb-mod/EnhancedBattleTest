@@ -11,5 +11,7 @@ namespace EnhancedBattleTest.Config
         public int SceneLevel = 1;
         public string Season = String.Empty;
         public int TimeOfDay;
+        public float RainDensity;
+        public float FogDensity;
     }
 }

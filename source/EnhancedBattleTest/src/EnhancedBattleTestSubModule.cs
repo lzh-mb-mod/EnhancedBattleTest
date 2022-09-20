@@ -6,9 +6,11 @@ using EnhancedBattleTest.UI;
 using HarmonyLib;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.ModuleManager;
 using TaleWorlds.MountAndBlade;
 using Campaign = TaleWorlds.CampaignSystem.Campaign;
 using MultiplayerGame = EnhancedBattleTest.GameMode.MultiplayerGame;
@@ -29,6 +31,8 @@ namespace EnhancedBattleTest
         public static bool IsMultiplayer;
 
         public event Action<CharacterSelectionData> OnSelectCharacter;
+
+        public static bool IsRealisticWeatherLoaded = false;
 
         protected override void OnSubModuleLoad()
         {
@@ -58,6 +62,12 @@ namespace EnhancedBattleTest
             Patch_PartyBase.Patch();
             // Patch for correct weather in custom sieges            
             Patch_Initializer.Patch();
+
+            // If RealisticWeather mod is activated, add additional weather options
+            if (TaleWorlds.Engine.Utilities.GetModulesNames().Select(ModuleHelper.GetModuleInfo).Contains(ModuleHelper.GetModuleInfo("RealisticWeather")))
+            {
+                IsRealisticWeatherLoaded = true;
+            }
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
@@ -124,6 +134,8 @@ namespace EnhancedBattleTest
             if (BattleStarter.IsEnhancedBattleTestBattle)
             {
                 mission.AddMissionBehavior(new EnhancedBattleTestMissionBehavior());
+
+                if (IsRealisticWeatherLoaded) mission.AddMissionBehavior(new EBTRealisticWeatherMissionBehavior());
             }
         }
     }

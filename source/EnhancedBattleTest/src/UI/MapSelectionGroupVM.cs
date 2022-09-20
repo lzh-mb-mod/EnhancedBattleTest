@@ -1,6 +1,5 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
-using EnhancedBattleTest.UI.Basic;
 using System;
 using System.Collections.Generic;
 using TaleWorlds.Core;
@@ -17,6 +16,7 @@ namespace EnhancedBattleTest.UI
         private bool _isCurrentMapSiege;
         private bool _isCurrentMapField;
         private bool _showMapOptions = true;
+        private bool _showAdvWeatherOptions = false;
         private bool _overridesPlayerPosition;
         private bool _isSallyOutSelected;
         private SelectorVM<MapItemVM> _mapSelection;
@@ -24,11 +24,15 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
         private SelectorVM<SeasonItemVM> _seasonSelection;
         private SelectorVM<TimeOfDayItemVM> _timeOfDaySelection;
+        private SelectorVM<RainDensityItemVM> _rainDensitySelection;
+        private SelectorVM<FogDensityItemVM> _fogDensitySelection;
         private string _titleText;
         private string _mapText;
         private string _useCustomMap;
         private string _seasonText;
         private string _timeOfDayText;
+        private string _rainDensityText;
+        private string _fogDensityText;
         private string _sceneLevelText;
         private string _wallHitpointsText;
         private string _attackerSiegeMachinesText;
@@ -66,6 +70,8 @@ namespace EnhancedBattleTest.UI
             SceneLevelSelection = new SelectorVM<SceneLevelItemVM>(0, OnSceneLevelSelection);
             SeasonSelection = new SelectorVM<SeasonItemVM>(0, OnSeasonSelection);
             TimeOfDaySelection = new SelectorVM<TimeOfDayItemVM>(0, OnTimeOfDaySelection);
+            RainDensitySelection = new SelectorVM<RainDensityItemVM>(0, new Action<SelectorVM<RainDensityItemVM>>(this.OnRainDensitySelection));
+            FogDensitySelection = new SelectorVM<FogDensityItemVM>(0, new Action<SelectorVM<FogDensityItemVM>>(this.OnFogDensitySelection));
             RefreshValues();
         }
 
@@ -78,6 +84,8 @@ namespace EnhancedBattleTest.UI
             UseCustomMap = GameTexts.FindText("str_ebt_custom_map").ToString();
             SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
+            RainDensityText = "Rain/Snow Density";
+            FogDensityText = "Fog Density";
             SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
             WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
             AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
@@ -88,6 +96,8 @@ namespace EnhancedBattleTest.UI
             SceneLevelSelection.ItemList.Clear();
             SeasonSelection.ItemList.Clear();
             TimeOfDaySelection.ItemList.Clear();
+            RainDensitySelection.ItemList.Clear();
+            FogDensitySelection.ItemList.Clear();
             foreach (MapItemVM availableMap in _availableMaps)
                 MapSelection.AddItem(new MapItemVM(availableMap.MapName, availableMap.MapId));
             foreach (Tuple<string, int> wallHitpoint in CustomBattleData.WallHitpoints)
@@ -98,11 +108,17 @@ namespace EnhancedBattleTest.UI
                 SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
             foreach (Tuple<string, CustomBattleTimeOfDay> tuple in CustomBattleData.TimesOfDay)
                 TimeOfDaySelection.AddItem(new TimeOfDayItemVM(tuple.Item1, (int)tuple.Item2));
+            foreach (ValueTuple<string, float> rainDensity in this.RainDensities)
+                RainDensitySelection.AddItem(new RainDensityItemVM(rainDensity.Item1, rainDensity.Item2));
+            foreach (ValueTuple<string, float> fogDensity in this.FogDensities)            
+                FogDensitySelection.AddItem(new FogDensityItemVM(fogDensity.Item1, fogDensity.Item2));
             MapSelection.SelectedIndex = 0;
             WallHitpointSelection.SelectedIndex = 0;
             SceneLevelSelection.SelectedIndex = 0;
             SeasonSelection.SelectedIndex = 0;
-            TimeOfDaySelection.SelectedIndex = 0;
+            TimeOfDaySelection.SelectedIndex = 0;       
+            RainDensitySelection.SelectedIndex = 0;
+            FogDensitySelection.SelectedIndex = 0;
         }
 
         public void ExecuteSallyOutChange()
@@ -304,9 +320,23 @@ namespace EnhancedBattleTest.UI
             }
         }
 
+        [DataSourceProperty]
+        public bool ShowAdvWeatherOptions
+        {
+            get => _showAdvWeatherOptions;
+            set
+            {
+                if (value == _showAdvWeatherOptions)
+                    return;
+                _showAdvWeatherOptions = value;
+                OnPropertyChanged(nameof(ShowAdvWeatherOptions));
+            }
+        }
+
         public void ToggleShowMapPosAndTimeOptions()
         {
             ShowMapOptions = OverridesPlayerPosition || !IsCurrentMapField;
+            ShowAdvWeatherOptions = ShowMapOptions && EnhancedBattleTestSubModule.IsRealisticWeatherLoaded;
         }
 
         [DataSourceProperty]
@@ -464,6 +494,139 @@ namespace EnhancedBattleTest.UI
                 _sallyoutText = value;
                 OnPropertyChanged(nameof(SallyoutText));
             }
+        }
+
+        public float SelectedRainDensity { get; set; }
+
+        public float SelectedFogDensity { get; set; }
+
+        public IEnumerable<ValueTuple<string, float>> RainDensities
+        {
+            get
+            {
+                yield return new ValueTuple<string, float>("None", 0f);
+                yield return new ValueTuple<string, float>("Light", 0.25f);
+                yield return new ValueTuple<string, float>("Moderate", 0.5f);
+                yield return new ValueTuple<string, float>("Heavy", 0.75f);
+                yield return new ValueTuple<string, float>("Very Heavy", 1f);
+                yield break;
+            }
+        }
+
+       public IEnumerable<ValueTuple<string, float>> FogDensities
+        {
+            get
+            {
+                yield return new ValueTuple<string, float>("None", 1f);
+                yield return new ValueTuple<string, float>("Light", 8f);
+                yield return new ValueTuple<string, float>("Moderate", 16f);
+                yield return new ValueTuple<string, float>("Heavy", 32f);
+                yield return new ValueTuple<string, float>("Very Heavy", 64f);
+                yield return new ValueTuple<string, float>("Dust Storm (Special)", 0f);
+                yield break;
+            }
+        }
+
+      [DataSourceProperty]
+        public SelectorVM<RainDensityItemVM> RainDensitySelection
+        {
+            get
+            {
+                return this._rainDensitySelection;
+            }
+            set
+            {
+                bool flag = value != this._rainDensitySelection;
+                if (flag)
+                {
+                    this._rainDensitySelection = value;
+                    OnPropertyChangedWithValue(value, "RainDensity");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public SelectorVM<FogDensityItemVM> FogDensitySelection
+        {
+            get
+            {
+                return this._fogDensitySelection;
+            }
+            set
+            {
+                bool flag = value != this._fogDensitySelection;
+                if (flag)
+                {
+                    this._fogDensitySelection = value;
+                    OnPropertyChangedWithValue(value, "FogDensity");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string RainDensityText
+        {
+            get
+            {
+                return this._rainDensityText;
+            }
+            set
+            {
+                bool flag = value != this._rainDensityText;
+                if (flag)
+                {
+                    this._rainDensityText = value;
+                    OnPropertyChangedWithValue(value, "RainDensityText");
+                }
+            }
+        }
+
+        [DataSourceProperty]
+        public string FogDensityText
+        {
+            get
+            {
+                return this._fogDensityText;
+            }
+            set
+            {
+                bool flag = value != this._fogDensityText;
+                if (flag)
+                {
+                    this._fogDensityText = value;
+                    OnPropertyChangedWithValue(value, "FogDensityText");
+                }
+            }
+        }
+
+        private void OnRainDensitySelection(SelectorVM<RainDensityItemVM> selector)
+        {
+            this.SelectedRainDensity = selector.SelectedItem.RainDensity;
+        }
+
+        private void OnFogDensitySelection(SelectorVM<FogDensityItemVM> selector)
+        {
+            this.SelectedFogDensity = selector.SelectedItem.FogDensity;
+        }
+    }
+
+    public class RainDensityItemVM : SelectorItemVM
+    { 
+        public float RainDensity { get; set; }
+
+        public RainDensityItemVM(string rainDensityName, float rainDensity) : base(rainDensityName)
+        {
+            this.RainDensity = rainDensity;
+        }
+    }
+
+    public class FogDensityItemVM : SelectorItemVM
+    {
+        public float FogDensity { get; set; }
+          
+        public FogDensityItemVM(string fogDensityName, float fogDensity) : base(fogDensityName)
+        {
+            this.FogDensity = fogDensity;
         }
     }
 }

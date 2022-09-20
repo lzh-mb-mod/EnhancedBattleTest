@@ -262,6 +262,16 @@ namespace EnhancedBattleTest.UI
                 MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault(vm =>
                     vm.TimeOfDay == _config.MapConfig.TimeOfDay) ??
                 MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault());
+
+            MapSelectionGroup.RainDensitySelection.SelectedIndex = MapSelectionGroup.RainDensitySelection.ItemList.IndexOf(
+                MapSelectionGroup.RainDensitySelection.ItemList.FirstOrDefault(vm =>
+                    vm.RainDensity == _config.MapConfig.RainDensity) ??
+                MapSelectionGroup.RainDensitySelection.ItemList.FirstOrDefault());
+
+            MapSelectionGroup.FogDensitySelection.SelectedIndex = MapSelectionGroup.FogDensitySelection.ItemList.IndexOf(
+                MapSelectionGroup.FogDensitySelection.ItemList.FirstOrDefault(vm =>
+                    vm.FogDensity == _config.MapConfig.FogDensity) ??
+                MapSelectionGroup.FogDensitySelection.ItemList.FirstOrDefault());
         }
 
         public void ExecuteSwapTeam()
@@ -309,9 +319,11 @@ namespace EnhancedBattleTest.UI
             if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
                 _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
             if (MapSelectionGroup.TimeOfDaySelection.SelectedItem != null)
-            {
                 _config.MapConfig.TimeOfDay = MapSelectionGroup.SelectedTimeOfDay;
-            }
+            if (MapSelectionGroup.RainDensitySelection.SelectedItem != null)
+                _config.MapConfig.RainDensity = MapSelectionGroup.SelectedRainDensity;
+            if (MapSelectionGroup.FogDensitySelection.SelectedItem != null)
+                _config.MapConfig.FogDensity = MapSelectionGroup.SelectedFogDensity;
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();
