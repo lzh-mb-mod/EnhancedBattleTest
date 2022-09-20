@@ -402,6 +402,7 @@ namespace EnhancedBattleTest.SinglePlayer
 
         private static void TryRecoverPartyBanner(PartyBase party)
         {
+            if (_bannerSave.IsEmpty()) return;
             if (_bannerSave.TryGetValue(party.Banner, out var bannerValue))
             {
                 party.Banner.Deserialize(bannerValue);
@@ -440,18 +441,19 @@ namespace EnhancedBattleTest.SinglePlayer
                 switch (pair.Value.Value)
                 {
                     case MemberState.Leader:
-                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
-                            continue;
-                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        if (!pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
+                        {
+                            pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
+                        }
                         pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
                         break;
                     case MemberState.Prisoner:
-                        if (pair.Key.PartyBelongedToAsPrisoner == pair.Value.Key)
+                        if (pair.Value.Key.MobileParty.PrisonRoster.Contains(pair.Key.CharacterObject))
                             continue;
                         pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);
                         break;
                     case MemberState.Original:
-                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
+                        if (pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
                             continue;
                         pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
                         break;
