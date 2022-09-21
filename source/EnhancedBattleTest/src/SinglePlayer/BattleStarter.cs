@@ -386,24 +386,23 @@ namespace EnhancedBattleTest.SinglePlayer
         private static PartyBase CreateParty(TeamConfig teamConfig, bool isPlayerSide, int index = 0)
         {
             PartyBase party = MobileParty.CreateParty("EnhancedBattleTestParty",
-                new EnhancedBattleTestPartyComponent(GetPartyName(isPlayerSide, index), teamConfig)).Party;
+                new EnhancedBattleTestPartyComponent(GetPartyName(isPlayerSide, index), teamConfig)).Party;            
             TryOverridePartyBanner(party, teamConfig);
             return party;
         }
 
         private static void TryOverridePartyBanner(PartyBase party, TeamConfig config)
         {
-            if (config.CustomBanner)
+            if (config.CustomBanner && party.Banner != null && !_bannerSave.ContainsKey(party.Banner))
             {
                 _bannerSave.Add(party.Banner, party.Banner.Serialize());
-                party.Banner.Deserialize(config.BannerKey);
+                party.Banner.Deserialize(config.BannerKey);                
             }
         }
 
         private static void TryRecoverPartyBanner(PartyBase party)
         {
-            if (_bannerSave.IsEmpty()) return;
-            if (_bannerSave.TryGetValue(party.Banner, out var bannerValue))
+            if (party.Banner != null && _bannerSave.TryGetValue(party.Banner, out var bannerValue))
             {
                 party.Banner.Deserialize(bannerValue);
                 _bannerSave.Remove(party.Banner);
@@ -450,7 +449,7 @@ namespace EnhancedBattleTest.SinglePlayer
                     case MemberState.Prisoner:
                         if (pair.Value.Key.MobileParty.PrisonRoster.Contains(pair.Key.CharacterObject))
                             continue;
-                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);
+                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);                        
                         break;
                     case MemberState.Original:
                         if (pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
