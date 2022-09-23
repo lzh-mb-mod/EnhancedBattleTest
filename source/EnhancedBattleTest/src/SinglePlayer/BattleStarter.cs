@@ -440,20 +440,25 @@ namespace EnhancedBattleTest.SinglePlayer
                 switch (pair.Value.Value)
                 {
                     case MemberState.Leader:
-                        if (!pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
-                        {
-                            pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
-                        }
+                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
+                            continue;
+                        if (pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
+                            pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, -1);
+                        pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1, true);
                         pair.Value.Key.MobileParty.ChangePartyLeader(pair.Key);
                         break;
                     case MemberState.Prisoner:
-                        if (pair.Value.Key.MobileParty.PrisonRoster.Contains(pair.Key.CharacterObject))
+                        if (pair.Key.PartyBelongedToAsPrisoner == pair.Value.Key)
                             continue;
-                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);                        
+                        if (pair.Value.Key.MobileParty.PrisonRoster.Contains(pair.Key.CharacterObject))
+                            pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, -1);
+                        pair.Value.Key.AddPrisoner(pair.Key.CharacterObject, 1);
                         break;
                     case MemberState.Original:
-                        if (pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
+                        if (pair.Key.PartyBelongedTo?.Party == pair.Value.Key)
                             continue;
+                        if (pair.Value.Key.MobileParty.MemberRoster.Contains(pair.Key.CharacterObject))
+                            pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, -1);
                         pair.Value.Key.AddElementToMemberRoster(pair.Key.CharacterObject, 1);
                         break;
                 }
