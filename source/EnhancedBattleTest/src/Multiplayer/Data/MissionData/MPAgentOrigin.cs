@@ -45,7 +45,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                 MPCharacter.IsHero, Seed);
             agentBuildData.Equipment(equipment);
             agentBuildData.IsFemale(MPCharacter.IsFemale);
-            if (!MPCharacter.IsPlayer)
+            //if (!MPCharacter.IsPlayer)
                 //agentBuildData.IsReinforcement(isReinforcement).SpawnOnInitialPoint(enforceSpawningOnInitialPoint);
             if (initialPosition.HasValue && initialDirection.HasValue)
             {
@@ -82,16 +82,16 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
                 agent.SetWatchState(Agent.WatchState.Alarmed);
             if (wieldInitialWeapons)
                 agent.WieldInitialWeapons();
-            if (!string.IsNullOrEmpty(specialActionSet))
-            {
-                AnimationSystemData animationSystemData =
-                    agentBuildData.AgentMonster.FillAnimationSystemData(MBGlobals.GetActionSet(specialActionSet),
-                        agent.Character.GetStepSize(), false);
-                AgentVisualsNativeData agentVisualsNativeData =
-                    agentBuildData.AgentMonster.FillAgentVisualsNativeData();
-                agentBuildData.AgentMonster.FillAgentVisualsNativeData();
-                agent.SetActionSet(ref agentVisualsNativeData, ref animationSystemData);
-            }
+            //if (!string.IsNullOrEmpty(specialActionSet))
+            //{
+            //    AnimationSystemData animationSystemData =
+            //        agentBuildData.AgentMonster.FillAnimationSystemData(MBGlobals.GetActionSet(specialActionSet),
+            //            agent.Character.GetStepSize(), false);
+            //    AgentVisualsNativeData agentVisualsNativeData =
+            //        agentBuildData.AgentMonster.FillAgentVisualsNativeData();
+            //    agentBuildData.AgentMonster.FillAgentVisualsNativeData();
+            //    agent.SetActionSet(ref agentVisualsNativeData, ref animationSystemData);
+            //}
             return agent;
         }
     }

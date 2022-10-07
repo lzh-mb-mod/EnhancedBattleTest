@@ -14,6 +14,11 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
         private int _numWounded;
         private int _numKilled;
         private int _numRouted;
+        public BasicCharacterObject GetGeneralCharacter()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public int GetNumberOfPlayerControllableTroops()
         {
             // TODO

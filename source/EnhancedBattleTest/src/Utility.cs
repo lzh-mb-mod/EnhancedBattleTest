@@ -210,10 +210,10 @@ namespace EnhancedBattleTest
                 return null;
             //var result = new ItemModifier { ID = string.Empty };
             var result = MBObjectManager.Instance.CreateObject<ItemModifier>(string.Empty);
-            float sum = 0;
-            foreach (var probability in group.ItemModifiersWithProbability.Values)
+            float sum = group.NoModifierLootScore;
+            foreach (var itemModifier in group.ItemModifiers)
             {
-                sum += probability.Probability;
+                sum += itemModifier.LootDropScore;
             }
 
             float damage = 0;
@@ -234,26 +234,26 @@ namespace EnhancedBattleTest
             float mountHitPoints = 0;
 
             var bindingFlag = BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (var modifier in group.ItemModifiersWithProbability.Values)
+            foreach (var itemModifier in group.ItemModifiers)
             {
-                if (modifier.ItemModifier == null)
+                if (itemModifier == null)
                     continue;
-                damage += modifier.ItemModifier.ModifyDamage(0) * modifier.Probability / sum;
-                speed += modifier.ItemModifier.ModifySpeed(0) * modifier.Probability / sum;
-                missileSpeed += modifier.ItemModifier.ModifyMissileSpeed(0) * modifier.Probability / sum;
-                armor += modifier.ItemModifier.ModifyArmor(0) * modifier.Probability / sum;
-                //rankIndex += modifier.ItemModifier.RankIndex * modifier.Probability / sum;
-                priceMultiplier += modifier.ItemModifier.PriceMultiplier * modifier.Probability / sum;
-                //weightMultiplier += modifier.ItemModifier.WeightMultiplier * modifier.Probability / sum;
-                //oldness += modifier.ItemModifier.Oldness * modifier.Probability / sum;
-                //factorOne += modifier.ItemModifier.FactorOne * modifier.Probability / sum;
-                //factorTwo += modifier.ItemModifier.FactorTwo * modifier.Probability / sum;
-                hitPoints += modifier.ItemModifier.ModifyHitPoints(0) * modifier.Probability / sum;
-                stackCount += modifier.ItemModifier.ModifyStackCount(0) * modifier.Probability / sum;
-                mountSpeed += modifier.ItemModifier.ModifyMountSpeed(0) * modifier.Probability / sum;
-                maneuver += modifier.ItemModifier.ModifyMountManeuver(0) * modifier.Probability / sum;
-                chargeDamage += modifier.ItemModifier.ModifyMountCharge(0) * modifier.Probability / sum;
-                mountHitPoints += modifier.ItemModifier.ModifyMountHitPoints(0) * modifier.Probability / sum;
+                damage += itemModifier.ModifyDamage(0) * itemModifier.LootDropScore / sum;
+                speed += itemModifier.ModifySpeed(0) * itemModifier.LootDropScore / sum;
+                missileSpeed += itemModifier.ModifyMissileSpeed(0) * itemModifier.LootDropScore / sum;
+                armor += itemModifier.ModifyArmor(0) * itemModifier.LootDropScore / sum;
+                //rankIndex += itemModifier.RankIndex * itemModifier.LootDropScore / sum;
+                priceMultiplier += itemModifier.PriceMultiplier * itemModifier.LootDropScore / sum;
+                //weightMultiplier += itemModifier.WeightMultiplier * itemModifier.LootDropScore / sum;
+                //oldness += itemModifier.Oldness * itemModifier.LootDropScore / sum;
+                //factorOne += itemModifier.FactorOne * itemModifier.LootDropScore / sum;
+                //factorTwo += itemModifier.FactorTwo * itemModifier.LootDropScore / sum;
+                hitPoints += itemModifier.ModifyHitPoints(0) * itemModifier.LootDropScore / sum;
+                stackCount += itemModifier.ModifyStackCount(0) * itemModifier.LootDropScore / sum;
+                mountSpeed += itemModifier.ModifyMountSpeed(0) * itemModifier.LootDropScore / sum;
+                maneuver += itemModifier.ModifyMountManeuver(0) * itemModifier.LootDropScore / sum;
+                chargeDamage += itemModifier.ModifyMountCharge(0) * itemModifier.LootDropScore / sum;
+                mountHitPoints += itemModifier.ModifyMountHitPoints(0) * itemModifier.LootDropScore / sum;
             }
 
             typeof(ItemModifier).GetField("_damage", bindingFlag)?.SetValue(result, (int)damage);

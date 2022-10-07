@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -17,10 +18,10 @@ namespace EnhancedBattleTest.Patch.Fix
             {
                 _harmony.Patch(
                     typeof(DeploymentMissionController).GetMethod(
-                        nameof(DeploymentMissionController.OnPlayerDeploymentFinish),
+                        nameof(DeploymentMissionController.FinishPlayerDeployment),
                         BindingFlags.Instance | BindingFlags.Public),
                     prefix: new HarmonyMethod(typeof(Patch_DeploymentMissionController).GetMethod(
-                        nameof(Prefix_OnPlayerDeploymentFinish),
+                        nameof(Prefix_FinishPlayerDeployment),
                         BindingFlags.Static | BindingFlags.Public)));
             }
             catch (Exception)
@@ -39,26 +40,24 @@ namespace EnhancedBattleTest.Patch.Fix
         //    __instance._mission.GetMissionBehavior<AssignPlayerRoleInTeamMissionController>().OnPlayerChoiceMade(battleFormationItemVm.Formation.Index, true);
         // The issue is that the Agent.Main is null and the commander of the first formation is also null.
         // Then the null agent will be assigned as sergeant of the first formation.
-        public static bool Prefix_OnPlayerDeploymentFinish(DeploymentMissionController __instance, BattleDeploymentHandler ____battleDeploymentHandler)
+        public static bool Prefix_FinishPlayerDeployment(DeploymentMissionController __instance, BattleDeploymentHandler ____battleDeploymentHandler, bool ____isPlayerAttacker, MissionAgentSpawnLogic ___MissionAgentSpawnLogic)
         {
             if (__instance.Mission.MainAgent == null)
             {
-                typeof(DeploymentMissionController)
-                    .GetMethod("OnSideDeploymentFinished", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(__instance, new object[] { __instance.Mission.PlayerTeam.Side });
-                if (__instance.Mission.PlayerTeam.Side == BattleSideEnum.Attacker)
+                __instance.OnBeforePlayerDeploymentFinished();
+                if (____isPlayerAttacker)
                 {
-                    Mission.Current.IsTeleportingAgents = false;
-                    typeof(DeploymentMissionController).GetMethod("SetupTeamsOfSide",
-                            BindingFlags.Instance | BindingFlags.NonPublic)
-                        .Invoke(__instance, new object[] { BattleSideEnum.Defender });
-                    // __instance.SetupTeamsOfSide(BattleSideEnum.Defender);
-                    typeof(DeploymentMissionController)
-                        .GetMethod("OnSideDeploymentFinished", BindingFlags.Instance | BindingFlags.NonPublic)
-                        .Invoke(__instance, new object[] { BattleSideEnum.Defender });
-                    // __instance.OnSideDeploymentFinished(BattleSideEnum.Defender);
+                    foreach (Agent agent in __instance.Mission.Agents)
+                    {
+                        if (agent.IsHuman && agent.Team is { Side: BattleSideEnum.Defender })
+                        {
+                            agent.SetRenderCheckEnabled(true);
+                            agent.AgentVisuals.SetVisible(true);
+                            agent.MountAgent?.SetRenderCheckEnabled(true);
+                            agent.MountAgent?.AgentVisuals.SetVisible(true);
+                        }
+                    }
                 }
-                __instance.Mission.RemoveMissionBehavior(____battleDeploymentHandler);
                 typeof(DeploymentMissionController)
                     .GetMethod("InvokePlayerDeploymentFinish", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(__instance, new object[] { });
@@ -72,13 +71,18 @@ namespace EnhancedBattleTest.Patch.Fix
                         agent.SetIsAIPaused(false);
                         if (agent.GetAgentFlags().HasAnyFlag(AgentFlag.CanWieldWeapon))
                             agent.ResetEnemyCaches();
+                        agent.HumanAIComponent?.SyncBehaviorParamsIfNecessary();
                     }
                 }
 
                 // main agent is null
-                // Mission.Current.MainAgent.Controller = Agent.ControllerType.Player;
+                //Agent mainAgent = __instance.Mission.MainAgent;
+                //mainAgent.PromoteToGeneral();
+                //mainAgent.SetDetachableFromFormation(true);
+                //mainAgent.Controller = Agent.ControllerType.Player;
                 Mission.Current.AllowAiTicking = true;
                 __instance.Mission.DisableDying = false;
+                ___MissionAgentSpawnLogic.SetReinforcementsSpawnTimerEnabled(true);
                 __instance.Mission.RemoveMissionBehavior(__instance);
                 return false;
             }

@@ -196,10 +196,11 @@ namespace EnhancedBattleTest.SinglePlayer
                             partyBase.MobileParty.CurrentSettlement = settlement;
                         }
 
-                        Dictionary<SiegeEngineType, int> siegeWeaponsCountOfAttackers = new Dictionary<SiegeEngineType, int>();
-                        Dictionary<SiegeEngineType, int> siegeWeaponsCountOfDefenders = new Dictionary<SiegeEngineType, int>();
-                        FillSiegeMachineCounts(siegeWeaponsCountOfAttackers, config.SiegeMachineConfig.AttackerMeleeMachines.Concat(config.SiegeMachineConfig.AttackerRangedMachines));
-                        FillSiegeMachineCounts(siegeWeaponsCountOfDefenders, config.SiegeMachineConfig.DefenderMachines);
+                        var siegeWeaponsCountOfAttackers = GetSiegeWeapons(
+                            config.SiegeMachineConfig.AttackerMeleeMachines.Concat(config.SiegeMachineConfig
+                                .AttackerRangedMachines), BattleSideEnum.Attacker);
+                        var siegeWeaponsCountOfDefenders = GetSiegeWeapons(config.SiegeMachineConfig.DefenderMachines,
+                            BattleSideEnum.Defender);
 
 
                         // Fix for weather/time settings being ignored in SiegeMission
@@ -518,26 +519,25 @@ namespace EnhancedBattleTest.SinglePlayer
             }
             return hitpointPercentages;
         }
-        private static void FillSiegeMachineCounts(
-            Dictionary<SiegeEngineType, int> machineCounts,
-            IEnumerable<string> machines)
+
+        private static List<MissionSiegeWeapon> GetSiegeWeapons(IEnumerable<string> machines, BattleSideEnum side)
         {
-            foreach (var machine in machines)
+            var result = new List<MissionSiegeWeapon>();
+            foreach (var (machine, i) in machines.Select((machine, i) => (machine, i)))
             {
                 SiegeEngineType siegeWeaponType = Utility.GetSiegeEngineType(machine);
-                if (siegeWeaponType == null)
-                    continue;
-                if (!machineCounts.ContainsKey(siegeWeaponType))
-                    machineCounts.Add(siegeWeaponType, 0);
-                machineCounts[siegeWeaponType]++;
+                var hitPoints =
+                    Campaign.Current.Models.SiegeEventModel.GetSiegeEngineHitPoints(PlayerSiege.PlayerSiegeEvent,
+                        siegeWeaponType, side);
+                result.Add(MissionSiegeWeapon.CreateCampaignWeapon(siegeWeaponType, i, hitPoints, hitPoints));
             }
+
+            return result;
         }
 
-        private static bool HasAnySiegeTower(Dictionary<SiegeEngineType, int> attackerMachines)
+        private static bool HasAnySiegeTower(List<MissionSiegeWeapon> attackerMachines)
         {
-
-            return attackerMachines.ContainsKey(DefaultSiegeEngineTypes.SiegeTower) ||
-                   attackerMachines.ContainsKey(DefaultSiegeEngineTypes.HeavySiegeTower);
+            return attackerMachines.Exists((Predicate<MissionSiegeWeapon>)(data => data.Type == DefaultSiegeEngineTypes.SiegeTower || data.Type == DefaultSiegeEngineTypes.HeavySiegeTower));
         }
     }
 }
