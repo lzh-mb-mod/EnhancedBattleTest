@@ -23,6 +23,10 @@ namespace EnhancedBattleTest.Patch
                     typeof(CampaignEventDispatcher).GetMethod("OnSiegeEventStarted", BindingFlags.Instance | BindingFlags.Public),
                     prefix: new HarmonyMethod(typeof(Patch_CampaignEventDispatcher).GetMethod(nameof(Prefix_OnSiegeEventStarted),
                         BindingFlags.Static | BindingFlags.Public)));
+                _harmony.Patch(
+                    typeof(CampaignEventDispatcher).GetMethod("SiegeCompleted", BindingFlags.Instance | BindingFlags.Public),
+                    prefix: new HarmonyMethod(typeof(Patch_CampaignEventDispatcher).GetMethod(nameof(Prefix_SiegeCompleted),
+                        BindingFlags.Static | BindingFlags.Public)));
             }
             catch (Exception)
             {
@@ -34,6 +38,13 @@ namespace EnhancedBattleTest.Patch
 
 
         public static bool Prefix_OnSiegeEventStarted()
+        {
+            if (BattleStarter.IsEnhancedBattleTestBattle)
+                return false;
+            return true;
+        }
+
+        public static bool Prefix_SiegeCompleted()
         {
             if (BattleStarter.IsEnhancedBattleTestBattle)
                 return false;

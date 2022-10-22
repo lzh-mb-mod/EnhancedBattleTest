@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using EnhancedBattleTest.src.Patch.Fix;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.ModuleManager;
@@ -62,6 +63,8 @@ namespace EnhancedBattleTest
             Patch_PartyBase.Patch();
             // Patch for correct weather in custom sieges            
             Patch_Initializer.Patch();
+            Patch_MissionScreen.Patch();
+            Patch_CampaignEventDispatcher.Patch();
 
             // If RealisticWeather mod is activated, add additional weather options
             if (TaleWorlds.Engine.Utilities.GetModulesNames().Select(ModuleHelper.GetModuleInfo).Contains(ModuleHelper.GetModuleInfo("RealisticWeather")))

@@ -13,6 +13,17 @@ namespace EnhancedBattleTest.SinglePlayer
     {
         private bool ended = false;
 
+        public override void OnSurrenderMission()
+        {
+            base.OnSurrenderMission();
+
+            if (!ended)
+            {
+                ended = true;
+                BattleStarter.BeforeMissionEnded();
+            }
+        }
+
         // Called when leaving battle before end
         public override void OnRetreatMission()
         {

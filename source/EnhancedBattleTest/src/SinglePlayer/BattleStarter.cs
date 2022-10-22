@@ -251,7 +251,6 @@ namespace EnhancedBattleTest.SinglePlayer
         {
             try
             {
-                IsEnhancedBattleTestBattle = false;
                 //RollbackPartyBanners();
 
                 for (int i = _enemySideParties.Count - 1; i > 0; --i)
@@ -304,10 +303,12 @@ namespace EnhancedBattleTest.SinglePlayer
                 _originalSettlements.Clear();
                 _bannerSave.Clear();
                 Campaign.Current.MainParty.Party.Visuals?.SetMapIconAsDirty();
+                IsEnhancedBattleTestBattle = false;
             }
             catch (Exception e)
             {
                 Utility.DisplayMessage(e.ToString());
+                IsEnhancedBattleTestBattle = false;
             }
         }
 
@@ -526,10 +527,13 @@ namespace EnhancedBattleTest.SinglePlayer
             foreach (var (machine, i) in machines.Select((machine, i) => (machine, i)))
             {
                 SiegeEngineType siegeWeaponType = Utility.GetSiegeEngineType(machine);
-                var hitPoints =
-                    Campaign.Current.Models.SiegeEventModel.GetSiegeEngineHitPoints(PlayerSiege.PlayerSiegeEvent,
-                        siegeWeaponType, side);
-                result.Add(MissionSiegeWeapon.CreateCampaignWeapon(siegeWeaponType, i, hitPoints, hitPoints));
+                if (siegeWeaponType != null)
+                {
+                    var hitPoints =
+                        Campaign.Current.Models.SiegeEventModel.GetSiegeEngineHitPoints(PlayerSiege.PlayerSiegeEvent,
+                            siegeWeaponType, side);
+                    result.Add(MissionSiegeWeapon.CreateCampaignWeapon(siegeWeaponType, i, hitPoints, hitPoints));
+                }
             }
 
             return result;
