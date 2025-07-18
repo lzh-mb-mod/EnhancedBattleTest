@@ -66,12 +66,12 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         public IEnumerable<IAgentOriginBase> SupplyTroops(
             int numberToAllocate)
         {
-            if (numberToAllocate <= 0 || _numAllocated >= _allAgentOrigins.Count)
+            if (numberToAllocate < 0)
             {
                 AnyTroopRemainsToBeSupplied = false;
                 return Enumerable.Empty<IAgentOriginBase>();
             }
-            if (numberToAllocate >= _allAgentOrigins.Count - _numAllocated)
+            if (numberToAllocate > _allAgentOrigins.Count - _numAllocated)
             {
                 numberToAllocate = _allAgentOrigins.Count - _numAllocated;
                 AnyTroopRemainsToBeSupplied = false;

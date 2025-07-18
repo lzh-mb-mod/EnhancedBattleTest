@@ -4,9 +4,9 @@ namespace EnhancedBattleTest.Config
 {
     public enum BattleType
     {
-        Field,
-        Siege,
+        Battle,
         Village,
+        Siege
     }
 
     public enum PlayerType

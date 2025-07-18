@@ -1,4 +1,5 @@
 ﻿using EnhancedBattleTest.Config;
+using EnhancedBattleTest.GameMode;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
@@ -16,6 +17,7 @@ namespace EnhancedBattleTest.Data
         public static void Initialize()
         {
             PlayerParty = MBObjectManager.Instance.CreateObject<MobileParty>("enhanced_battle_test_player_party");
+            //PlayerParty = Campaign.Current.MainParty;
             PlayerParty.SetCustomName(new TextObject("{=sSJSTe5p}Player Party"));
             EnemyParty = MBObjectManager.Instance.CreateObject<MobileParty>("enhanced_battle_test_enemy_party");
             EnemyParty.SetCustomName(new TextObject("{=0xC75dN6}Enemy Party"));

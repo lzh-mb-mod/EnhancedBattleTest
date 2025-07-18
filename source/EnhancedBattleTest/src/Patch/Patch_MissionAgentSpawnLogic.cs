@@ -15,12 +15,12 @@ namespace EnhancedBattleTest.Patch
     public class Patch_MissionAgentSpawnLogic
     {
         public static bool SpawnTroops_Prefix(Object __instance, int number, bool isReinforcement, ref int __result,
-            IMissionTroopSupplier ____troopSupplier, List<IAgentOriginBase> ____reservedTroops, List<(Team team, List<IAgentOriginBase> origins)> ____troopOriginsToSpawnPerTeam,
+            IMissionTroopSupplier ____troopSupplier, List<IAgentOriginBase> ____reservedTroops, ref List<(Team team, List<IAgentOriginBase> origins)> ____troopOriginsToSpawnPerTeam,
             bool ____spawnWithHorses, BattleSideEnum ____side, MBList<Formation> ____spawnedFormations,
             Dictionary<IAgentOriginBase, int> ____reinforcementTroopFormationAssignments,
             (int currentTroopIndex, int troopCount)[] ____reinforcementSpawnedUnitCountPerFormation,
             BannerBearerLogic ____bannerBearerLogic,
-            int ____numSpawnedTroops)
+            ref int ____numSpawnedTroops)
         {
             if (number <= 0)
             {
@@ -113,18 +113,6 @@ namespace EnhancedBattleTest.Patch
                                         agentOriginBaseList2.Add(agentOriginBase2);
                                     }
                                 }
-                                if (agentOriginBase2.Troop == Game.Current.PlayerTroop)
-                                {
-                                    player = agentOriginBase2;
-                                }
-                                else
-                                {
-                                    if (agentOriginBase2.Troop.HasMount())
-                                        ++mountedTroopCount;
-                                    else
-                                        ++footTroopCount;
-                                    agentOriginBaseList2.Add(agentOriginBase2);
-                                }
                             }
                         }
                             if (player != null)
@@ -159,7 +147,13 @@ namespace EnhancedBattleTest.Patch
                                 if (!troopOrigin.Troop.IsHero && ____bannerBearerLogic != null && Mission.Current.Mode != MissionMode.Deployment && ____bannerBearerLogic.GetMissingBannerCount(formation) > 0)
                                     ____bannerBearerLogic.SpawnBannerBearer(troopOrigin, isPlayerSide, formation, ____spawnWithHorses, isReinforcement, num6, formationTroopIndex, true, true, false, new Vec3?(), new Vec2?(), useTroopClassForSpawn: Mission.Current.IsSallyOutBattle);
                                 else
-                                    Mission.Current.SpawnTroop(troopOrigin, isPlayerSide, true, ____spawnWithHorses, isReinforcement, num6, formationTroopIndex, true, true, false, new Vec3?(), new Vec2?(), formationIndex: formation.FormationIndex, useTroopClassForSpawn: Mission.Current.IsSallyOutBattle);
+                                {
+                                    var agent = Mission.Current.SpawnTroop(troopOrigin, isPlayerSide, true, ____spawnWithHorses, isReinforcement, num6, formationTroopIndex, true, true, false, new Vec3?(), new Vec2?(), formationIndex: formation.FormationIndex, useTroopClassForSpawn: Mission.Current.IsSallyOutBattle);
+                                    if (player == troopOrigin)
+                                    {
+                                        agent.Controller = Agent.ControllerType.Player;
+                                    }
+                                }
                                 ++____numSpawnedTroops;
                                 ++formationTroopIndex;
                                 ++num3;

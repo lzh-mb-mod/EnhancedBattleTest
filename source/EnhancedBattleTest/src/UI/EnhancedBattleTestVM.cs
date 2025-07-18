@@ -204,7 +204,7 @@ namespace EnhancedBattleTest.UI
 
         private void RecoverConfig()
         {
-            MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
+            MapSelectionGroup.SelectedMapId = _config.MapConfig.MapId;
             //if (MapSelectionGroup.SearchText.IsStringNoneOrEmpty())
             //{
             //    MapSelectionGroup.SearchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
@@ -284,12 +284,15 @@ namespace EnhancedBattleTest.UI
             GameTexts.SetVariable("MapName", sceneData.Name);
             Utility.DisplayLocalizedText("str_ebt_current_map");
             EnhancedBattleTestPartyController.BattleConfig = _config;
-            EnhancedBattleTestMissions.OpenMission(_config, sceneData.Id);
+            EnhancedBattleTestMissions.OpenMission(_config, sceneData.SceneID);
         }
 
         private bool ApplyConfig()
         {
-            _config.MapConfig.MapNameSearchText = MapSelectionGroup.SearchText;
+            if (MapSelectionGroup.SelectedMap != null)
+            {
+                _config.MapConfig.MapId = MapSelectionGroup.SelectedMapId;
+            }
             if (MapSelectionGroup.SceneLevelSelection.SelectedItem != null)
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
@@ -322,7 +325,7 @@ namespace EnhancedBattleTest.UI
             var selectedMap = MapSelectionGroup.SelectedMap;
             if (selectedMap == null)
             {
-                MapSelectionGroup.RandomizeMap();
+                MapSelectionGroup.MapSelection.ExecuteRandomize();
                 selectedMap = MapSelectionGroup.SelectedMap;
                 if (selectedMap == null)
                 {
@@ -330,8 +333,6 @@ namespace EnhancedBattleTest.UI
                     return null;
                 }
 
-                // Keep search text not changed.
-                MapSelectionGroup.SearchText = _config.MapConfig.MapNameSearchText;
             }
             return _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
         }
