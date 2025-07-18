@@ -6,6 +6,7 @@ using EnhancedBattleTest.Multiplayer.Data;
 using EnhancedBattleTest.UI.Basic;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using FaceGen = TaleWorlds.Core.FaceGen;
 
@@ -129,7 +130,7 @@ namespace EnhancedBattleTest.UI
                 _config.SelectedFirstPerk, _config.SelectedSecondPerk, _config.IsHero);
             Character.EquipmentCode = equipment.CalculateEquipmentCode();
             Character.BodyProperties = null;
-            Character.BodyProperties = FaceGen.GetRandomBodyProperties(_config.FemaleRatio > 0.5,
+            Character.BodyProperties = FaceGen.GetRandomBodyProperties(character.Race, _config.FemaleRatio > 0.5,
                 character.GetBodyPropertiesMin(false), character.GetBodyPropertiesMax(),
                 (int)equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
                 character.TattooTags).ToString();

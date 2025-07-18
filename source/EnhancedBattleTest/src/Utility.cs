@@ -4,6 +4,9 @@ using System.Linq;
 using System.Reflection;
 using EnhancedBattleTest.Config;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.MapEvents;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
@@ -178,102 +181,13 @@ namespace EnhancedBattleTest
                 {
                     bool isAIControlled = formation.IsAIControlled;
                     formation.PlayerOwner = mission.MainAgent;
-                    formation.IsAIControlled = isAIControlled;
+                    formation.SetControlledByAI(isAIControlled);
                 }
             }
         }
 
         public static void CancelPlayerAsCommander()
         {
-        }
-
-        public static ItemModifier AverageItemModifier(ItemModifierGroup group)
-        {
-            /*
-            public sealed class ItemModifier : MBObjectBase
-            {
-                private int _damage;
-                private int _speed;
-                private int _missileSpeed;
-                private int _armor;
-                private short _hitPoints;
-                private short _stackCount;
-                private float _mountSpeed;
-                private float _maneuver;
-                private float _chargeDamage;
-                private float _mountHitPoints;
-                public TextObject Name { get; private set; }
-                public float PriceMultiplier { get; private set; }
-                ...
-            }
-            */
-            if (group == null)
-                return null;
-            //var result = new ItemModifier { ID = string.Empty };
-            var result = MBObjectManager.Instance.CreateObject<ItemModifier>(string.Empty);
-            float sum = 0;
-            foreach (var probability in group.ItemModifiersWithProbability.Values)
-            {
-                sum += probability.Probability;
-            }
-
-            float damage = 0;
-            float speed = 0;
-            float missileSpeed = 0;
-            float armor = 0;
-            //float rankIndex = 0;
-            float priceMultiplier = 0;
-            //float weightMultiplier = 0;
-            //float oldness = 0;
-            //float factorOne = 0;
-            //float factorTwo = 0;
-            float hitPoints = 0;
-            float stackCount = 0;
-            float mountSpeed = 0;
-            float maneuver = 0;
-            float chargeDamage = 0;
-            float mountHitPoints = 0;
-
-            var bindingFlag = BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (var modifier in group.ItemModifiersWithProbability.Values)
-            {
-                if (modifier.ItemModifier == null)
-                    continue;
-                damage += modifier.ItemModifier.ModifyDamage(0) * modifier.Probability / sum;
-                speed += modifier.ItemModifier.ModifySpeed(0) * modifier.Probability / sum;
-                missileSpeed += modifier.ItemModifier.ModifyMissileSpeed(0) * modifier.Probability / sum;
-                armor += modifier.ItemModifier.ModifyArmor(0) * modifier.Probability / sum;
-                //rankIndex += modifier.ItemModifier.RankIndex * modifier.Probability / sum;
-                priceMultiplier += modifier.ItemModifier.PriceMultiplier * modifier.Probability / sum;
-                //weightMultiplier += modifier.ItemModifier.WeightMultiplier * modifier.Probability / sum;
-                //oldness += modifier.ItemModifier.Oldness * modifier.Probability / sum;
-                //factorOne += modifier.ItemModifier.FactorOne * modifier.Probability / sum;
-                //factorTwo += modifier.ItemModifier.FactorTwo * modifier.Probability / sum;
-                hitPoints += modifier.ItemModifier.ModifyHitPoints(0) * modifier.Probability / sum;
-                stackCount += modifier.ItemModifier.ModifyStackCount(0) * modifier.Probability / sum;
-                mountSpeed += modifier.ItemModifier.ModifyMountSpeed(0) * modifier.Probability / sum;
-                maneuver += modifier.ItemModifier.ModifyMountManeuver(0) * modifier.Probability / sum;
-                chargeDamage += modifier.ItemModifier.ModifyMountCharge(0) * modifier.Probability / sum;
-                mountHitPoints += modifier.ItemModifier.ModifyMountHitPoints(0) * modifier.Probability / sum;
-            }
-
-            typeof(ItemModifier).GetField("_damage", bindingFlag)?.SetValue(result, (int)damage);
-            typeof(ItemModifier).GetField("_speed", bindingFlag)?.SetValue(result, (int)speed);
-            typeof(ItemModifier).GetField("_missileSpeed", bindingFlag)?.SetValue(result, (int)missileSpeed);
-            typeof(ItemModifier).GetField("_armor", bindingFlag)?.SetValue(result, (int)armor);
-            //typeof(ItemModifier).GetField("RankIndex", bindingFlag)?.SetValue(result, (int)rankIndex);
-            typeof(ItemModifier).GetField("PriceMultiplier", bindingFlag)?.SetValue(result, priceMultiplier);
-            //typeof(ItemModifier).GetField("WeightMultiplier", bindingFlag)?.SetValue(result, weightMultiplier);
-            //typeof(ItemModifier).GetField("Oldness", bindingFlag)?.SetValue(result, oldness);
-            //typeof(ItemModifier).GetField("FactorOne", bindingFlag)?.SetValue(result, (uint)factorOne);
-            //typeof(ItemModifier).GetField("FactorTwo", bindingFlag)?.SetValue(result, (uint)factorTwo);
-            typeof(ItemModifier).GetField("_hitPoints", bindingFlag)?.SetValue(result, (short)hitPoints);
-            typeof(ItemModifier).GetField("_stackCount", bindingFlag)?.SetValue(result, (short)stackCount);
-            typeof(ItemModifier).GetField("_mountSpeed", bindingFlag)?.SetValue(result, (int)mountSpeed);
-            typeof(ItemModifier).GetField("_maneuver", bindingFlag)?.SetValue(result, (int)maneuver);
-            typeof(ItemModifier).GetField("_chargeDamage", bindingFlag)?.SetValue(result, (int)chargeDamage);
-            typeof(ItemModifier).GetField("_mountHitPoints", bindingFlag)?.SetValue(result, (int)mountHitPoints);
-            return result;
         }
 
         public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
@@ -307,8 +221,7 @@ namespace EnhancedBattleTest
                             mapEvents.RemoveAt(index);
                     }
                 }
-
-                Campaign.Current.MapEventManager.StartBattleMapEvent(attacker, defender);
+                FieldBattleEventComponent.CreateFieldBattleEvent(attacker, defender);
             }
             catch (Exception e)
             {
@@ -339,6 +252,10 @@ namespace EnhancedBattleTest
             if (characterObject.IsHero)
                 characterObject.HeroObject.HitPoints = characterObject.MaxHitPoints();
             return characterObject;
+        }
+        public static MissionSpawnSettings CreateSandBoxBattleWaveSpawnSettings()
+        {
+            return new MissionSpawnSettings(MissionSpawnSettings.InitialSpawnMethod.BattleSizeAllocating, MissionSpawnSettings.ReinforcementTimingMethod.GlobalTimer, MissionSpawnSettings.ReinforcementSpawnMethod.Wave, 3f, reinforcementWavePercentage: 0.5f, maximumReinforcementWaveCount: BannerlordConfig.GetReinforcementWaveCount());
         }
     }
 }

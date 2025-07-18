@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Reflection;
 using SandBox.GauntletUI;
+using SandBox.GauntletUI.BannerEditor;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.Engine.Screens;
 using TaleWorlds.InputSystem;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.MountAndBlade.View.Screen;
+using TaleWorlds.MountAndBlade.View.Screens;
+using TaleWorlds.ScreenSystem;
 
 namespace EnhancedBattleTest.BannerEditor
 {
@@ -16,7 +18,6 @@ namespace EnhancedBattleTest.BannerEditor
     {
         private const int ViewOrderPriority = 15;
         private readonly BannerEditorView _bannerEditorLayer;
-        private bool _oldGameStateManagerDisabledStatus;
 
         public BannerEditorScreen(BannerEditorState bannerEditorState)
         {
@@ -76,8 +77,7 @@ namespace EnhancedBattleTest.BannerEditor
         {
             base.OnInitialize();
 
-            _oldGameStateManagerDisabledStatus = TaleWorlds.Core.Game.Current.GameStateManager.ActiveStateDisabledByUser;
-            TaleWorlds.Core.Game.Current.GameStateManager.ActiveStateDisabledByUser = true;
+            TaleWorlds.Core.Game.Current.GameStateManager.RegisterActiveStateDisableRequest(this);
         }
 
         protected override void OnFinalize()
@@ -87,7 +87,7 @@ namespace EnhancedBattleTest.BannerEditor
             _bannerEditorLayer.OnFinalize();
             if (LoadingWindow.GetGlobalLoadingWindowState())
                 LoadingWindow.DisableGlobalLoadingWindow();
-            TaleWorlds.Core.Game.Current.GameStateManager.ActiveStateDisabledByUser = _oldGameStateManagerDisabledStatus;
+            TaleWorlds.Core.Game.Current.GameStateManager.UnregisterActiveStateDisableRequest(this);
         }
 
         protected override void OnActivate()

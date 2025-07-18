@@ -1,6 +1,10 @@
 ﻿using EnhancedBattleTest.Data;
 using SandBox;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.GameState;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
 using TaleWorlds.ModuleManager;
@@ -36,7 +40,7 @@ namespace EnhancedBattleTest.GameMode
                         MBDebug.Print("Initializing new game begin...");
                         var campaign = new Campaign();
                         TaleWorlds.Core.Game.CreateGame(campaign, this);
-                        campaign.SetLoadingParameters(TaleWorlds.CampaignSystem.Campaign.GameLoadingType.NewCampaign, _seed);
+                        campaign.SetLoadingParameters(TaleWorlds.CampaignSystem.Campaign.GameLoadingType.NewCampaign);
                         MBDebug.Print("Initializing new game end...");
                     }
                     TaleWorlds.Core.Game.Current.DoLoading();
@@ -71,17 +75,21 @@ namespace EnhancedBattleTest.GameMode
 
         public override void OnLoadFinished()
         {
-            if (CampaignSiegeTestStatic.IsSiegeTestBuild)
-                CampaignSiegeTestStatic.DisableSiegeTest();
             Game.Current.GameStateManager.OnSavedGameLoadFinished();
             Game.Current.GameStateManager.CleanAndPushState((GameState)Game.Current.GameStateManager.CreateState<MapState>());
-            PartyBase.MainParty.Visuals?.SetMapIconAsDirty();
+            MapState activeState = Game.Current.GameStateManager.ActiveState as MapState;
+            string gameMenuId = activeState != null ? activeState.GameMenuId : (string)null;
+            if (!string.IsNullOrEmpty(gameMenuId))
+            {
+                PlayerEncounter.Current?.OnLoad();
+                Campaign.Current.GameMenuManager.SetNextMenu(gameMenuId);
+            }
+            PartyBase.MainParty.SetVisualAsDirty();
             TaleWorlds.CampaignSystem.Campaign.Current.CampaignInformationManager.OnGameLoaded();
             foreach (Settlement settlement in Settlement.All)
-                settlement.Party.Visuals.RefreshLevelMask(settlement.Party);
+                settlement.Party.SetLevelMaskIsDirty();
             CampaignEventDispatcher.Instance.OnGameLoadFinished();
-            if (Game.Current.GameStateManager.ActiveState is MapState activeState)
-                activeState.OnLoadingFinished();
+            activeState?.OnLoadingFinished();
 
             IsLoaded = true;
             Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
@@ -92,8 +100,8 @@ namespace EnhancedBattleTest.GameMode
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/global_strings.xml");
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/module_strings.xml");
             //gameTextManager.LoadGameTexts(BasePath.Name + "Modules/Native/ModuleData/native_strings.xml");
-            gameTextManager.LoadGameTexts(ModuleHelper.GetXmlPath(EnhancedBattleTestSubModule.ModuleId,
-                "module_strings"));
+            //gameTextManager.LoadGameTexts(ModuleHelper.GetXmlPath(EnhancedBattleTestSubModule.ModuleId,
+            //    "module_strings"));
         }
     }
 }

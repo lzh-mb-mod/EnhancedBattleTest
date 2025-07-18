@@ -18,7 +18,7 @@ namespace EnhancedBattleTest.Data.MissionData
     }
     public abstract class EnhancedBattleTestCombatant : IEnhancedBattleTestCombatant
     {
-        protected EnhancedBattleTestCombatant(TextObject name, BattleSideEnum side, BasicCultureObject basicCulture, Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
+        protected EnhancedBattleTestCombatant(TextObject name, BattleSideEnum side, BasicCultureObject basicCulture, Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner, bool isPlayerTeam)
         {
             Name = name;
             Side = side;
@@ -26,9 +26,11 @@ namespace EnhancedBattleTest.Data.MissionData
             PrimaryColorPair = primaryColorPair;
             AlternativeColorPair = alternativeColorPair;
             Banner = banner;
+            IsPlayerTeam = isPlayerTeam;
         }
 
         public abstract int GetTacticsSkillAmount();
+        public bool IsPlayerTeam { get; }
 
         public TextObject Name { get; }
         public BattleSideEnum Side { get; set; }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.SinglePlayer.Config;
-using TaleWorlds.CampaignSystem;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -25,17 +25,17 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             SPCharacters.Select(character => character.Character);
 
         public SPCombatant(PartyBase party, TextObject name, int tacticLevel, BattleSideEnum side, BasicCultureObject basicCulture,
-            Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
-            : base(name, side, basicCulture, primaryColorPair, alternativeColorPair, banner)
+            Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner, bool isPlayerTeam)
+            : base(name, side, basicCulture, primaryColorPair, alternativeColorPair, banner, isPlayerTeam)
         {
             Combatant = party;
             _tacticLevel = tacticLevel;
             General = party.General;
         }
 
-        public SPCombatant(PartyBase party, BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
+        public SPCombatant(PartyBase party, BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner, bool isPlayerTeam)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
-                side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner)
+                side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner, isPlayerTeam)
         {
             Combatant = party;
             _tacticLevel = tacticLevel;
@@ -56,7 +56,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             bool isAttacker = side == BattleSideEnum.Attacker;
             var combatant = new SPCombatant(party, side, teamConfig.TacticLevel, culture,
                 new Tuple<uint, uint>(teamConfig.Color1, teamConfig.Color2),
-                teamConfig.Banner);
+                teamConfig.Banner, isPlayerTeam);
             if (teamConfig.HasGeneral)
             {
                 bool hasPlayer = false;

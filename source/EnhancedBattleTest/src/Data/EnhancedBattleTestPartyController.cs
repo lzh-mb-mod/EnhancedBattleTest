@@ -1,5 +1,5 @@
 ﻿using EnhancedBattleTest.Config;
-using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;
 

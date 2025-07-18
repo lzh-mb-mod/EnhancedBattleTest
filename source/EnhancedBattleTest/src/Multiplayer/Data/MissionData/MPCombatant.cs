@@ -19,16 +19,16 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
         public override int NumberOfHealthyMembers => _characters.Count;
 
         public MPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture,
-            Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner)
+            Tuple<uint, uint> primaryColorPair, Tuple<uint, uint> alternativeColorPair, Banner banner, bool isPlayerTeam)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
-                side, culture, primaryColorPair, alternativeColorPair, banner)
+                side, culture, primaryColorPair, alternativeColorPair, banner, isPlayerTeam)
         {
             _tacticLevel = tacticLevel;
         }
 
-        public MPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner)
+        public MPCombatant(BattleSideEnum side, int tacticLevel, BasicCultureObject culture, Tuple<uint, uint> primaryColorPair, Banner banner, bool isPlayerTeam)
             : base(GameTexts.FindText("str_ebt_side", side == BattleSideEnum.Attacker ? "Attacker" : "Defender"),
-                side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner)
+                side, culture, primaryColorPair, new Tuple<uint, uint>(primaryColorPair.Item2, primaryColorPair.Item1), banner, isPlayerTeam)
         {
             _tacticLevel = tacticLevel;
         }
@@ -40,7 +40,7 @@ namespace EnhancedBattleTest.Multiplayer.Data.MissionData
             uint color1 = Utility.BackgroundColor(culture, isAttacker);
             uint color2 = Utility.ForegroundColor(culture, isAttacker);
             var combatant = new MPCombatant(side, teamConfig.TacticLevel, culture,
-                new Tuple<uint, uint>(color1, color2), new Banner(culture.BannerKey, color1, color2));
+                new Tuple<uint, uint>(color1, color2), new Banner(culture.BannerKey, color1, color2), isPlayerTeam);
             if (teamConfig.HasGeneral)
             {
                 bool hasPlayer = false;

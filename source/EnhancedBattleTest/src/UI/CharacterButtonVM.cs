@@ -1,9 +1,7 @@
 ﻿using EnhancedBattleTest.Config;
-using EnhancedBattleTest.UI.Basic;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest.UI
 {

@@ -21,10 +21,10 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             _attackerParty = attackerParty;
         }
 
-        public override void OnBehaviourInitialize()
+        public override void OnBehaviorInitialize()
         {
-            base.OnBehaviourInitialize();
-            _missionAgentSpawnLogic = Mission.GetMissionBehaviour<MissionAgentSpawnLogic>();
+            base.OnBehaviorInitialize();
+            _missionAgentSpawnLogic = Mission.GetMissionBehavior<MissionAgentSpawnLogic>();
         }
 
         public override void AfterStart()
@@ -35,7 +35,8 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             int attackerInitialSpawn = ofHealthyMembers2;
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Defender, true);
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Attacker, true);
-            _missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, true, true);
+            _missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, true, true, Utility.CreateSandBoxBattleWaveSpawnSettings());
         }
+
     }
 }

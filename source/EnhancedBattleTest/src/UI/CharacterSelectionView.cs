@@ -1,10 +1,10 @@
 ﻿using EnhancedBattleTest.Data;
 using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.Engine.Screens;
 using TaleWorlds.GauntletUI.Data;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.ScreenSystem;
 
 namespace EnhancedBattleTest.UI
 {
@@ -17,7 +17,6 @@ namespace EnhancedBattleTest.UI
         private IGauntletMovie _movie;
         private ScreenBase _screen;
         private GauntletLayer _gauntletLayer;
-        private bool _isLastActiveGameStateActive;
         private bool _isLastActiveGameStatePaused;
 
         public void Initialize(ScreenBase screen, CharacterCollection characterCollection, bool isMultiplayer)
@@ -45,6 +44,7 @@ namespace EnhancedBattleTest.UI
             _dataSource = null;
             _gauntletLayer = null;
             _movie = null;
+            GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
         }
 
         public void BeginSelection(CharacterSelectionData data)
@@ -56,8 +56,7 @@ namespace EnhancedBattleTest.UI
             _isLastActiveGameStatePaused = data.PauseGameActiveState;
             if (!_isLastActiveGameStatePaused)
                 return;
-            _isLastActiveGameStateActive = GameStateManager.Current.ActiveStateDisabledByUser;
-            GameStateManager.Current.ActiveStateDisabledByUser = true;
+            GameStateManager.Current.RegisterActiveStateDisableRequest(this);
             MBCommon.PauseGameEngine();
         }
 
@@ -69,7 +68,7 @@ namespace EnhancedBattleTest.UI
             RemoveLayer();
             if (!_isLastActiveGameStatePaused)
                 return;
-            GameStateManager.Current.ActiveStateDisabledByUser = _isLastActiveGameStateActive;
+            GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
             MBCommon.UnPauseGameEngine();
         }
 

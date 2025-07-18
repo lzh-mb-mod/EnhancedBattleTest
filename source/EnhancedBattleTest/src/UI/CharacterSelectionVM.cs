@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EnhancedBattleTest.Config;
+﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
 using EnhancedBattleTest.UI.Basic;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.Core;
-using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.ObjectSystem;

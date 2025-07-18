@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using EnhancedBattleTest.Data.MissionData;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using EnhancedBattleTest.Data.MissionData;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade.Diamond.Ranked;
 
 namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
 {
@@ -10,6 +12,7 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
     {
         private readonly SPCombatant _combatant;
         private PriorityQueue<float, SPSpawnableCharacter> _characters;
+        private List<SPAgentOrigin> _allAgentOrigins;
         private int _numAllocated;
         private int _numWounded;
         private int _numKilled;
@@ -26,7 +29,9 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
         {
             _combatant = combatant as SPCombatant;
             ArrangePriorities();
+            AllocateAllTroops();
         }
+
         private void ArrangePriorities()
         {
             _characters = new PriorityQueue<float, SPSpawnableCharacter>(new GenericComparer<float>());
@@ -45,32 +50,37 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             }
         }
 
+        private void AllocateAllTroops()
+        {
+            _allAgentOrigins = new List<SPAgentOrigin>();
+            int rank = 0;
+            while (!_characters.IsEmpty())
+            {
+                UniqueTroopDescriptor uniqueNo = new UniqueTroopDescriptor(TaleWorlds.Core.Game.Current.NextUniqueTroopSeed);
+                var origin = new SPAgentOrigin(_combatant, _characters.DequeueValue(), this, _combatant.Side, rank, uniqueNo);
+                ++rank;
+                _allAgentOrigins.Add(origin);
+            }
+        }
+
         public IEnumerable<IAgentOriginBase> SupplyTroops(
             int numberToAllocate)
         {
-            List<SPSpawnableCharacter> characterList = AllocateTroops(numberToAllocate);
-            EnhancedBattleTestAgentOrigin[] battleAgentOriginArray = new EnhancedBattleTestAgentOrigin[characterList.Count];
-            _numAllocated += characterList.Count;
-            for (int rank = 0; rank < battleAgentOriginArray.Length; ++rank)
+            if (numberToAllocate <= 0 || _numAllocated >= _allAgentOrigins.Count)
             {
-                UniqueTroopDescriptor uniqueNo = new UniqueTroopDescriptor(TaleWorlds.Core.Game.Current.NextUniqueTroopSeed);
-                battleAgentOriginArray[rank] = new SPAgentOrigin(_combatant, characterList[rank], this, _combatant.Side,
-                    rank, uniqueNo);
-            }
-            if (battleAgentOriginArray.Length < numberToAllocate)
                 AnyTroopRemainsToBeSupplied = false;
-            return battleAgentOriginArray;
+                return Enumerable.Empty<IAgentOriginBase>();
+            }
+            if (numberToAllocate >= _allAgentOrigins.Count - _numAllocated)
+            {
+                numberToAllocate = _allAgentOrigins.Count - _numAllocated;
+                AnyTroopRemainsToBeSupplied = false;
+            }
+            var result = _allAgentOrigins.Skip(_numAllocated).Take(numberToAllocate);
+            _numAllocated += numberToAllocate;
+            return result;
         }
 
-        private List<SPSpawnableCharacter> AllocateTroops(int numberToAllocate)
-        {
-            if (numberToAllocate > _characters.Count)
-                numberToAllocate = _characters.Count;
-            List<SPSpawnableCharacter> basicCharacterObjectList = new List<SPSpawnableCharacter>();
-            for (int index = 0; index < numberToAllocate; ++index)
-                basicCharacterObjectList.Add(_characters.DequeueValue());
-            return basicCharacterObjectList;
-        }
         public void OnTroopWounded()
         {
             ++_numWounded;
@@ -86,5 +96,20 @@ namespace EnhancedBattleTest.SinglePlayer.Data.MissionData
             ++_numRouted;
         }
 
+        public IEnumerable<IAgentOriginBase> GetAllTroops()
+        {
+            return _allAgentOrigins;
+        }
+
+        public BasicCharacterObject GetGeneralCharacter()
+        {
+            return _combatant.General;
+
+        }
+
+        public int GetNumberOfPlayerControllableTroops()
+        {
+            return _combatant.IsPlayerTeam ? _combatant.NumberOfHealthyMembers : 0;
+        }
     }
 }

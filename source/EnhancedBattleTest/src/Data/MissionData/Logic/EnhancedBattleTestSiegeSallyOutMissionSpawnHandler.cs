@@ -26,29 +26,29 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             };
         }
 
-        public override void OnBehaviourInitialize()
+        public override void OnBehaviorInitialize()
         {
-            base.OnBehaviourInitialize();
-            _missionAgentSpawnLogic = Mission.GetMissionBehaviour<MissionAgentSpawnLogic>();
+            base.OnBehaviorInitialize();
+            _missionAgentSpawnLogic = Mission.GetMissionBehavior<MissionAgentSpawnLogic>();
         }
 
         public override void AfterStart()
         {
-            int ofHealthyMembers1 = _battleCombatants[0].NumberOfHealthyMembers;
-            int ofHealthyMembers2 = _battleCombatants[1].NumberOfHealthyMembers;
-            int defenderInitialSpawn = MBMath.Floor(ofHealthyMembers1);
-            int attackerInitialSpawn = MBMath.Floor(ofHealthyMembers2 * 0.1f);
-            _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Defender, true);
-            _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Attacker, true);
-            _missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, false, false);
-            _missionAgentSpawnLogic.ReserveReinforcement(BattleSideEnum.Attacker, ofHealthyMembers2 - attackerInitialSpawn);
+            //int ofHealthyMembers1 = _battleCombatants[0].NumberOfHealthyMembers;
+            //int ofHealthyMembers2 = _battleCombatants[1].NumberOfHealthyMembers;
+            //int defenderInitialSpawn = MathF.Floor(ofHealthyMembers1);
+            //int attackerInitialSpawn = MathF.Floor(ofHealthyMembers2 * 0.1f);
+            //_missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Defender, true);
+            //_missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Attacker, true);
+            //_missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, false, false);
+            //_missionAgentSpawnLogic.ReserveReinforcement(BattleSideEnum.Attacker, ofHealthyMembers2 - attackerInitialSpawn);
         }
 
         public override void OnMissionTick(float dt)
         {
             if (!CheckTimer(dt))
                 return;
-            _missionAgentSpawnLogic.CheckReinforcement(Math.Max(MBMath.Floor(_battleCombatants[1].NumberOfHealthyMembers * 0.07f), 5));
+            //_missionAgentSpawnLogic.CheckReinforcement(Math.Max(MBMath.Floor(_battleCombatants[1].NumberOfHealthyMembers * 0.07f), 5));
         }
 
         private bool CheckTimer(float dt)

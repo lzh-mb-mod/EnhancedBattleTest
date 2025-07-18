@@ -11,7 +11,6 @@ using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
 using Module = TaleWorlds.MountAndBlade.Module;
-using MultiplayerGame = EnhancedBattleTest.GameMode.MultiplayerGame;
 
 namespace EnhancedBattleTest
 {
@@ -19,7 +18,7 @@ namespace EnhancedBattleTest
     {
         private readonly Harmony harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
         private readonly MethodInfo original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
-        private readonly MethodInfo prefix = typeof(Patch_MissionAgentSpawnLogic).GetMethod("SpawnTroops_Prefix");
+        private readonly MethodInfo prefix = typeof(Patch_MissionAgentSpawnLogic).GetMethod(nameof(Patch_MissionAgentSpawnLogic.SpawnTroops_Prefix));
         public static EnhancedBattleTestSubModule Instance { get; private set; }
 
         public static string ModuleId = "EnhancedBattleTest";
@@ -34,6 +33,7 @@ namespace EnhancedBattleTest
         {
             base.OnSubModuleLoad();
             EnhancedBattleTestSubModule.Instance = this;
+            Module.CurrentModule.GlobalTextManager.LoadGameTexts();
             /*
             Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTMultiplayerTest",
                 new TextObject("{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test"), 3,
@@ -56,6 +56,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameStart(game, gameStarterObject);
 
+            game.GameTextManager.LoadGameTexts();
             gameStarterObject.AddModel(new EnhancedBattleTestMoraleModel());
         }
 
@@ -69,7 +70,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameInitializationFinished(game);
 
-            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
+            if (/*game.GameType is MultiplayerGame ||*/ game.GameType is Campaign)
             {
                 ApplyHarmonyPatch();
             }
@@ -79,7 +80,7 @@ namespace EnhancedBattleTest
         {
             base.OnGameEnd(game);
 
-            if (game.GameType is MultiplayerGame || game.GameType is Campaign)
+            if (/*game.GameType is MultiplayerGame ||*/ game.GameType is Campaign)
             {
                 Unpatch();
             }

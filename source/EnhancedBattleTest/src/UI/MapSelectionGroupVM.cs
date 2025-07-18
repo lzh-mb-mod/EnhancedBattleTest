@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
+using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade.CustomBattle.CustomBattle;
@@ -17,6 +18,7 @@ namespace EnhancedBattleTest.UI
         private bool _isCurrentMapSiege;
         private bool _isSallyOutSelected;
         private string _searchText;
+        private SelectorVM<MapItemVM> _mapSelection;
         private SelectorVM<SceneLevelItemVM> _sceneLevelSelection;
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
         private SelectorVM<SeasonItemVM> _seasonSelection;
@@ -66,6 +68,7 @@ namespace EnhancedBattleTest.UI
             _battleMaps = new List<MapItemVM>();
             _villageMaps = new List<MapItemVM>();
             _siegeMaps = new List<MapItemVM>();
+            this.MapSelection = new SelectorVM<MapItemVM>(0, new Action<SelectorVM<MapItemVM>>(this.OnMapSelection));
             WallHitpointSelection = new SelectorVM<WallHitpointItemVM>(0, OnWallHitpointSelection);
             SceneLevelSelection = new SelectorVM<SceneLevelItemVM>(0, OnSceneLevelSelection);
             SeasonSelection = new SelectorVM<SeasonItemVM>(0, OnSeasonSelection);
@@ -115,7 +118,7 @@ namespace EnhancedBattleTest.UI
             _siegeMaps.Clear();
             foreach (var sceneData in _scenes)
             {
-                MapItemVM mapItemVm = new MapItemVM(sceneData.Name.ToString(), sceneData.Id, OnMapSelection);
+                MapItemVM mapItemVm = new MapItemVM(sceneData.Name.ToString(), sceneData.Id);
                 if (sceneData.IsVillageMap)
                     _villageMaps.Add(mapItemVm);
                 else if (sceneData.IsSiegeMap)
@@ -129,10 +132,11 @@ namespace EnhancedBattleTest.UI
             _siegeMaps.Sort(comparer);
         }
 
-        private void OnMapSelection(MapItemVM item)
+
+        private void OnMapSelection(SelectorVM<MapItemVM> selector)
         {
-            SelectedMap = item;
-            SearchText = item.MapName;
+            SelectedMap = selector.SelectedItem;
+            SearchText = selector.SelectedItem.MapName;
         }
 
         private void OnWallHitpointSelection(SelectorVM<WallHitpointItemVM> selector)
@@ -195,7 +199,7 @@ namespace EnhancedBattleTest.UI
             if (mapSearchResults != null && mapSearchResults.Count > 0)
             {
                 SearchText = "";
-                MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)].ExecuteSelection();
+                SelectedMap = MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)];
             }
             SceneLevelSelection.ExecuteRandomize();
             SeasonSelection.ExecuteRandomize();
@@ -208,7 +212,8 @@ namespace EnhancedBattleTest.UI
             // ISSUE: explicit non-virtual call
             if (mapSearchResults != null && mapSearchResults.Count > 0)
             {
-                MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)].ExecuteSelection();
+                SelectedMap = MapSearchResults[MBRandom.RandomInt(MapSearchResults.Count)];
+                SearchText = SelectedMap.MapName;
             }
         }
 
@@ -234,6 +239,21 @@ namespace EnhancedBattleTest.UI
                         MapSearchResults.Add(map);
                 }
                 _availableMaps.ForEach(m => m.UpdateSearchedText(_searchText));
+            }
+        }
+
+
+
+        [DataSourceProperty]
+        public SelectorVM<MapItemVM> MapSelection
+        {
+            get => this._mapSelection;
+            set
+            {
+                if (value == this._mapSelection)
+                    return;
+                this._mapSelection = value;
+                this.OnPropertyChangedWithValue<SelectorVM<MapItemVM>>(value, nameof(MapSelection));
             }
         }
 

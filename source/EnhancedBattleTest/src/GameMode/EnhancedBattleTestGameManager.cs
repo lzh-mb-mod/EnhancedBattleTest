@@ -57,5 +57,9 @@ namespace EnhancedBattleTest.GameMode
             base.OnLoadFinished();
             TaleWorlds.Core.Game.Current.GameStateManager.CleanAndPushState(TaleWorlds.Core.Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
         }
+
+        public override void OnAfterCampaignStart(Game game)
+        {
+        }
     }
 }

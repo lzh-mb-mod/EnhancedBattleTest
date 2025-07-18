@@ -75,18 +75,11 @@ namespace EnhancedBattleTest.Data.MissionData
         {
         }
 
-        public abstract Agent SpawnTroop(
-            BattleSideEnum side,
-            bool hasFormation,
-            bool spawnWithHorse,
-            bool isReinforcement,
-            bool enforceSpawningOnInitialPoint,
-            int formationTroopCount,
-            int formationTroopIndex,
-            bool isAlarmed,
-            bool wieldInitialWeapons,
-            bool forceDismounted = false,
-            string specialActionSet = null,
-            MatrixFrame? initFrame = null);
+        public abstract Agent SpawnTroop(BattleSideEnum side, bool hasFormation, bool spawnWithHorse, bool isReinforcement,
+            int formationTroopCount, int formationTroopIndex, bool isAlarmed,
+            bool wieldInitialWeapons, bool forceDismounted = false,
+            Vec3? initialPosition = null, Vec2? initialDirection = null, string specialActionSet = null,
+            ItemObject bannerItem = null,
+            FormationClass formationIndex = FormationClass.NumberOfAllFormations);
     }
 }
