@@ -28,7 +28,7 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        public bool ShouldShowBanner => !EnhancedBattleTestSubModule.IsMultiplayer;
+        public bool ShouldShowBanner => true;
 
         public TextVM TacticText { get; }
         public NumberVM<float> TacticLevel { get; }
@@ -90,7 +90,8 @@ namespace EnhancedBattleTest.UI
         public void EditBanner()
         {
             BannerEditorState.Config = _config;
-            BannerEditorState.OnDone = () => Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
+            BannerEditorState.OnDone = () =>
+                Banner = new ImageIdentifierVM(BannerCode.CreateFrom(_config.BannerKey), true);
             Game.Current.GameStateManager.PushState(Game.Current.GameStateManager.CreateState<BannerEditorState>());
         }
 

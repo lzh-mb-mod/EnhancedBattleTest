@@ -1,17 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using EnhancedBattleTest.Config;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
-using Campaign = EnhancedBattleTest.GameMode.Campaign;
 
 namespace EnhancedBattleTest
 {
@@ -42,58 +38,6 @@ namespace EnhancedBattleTest
         private static void DisplayMessageImpl(string str, Color color)
         {
             InformationManager.DisplayMessage(new InformationMessage("Enhanced Battle Test: " + str, color));
-        }
-
-        //TODO: multilplayer related
-        /*
-        public static List<MPPerkObject> GetAllSelectedPerks(MultiplayerClassDivisions.MPHeroClass mpHeroClass,
-            int[] selectedPerks)
-        {
-            List<MPPerkObject> selectedPerkList = new List<MPPerkObject>();
-            for (int i = 0; i < selectedPerks.Length; ++i)
-            {
-                var perks = mpHeroClass.GetAllAvailablePerksForListIndex(i);
-                if (perks.IsEmpty())
-                    continue;
-                selectedPerkList.Add(perks[selectedPerks[i]]);
-            }
-
-            return selectedPerkList;
-        }
-
-        public static IEnumerable<PerkEffect> SelectRandomPerkEffectsForPerks(
-            MultiplayerClassDivisions.MPHeroClass mpHeroClass,
-            bool isPlayer,
-            PerkType perkType,
-            int[] selectedPerks)
-        {
-            var selectedPerkList = GetAllSelectedPerks(mpHeroClass, selectedPerks);
-            return MPPerkObject.SelectRandomPerkEffectsForPerks(isPlayer, perkType, selectedPerkList);
-        }
-        */
-
-        public static Equipment GetNewEquipmentsForPerks(
-            MultiplayerClassDivisions.MPHeroClass heroClass,
-            bool isHero,
-            int firstPerk,
-            int secondPerk,
-            bool fixedEquipment, int seed = -1)
-        {
-            //TODO: multilplayer related
-            throw new NotImplementedException();
-            /*
-            BasicCharacterObject character = isHero ? heroClass.HeroCharacter : heroClass.TroopCharacter;
-            Equipment equipment = fixedEquipment
-                ? character.Equipment.Clone()
-                : Equipment.GetRandomEquipmentElements(character, false, false, seed);
-            foreach (PerkEffect perkEffectsForPerk in SelectRandomPerkEffectsForPerks(heroClass, isHero,
-                PerkType.PerkAlternativeEquipment, new[]
-                {
-                    firstPerk, secondPerk
-                }))
-                equipment[perkEffectsForPerk.NewItemIndex] = perkEffectsForPerk.NewItem.EquipmentElement;
-            return equipment;
-            */
         }
 
         public static uint ClothingColor1(BasicCultureObject culture, bool isAttacker)
@@ -190,69 +134,6 @@ namespace EnhancedBattleTest
         {
         }
 
-        public static List<CharacterObject> OrderHeroesByPriority(TeamConfig teamConfig)
-        {
-            var characters = teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
-                troopGroupConfig.Troops.Select(troopConfig => troopConfig.Character));
-            if (teamConfig.HasGeneral)
-                characters = characters.Concat(teamConfig.Generals.Troops.Select(troopConfig => troopConfig.Character));
-            return characters.Select(character => character.CharacterObject as CharacterObject)
-                .Where(character => character != null && character.IsHero).Select(character => character.HeroObject)
-                .ToList().ConvertAll(hero => hero.CharacterObject);
-        }
-
-        public static void SetMapEvents(PartyBase attacker, PartyBase defender, BattleType battleType)
-        {
-            try
-            {
-                var mapEvent = attacker.MapEvent;
-                if (mapEvent != null)
-                {
-                    mapEvent.FinalizeEvent();
-                    MBObjectManager.Instance.UnregisterObject(mapEvent);
-                    var mapEvents = (List<MapEvent>)
-                        typeof(MapEventManager)
-                            .GetField("mapEvents", BindingFlags.Instance | BindingFlags.NonPublic)
-                            ?.GetValue(Campaign.Current.MapEventManager);
-                    if (mapEvents != null)
-                    {
-                        var index = mapEvents.FindIndex(m => m == mapEvent);
-                        if (index >= 0 && index < mapEvents.Count)
-                            mapEvents.RemoveAt(index);
-                    }
-                }
-                FieldBattleEventComponent.CreateFieldBattleEvent(attacker, defender);
-            }
-            catch (Exception e)
-            {
-                DisplayMessage(e.ToString());
-            }
-        }
-
-        public static void FillPartyMembers(PartyBase party, BattleSideEnum side, BasicCultureObject culture,
-                TeamConfig teamConfig, bool isPlayerTeam)
-        {
-            party.MemberRoster.Clear();
-            party.MemberRoster.Add(teamConfig.Generals.Troops.Select(troopConfig => 
-                new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject),
-                    teamConfig.HasGeneral ? RosterTroopState.Active : RosterTroopState.WoundedInThisBattle)).ToArray());
-
-            party.MemberRoster.Add(teamConfig.TroopGroups.SelectMany(troopGroupConfig =>
-                troopGroupConfig.Troops.SelectMany(troopConfig =>
-                    Enumerable.Repeat(
-                        new FlattenedTroopRosterElement(GetCharacterObject(troopConfig.Character.CharacterObject)),
-                        troopConfig.Number))));
-        }
-
-        public static CharacterObject GetCharacterObject(BasicCharacterObject character)
-        {
-            var characterObject = character as CharacterObject;
-            if (characterObject == null)
-                return null;
-            if (characterObject.IsHero)
-                characterObject.HeroObject.HitPoints = characterObject.MaxHitPoints();
-            return characterObject;
-        }
         public static MissionSpawnSettings CreateSandBoxBattleWaveSpawnSettings()
         {
             return new MissionSpawnSettings(MissionSpawnSettings.InitialSpawnMethod.BattleSizeAllocating, MissionSpawnSettings.ReinforcementTimingMethod.GlobalTimer, MissionSpawnSettings.ReinforcementSpawnMethod.Wave, 3f, reinforcementWavePercentage: 0.5f, maximumReinforcementWaveCount: BannerlordConfig.GetReinforcementWaveCount());

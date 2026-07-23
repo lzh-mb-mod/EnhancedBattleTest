@@ -9,8 +9,6 @@ namespace EnhancedBattleTest.SinglePlayer.Data
     {
         public override List<string> Cultures { get; } = new List<string>();
         public override Dictionary<string, List<Group>> GroupsInCultures { get; } = new Dictionary<string, List<Group>>();
-        public override bool IsMultiplayer => false;
-
         public override void Initialize()
         {
             Cultures.Clear();

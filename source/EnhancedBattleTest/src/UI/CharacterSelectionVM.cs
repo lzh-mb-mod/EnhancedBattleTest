@@ -53,7 +53,10 @@ namespace EnhancedBattleTest.UI
         public CharactersInGroupVM Characters { get; }
 
 
-        public CharacterSelectionVM(CharacterCollection characterCollection, Action<CharacterSelectionData> beginSelection, Action endSelection, bool isMultiplayer)
+        public CharacterSelectionVM(
+            CharacterCollection characterCollection,
+            Action<CharacterSelectionData> beginSelection,
+            Action endSelection)
         {
             _beginSelection = beginSelection;
             _endSelection = endSelection;

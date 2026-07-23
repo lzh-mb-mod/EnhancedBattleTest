@@ -1,4 +1,4 @@
-﻿using EnhancedBattleTest.UI.MissionUI;
+using EnhancedBattleTest.UI.MissionUI;
 using SandBox.View.Missions;
 using SandBox.ViewModelCollection;
 using System;
@@ -15,19 +15,22 @@ using TaleWorlds.MountAndBlade.ViewModelCollection.OrderOfBattle;
 namespace EnhancedBattleTest.Data.MissionData.View
 {
     [ViewCreatorModule]
-    public class EnhancedBattleTestViews
+    public static class EnhancedBattleTestViews
     {
         [ViewMethod("EnhancedBattleTestFieldBattle")]
         public static MissionView[] OpenBattleMission(Mission mission)
         {
             MissionView missionOrderUiHandler = ViewCreator.CreateMissionOrderUIHandler();
-            ISiegeDeploymentView siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
+            var siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
 
             return new List<MissionView>
             {
+                new MissionCampaignView(),
                 ViewCreator.CreateMissionSingleplayerEscapeMenu(false),
                 ViewCreator.CreateMissionAgentLabelUIHandler(mission),
-                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
+                ViewCreator.CreateMissionBattleScoreUIHandler(
+                    mission,
+                    new EnhancedBattleTestScoreBoardVM()),
                 ViewCreator.CreateOptionsUIHandler(),
                 ViewCreator.CreateMissionMainAgentEquipDropView(mission),
                 missionOrderUiHandler,
@@ -39,7 +42,9 @@ namespace EnhancedBattleTest.Data.MissionData.View
                 ViewCreator.CreateMissionAgentLockVisualizerView(mission),
                 new MusicBattleMissionView(false),
                 new DeploymentMissionView(),
-                new MissionDeploymentBoundaryMarker((IEntityFactory) new BorderFlagEntityFactory("swallowtail_banner")),
+                new MissionDeploymentBoundaryMarker(
+                    new BorderFlagEntityFactory("swallowtail_banner"),
+                    2f),
                 ViewCreator.CreateMissionBoundaryCrossingView(),
                 new MissionBoundaryWallView(),
                 ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
@@ -48,57 +53,16 @@ namespace EnhancedBattleTest.Data.MissionData.View
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                //new MissionPreloadView(),
                 new EnhancedBattleTestPreloadView(),
                 new MissionCampaignBattleSpectatorView(),
                 ViewCreator.CreatePhotoModeView(),
-                new MissionEntitySelectionUIHandler(new Action<GameEntity>(siegeDeploymentView.OnEntitySelection), new Action<GameEntity>(siegeDeploymentView.OnEntityHover)),
-                ViewCreator.CreateMissionOrderOfBattleUIHandler(mission, (OrderOfBattleVM) new SPOrderOfBattleVM()),
-                //new EnhancedBattleTestPreloadView()
+                new MissionEntitySelectionUIHandler(
+                    new Action<GameEntity>(siegeDeploymentView.OnEntitySelection),
+                    new Action<GameEntity>(siegeDeploymentView.OnEntityHover)),
+                ViewCreator.CreateMissionOrderOfBattleUIHandler(
+                    mission,
+                    new SPOrderOfBattleVM())
             }.ToArray();
-        }
-        [ViewMethod("EnhancedBattleTestSiegeBattle")]
-        public static MissionView[] OpenSiegeBattleMission(Mission mission)
-        {
-            MissionView missionOrderUiHandler = ViewCreator.CreateMissionOrderUIHandler();
-            ISiegeDeploymentView siegeDeploymentView = missionOrderUiHandler as ISiegeDeploymentView;
-            List<MissionView> missionViewList = new List<MissionView>
-            {   new MissionCampaignView(),
-                new MissionConversationCameraView(),
-                ViewCreator.CreateMissionSingleplayerEscapeMenu(false),
-                ViewCreator.CreateOptionsUIHandler(),
-                ViewCreator.CreateMissionMainAgentEquipDropView(mission),
-                ViewCreator.CreateMissionAgentLabelUIHandler(mission),
-                ViewCreator.CreateMissionBattleScoreUIHandler(mission, new EnhancedBattleTestScoreBoardVM()),
-                ViewCreator.CreateMissionAgentStatusUIHandler(mission),
-                ViewCreator.CreateMissionMainAgentEquipmentController(mission),
-                ViewCreator.CreateMissionMainAgentCheerBarkControllerView(mission),
-                ViewCreator.CreateMissionAgentLockVisualizerView(mission),
-                missionOrderUiHandler,
-                new OrderTroopPlacer(),
-                new MissionSingleplayerViewHandler(),
-                new MusicBattleMissionView(true),
-                new DeploymentMissionView(),
-                new MissionDeploymentBoundaryMarker((IEntityFactory) new BorderFlagEntityFactory("swallowtail_banner")),
-                ViewCreator.CreateMissionBoundaryCrossingView(),
-                ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
-                ViewCreator.CreatePhotoModeView(),
-                ViewCreator.CreateMissionFormationMarkerUIHandler(mission),
-                new MissionFormationTargetSelectionHandler(),
-                ViewCreator.CreateMissionSpectatorControlView(mission),
-                ViewCreator.CreateMissionBoundaryCrossingView(),
-                ViewCreator.CreateSingleplayerMissionKillNotificationUIHandler(),
-                new MissionEntitySelectionUIHandler(siegeDeploymentView.OnEntitySelection,
-                    siegeDeploymentView.OnEntityHover),
-                ViewCreator.CreateMissionSpectatorControlView(mission),
-                new MissionItemContourControllerView(),
-                new MissionAgentContourControllerView(),
-                new EnhancedBattleTestPreloadView(),
-                new MissionCampaignBattleSpectatorView(),
-                ViewCreator.CreateMissionOrderOfBattleUIHandler(mission, (OrderOfBattleVM) new SPOrderOfBattleVM()),
-                ViewCreator.CreateMissionSiegeEngineMarkerView(mission)
-            };
-            return missionViewList.ToArray();
         }
     }
 }

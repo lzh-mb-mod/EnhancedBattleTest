@@ -11,10 +11,10 @@ namespace EnhancedBattleTest.Config
             Troops = new List<TroopConfig>();
         }
 
-        public TroopGroupConfig(bool isMultiplayer, bool isGeneralTroopGroup = false)
+        public TroopGroupConfig(bool isGeneralTroopGroup)
         {
             Troops = isGeneralTroopGroup
-                ? new List<TroopConfig>(1) {new TroopConfig(isMultiplayer)}
+                ? new List<TroopConfig>(1) {new TroopConfig()}
                 : new List<TroopConfig>();
         }
     }

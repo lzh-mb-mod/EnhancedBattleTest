@@ -1,5 +1,6 @@
 .vs/
 source/package/
+source/EnhancedBattleTest/package/
 source/*/bin/
 source/*/obj/
 *.DotSettings.user

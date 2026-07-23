@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using EnhancedBattleTest.Multiplayer.Data;
+using System.Collections.Generic;
 using EnhancedBattleTest.SinglePlayer.Data;
 
 namespace EnhancedBattleTest.Data
@@ -12,18 +11,9 @@ namespace EnhancedBattleTest.Data
 
         public abstract void Initialize();
 
-        public abstract bool IsMultiplayer { get; }
-
-        public static CharacterCollection Create(bool isMultiplayer)
+        public static CharacterCollection Create()
         {
-            if (isMultiplayer)
-            {
-                return new MPCharacterCollection();
-            }
-            else
-            {
-                return new SPCharacterCollection();
-            }
+            return new SPCharacterCollection();
         }
     }
 }

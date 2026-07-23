@@ -1,21 +1,18 @@
-﻿using TaleWorlds.Core;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.Data.MissionData.Logic
 {
-    public class EnhancedBattleTestMissionSpawnHandler : MissionLogic
+    public sealed class EnhancedBattleTestMissionSpawnHandler : MissionLogic
     {
+        private readonly PartyBase _defenderParty;
+        private readonly PartyBase _attackerParty;
         private MissionAgentSpawnLogic _missionAgentSpawnLogic;
-        private readonly IEnhancedBattleTestCombatant _defenderParty;
-        private readonly IEnhancedBattleTestCombatant _attackerParty;
-
-        public EnhancedBattleTestMissionSpawnHandler()
-        {
-        }
 
         public EnhancedBattleTestMissionSpawnHandler(
-            IEnhancedBattleTestCombatant defenderParty,
-            IEnhancedBattleTestCombatant attackerParty)
+            PartyBase defenderParty,
+            PartyBase attackerParty)
         {
             _defenderParty = defenderParty;
             _attackerParty = attackerParty;
@@ -24,19 +21,25 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
         public override void OnBehaviorInitialize()
         {
             base.OnBehaviorInitialize();
-            _missionAgentSpawnLogic = Mission.GetMissionBehavior<MissionAgentSpawnLogic>();
+            _missionAgentSpawnLogic =
+                Mission.GetMissionBehavior<MissionAgentSpawnLogic>();
         }
 
         public override void AfterStart()
         {
-            int ofHealthyMembers1 = _defenderParty.NumberOfHealthyMembers;
-            int ofHealthyMembers2 = _attackerParty.NumberOfHealthyMembers;
-            int defenderInitialSpawn = ofHealthyMembers1;
-            int attackerInitialSpawn = ofHealthyMembers2;
+            int defenderCount = _defenderParty.NumberOfHealthyMembers;
+            int attackerCount = _attackerParty.NumberOfHealthyMembers;
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Defender, true);
             _missionAgentSpawnLogic.SetSpawnHorses(BattleSideEnum.Attacker, true);
-            _missionAgentSpawnLogic.InitWithSinglePhase(ofHealthyMembers1, ofHealthyMembers2, defenderInitialSpawn, attackerInitialSpawn, true, true, Utility.CreateSandBoxBattleWaveSpawnSettings());
+            MissionSpawnSettings spawnSettings = MissionSpawnSettings.CreateDefaultSpawnSettings();
+            _missionAgentSpawnLogic.InitWithSinglePhase(
+                defenderCount,
+                attackerCount,
+                defenderCount,
+                attackerCount,
+                true,
+                true,
+                in spawnSettings);
         }
-
     }
 }

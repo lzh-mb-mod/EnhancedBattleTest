@@ -155,7 +155,7 @@ namespace EnhancedBattleTest.UI
         public EnhancedBattleTestVM(EnhancedBattleTestState state, TextObject title)
         {
             _state = state;
-            _config = BattleConfig.Deserialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            _config = BattleConfig.Deserialize();
             BattleConfig.Instance = _config;
             _scenes = _state.Scenes;
 
@@ -265,9 +265,9 @@ namespace EnhancedBattleTest.UI
         public void ExecuteBack()
         {
             ApplyConfig();
-            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            _config.Serialize();
             _config = null;
-            MBGameManager.EndGame();
+            Game.Current.GameStateManager.PopState();
         }
 
         public void ExecuteStart()
@@ -276,14 +276,19 @@ namespace EnhancedBattleTest.UI
                 return;
             if (!ApplyConfig())
                 return;
+            if (_config.BattleTypeConfig.BattleType == BattleType.Siege)
+            {
+                Utility.DisplayLocalizedText("str_ebt_siege_unsupported");
+                return;
+            }
 
             var sceneData = GetMap();
             if (sceneData == null)
                 return;
-            _config.Serialize(EnhancedBattleTestSubModule.IsMultiplayer);
+            _config.Serialize();
             GameTexts.SetVariable("MapName", sceneData.Name);
             Utility.DisplayLocalizedText("str_ebt_current_map");
-            EnhancedBattleTestPartyController.BattleConfig = _config;
+            Game.Current.GameStateManager.PopState();
             EnhancedBattleTestMissions.OpenMission(_config, sceneData.SceneID);
         }
 

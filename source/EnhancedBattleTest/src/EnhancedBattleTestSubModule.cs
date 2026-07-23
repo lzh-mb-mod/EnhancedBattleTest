@@ -5,100 +5,62 @@ using EnhancedBattleTest.UI;
 using HarmonyLib;
 using System;
 using System.IO;
-using System.Reflection;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
-using Module = TaleWorlds.MountAndBlade.Module;
 
 namespace EnhancedBattleTest
 {
     public class EnhancedBattleTestSubModule : MBSubModuleBase
     {
-        private readonly Harmony harmony = new Harmony("MissionAgentSpawnLogicForMpPatch");
-        private readonly MethodInfo original = typeof(MissionAgentSpawnLogic).GetNestedType("MissionSide", BindingFlags.NonPublic).GetMethod("SpawnTroops", BindingFlags.Instance | BindingFlags.Public);
-        private readonly MethodInfo prefix = typeof(Patch_MissionAgentSpawnLogic).GetMethod(nameof(Patch_MissionAgentSpawnLogic.SpawnTroops_Prefix));
+        private const string HarmonyId = "mod.enhancedbattletest";
+        private Harmony _harmony;
+
         public static EnhancedBattleTestSubModule Instance { get; private set; }
 
-        public static string ModuleId = "EnhancedBattleTest";
+        public const string ModuleId = "EnhancedBattleTest";
 
         public static string ModuleFolderPath = Path.Combine(BasePath.Name, "Modules", ModuleId);
-
-        public static bool IsMultiplayer;
 
         public event Action<CharacterSelectionData> OnSelectCharacter;
 
         protected override void OnSubModuleLoad()
         {
             base.OnSubModuleLoad();
-            EnhancedBattleTestSubModule.Instance = this;
-            Module.CurrentModule.GlobalTextManager.LoadGameTexts();
-            /*
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTMultiplayerTest",
-                new TextObject("{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test"), 3,
-                () =>
-                {
-                    IsMultiplayer = true;
-                    MBGameManager.StartNewGame(new EnhancedBattleTestGameManager<MultiplayerGame>());
-                }, false));
-            */
-            Module.CurrentModule.AddInitialStateOption(new InitialStateOption("EBTSingleplayerTest",
-                new TextObject("{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test"), 3,
-                () =>
-                {
-                    IsMultiplayer = false;
-                    MBGameManager.StartNewGame(new EnhancedBattleTestSingleplayerGameManager());
-                }, () => (false, new TextObject())));
+            Instance = this;
+            _harmony = new Harmony(HarmonyId);
+            _harmony.PatchAll(typeof(EnhancedBattleTestMapMenuPatch).Assembly);
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
         {
             base.OnGameStart(game, gameStarterObject);
 
-            game.GameTextManager.LoadGameTexts();
-            gameStarterObject.AddModel(new EnhancedBattleTestMoraleModel());
+            if (gameStarterObject is CampaignGameStarter campaignGameStarter)
+                campaignGameStarter.AddBehavior(new EnhancedBattleTestCampaignBehavior());
         }
 
         protected override void OnSubModuleUnloaded()
         {
-            EnhancedBattleTestSubModule.Instance = (EnhancedBattleTestSubModule)null;
+            EnhancedBattleTestPartyController.Cleanup();
+            _harmony?.UnpatchAll(HarmonyId);
+            Instance = null;
             base.OnSubModuleUnloaded();
         }
 
-        public override void OnGameInitializationFinished(Game game)
+        public static void OpenBattleTest()
         {
-            base.OnGameInitializationFinished(game);
+            if (Campaign.Current == null)
+                return;
 
-            if (/*game.GameType is MultiplayerGame ||*/ game.GameType is Campaign)
-            {
-                ApplyHarmonyPatch();
-            }
-        }
-
-        public override void OnGameEnd(Game game)
-        {
-            base.OnGameEnd(game);
-
-            if (/*game.GameType is MultiplayerGame ||*/ game.GameType is Campaign)
-            {
-                Unpatch();
-            }
+            Game.Current.GameStateManager.PushState(
+                Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
         }
 
         public void SelectCharacter(CharacterSelectionData data)
         {
             OnSelectCharacter?.Invoke(data);
-        }
-
-        private void ApplyHarmonyPatch()
-        {
-            harmony.Patch(original, prefix: new HarmonyMethod(prefix));
-        }
-
-        private void Unpatch()
-        {
-            harmony.UnpatchAll(harmony.Id);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace EnhancedBattleTest.GameMode
         private const ForestDensity DefaultForestDensity = ForestDensity.None;
 
         public override bool IsMusicMenuState => true;
+        public override bool IsMenuState => true;
         public List<SceneData> Scenes { get; private set; } = new List<SceneData>();
 
         public EnhancedBattleTestState()

@@ -19,14 +19,17 @@ namespace EnhancedBattleTest.UI
         private GauntletLayer _gauntletLayer;
         private bool _isLastActiveGameStatePaused;
 
-        public void Initialize(ScreenBase screen, CharacterCollection characterCollection, bool isMultiplayer)
+        public void Initialize(ScreenBase screen, CharacterCollection characterCollection)
         {
             if (!_isInitialized)
             {
                 _isInitialized = true;
                 _screen = screen;
                 _characterCollection = characterCollection;
-                _dataSource = new CharacterSelectionVM(_characterCollection, BeginSelection, EndSelection, isMultiplayer);
+                _dataSource = new CharacterSelectionVM(
+                    _characterCollection,
+                    BeginSelection,
+                    EndSelection);
             }
 
             _isActive = false;

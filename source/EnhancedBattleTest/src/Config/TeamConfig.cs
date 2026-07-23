@@ -16,7 +16,7 @@ namespace EnhancedBattleTest.Config
         }
 
         [field: XmlIgnore]
-        public TroopGroupConfig Generals { get; set; } = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+        public TroopGroupConfig Generals { get; set; } = new TroopGroupConfig();
 
         public bool HasGeneral;
 
@@ -42,7 +42,7 @@ namespace EnhancedBattleTest.Config
         public TeamConfig()
         {
             for (int i = 0; i < TroopGroups.Length; ++i)
-                TroopGroups[i] = new TroopGroupConfig(EnhancedBattleTestSubModule.IsMultiplayer);
+                TroopGroups[i] = new TroopGroupConfig();
         }
     }
 }

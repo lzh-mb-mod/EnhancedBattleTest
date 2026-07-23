@@ -5,7 +5,6 @@
     <tag language="Türkçe" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_multiplayerbattleoption" text="Çok Oyunculu Savaş Testi" />
     <string id="EnhancedBattleTest_singleplayerbattleoption" text="Tek Oyunculu Savaş Testi" />
 
     <string id="EnhancedBattleTest_battletype" text="Savaş Tipi" />
@@ -58,5 +57,8 @@
     <string id="EnhancedBattleTest_tacticlevel" text="Taktik seviyesi" />
 
     <string id="EnhancedBattleTest_siegenoplayer" text="Kuşatmada oyucu takımının komutana ihtiyacı var." />
+    <string id="EnhancedBattleTest_siege_unsupported" text="Kuşatma savaşları sefer modunda geçici olarak kullanılamıyor." />
+    <string id="EnhancedBattleTest_campaign_menu_desc" text="Özel bir savaş testi hazırlayın." />
+    <string id="EnhancedBattleTest_campaign_menu_start" text="Savaşı Yapılandır" />
   </strings>
 </base>

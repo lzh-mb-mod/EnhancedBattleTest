@@ -5,7 +5,6 @@
     <tag language="English" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_multiplayerbattleoption" text="Multiplayer Battle Test" />
     <string id="EnhancedBattleTest_singleplayerbattleoption" text="Singleplayer Battle Test" />
 
     <string id="EnhancedBattleTest_all" text="All" />
@@ -64,5 +63,8 @@
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
 
     <string id="EnhancedBattleTest_siegenoplayer" text="In siege, player team should have general." />
+    <string id="EnhancedBattleTest_siege_unsupported" text="Siege battles are temporarily unavailable in campaign mode." />
+    <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
+    <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />
   </strings>
 </base>

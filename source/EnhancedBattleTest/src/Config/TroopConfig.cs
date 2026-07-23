@@ -2,7 +2,7 @@
 {
     public class TroopConfig
     {
-        private CharacterConfig _character = CharacterConfig.Create(EnhancedBattleTestSubModule.IsMultiplayer);
+        private CharacterConfig _character = CharacterConfig.Create();
 
         public CharacterConfig Character
         {
@@ -14,14 +14,9 @@
         public TroopConfig()
         { }
 
-        public TroopConfig(bool isMultiplayer)
+        public TroopConfig(string id, int number, float femaleRatio = 0)
         {
-            Character = CharacterConfig.Create(isMultiplayer);
-        }
-
-        public TroopConfig(bool isMultiplayer, string id, int number, float femaleRatio = 0)
-        {
-            Character = CharacterConfig.Create(isMultiplayer, id, femaleRatio);
+            Character = CharacterConfig.Create(id, femaleRatio);
             Number = number;
         }
 

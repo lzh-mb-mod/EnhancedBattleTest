@@ -15,9 +15,6 @@ namespace EnhancedBattleTest.UI
         private TeamConfig _teamConfig;
         private SPCharacterConfig _config = new SPCharacterConfig();
         private bool _isAttacker;
-        public bool IsMultiplayer => false;
-        public bool IsSingleplayer => true;
-
         public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
 
         public TextVM MaleRatioText { get; }

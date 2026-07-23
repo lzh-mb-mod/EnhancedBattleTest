@@ -17,9 +17,6 @@ namespace EnhancedBattleTest.UI
 
         protected CharacterConfig Config;
 
-        public bool IsMultiplayer => Collection.IsMultiplayer;
-        public bool IsSinglePlayer => !Collection.IsMultiplayer;
-
         public TextVM CharacterText { get; }
 
         public SelectorVM<SelectorItemVM> Characters { get; }
@@ -27,9 +24,7 @@ namespace EnhancedBattleTest.UI
 
         public static CharactersInGroupVM Create(CharacterCollection collection)
         {
-            return collection.IsMultiplayer
-                ? (CharactersInGroupVM)new MPCharactersInGroupVM(collection)
-                : new SPCharactersInGroupVM(collection);
+            return new SPCharactersInGroupVM(collection);
         }
 
         protected CharactersInGroupVM(CharacterCollection collection)
@@ -39,7 +34,7 @@ namespace EnhancedBattleTest.UI
             CharacterText = new TextVM(GameTexts.FindText("str_ebt_character"));
             Characters = new SelectorVM<SelectorItemVM>(0, null);
 
-            Character = CharacterConfigVM.Create(Collection.IsMultiplayer);
+            Character = CharacterConfigVM.Create();
         }
 
         public abstract void SelectedCultureAndGroupChanged(string cultureId, Group group, bool updateInstantly = true);

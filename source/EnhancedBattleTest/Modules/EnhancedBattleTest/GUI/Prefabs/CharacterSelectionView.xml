@@ -25,7 +25,7 @@
                   </Children>
                 </ListPanel>
 
-                <ListPanel IsVisible="@IsSinglePlayer" DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
+                <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
                   <Children>
                     <RichTextWidget DataSource="{OccupationText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
                     <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Occupations}" />
@@ -54,8 +54,7 @@
                   </Children>
                 </Widget>
 
-                <MPCharacterConfig IsVisible="@IsMultiplayer"/>
-                <SPCharacterConfig IsVisible="@IsSingleplayer"/>
+                <SPCharacterConfig/>
 
               </Children>
             </ListPanel>

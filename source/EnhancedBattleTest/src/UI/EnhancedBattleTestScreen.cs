@@ -28,10 +28,7 @@ namespace EnhancedBattleTest.UI
         public EnhancedBattleTestScreen(EnhancedBattleTestState state)
         {
             _state = state;
-            _title = EnhancedBattleTestSubModule.IsMultiplayer
-                ? GameTexts.FindText("str_ebt_multiplayer_battle_option")
-                : GameTexts.FindText("str_ebt_singleplayer_battle_option");
-
+            _title = GameTexts.FindText("str_ebt_singleplayer_battle_option");
         }
         void IGameStateListener.OnActivate()
         {
@@ -61,10 +58,10 @@ namespace EnhancedBattleTest.UI
             _dataSource.SetActiveState(true);
             AddLayer(_gauntletLayer);
 
-            var collection = CharacterCollection.Create(EnhancedBattleTestSubModule.IsMultiplayer);
+            var collection = CharacterCollection.Create();
             collection.Initialize();
             CharacterSelectionView = new CharacterSelectionView();
-            CharacterSelectionView.Initialize(this, collection, EnhancedBattleTestSubModule.IsMultiplayer);
+            CharacterSelectionView.Initialize(this, collection);
         }
 
         protected override void OnFinalize()

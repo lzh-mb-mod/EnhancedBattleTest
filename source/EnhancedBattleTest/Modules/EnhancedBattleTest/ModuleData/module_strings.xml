@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <strings>
-  <string id="str_ebt_multiplayer_battle_option" text="{=EnhancedBattleTest_multiplayerbattleoption}Multiplayer Battle Test" />
   <string id="str_ebt_singleplayer_battle_option" text="{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test" />
 
   <string id="str_ebt_all" text="{=EnhancedBattleTest_all}All" />
@@ -59,4 +58,7 @@
   <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
 
   <string id="str_ebt_siege_no_player" text="{=EnhancedBattleTest_siegenoplayer}In siege, player team should have general." />
+  <string id="str_ebt_siege_unsupported" text="{=EnhancedBattleTest_siege_unsupported}Siege battles are temporarily unavailable in campaign mode." />
+  <string id="str_ebt_campaign_menu_desc" text="{=EnhancedBattleTest_campaign_menu_desc}Prepare a custom battle test." />
+  <string id="str_ebt_campaign_menu_start" text="{=EnhancedBattleTest_campaign_menu_start}Configure Battle" />
 </strings>
