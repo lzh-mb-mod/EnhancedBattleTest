@@ -48,8 +48,8 @@ namespace EnhancedBattleTest.UI
             BattleTypeSelection = new SelectorVM<SelectorItemVM>(new List<TextObject>()
             {
                 GameTexts.FindText("str_ebt_battle_type", "Field"),
-                GameTexts.FindText("str_ebt_battle_type", "Siege"),
                 GameTexts.FindText("str_ebt_battle_type", "Village"),
+                GameTexts.FindText("str_ebt_battle_type", "Siege"),
             }, (int)_config.BattleType, OnBattleTypeSelection);
             PlayerTypeSelection = new SelectorVM<SelectorItemVM>(new List<TextObject>()
             {
@@ -64,7 +64,6 @@ namespace EnhancedBattleTest.UI
             EquipmentModifierTypeSelection = new SelectorVM<SelectorItemVM>(new List<TextObject>()
             {
                 GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.Random.ToString()),
-                GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.Average.ToString()),
                 GameTexts.FindText("str_ebt_modifier_type", EquipmentModifierType.None.ToString()),
             }, (int)_config.EquipmentModifierType, OnEquipmentModifierType);
             BattleTypeText.RefreshValues();

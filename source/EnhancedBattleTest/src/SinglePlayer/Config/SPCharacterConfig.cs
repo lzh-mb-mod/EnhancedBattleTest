@@ -21,10 +21,12 @@ namespace EnhancedBattleTest.SinglePlayer.Config
             {
                 if (value == null)
                     return;
+                _characterId = value;
+                ActualCharacterObject = null;
+                Character = null;
                 var characterObject = TaleWorlds.Core.Game.Current.ObjectManager.GetObject<CharacterObject>(value);
                 if (characterObject == null)
                     return;
-                _characterId = value;
                 ActualCharacterObject = characterObject;
                 Character = new SPCharacter(ActualCharacterObject,
                     new SPGroup(CharacterObject.DefaultFormationClass).Info);

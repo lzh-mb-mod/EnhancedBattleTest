@@ -93,7 +93,7 @@ namespace EnhancedBattleTest
             if (config.HasGeneral)
             {
                 var character = config.Generals.Troops.FirstOrDefault();
-                if (character != null)
+                if (character?.Character?.CharacterObject?.Culture != null)
                     return character.Character.CharacterObject.Culture;
             }
 
@@ -101,7 +101,8 @@ namespace EnhancedBattleTest
             {
                 foreach (var troopConfig in troopGroupConfig.Troops)
                 {
-                    if (troopConfig.Number > 0)
+                    if (troopConfig.Number > 0
+                        && troopConfig.Character?.CharacterObject?.Culture != null)
                         return troopConfig.Character.CharacterObject.Culture;
                 }
             }

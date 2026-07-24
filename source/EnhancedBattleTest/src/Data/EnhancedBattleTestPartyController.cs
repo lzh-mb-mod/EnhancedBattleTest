@@ -1,5 +1,6 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.SinglePlayer.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -27,6 +28,7 @@ namespace EnhancedBattleTest.Data
             public IReadOnlyList<CharacterObject> PlayerSpawnPriorityCharacters { get; }
             public IReadOnlyList<string> PlayerPriorityCharacterIds { get; }
             public IReadOnlyDictionary<Hero, int> OriginalHeroHitPoints { get; }
+            public EquipmentModifierType EquipmentModifierType { get; }
 
             public BattleContext(
                 MobileParty playerParty,
@@ -37,7 +39,8 @@ namespace EnhancedBattleTest.Data
                 CharacterObject playerCharacter,
                 IReadOnlyList<CharacterObject> playerSpawnPriorityCharacters,
                 IReadOnlyList<string> playerPriorityCharacterIds,
-                IReadOnlyDictionary<Hero, int> originalHeroHitPoints)
+                IReadOnlyDictionary<Hero, int> originalHeroHitPoints,
+                EquipmentModifierType equipmentModifierType)
             {
                 PlayerParty = playerParty;
                 EnemyParty = enemyParty;
@@ -48,6 +51,7 @@ namespace EnhancedBattleTest.Data
                 PlayerSpawnPriorityCharacters = playerSpawnPriorityCharacters;
                 PlayerPriorityCharacterIds = playerPriorityCharacterIds;
                 OriginalHeroHitPoints = originalHeroHitPoints;
+                EquipmentModifierType = equipmentModifierType;
             }
         }
 
@@ -56,6 +60,9 @@ namespace EnhancedBattleTest.Data
         private static bool _isCreatingTemporaryParty;
         private static readonly HashSet<MobileParty> TemporaryParties =
             new HashSet<MobileParty>();
+        private static readonly Dictionary<MobileParty, Tuple<Banner, uint, uint>>
+            TemporaryPartyAppearances =
+                new Dictionary<MobileParty, Tuple<Banner, uint, uint>>();
 
         public static BattleContext Create(BattleConfig config)
         {
@@ -128,7 +135,8 @@ namespace EnhancedBattleTest.Data
                     playerCharacter,
                     playerSpawnPriorityCharacters,
                     playerPriorityCharacterIds,
-                    originalHeroHitPoints);
+                    originalHeroHitPoints,
+                    config.BattleTypeConfig.EquipmentModifierType);
                 EnhancedBattleTestSaveGuard.Disable();
                 return Current;
             }
@@ -170,6 +178,28 @@ namespace EnhancedBattleTest.Data
             return party != null
                    && (_isCreatingTemporaryParty
                        || TemporaryParties.Contains(party));
+        }
+
+        public static bool TryGetTemporaryPartyAppearance(
+            PartyBase party,
+            out Banner banner,
+            out Tuple<uint, uint> colors)
+        {
+            if (party?.MobileParty != null
+                && TemporaryPartyAppearances.TryGetValue(
+                    party.MobileParty,
+                    out Tuple<Banner, uint, uint> appearance))
+            {
+                banner = appearance.Item1;
+                colors = new Tuple<uint, uint>(
+                    appearance.Item2,
+                    appearance.Item3);
+                return true;
+            }
+
+            banner = null;
+            colors = null;
+            return false;
         }
 
         public static void Cleanup()
@@ -235,6 +265,12 @@ namespace EnhancedBattleTest.Data
                     owner,
                     avoidHostileActions: true);
                 TemporaryParties.Add(party);
+                TemporaryPartyAppearances.Add(
+                    party,
+                    new Tuple<Banner, uint, uint>(
+                        config.Banner,
+                        config.Color1,
+                        config.Color2));
             }
             finally
             {
@@ -353,6 +389,7 @@ namespace EnhancedBattleTest.Data
             finally
             {
                 TemporaryParties.Remove(party);
+                TemporaryPartyAppearances.Remove(party);
             }
         }
 

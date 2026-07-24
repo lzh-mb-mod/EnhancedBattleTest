@@ -147,14 +147,38 @@ namespace EnhancedBattleTest.Config
                 var filePath = Path.Combine(SaveFolderPath(), "spconfig-v2.xml");
                 using TextReader reader = new StreamReader(filePath);
                 var result = (BattleConfig)serializer.Deserialize(reader);
+                RemoveUnavailableCharacters(result.PlayerTeamConfig);
+                RemoveUnavailableCharacters(result.EnemyTeamConfig);
                 return result;
             }
+
             catch
             {
                 var result = CreateDefault();
                 result.Serialize();
                 return result;
             }
+        }
+
+        private static void RemoveUnavailableCharacters(TeamConfig team)
+        {
+            if (team == null)
+                return;
+
+            team.Generals?.Troops?.RemoveAll(IsCharacterUnavailable);
+            if (team.Generals?.Troops == null
+                || team.Generals.Troops.Count == 0)
+                team.HasGeneral = false;
+
+            if (team.TroopGroups == null)
+                return;
+            foreach (TroopGroupConfig group in team.TroopGroups)
+                group?.Troops?.RemoveAll(IsCharacterUnavailable);
+        }
+
+        private static bool IsCharacterUnavailable(TroopConfig troop)
+        {
+            return troop?.Character?.CharacterObject == null;
         }
 
         public void Serialize()
