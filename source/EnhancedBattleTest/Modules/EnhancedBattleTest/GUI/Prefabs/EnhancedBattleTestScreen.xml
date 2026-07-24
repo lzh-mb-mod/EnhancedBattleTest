@@ -65,8 +65,12 @@
                     <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Title.Text" />
                     <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="650" SuggestedHeight="7" HorizontalAlignment="Center" VerticalAlignment="Top" PositionYOffset="75" Sprite="TownManagement\title_divider" />
 
-                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="90" MarginBottom="90" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="CenterOptionsClip" InnerPanel="CenterOptionsClip\CenterOptions" MouseScrollAxis="Vertical" VerticalScrollbar="..\CenterOptionsScrollbar">
                       <Children>
+                        <Widget Id="CenterOptionsClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                          <Children>
+                            <ListPanel Id="CenterOptions" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" MarginBottom="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                              <Children>
 
                         <!--_____Map Selection_________-->
                         <Widget DataSource="{BattleTypeSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15">
@@ -235,7 +239,7 @@
                                   <ItemTemplate>
                                     <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
                                       <Children>
-                                        <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
+                                        <OrderSiegeMachineItemButtonWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
                                       </Children>
                                     </ButtonWidget>
                                   </ItemTemplate>
@@ -246,7 +250,7 @@
                                   <ItemTemplate>
                                     <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
                                       <Children>
-                                        <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID" />
+                                        <OrderSiegeMachineItemButtonWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID" />
                                       </Children>
                                     </ButtonWidget>
                                   </ItemTemplate>
@@ -275,7 +279,7 @@
                                       <ItemTemplate>
                                         <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" MarginLeft="!SiegeMachines.HorizontalPadding" MarginRight="!SiegeMachines.HorizontalPadding" Brush="CustomBattle.Machine.Slot" Command.Click="OnSelection">
                                           <Children>
-                                            <OrderSiegeMachineItemWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
+                                            <OrderSiegeMachineItemButtonWidget Id="MachineIconWidget" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="45" SuggestedHeight="45" HorizontalAlignment="Center" VerticalAlignment="Center" MachineIconWidget="..\MachineIconWidget" Brush="CustomBattle.Siege.MachineIcon" MachineClass="@MachineID"/>
                                           </Children>
                                         </ButtonWidget>
                                       </ItemTemplate>
@@ -289,6 +293,8 @@
 
                           </Children>
                         </Widget>
+
+                        <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="25" />
 
                         <!--Sallyout-->
                         <Widget DataSource="{MapSelectionGroup}" WidthSizePolicy="Fixed" SuggestedWidth="590" HorizontalAlignment="Center" HeightSizePolicy="CoverChildren" MarginLeft="!InnerPanel.LeftRight.Padding" MarginRight="!InnerPanel.LeftRight.Padding" MarginTop="15" IsVisible="false">
@@ -310,8 +316,18 @@
                           </Children>
                         </Widget>
 
+                              </Children>
+                            </ListPanel>
+                          </Children>
+                        </Widget>
                       </Children>
-                    </ListPanel>
+                    </ScrollablePanel>
+                    <ScrollbarWidget Id="CenterOptionsScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="8" HorizontalAlignment="Right" VerticalAlignment="Center" MarginTop="100" MarginRight="15" MarginBottom="100" AlignmentAxis="Vertical" Handle="CenterOptionsScrollbarHandle" MaxValue="100" MinValue="0">
+                      <Children>
+                        <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="4" HorizontalAlignment="Center" Sprite="MPLobby\CustomServer\lobby_slider_bed" AlphaFactor="0.4" />
+                        <ImageWidget Id="CenterOptionsScrollbarHandle" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="8" SuggestedHeight="10" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+                      </Children>
+                    </ScrollbarWidget>
 
                     <!--Search Text Bar-->
                     <!-- <EncyclopediaSearchBarWidget DataSource="{MapSelectionGroup}" DoNotAcceptEvents="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="303" SuggestedHeight="43" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="475" Brush="SPOptions.Dropdown.Center" MinCharAmountToShowResults="0" SearchInputWidget="SearchInputWidget" SearchResultPanel="..\SearchResultListScrollablePanel">

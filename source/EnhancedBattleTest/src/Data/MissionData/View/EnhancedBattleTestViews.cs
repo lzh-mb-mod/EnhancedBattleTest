@@ -52,7 +52,7 @@ namespace EnhancedBattleTest.Data.MissionData.View
                 ViewCreator.CreateMissionSpectatorControlView(mission),
                 new MissionItemContourControllerView(),
                 new MissionAgentContourControllerView(),
-                new EnhancedBattleTestPreloadView(),
+                new MissionPreloadView(),
                 new MissionCampaignBattleSpectatorView(),
                 ViewCreator.CreatePhotoModeView(),
                 new MissionEntitySelectionUIHandler(

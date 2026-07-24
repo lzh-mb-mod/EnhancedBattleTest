@@ -1,0 +1,55 @@
+<Prefab>
+  <Window>
+    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="560" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginTop="20" MarginBottom="25" LayoutImp.LayoutMethod="VerticalBottomToTop">
+      <Children>
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+            <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" Brush="SPOptions.GameKeysGroup.Title.Text" Brush.TextHorizontalAlignment="Left" MarginLeft="20" />
+            <ButtonWidget IsVisible="@CanRemove" DoNotPassEventsToChildren="true" Command.Click="RemoveParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="160" SuggestedHeight="38" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+              <Children>
+                <RichTextWidget DataSource="{RemovePartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="EditBanner" IsEnabled="@IsBannerEditorEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" MarginLeft="20">
+              <Children>
+                <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Kingdom.TornBanner.Big" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+              </Children>
+            </ButtonWidget>
+            <RichTextWidget DataSource="{CustomBannerText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="25" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+            <ButtonWidget DataSource="{UseCustomBanner}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" MarginLeft="15" HorizontalAlignment="Left" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+              <Children>
+                <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+
+        <ListPanel IsVisible="@CanConfigureArmy" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+          <Children>
+            <RichTextWidget DataSource="{InArmyText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+            <ButtonWidget DataSource="{InArmy}" IsSelected="@Value" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" MarginLeft="15" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+              <Children>
+                <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+
+        <ListPanel IsVisible="@IsPlayerCharacterVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="10" LayoutImp.LayoutMethod="VerticalBottomToTop">
+          <Children>
+            <RichTextWidget DataSource="{PlayerCharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="SPOptions.GameKeysGroup.Title.Text" />
+            <EnhancedBattleTestCharacterButton DataSource="{PlayerCharacter}" MarginTop="10" />
+          </Children>
+        </ListPanel>
+
+        <EnhancedBattleTestGeneralTroopGroup DataSource="{Generals}" />
+        <EnhancedBattleTestNonGeneralTroopGroup DataSource="{Troops}" />
+      </Children>
+    </ListPanel>
+  </Window>
+</Prefab>

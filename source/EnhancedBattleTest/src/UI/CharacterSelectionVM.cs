@@ -14,15 +14,15 @@ namespace EnhancedBattleTest.UI
 {
     public class CharacterSelectionData
     {
-        public TeamConfig TeamConfig;
+        public PartyConfig PartyConfig;
         public CharacterConfig Config;
         public bool IsAttacker;
         public Action<CharacterConfig> SelectAction;
         public bool PauseGameActiveState;
 
-        public CharacterSelectionData(TeamConfig teamConfig, CharacterConfig config, bool isAttacker, Action<CharacterConfig> selectAction, bool pauseGameActiveState)
+        public CharacterSelectionData(PartyConfig partyConfig, CharacterConfig config, bool isAttacker, Action<CharacterConfig> selectAction, bool pauseGameActiveState)
         {
-            TeamConfig = teamConfig;
+            PartyConfig = partyConfig;
             Config = config;
             IsAttacker = isAttacker;
             SelectAction = selectAction;
@@ -161,7 +161,7 @@ namespace EnhancedBattleTest.UI
             Cultures.SelectedIndex = _characterCollection.Cultures.IndexOf(character.Culture.StringId) + 1;
             Groups.SelectedIndex = _characterCollection.GroupsInCultures[character.Culture.StringId]
                 .FindIndex(group => group.Info.StringId == character.GroupInfo.StringId) + 1;
-            Characters.SetConfig(data.TeamConfig, data.Config, data.IsAttacker);
+            Characters.SetConfig(data.PartyConfig, data.Config, data.IsAttacker);
             _updateInstantly = true;
         }
 

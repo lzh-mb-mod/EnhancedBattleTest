@@ -36,7 +36,18 @@
     <string id="EnhancedBattleTest_season" text="季节" />
 
     <string id="EnhancedBattleTest_trooprolegeneral" text="将领" />
-    <string id="EnhancedBattleTest_trooprolesoldiers" text="部队 {TroopIndex}" />
+    <string id="EnhancedBattleTest_trooprolesoldiers" text="士兵 {TroopIndex}" />
+    <string id="EnhancedBattleTest_primary_party" text="主部队" />
+    <string id="EnhancedBattleTest_allied_party" text="盟军部队 {INDEX}" />
+    <string id="EnhancedBattleTest_add_allied_party" text="添加盟军部队" />
+    <string id="EnhancedBattleTest_remove_allied_party" text="移除部队" />
+    <string id="EnhancedBattleTest_player_allied_party" text="玩家盟军部队 {INDEX}" />
+    <string id="EnhancedBattleTest_enemy_allied_party" text="敌方盟军部队 {INDEX}" />
+    <string id="EnhancedBattleTest_generals" text="将领" />
+    <string id="EnhancedBattleTest_troops" text="士兵" />
+    <string id="EnhancedBattleTest_custom_banner" text="使用自定义旗帜" />
+    <string id="EnhancedBattleTest_in_army" text="加入军团" />
+    <string id="EnhancedBattleTest_player_character" text="玩家角色" />
 
     <string id="EnhancedBattleTest_enabled" text="启用" />
     <string id="EnhancedBattleTest_number" text="数量" />
@@ -62,6 +73,7 @@
     <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
 
     <string id="EnhancedBattleTest_siegenoplayer" text="攻城模式中玩家方必须有将领。" />
+    <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />
     <string id="EnhancedBattleTest_siege_unsupported" text="战役模式暂时无法使用攻城战。" />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="准备一场自定义战斗测试。" />
     <string id="EnhancedBattleTest_campaign_menu_start" text="配置战斗" />

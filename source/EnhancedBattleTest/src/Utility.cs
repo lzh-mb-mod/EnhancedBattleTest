@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using EnhancedBattleTest.Config;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
 using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest
@@ -88,7 +85,7 @@ namespace EnhancedBattleTest
             }
         }
 
-        public static BasicCultureObject GetCulture(TeamConfig config)
+        public static BasicCultureObject GetCulture(PartyConfig config)
         {
             if (config.HasGeneral)
             {
@@ -97,14 +94,11 @@ namespace EnhancedBattleTest
                     return character.Character.CharacterObject.Culture;
             }
 
-            foreach (var troopGroupConfig in config.TroopGroups)
+            foreach (var troopConfig in config.Troops.Troops)
             {
-                foreach (var troopConfig in troopGroupConfig.Troops)
-                {
-                    if (troopConfig.Number > 0
-                        && troopConfig.Character?.CharacterObject?.Culture != null)
-                        return troopConfig.Character.CharacterObject.Culture;
-                }
+                if (troopConfig.Number > 0
+                    && troopConfig.Character?.CharacterObject?.Culture != null)
+                    return troopConfig.Character.CharacterObject.Culture;
             }
             return Game.Current.ObjectManager.GetObject<BasicCultureObject>(culture => true);
         }
@@ -114,30 +108,5 @@ namespace EnhancedBattleTest
             return string.IsNullOrEmpty(id) ? null : Game.Current.ObjectManager.GetObject<SiegeEngineType>(id);
         }
 
-        public static void SetPlayerAsCommander(bool isSergeant)
-        {
-            var mission = Mission.Current;
-            if (mission?.PlayerTeam == null)
-                return;
-            mission.PlayerTeam.PlayerOrderController.Owner = mission.MainAgent;
-            foreach (var formation in mission.PlayerTeam.FormationsIncludingEmpty)
-            {
-                if (!isSergeant || formation.PlayerOwner != null)
-                {
-                    bool isAIControlled = formation.IsAIControlled;
-                    formation.PlayerOwner = mission.MainAgent;
-                    formation.SetControlledByAI(isAIControlled);
-                }
-            }
-        }
-
-        public static void CancelPlayerAsCommander()
-        {
-        }
-
-        public static MissionSpawnSettings CreateSandBoxBattleWaveSpawnSettings()
-        {
-            return new MissionSpawnSettings(MissionSpawnSettings.InitialSpawnMethod.BattleSizeAllocating, MissionSpawnSettings.ReinforcementTimingMethod.GlobalTimer, MissionSpawnSettings.ReinforcementSpawnMethod.Wave, 3f, reinforcementWavePercentage: 0.5f, maximumReinforcementWaveCount: BannerlordConfig.GetReinforcementWaveCount());
-        }
     }
 }

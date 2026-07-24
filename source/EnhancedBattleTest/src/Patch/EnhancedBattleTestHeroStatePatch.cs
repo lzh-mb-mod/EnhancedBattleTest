@@ -56,6 +56,17 @@ namespace EnhancedBattleTest.Patch
             }
         }
 
+        [HarmonyPatch(
+            typeof(CampaignEventDispatcher),
+            nameof(CampaignEventDispatcher.OnHeroWounded))]
+        private static class OnHeroWoundedPatch
+        {
+            private static bool Prefix(Hero woundedHero)
+            {
+                return !EnhancedBattleTestPartyController.IsParticipatingHero(woundedHero);
+            }
+        }
+
         [HarmonyPatch(typeof(Hero), "OnAddedToParty")]
         private static class OnAddedToPartyPatch
         {

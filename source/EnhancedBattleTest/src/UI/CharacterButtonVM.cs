@@ -1,4 +1,5 @@
 ﻿using EnhancedBattleTest.Config;
+using System;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Library;
@@ -25,11 +26,16 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        public CharacterButtonVM(TeamConfig teamConfig, CharacterConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public CharacterButtonVM(
+            PartyConfig partyConfig,
+            CharacterConfig config,
+            bool isPlayerSide,
+            BattleTypeConfig battleTypeConfig,
+            Action onCharacterChanged = null)
         {
             _battleTypeConfig = battleTypeConfig;
             IsPlayerSide = isPlayerSide;
-            SetConfig(teamConfig, config);
+            SetConfig(partyConfig, config, onCharacterChanged);
         }
 
         public override void RefreshValues()
@@ -38,18 +44,22 @@ namespace EnhancedBattleTest.UI
             Name.ActionText = _config.Character.Name.ToString();
         }
 
-        private void SetConfig(TeamConfig teamConfig, CharacterConfig config)
+        private void SetConfig(
+            PartyConfig partyConfig,
+            CharacterConfig config,
+            Action onCharacterChanged)
         {
             _config = config;
             Name = new StringItemWithActionVM(
                 o =>
                 {
-                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(teamConfig, _config.Clone(),
+                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(partyConfig, _config.Clone(),
                         IsPlayerSide == (_battleTypeConfig.PlayerSide == BattleSideEnum.Attacker),
                         characterConfig =>
                         {
                             _config.CopyFrom(characterConfig);
                             Name.ActionText = _config.Character.Name.ToString();
+                            onCharacterChanged?.Invoke();
                         }, false));
                 }, _config.Character.Name.ToString(), this);
         }

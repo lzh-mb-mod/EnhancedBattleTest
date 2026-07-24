@@ -1,5 +1,6 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
+using System;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -17,12 +18,27 @@ namespace EnhancedBattleTest.UI
 
         public bool IsGeneralTroop { get; }
 
-        public TroopVM(TeamConfig teamConfig, TroopConfig config, bool isPlayerSide, BattleTypeConfig battleTypeConfig, bool isGeneralTroop = false)
+        public TroopVM(
+            PartyConfig partyConfig,
+            TroopConfig config,
+            bool isPlayerSide,
+            BattleTypeConfig battleTypeConfig,
+            bool isGeneralTroop = false,
+            Action onCharacterChanged = null)
         {
-            CharacterButton = new CharacterButtonVM(teamConfig, config.Character, isPlayerSide, battleTypeConfig);
+            CharacterButton = new CharacterButtonVM(
+                partyConfig,
+                config.Character,
+                isPlayerSide,
+                battleTypeConfig,
+                onCharacterChanged);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0, 5000, true);
-            Number.OnValueChanged += number => config.Number = number;
+            Number.OnValueChanged += number =>
+            {
+                config.Number = number;
+                onCharacterChanged?.Invoke();
+            };
             InvalidText = new TextVM(GameTexts.FindText("str_ebt_invalid"));
             IsGeneralTroop = isGeneralTroop;
         }

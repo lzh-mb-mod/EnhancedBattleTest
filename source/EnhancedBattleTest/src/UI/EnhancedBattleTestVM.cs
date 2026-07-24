@@ -336,6 +336,12 @@ namespace EnhancedBattleTest.UI
         {
             if (!IsValid())
                 return;
+            if (!HasAvailableSergeantGeneral())
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_sergeant_general_required");
+                return;
+            }
             if (!ApplyConfig())
                 return;
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege)
@@ -359,6 +365,31 @@ namespace EnhancedBattleTest.UI
             EnhancedBattleTestSaveGuard.ShowCampaignStateWarning(
                 true,
                 () => OpenMission(sceneData));
+        }
+
+        private bool HasAvailableSergeantGeneral()
+        {
+            if (_config.BattleTypeConfig.PlayerType != PlayerType.Sergeant)
+                return true;
+
+            TeamConfig team = _config.PlayerTeamConfig;
+            BasicCharacterObject playerCharacter =
+                team.PlayerCharacter?.CharacterObject;
+            IEnumerable<PartyConfig> parties =
+                new[] { team.PrimaryParty };
+            if (team.PrimaryParty.IsInArmy)
+            {
+                parties = parties.Concat(
+                    team.AlliedParties.Where(party => party.IsInArmy));
+            }
+
+            return parties.Any(
+                party => party?.HasGeneral == true
+                         && party.Generals.Troops.Any(
+                             troop =>
+                                 troop?.Character?.CharacterObject != null
+                                 && troop.Character.CharacterObject
+                                 != playerCharacter));
         }
 
         private void OpenMission(SceneData sceneData)
@@ -396,7 +427,8 @@ namespace EnhancedBattleTest.UI
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege &&
-                (!_config.PlayerTeamConfig.HasGeneral || _config.PlayerTeamConfig.Generals.Troops.Count == 0))
+                (!_config.PlayerTeamConfig.PrimaryParty.HasGeneral
+                 || _config.PlayerTeamConfig.PrimaryParty.Generals.Troops.Count == 0))
             {
                 Utility.DisplayLocalizedText("str_ebt_siege_no_player");
                 return false;
@@ -424,7 +456,8 @@ namespace EnhancedBattleTest.UI
 
         private void OnPlayerTypeChange(bool isCommander)
         {
-
+            PlayerSide.SetPlayerType(
+                isCommander ? PlayerType.Commander : PlayerType.Sergeant);
         }
 
         private void InitializeSiegeMachines()

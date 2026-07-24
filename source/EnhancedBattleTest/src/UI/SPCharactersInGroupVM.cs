@@ -74,7 +74,7 @@ namespace EnhancedBattleTest.UI
             if (spConfig == null)
                 return;
             Occupations.SelectedIndex = -1;
-            Occupations.SelectedIndex = (int)spConfig.ActualCharacterObject.Occupation + 1;
+            Occupations.SelectedIndex = (int)spConfig.ActualCharacterObject.Occupation;
         }
 
         private void OnSelectedOccupationChanged(SelectorVM<SelectorItemVM> obj)

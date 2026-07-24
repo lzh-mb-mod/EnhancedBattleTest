@@ -39,13 +39,13 @@ namespace EnhancedBattleTest.UI
 
         public abstract void SelectedCultureAndGroupChanged(string cultureId, Group group, bool updateInstantly = true);
 
-        public void SetConfig(TeamConfig teamConfig, CharacterConfig config, bool isAttacker)
+        public void SetConfig(PartyConfig partyConfig, CharacterConfig config, bool isAttacker)
         {
             Config = config;
             OnSetConfig(config);
             Characters.SelectedIndex = -1;
             Characters.SelectedIndex = CharactersInCurrentGroup.FindIndex(c => c.StringId == Config.Character.StringId);
-            Character.SetConfig(teamConfig, Config, isAttacker);
+            Character.SetConfig(partyConfig, Config, isAttacker);
         }
 
         protected abstract void OnSetConfig(CharacterConfig config);

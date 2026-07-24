@@ -63,5 +63,21 @@ namespace EnhancedBattleTest.Patch
                     __result = banner;
             }
         }
+
+        [HarmonyPatch(
+            typeof(PartyGroupAgentOrigin),
+            nameof(PartyGroupAgentOrigin.IsPartyUnderPlayerCommand))]
+        private static class PartyUnderPlayerCommandPatch
+        {
+            private static bool Prefix(PartyBase party, ref bool __result)
+            {
+                if (!EnhancedBattleTestPartyController.IsTestParty(party))
+                    return true;
+
+                __result =
+                    EnhancedBattleTestPartyController.IsPartyInPlayerTeam(party);
+                return false;
+            }
+        }
     }
 }

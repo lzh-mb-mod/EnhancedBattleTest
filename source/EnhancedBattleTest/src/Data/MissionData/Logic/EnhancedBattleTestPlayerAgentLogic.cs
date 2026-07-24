@@ -1,4 +1,6 @@
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.AgentOrigins;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -7,11 +9,15 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
     public sealed class EnhancedBattleTestPlayerAgentLogic : MissionLogic
     {
         private readonly CharacterObject _playerCharacter;
+        private readonly PartyBase _playerParty;
         private Agent _playerAgent;
 
-        public EnhancedBattleTestPlayerAgentLogic(CharacterObject playerCharacter)
+        public EnhancedBattleTestPlayerAgentLogic(
+            CharacterObject playerCharacter,
+            PartyBase playerParty)
         {
             _playerCharacter = playerCharacter;
+            _playerParty = playerParty;
         }
 
         public override void OnAgentBuild(Agent agent, Banner banner)
@@ -42,6 +48,9 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             {
                 return;
             }
+            if (!(agent.Origin is PartyGroupAgentOrigin origin)
+                || origin.Party != _playerParty)
+                return;
 
             _playerAgent = agent;
             SetPlayerController();

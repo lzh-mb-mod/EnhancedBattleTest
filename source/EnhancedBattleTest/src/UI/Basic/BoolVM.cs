@@ -22,6 +22,7 @@ namespace EnhancedBattleTest.UI.Basic
         }
 
         public event Action<bool> OnValueChanged;
+
         public BoolVM(bool value)
         {
             Value = value;

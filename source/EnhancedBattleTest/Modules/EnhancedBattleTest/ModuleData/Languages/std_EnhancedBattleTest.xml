@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-16"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <tags>
@@ -37,6 +37,17 @@
 
     <string id="EnhancedBattleTest_trooprolegeneral" text="General" />
     <string id="EnhancedBattleTest_trooprolesoldiers" text="Troop {TroopIndex}" />
+    <string id="EnhancedBattleTest_primary_party" text="Primary Party" />
+    <string id="EnhancedBattleTest_allied_party" text="Allied Party {INDEX}" />
+    <string id="EnhancedBattleTest_add_allied_party" text="Add Allied Party" />
+    <string id="EnhancedBattleTest_remove_allied_party" text="Remove Party" />
+    <string id="EnhancedBattleTest_player_allied_party" text="Player Allied Party {INDEX}" />
+    <string id="EnhancedBattleTest_enemy_allied_party" text="Enemy Allied Party {INDEX}" />
+    <string id="EnhancedBattleTest_generals" text="Generals" />
+    <string id="EnhancedBattleTest_troops" text="Troops" />
+    <string id="EnhancedBattleTest_custom_banner" text="Use Custom Banner" />
+    <string id="EnhancedBattleTest_in_army" text="In Army" />
+    <string id="EnhancedBattleTest_player_character" text="Player Character" />
 
     <string id="EnhancedBattleTest_enabled" text="Enable" />
     <string id="EnhancedBattleTest_number" text="Count" />
@@ -62,6 +73,7 @@
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
 
     <string id="EnhancedBattleTest_siegenoplayer" text="In siege, player team should have general." />
+    <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
     <string id="EnhancedBattleTest_siege_unsupported" text="Siege battles are temporarily unavailable in campaign mode." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />

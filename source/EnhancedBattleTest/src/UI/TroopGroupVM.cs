@@ -1,5 +1,6 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
+using System;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -8,10 +9,11 @@ namespace EnhancedBattleTest.UI
 {
     public class TroopGroupVM : ViewModel
     {
-        private readonly TeamConfig _teamConfig;
+        private readonly PartyConfig _partyConfig;
         private readonly TroopGroupConfig _config;
         private readonly bool _isPlayerSide;
         private readonly BattleTypeConfig _battleTypeConfig;
+        private readonly Action _onCharacterChanged;
         private MBBindingList<TroopVM> _troops;
         private bool _isGeneralTroopGroup;
         private bool _pushEnabled;
@@ -56,19 +58,28 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        public TroopGroupVM(TeamConfig teamConfig, TroopGroupConfig config, TextObject groupName, bool isGeneralTroopGroup, bool isPlayerSide, BattleTypeConfig battleTypeConfig)
+        public TroopGroupVM(
+            PartyConfig partyConfig,
+            TroopGroupConfig config,
+            TextObject groupName,
+            bool isGeneralTroopGroup,
+            bool isPlayerSide,
+            BattleTypeConfig battleTypeConfig,
+            Action onCharacterChanged = null)
         {
-            _teamConfig = teamConfig;
+            _partyConfig = partyConfig;
             _config = config;
             _isPlayerSide = isPlayerSide;
             _battleTypeConfig = battleTypeConfig;
+            _onCharacterChanged = onCharacterChanged;
             Troops = new MBBindingList<TroopVM>();
             IsGeneralTroopGroup = isGeneralTroopGroup;
             TroopGroupName = new TextVM(groupName);
             foreach (var troopConfig in config.Troops)
             {
-                Troops.Add(new TroopVM(teamConfig, troopConfig,
-                    isPlayerSide, battleTypeConfig, isGeneralTroopGroup));
+                Troops.Add(new TroopVM(partyConfig, troopConfig,
+                    isPlayerSide, battleTypeConfig, isGeneralTroopGroup,
+                    onCharacterChanged));
             }
 
             UpdateEnabled();
@@ -102,7 +113,14 @@ namespace EnhancedBattleTest.UI
                 ? new TroopConfig()
                 : new TroopConfig(_config.Troops[_config.Troops.Count - 1]);
             _config.Troops.Add(newTroop);
-            Troops.Add(new TroopVM(_teamConfig, newTroop, _isPlayerSide, _battleTypeConfig, IsGeneralTroopGroup));
+            Troops.Add(new TroopVM(
+                _partyConfig,
+                newTroop,
+                _isPlayerSide,
+                _battleTypeConfig,
+                IsGeneralTroopGroup,
+                _onCharacterChanged));
+            _onCharacterChanged?.Invoke();
             UpdateEnabled();
         }
 
@@ -126,6 +144,7 @@ namespace EnhancedBattleTest.UI
                 _config.Troops.RemoveAt(_config.Troops.Count - 1);
             if (Troops.Count > 0)
                 Troops.RemoveAt(Troops.Count - 1);
+            _onCharacterChanged?.Invoke();
             UpdateEnabled();
         }
 

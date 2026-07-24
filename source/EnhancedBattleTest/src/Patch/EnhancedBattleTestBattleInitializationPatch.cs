@@ -2,6 +2,7 @@ using EnhancedBattleTest.Data;
 using HarmonyLib;
 using SandBox.GameComponents;
 using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -23,7 +24,8 @@ namespace EnhancedBattleTest.Patch
                 if (context == null)
                     return true;
 
-                __result = context.PlayerParty.Party.NumberOfHealthyMembers >= 20;
+                __result = context.PlayerParties
+                    .Sum(party => party.Party.NumberOfHealthyMembers) >= 20;
                 return false;
             }
         }
@@ -40,15 +42,19 @@ namespace EnhancedBattleTest.Patch
                 if (context == null)
                     return true;
 
-                __result = GetAvailableTroopTypes(context.PlayerParty.Party);
+                __result = GetAvailableTroopTypes(
+                    context.PlayerParties.Select(party => party.Party));
                 return false;
             }
         }
 
-        private static List<FormationClass> GetAvailableTroopTypes(PartyBase party)
+        private static List<FormationClass> GetAvailableTroopTypes(
+            IEnumerable<PartyBase> parties)
         {
             var troopTypes = new List<FormationClass>();
-            foreach (TroopRosterElement element in party.MemberRoster.GetTroopRoster())
+            foreach (TroopRosterElement element in parties
+                         .SelectMany(
+                             party => party.MemberRoster.GetTroopRoster()))
             {
                 if (element.Number <= element.WoundedNumber)
                     continue;

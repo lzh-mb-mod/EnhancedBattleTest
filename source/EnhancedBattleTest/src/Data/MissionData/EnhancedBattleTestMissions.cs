@@ -1,7 +1,6 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data.MissionData.Logic;
 using SandBox.Missions.MissionLogics;
-using SandBox.Missions.MissionLogics.Towns;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -50,12 +49,12 @@ namespace EnhancedBattleTest.Data.MissionData
         {
             BattleSideEnum playerSide = config.BattleTypeConfig.PlayerSide;
             bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
-            bool hasPlayer = config.PlayerTeamConfig.HasGeneral
-                             && config.PlayerTeamConfig.Generals.Troops.Count > 0;
-            bool isPlayerGeneral = hasPlayer
-                                   && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
-            bool isPlayerSergeant = hasPlayer
-                                    && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
+            bool isPlayerGeneral =
+                context.PlayerCharacter != null
+                && config.BattleTypeConfig.PlayerType == PlayerType.Commander;
+            bool isPlayerSergeant =
+                context.PlayerCharacter != null
+                && config.BattleTypeConfig.PlayerType == PlayerType.Sergeant;
 
             PartyBase playerParty = context.PlayerParty.Party;
             PartyBase enemyParty = context.EnemyParty.Party;
@@ -63,8 +62,8 @@ namespace EnhancedBattleTest.Data.MissionData
             PartyBase attackerParty = isPlayerAttacker ? playerParty : enemyParty;
 
             List<string> playerHeroIds = context.PlayerPriorityCharacterIds.ToList();
-            TextObject playerGeneralName = GetGeneralName(config.PlayerTeamConfig);
-            TextObject enemyGeneralName = GetGeneralName(config.EnemyTeamConfig);
+            TextObject playerGeneralName = GetGeneralName(config.PlayerTeamConfig.PrimaryParty);
+            TextObject enemyGeneralName = GetGeneralName(config.EnemyTeamConfig.PrimaryParty);
             AtmosphereInfo atmosphereInfo = AtmosphereModel.CreateAtmosphereInfoForMission(
                 config.MapConfig.DayOfYear,
                 config.MapConfig.TimeOfDay,
@@ -103,15 +102,16 @@ namespace EnhancedBattleTest.Data.MissionData
                         atmosphereInfo.FogInfo.Density,
                         atmosphereInfo.FogInfo.Color,
                         atmosphereInfo.FogInfo.Falloff),
-                    new EnhancedBattleTestPlayerAgentLogic(context.PlayerCharacter),
-                    new CommanderLogic(config),
+                    new EnhancedBattleTestPlayerAgentLogic(
+                        context.PlayerCharacter,
+                        context.PlayerParty.Party),
                     new MissionAgentSpawnLogic(
                         context.TroopSuppliers,
                         playerSide,
                         Mission.BattleSizeType.Battle),
                     new BattlePowerCalculationLogic(),
                     new BattleSpawnLogic("battle_set"),
-                    new EnhancedBattleTestMissionSpawnHandler(defenderParty, attackerParty),
+                    new SandBoxBattleMissionSpawnHandler(),
                     new CampaignMissionComponent(),
                     new BattleAgentLogic(),
                     new MountAgentLogic(),
@@ -125,7 +125,7 @@ namespace EnhancedBattleTest.Data.MissionData
                         defenderParty,
                         attackerParty,
                         Mission.MissionTeamAITypeEnum.FieldBattle,
-                        isPlayerSergeant),
+                        false),
                     new BattleObserverMissionLogic(),
                     new AgentHumanAILogic(),
                     new AgentVictoryLogic(),
@@ -136,7 +136,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new AssignPlayerRoleInTeamMissionController(
                         isPlayerGeneral,
                         isPlayerSergeant,
-                        false,
+                        config.PlayerTeamConfig.PrimaryParty.IsInArmy,
                         playerHeroIds),
                     new SandboxGeneralsAndCaptainsAssignmentLogic(
                         isPlayerAttacker ? playerGeneralName : enemyGeneralName,
@@ -153,7 +153,7 @@ namespace EnhancedBattleTest.Data.MissionData
             return mission;
         }
 
-        private static TextObject GetGeneralName(TeamConfig config)
+        private static TextObject GetGeneralName(PartyConfig config)
         {
             return config.HasGeneral
                 ? config.Generals.Troops

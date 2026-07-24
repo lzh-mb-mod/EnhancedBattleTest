@@ -12,7 +12,7 @@ namespace EnhancedBattleTest.UI
 {
     public class SPCharacterConfigVM : CharacterConfigVM
     {
-        private TeamConfig _teamConfig;
+        private PartyConfig _partyConfig;
         private SPCharacterConfig _config = new SPCharacterConfig();
         private bool _isAttacker;
         public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
@@ -46,11 +46,11 @@ namespace EnhancedBattleTest.UI
             };
         }
 
-        public override void SetConfig(TeamConfig teamConfig, CharacterConfig config, bool isAttacker)
+        public override void SetConfig(PartyConfig partyConfig, CharacterConfig config, bool isAttacker)
         {
             if (!(config is SPCharacterConfig spConfig))
                 return;
-            _teamConfig = teamConfig;
+            _partyConfig = partyConfig;
             _config = spConfig;
             _isAttacker = isAttacker;
             FemaleRatio.Value = _config.FemaleRatio;
@@ -76,11 +76,12 @@ namespace EnhancedBattleTest.UI
 
         private void FillFrom(BasicCharacterObject character, int seed = -1)
         {
-            if (_teamConfig != null)
+            if (_partyConfig != null)
             {
-                Character.ArmorColor1 = _teamConfig.Color1;
-                Character.ArmorColor2 = _teamConfig.Color2;
-                Character.BannerCodeText = _teamConfig.BannerKey;
+                var colors = _partyConfig.ResolveColors(_isAttacker);
+                Character.ArmorColor1 = colors.Item1;
+                Character.ArmorColor2 = colors.Item2;
+                Character.BannerCodeText = _partyConfig.ResolveBanner(_isAttacker).Serialize();
             }
             else
             {
