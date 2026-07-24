@@ -117,7 +117,7 @@ namespace EnhancedBattleTest.UI
 
         private Occupation CurrentOccupation()
         {
-            return (Occupation)Occupations.SelectedIndex - 1;
+            return (Occupation)Occupations.SelectedIndex;
         }
 
         private IEnumerable<Character> GetCharactersInGroup(Group group)

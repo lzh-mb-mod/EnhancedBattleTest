@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-16"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <tags>
@@ -60,5 +60,27 @@
     <string id="EnhancedBattleTest_siege_unsupported" text="Kuşatma savaşları sefer modunda geçici olarak kullanılamıyor." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Özel bir savaş testi hazırlayın." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Savaşı Yapılandır" />
+    <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test, sefer durumunu korumak için elinden geleni yapar ancak değişmeden kalacağını garanti edemez. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır." />
+    <string id="EnhancedBattleTest_save_disabled" text="Enhanced Battle Test savaşından sonra sefer yeniden yüklenene kadar kayıt devre dışıdır." />
+    <string id="EnhancedBattleTest_save_before_battle_title" text="Savaş Yapılandırmasından Önce Kaydet?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="Savaş yapılandırma ekranını açmadan önce seferi kaydetmek ister misiniz?" />
+    <string id="EnhancedBattleTest_save_before_battle" text="Önce oyunu kaydet" />
+    <string id="EnhancedBattleTest_continue_without_saving" text="Kaydetmeden devam et" />
+    <string id="EnhancedBattleTest_rain_snow_density" text="Yağmur/Kar Yoğunluğu" />
+    <string id="EnhancedBattleTest_weather" text="Hava Durumu" />
+    <string id="EnhancedBattleTest_fog_density" text="Sis Yoğunluğu" />
+    <string id="EnhancedBattleTest_day_of_year" text="Yılın Günü" />
+    <string id="EnhancedBattleTest_weather_clear" text="Açık" />
+    <string id="EnhancedBattleTest_weather_light_rain" text="Hafif Yağmur" />
+    <string id="EnhancedBattleTest_weather_heavy_rain" text="Şiddetli Yağmur" />
+    <string id="EnhancedBattleTest_weather_snowy" text="Kar" />
+    <string id="EnhancedBattleTest_weather_blizzard" text="Kar Fırtınası" />
+    <string id="EnhancedBattleTest_density_default" text="Varsayılan" />
+    <string id="EnhancedBattleTest_density_none" text="Yok" />
+    <string id="EnhancedBattleTest_density_light" text="Hafif" />
+    <string id="EnhancedBattleTest_density_moderate" text="Orta" />
+    <string id="EnhancedBattleTest_density_heavy" text="Yoğun" />
+    <string id="EnhancedBattleTest_density_very_heavy" text="Çok Yoğun" />
   </strings>
 </base>

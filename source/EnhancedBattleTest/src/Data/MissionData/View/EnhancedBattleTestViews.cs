@@ -10,7 +10,6 @@ using TaleWorlds.MountAndBlade.View.MissionViews;
 using TaleWorlds.MountAndBlade.View.MissionViews.Order;
 using TaleWorlds.MountAndBlade.View.MissionViews.Singleplayer;
 using TaleWorlds.MountAndBlade.View.MissionViews.Sound;
-using TaleWorlds.MountAndBlade.ViewModelCollection.OrderOfBattle;
 
 namespace EnhancedBattleTest.Data.MissionData.View
 {

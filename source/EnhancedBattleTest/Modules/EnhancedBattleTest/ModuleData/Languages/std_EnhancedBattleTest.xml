@@ -66,5 +66,27 @@
     <string id="EnhancedBattleTest_siege_unsupported" text="Siege battles are temporarily unavailable in campaign mode." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />
+    <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
+    <string id="EnhancedBattleTest_save_disabled" text="Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
+    <string id="EnhancedBattleTest_save_before_battle_title" text="Save Before Battle Configuration?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="Would you like to save the campaign before opening the battle configuration screen?" />
+    <string id="EnhancedBattleTest_save_before_battle" text="Save the game first" />
+    <string id="EnhancedBattleTest_continue_without_saving" text="Continue without saving" />
+    <string id="EnhancedBattleTest_rain_snow_density" text="Rain/Snow Density" />
+    <string id="EnhancedBattleTest_weather" text="Weather" />
+    <string id="EnhancedBattleTest_fog_density" text="Fog Density" />
+    <string id="EnhancedBattleTest_day_of_year" text="Day of Year" />
+    <string id="EnhancedBattleTest_weather_clear" text="Clear" />
+    <string id="EnhancedBattleTest_weather_light_rain" text="Light Rain" />
+    <string id="EnhancedBattleTest_weather_heavy_rain" text="Heavy Rain" />
+    <string id="EnhancedBattleTest_weather_snowy" text="Snow" />
+    <string id="EnhancedBattleTest_weather_blizzard" text="Blizzard" />
+    <string id="EnhancedBattleTest_density_default" text="Default" />
+    <string id="EnhancedBattleTest_density_none" text="None" />
+    <string id="EnhancedBattleTest_density_light" text="Light" />
+    <string id="EnhancedBattleTest_density_moderate" text="Moderate" />
+    <string id="EnhancedBattleTest_density_heavy" text="Heavy" />
+    <string id="EnhancedBattleTest_density_very_heavy" text="Very Heavy" />
   </strings>
 </base>

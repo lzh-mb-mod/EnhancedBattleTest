@@ -15,6 +15,7 @@ namespace EnhancedBattleTest.UI.Basic
         private string _text;
         private bool _isIllegal;
         private bool _isDiscrete;
+        private bool _isEnabled = true;
 
         public T Min { get; }
 
@@ -85,6 +86,19 @@ namespace EnhancedBattleTest.UI.Basic
                     return;
                 _isIllegal = value;
                 OnPropertyChanged(nameof(IsIllegal));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled == value)
+                    return;
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
 

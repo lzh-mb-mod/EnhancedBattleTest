@@ -61,4 +61,26 @@
   <string id="str_ebt_siege_unsupported" text="{=EnhancedBattleTest_siege_unsupported}Siege battles are temporarily unavailable in campaign mode." />
   <string id="str_ebt_campaign_menu_desc" text="{=EnhancedBattleTest_campaign_menu_desc}Prepare a custom battle test." />
   <string id="str_ebt_campaign_menu_start" text="{=EnhancedBattleTest_campaign_menu_start}Configure Battle" />
+  <string id="str_ebt_campaign_state_warning_title" text="{=EnhancedBattleTest_campaign_state_warning_title}Enhanced Battle Test Warning" />
+  <string id="str_ebt_campaign_state_warning" text="{=EnhancedBattleTest_campaign_state_warning}Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
+  <string id="str_ebt_save_disabled" text="{=EnhancedBattleTest_save_disabled}Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
+  <string id="str_ebt_save_before_battle_title" text="{=EnhancedBattleTest_save_before_battle_title}Save Before Battle Configuration?" />
+  <string id="str_ebt_save_before_battle_description" text="{=EnhancedBattleTest_save_before_battle_description}Would you like to save the campaign before opening the battle configuration screen?" />
+  <string id="str_ebt_save_before_battle" text="{=EnhancedBattleTest_save_before_battle}Save the game first" />
+  <string id="str_ebt_continue_without_saving" text="{=EnhancedBattleTest_continue_without_saving}Continue without saving" />
+  <string id="str_ebt_rain_snow_density" text="{=EnhancedBattleTest_rain_snow_density}Rain/Snow Density" />
+  <string id="str_ebt_weather" text="{=EnhancedBattleTest_weather}Weather" />
+  <string id="str_ebt_fog_density" text="{=EnhancedBattleTest_fog_density}Fog Density" />
+  <string id="str_ebt_day_of_year" text="{=EnhancedBattleTest_day_of_year}Day of Year" />
+  <string id="str_ebt_weather_clear" text="{=EnhancedBattleTest_weather_clear}Clear" />
+  <string id="str_ebt_weather_light_rain" text="{=EnhancedBattleTest_weather_light_rain}Light Rain" />
+  <string id="str_ebt_weather_heavy_rain" text="{=EnhancedBattleTest_weather_heavy_rain}Heavy Rain" />
+  <string id="str_ebt_weather_snowy" text="{=EnhancedBattleTest_weather_snowy}Snow" />
+  <string id="str_ebt_weather_blizzard" text="{=EnhancedBattleTest_weather_blizzard}Blizzard" />
+  <string id="str_ebt_density_default" text="{=EnhancedBattleTest_density_default}Default" />
+  <string id="str_ebt_density_none" text="{=EnhancedBattleTest_density_none}None" />
+  <string id="str_ebt_density_light" text="{=EnhancedBattleTest_density_light}Light" />
+  <string id="str_ebt_density_moderate" text="{=EnhancedBattleTest_density_moderate}Moderate" />
+  <string id="str_ebt_density_heavy" text="{=EnhancedBattleTest_density_heavy}Heavy" />
+  <string id="str_ebt_density_very_heavy" text="{=EnhancedBattleTest_density_very_heavy}Very Heavy" />
 </strings>

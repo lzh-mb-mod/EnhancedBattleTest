@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
@@ -27,28 +28,237 @@ namespace EnhancedBattleTest.Data.MissionData
             public bool IsMoon;
         }
 
-        public static AtmosphereInfo CreateAtmosphereInfoForMission(string seasonString = "", int timeOfDay = 6, bool isInSettlement = false)
+        public static AtmosphereInfo CreateAtmosphereInfoForMission(
+            int dayOfYear = 1,
+            float timeOfDay = 6f,
+            string weather = "clear",
+            float fogDensity = -1f,
+            bool isInSettlement = false)
         {
-            Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
-            dictionary1.Add("spring", 0);
-            dictionary1.Add("summer", 1);
-            dictionary1.Add("fall", 2);
-            dictionary1.Add("winter", 3);
-            int num = 0;
-            dictionary1.TryGetValue(seasonString, out num);
-            Dictionary<int, string> dictionary2 = new Dictionary<int, string>();
-            dictionary2.Add(6, "TOD_06_00_SemiCloudy");
-            dictionary2.Add(12, "TOD_12_00_SemiCloudy");
-            dictionary2.Add(15, "TOD_04_00_SemiCloudy");
-            dictionary2.Add(18, "TOD_03_00_SemiCloudy");
-            dictionary2.Add(22, "TOD_01_00_SemiCloudy");
-            string str = "field_battle";
-            dictionary2.TryGetValue(timeOfDay, out str);
+            float seasonOfYear =
+                (MBMath.ClampInt(dayOfYear, 1, CampaignTime.DaysInYear) - 1f)
+                / CampaignTime.DaysInSeason;
+            (CampaignTime.Seasons season, bool isRaining, float rainValue, float snowValue)
+                = GetSeasonRainAndSnowDataForOpeningMission(
+                    dayOfYear,
+                    weather);
+            bool isWinter = season == CampaignTime.Seasons.Winter;
+            string atmosphereName = GetSelectedAtmosphereId(
+                isWinter,
+                isRaining,
+                snowValue,
+                rainValue);
+            float hourNormalized = timeOfDay / 24f;
+            float seasonFactor = GetSeasonTimeFactor(seasonOfYear);
+            SunInfo sunInfo = GetSunInfo(hourNormalized, seasonFactor);
+            float environmentMultiplier = GetEnvironmentMultiplier(
+                sunInfo.SunPosition,
+                seasonFactor,
+                sunInfo.IsMoon);
+            float modifiedEnvironmentMultiplier = GetModifiedEnvironmentMultiplier(
+                environmentMultiplier,
+                sunInfo.IsMoon);
+            modifiedEnvironmentMultiplier = Math.Max(
+                (float)Math.Pow(modifiedEnvironmentMultiplier, 1.5),
+                0.001f);
+            Vec3 position = MobileParty.MainParty?.GetLogicalPosition()
+                            ?? Vec3.Zero;
+            AtmosphereState atmosphereState =
+                Campaign.Current.Models.MapWeatherModel
+                    .GetInterpolatedAtmosphereState(
+                        CampaignTime.Now,
+                        position);
+            float calculatedFogDensity = GetFogDensity(
+                environmentMultiplier,
+                position,
+                sunInfo.IsMoon);
+            float selectedFogDensity = fogDensity < 0f
+                ? calculatedFogDensity
+                : fogDensity;
             return new AtmosphereInfo()
             {
-                AtmosphereName = str,
-                TimeInfo = new TimeInformation() { Season = num }
+                //AtmosphereName = "TOD_12_00_SemiCloudy",
+                InterpolatedAtmosphereName = atmosphereName,
+                SunInfo =
+                {
+                    Altitude = sunInfo.SunPosition.Altitude,
+                    Angle = sunInfo.SunPosition.Angle,
+                    Color = GetSunColor(
+                        environmentMultiplier,
+                        sunInfo.IsMoon),
+                    Brightness = GetSunBrightness(
+                        environmentMultiplier,
+                        sunInfo.IsMoon),
+                    Size = GetSunSize(environmentMultiplier),
+                    RayStrength = GetSunRayStrength(environmentMultiplier),
+                    MaxBrightness = GetSunBrightness(
+                        1f,
+                        sunInfo.IsMoon,
+                        true)
+                },
+                AmbientInfo =
+                {
+                    EnvironmentMultiplier = Math.Max(
+                        modifiedEnvironmentMultiplier * 0.5f,
+                        0.001f),
+                    AmbientColor = GetAmbientFogColor(
+                        modifiedEnvironmentMultiplier),
+                    MieScatterStrength = GetMieScatterStrength(
+                        environmentMultiplier),
+                    RayleighConstant = GetRayleighConstant(
+                        environmentMultiplier)
+                },
+                SkyInfo =
+                {
+                    Brightness = GetSkyBrightness(
+                        hourNormalized,
+                        environmentMultiplier,
+                        sunInfo.IsMoon)
+                },
+                FogInfo =
+                {
+                    Density = selectedFogDensity,
+                    Color = GetFogColor(
+                        modifiedEnvironmentMultiplier,
+                        sunInfo.IsMoon),
+                    Falloff = 1.48f
+                },
+                TimeInfo = new TimeInformation
+                {
+                    Season = (int)season,
+                    TimeOfDay = timeOfDay,
+                    WinterTimeFactor = GetWinterTimeFactor(seasonOfYear),
+                    DrynessFactor = GetDrynessFactor(seasonOfYear),
+                    NightTimeFactor = GetNightTimeFactor(timeOfDay)
+                },
+                RainInfo = new RainInformation
+                {
+                    Density = rainValue
+                },
+                SnowInfo = new SnowInformation
+                {
+                    Density = snowValue
+                },
+                AreaInfo =
+                {
+                    Temperature = GetTemperature(
+                        ref atmosphereState,
+                        seasonFactor),
+                    Humidity = GetHumidity(
+                        ref atmosphereState,
+                        seasonFactor)
+                },
+                PostProInfo =
+                {
+                    MinExposure = MBMath.Lerp(
+                        -3f,
+                        -2f,
+                        GetExposureCoefBetweenDayNight(timeOfDay)),
+                    MaxExposure = MBMath.Lerp(
+                        2f,
+                        0f,
+                        modifiedEnvironmentMultiplier),
+                    BrightpassThreshold = MBMath.Lerp(
+                        0.7f,
+                        0.9f,
+                        modifiedEnvironmentMultiplier),
+                    MiddleGray = 0.1f
+                }
             };
+        }
+
+        private static (
+            CampaignTime.Seasons season,
+            bool isRaining,
+            float rainValue,
+            float snowValue)
+            GetSeasonRainAndSnowDataForOpeningMission(
+                int dayOfYear,
+                string weather)
+        {
+            var season = GetSeason(dayOfYear);
+            float rainValue = 0f;
+            float snowValue = 0.85f;
+            bool isRaining = false;
+            switch (weather)
+            {
+                case "clear":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    break;
+                case "light_rain":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    rainValue = 0.701f;
+                    break;
+                case "heavy_rain":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    isRaining = true;
+                    rainValue = 0.85f
+                                + MBRandom.RandomFloatRanged(0f, 0.14999998f);
+                    break;
+                case "snowy":
+                    season = CampaignTime.Seasons.Winter;
+                    rainValue = 0.55f;
+                    snowValue = 0.55f
+                                + MBRandom.RandomFloatRanged(0f, 0.3f);
+                    break;
+                case "blizzard":
+                    season = CampaignTime.Seasons.Winter;
+                    rainValue = 0.85f;
+                    snowValue = 0.85f;
+                    break;
+            }
+
+            return (season, isRaining, rainValue, snowValue);
+        }
+
+        private static CampaignTime.Seasons GetNonWinterSeason(
+            int dayOfYear,
+            CampaignTime.Seasons season)
+        {
+            if (season != CampaignTime.Seasons.Winter)
+                return season;
+
+            int dayOfSeason =
+                (MBMath.ClampInt(dayOfYear, 1, CampaignTime.DaysInYear) - 1)
+                % CampaignTime.DaysInSeason;
+            return dayOfSeason <= 10
+                ? CampaignTime.Seasons.Autumn
+                : CampaignTime.Seasons.Spring;
+        }
+
+        private static string GetSelectedAtmosphereId(
+            bool isWinter,
+            bool isRaining,
+            float snowDensity,
+            float rainDensity)
+        {
+            string result = "semicloudy_field_battle";
+            if (isWinter)
+                return snowDensity >= 0.85f ? "dense_snowy" : "semi_snowy";
+
+            if (rainDensity < 0.6f)
+                return result;
+            result = "wet";
+            if (isRaining)
+                result = rainDensity >= 0.85f
+                    ? "dense_rainy"
+                    : "semi_rainy";
+            return result;
+        }
+
+        public static int GetSeasonIndex(int dayOfYear)
+        {
+            return (MBMath.ClampInt(
+                        dayOfYear,
+                        1,
+                        CampaignTime.DaysInYear)
+                    - 1)
+                   / CampaignTime.DaysInSeason;
+        }
+
+        private static CampaignTime.Seasons GetSeason(int dayOfYear)
+        {
+            return (CampaignTime.Seasons)GetSeasonIndex(dayOfYear);
         }
 
         private static SunInfo GetSunInfo(
@@ -88,15 +298,16 @@ namespace EnhancedBattleTest.Data.MissionData
 
         private static Vec3 GetFogColor(float environmentMultiplier, bool isMoon)
         {
-            return isMoon
-                ? Vec3.Vec3Max(
-                    new Vec3((float) (1.0 - (double) environmentMultiplier * 10.0),
-                        (float) (0.75 + (double) environmentMultiplier * 1.5),
-                        (float) (0.649999976158142 + (double) environmentMultiplier * 2.0)),
-                    new Vec3(0.55f, 0.59f, 0.6f))
-                : new Vec3((float) (1.0 - (1.0 - (double) environmentMultiplier) / 7.0),
-                    (float) (0.75 - (double) environmentMultiplier / 4.0),
-                    (float) (0.550000011920929 - (double) environmentMultiplier / 5.0));
+            //return isMoon
+            //    ? Vec3.Vec3Max(
+            //        new Vec3((float)(1.0 - (double)environmentMultiplier * 10.0),
+            //            (float)(0.75 + (double)environmentMultiplier * 1.5),
+            //            (float)(0.649999976158142 + (double)environmentMultiplier * 2.0)),
+            //        new Vec3(0.55f, 0.59f, 0.6f))
+            //    : new Vec3((float)(1.0 - (1.0 - (double)environmentMultiplier) / 7.0),
+            //        (float)(0.75 - (double)environmentMultiplier / 4.0),
+            //        (float)(0.550000011920929 - (double)environmentMultiplier / 5.0));
+            return new Vec3(0.72f, 0.76f, 0.8f);
         }
 
 
@@ -143,7 +354,7 @@ namespace EnhancedBattleTest.Data.MissionData
         {
             float num = 0.0f;
             if ((int)seasonOfYear == 3)
-                num = MBMath.SplitLerp(0.0f, 0.35f, 0.0f, 0.5f, Math.Abs((float)Math.IEEERemainder(seasonOfYear, 1.0)), 1E-05f);
+                num = MBMath.SplitLerp(0.0f, 0.75f, 0.0f, 0.5f, Math.Abs((float)Math.IEEERemainder(seasonOfYear, 1.0)), 1E-05f);
             return num;
         }
 
@@ -168,14 +379,13 @@ namespace EnhancedBattleTest.Data.MissionData
 
         private static float GetSeasonTimeFactor(float seasonNum)
         {
-            float num1 = seasonNum;
             float result = 0.0f;
-            if (num1 > 1.5 && num1 < 3.5)
-                result = MBMath.Lerp(0.0f, 1f, (float) ((num1 - 1.5) / 2.0));
-            else if (num1 < 1.5)
-                result = MBMath.Lerp(0.75f, 0.0f, num1 / 1.5f);
-            else if (num1 > 3.5)
-                result = MBMath.Lerp(1f, 0.75f, (float) ((num1 - 3.5) * 2.0));
+            if (seasonNum > 1.5f && seasonNum <= 3.5f)
+                result = MBMath.Map(seasonNum, 1.5f, 3.5f, 0f, 1f);
+            else if (seasonNum <= 1.5f)
+                result = MBMath.Map(seasonNum, 0f, 1.5f, 0.75f, 0f);
+            else if (seasonNum > 3.5f)
+                result = MBMath.Map(seasonNum, 3.5f, 4f, 1f, 0.75f);
             return result;
         }
         private static float GetTemperature(ref AtmosphereState gridInfo, float seasonFactor)

@@ -7,6 +7,7 @@ using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 using TaleWorlds.MountAndBlade;
@@ -19,7 +20,10 @@ namespace EnhancedBattleTest.Data.MissionData
     [MissionManager]
     public static class EnhancedBattleTestMissions
     {
-        public static Mission OpenMission(BattleConfig config, string mapName)
+        public static Mission OpenMission(
+            BattleConfig config,
+            string mapName,
+            TerrainType terrainType)
         {
             if (config.BattleTypeConfig.BattleType == BattleType.Siege)
                 return null;
@@ -28,7 +32,7 @@ namespace EnhancedBattleTest.Data.MissionData
             {
                 EnhancedBattleTestPartyController.BattleContext context =
                     EnhancedBattleTestPartyController.Create(config);
-                return OpenFieldMission(config, mapName, context);
+                return OpenFieldMission(config, mapName, terrainType, context);
             }
             catch
             {
@@ -41,6 +45,7 @@ namespace EnhancedBattleTest.Data.MissionData
         private static Mission OpenFieldMission(
             BattleConfig config,
             string scene,
+            TerrainType terrainType,
             EnhancedBattleTestPartyController.BattleContext context)
         {
             BattleSideEnum playerSide = config.BattleTypeConfig.PlayerSide;
@@ -61,8 +66,18 @@ namespace EnhancedBattleTest.Data.MissionData
             TextObject playerGeneralName = GetGeneralName(config.PlayerTeamConfig);
             TextObject enemyGeneralName = GetGeneralName(config.EnemyTeamConfig);
             AtmosphereInfo atmosphereInfo = AtmosphereModel.CreateAtmosphereInfoForMission(
-                config.MapConfig.Season,
-                config.MapConfig.TimeOfDay);
+                config.MapConfig.DayOfYear,
+                config.MapConfig.TimeOfDay,
+                config.MapConfig.Weather,
+                config.MapConfig.FogDensity);
+            bool isDayInWinter =
+                AtmosphereModel.GetSeasonIndex(config.MapConfig.DayOfYear)
+                == (int)CampaignTime.Seasons.Winter;
+            bool usesWinterWeather =
+                atmosphereInfo.TimeInfo.Season
+                == (int)CampaignTime.Seasons.Winter;
+            if (isDayInWinter || usesWinterWeather)
+                terrainType = TerrainType.Snow;
 
             Mission mission = MissionState.OpenNew(
                 "Battle",
@@ -71,11 +86,23 @@ namespace EnhancedBattleTest.Data.MissionData
                     DoNotUseLoadingScreen = false,
                     PlayingInCampaignMode = true,
                     AtmosphereOnCampaign = atmosphereInfo,
-                    TimeOfDay = config.MapConfig.TimeOfDay
+                    TimeOfDay = config.MapConfig.TimeOfDay,
+                    TerrainType = (int)terrainType,
+                    DecalAtlasGroup = (int)DecalAtlasGroup.Battle,
+                    RandomTerrainSeed = MBRandom.RandomInt(10000)
                 },
                 missionController => new MissionBehavior[]
                 {
                     new EnhancedBattleTestCleanupLogic(),
+                    new EnhancedBattleTestEnvironmentLogic(
+                        config.MapConfig.TimeOfDay,
+                        atmosphereInfo.RainInfo.Density,
+                        usesWinterWeather
+                            ? atmosphereInfo.SnowInfo.Density
+                            : 0f,
+                        atmosphereInfo.FogInfo.Density,
+                        atmosphereInfo.FogInfo.Color,
+                        atmosphereInfo.FogInfo.Falloff),
                     new EnhancedBattleTestPlayerAgentLogic(context.PlayerCharacter),
                     new CommanderLogic(config),
                     new MissionAgentSpawnLogic(

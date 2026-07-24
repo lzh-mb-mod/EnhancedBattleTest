@@ -1,8 +1,10 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
+using EnhancedBattleTest.UI.Basic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Extensions;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection;
@@ -21,14 +23,17 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<MapItemVM> _mapSelection;
         private SelectorVM<SceneLevelItemVM> _sceneLevelSelection;
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
-        private SelectorVM<SeasonItemVM> _seasonSelection;
-        private SelectorVM<TimeOfDayItemVM> _timeOfDaySelection;
+        private SelectorVM<WeatherItemVM> _weatherSelection;
+        private bool _isDefaultFogDensity;
         //private MBBindingList<MapItemVM> _mapSearchResults;
         private string _titleText;
 
         private string _mapText;
-        private string _seasonText;
+        private string _dayOfYearText;
         private string _timeOfDayText;
+        private string _rainDensityText;
+        private string _fogDensityText;
+        private string _fogDefaultText;
         private string _sceneLevelText;
         private string _wallHitpointsText;
         private string _attackerSiegeMachinesText;
@@ -40,9 +45,20 @@ namespace EnhancedBattleTest.UI
 
         public int SelectedSceneLevel { get; private set; }
 
-        public int SelectedTimeOfDay { get; private set; }
+        public float SelectedTimeOfDay => TimeOfDay.Value;
 
-        public string SelectedSeasonId { get; private set; }
+        public int SelectedDayOfYear => (int)DayOfYear.Value;
+
+        public string SelectedWeatherId { get; private set; }
+
+        public float SelectedFogDensity =>
+            IsDefaultFogDensity ? -1f : FogDensity.Value;
+
+        public NumberVM<float> TimeOfDay { get; }
+
+        public NumberVM<float> DayOfYear { get; }
+
+        public NumberVM<float> FogDensity { get; }
 
         public string SelectedMapId
         {
@@ -77,8 +93,12 @@ namespace EnhancedBattleTest.UI
             MapSelection = new SelectorVM<MapItemVM>(0, new Action<SelectorVM<MapItemVM>>(this.OnMapSelection));
             WallHitpointSelection = new SelectorVM<WallHitpointItemVM>(0, OnWallHitpointSelection);
             SceneLevelSelection = new SelectorVM<SceneLevelItemVM>(0, OnSceneLevelSelection);
-            SeasonSelection = new SelectorVM<SeasonItemVM>(0, OnSeasonSelection);
-            TimeOfDaySelection = new SelectorVM<TimeOfDayItemVM>(0, OnTimeOfDaySelection);
+            WeatherSelection =
+                new SelectorVM<WeatherItemVM>(0, OnWeatherSelection);
+            DayOfYear = new NumberVM<float>(1f, 1f, CampaignTime.DaysInYear, true);
+            TimeOfDay = new NumberVM<float>(6f, 0f, 24f, false);
+            FogDensity = new NumberVM<float>(1f, 0f, 64f, false);
+            IsDefaultFogDensity = true;
             RefreshValues();
         }
 
@@ -88,8 +108,14 @@ namespace EnhancedBattleTest.UI
             PrepareMapLists();
             TitleText = new TextObject("{=customgametitle}Map").ToString();
             MapText = new TextObject("{=customgamemapname}Map").ToString();
-            SeasonText = new TextObject("{=xTzDM5XE}Season").ToString();
+            DayOfYearText =
+                GameTexts.FindText("str_ebt_day_of_year").ToString();
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
+            RainDensityText =
+                GameTexts.FindText("str_ebt_weather").ToString();
+            FogDensityText = GameTexts.FindText("str_ebt_fog_density").ToString();
+            FogDefaultText =
+                GameTexts.FindText("str_ebt_density_default").ToString();
             SceneLevelText = new TextObject("{=0s52GQJt}Scene Level").ToString();
             WallHitpointsText = new TextObject("{=4IuXGSdc}Wall Hitpoints").ToString();
             AttackerSiegeMachinesText = new TextObject("{=AmfIfeIc}Choose Attacker Siege Machines").ToString();
@@ -98,20 +124,25 @@ namespace EnhancedBattleTest.UI
             MapSelection.ItemList.Clear();
             WallHitpointSelection.ItemList.Clear();
             SceneLevelSelection.ItemList.Clear();
-            SeasonSelection.ItemList.Clear();
-            TimeOfDaySelection.ItemList.Clear();
+            WeatherSelection.ItemList.Clear();
             foreach (Tuple<string, int> wallHitpoint in CustomBattleData.WallHitpoints)
                 WallHitpointSelection.AddItem(new WallHitpointItemVM(wallHitpoint.Item1, wallHitpoint.Item2));
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
                 SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
-            foreach (Tuple<string, string> season in CustomBattleData.Seasons)
-                SeasonSelection.AddItem(new SeasonItemVM(season.Item1, season.Item2));
-            foreach (Tuple<string, CustomBattleTimeOfDay> tuple in CustomBattleData.TimesOfDay)
-                TimeOfDaySelection.AddItem(new TimeOfDayItemVM(tuple.Item1, (int)tuple.Item2));
+            AddWeatherItem("clear", "str_ebt_weather_clear");
+            AddWeatherItem("light_rain", "str_ebt_weather_light_rain");
+            AddWeatherItem("heavy_rain", "str_ebt_weather_heavy_rain");
+            AddWeatherItem("snowy", "str_ebt_weather_snowy");
+            AddWeatherItem("blizzard", "str_ebt_weather_blizzard");
             WallHitpointSelection.SelectedIndex = 0;
             SceneLevelSelection.SelectedIndex = 0;
-            SeasonSelection.SelectedIndex = 0;
-            TimeOfDaySelection.SelectedIndex = 0;
+            WeatherSelection.SelectedIndex = 0;
+        }
+
+        private void AddWeatherItem(string id, string textId)
+        {
+            WeatherSelection.AddItem(
+                new WeatherItemVM(id, GameTexts.FindText(textId)));
         }
 
         public void ExecuteSallyOutChange()
@@ -157,14 +188,24 @@ namespace EnhancedBattleTest.UI
             SelectedSceneLevel = selector.SelectedItem.Level;
         }
 
-        private void OnSeasonSelection(SelectorVM<SeasonItemVM> selector)
+        private void OnWeatherSelection(SelectorVM<WeatherItemVM> selector)
         {
-            SelectedSeasonId = selector.SelectedItem.SeasonId;
+            SelectedWeatherId = selector.SelectedItem.WeatherId;
         }
 
-        private void OnTimeOfDaySelection(SelectorVM<TimeOfDayItemVM> selector)
+        public void SetWeather(string weatherId)
         {
-            SelectedTimeOfDay = selector.SelectedItem.TimeOfDay;
+            WeatherSelection.SelectedIndex = Math.Max(
+                WeatherSelection.ItemList.FindIndex(
+                    item => item.WeatherId == weatherId),
+                0);
+        }
+
+        public void SetFogDensity(float density)
+        {
+            IsDefaultFogDensity = density < 0f;
+            if (!IsDefaultFogDensity)
+                FogDensity.Value = density;
         }
 
         public void OnGameTypeChange(BattleType gameType)
@@ -217,9 +258,14 @@ namespace EnhancedBattleTest.UI
             //}
             MapSelection.ExecuteRandomize();
             SceneLevelSelection.ExecuteRandomize();
-            SeasonSelection.ExecuteRandomize();
             WallHitpointSelection.ExecuteRandomize();
-            TimeOfDaySelection.ExecuteRandomize();
+            WeatherSelection.ExecuteRandomize();
+            DayOfYear.Value = MBRandom.RandomInt(
+                1,
+                CampaignTime.DaysInYear + 1);
+            TimeOfDay.Value = MBRandom.RandomFloat * 24f;
+            IsDefaultFogDensity = false;
+            FogDensity.Value = MBRandom.RandomFloat * 64f;
         }
 
         public void RandomizeMap()
@@ -314,28 +360,29 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public SelectorVM<SeasonItemVM> SeasonSelection
+        public SelectorVM<WeatherItemVM> WeatherSelection
         {
-            get => _seasonSelection;
+            get => _weatherSelection;
             set
             {
-                if (value == _seasonSelection)
+                if (value == _weatherSelection)
                     return;
-                _seasonSelection = value;
-                OnPropertyChanged(nameof(SeasonSelection));
+                _weatherSelection = value;
+                OnPropertyChangedWithValue(value, nameof(WeatherSelection));
             }
         }
 
         [DataSourceProperty]
-        public SelectorVM<TimeOfDayItemVM> TimeOfDaySelection
+        public bool IsDefaultFogDensity
         {
-            get => _timeOfDaySelection;
+            get => _isDefaultFogDensity;
             set
             {
-                if (value == _timeOfDaySelection)
+                if (value == _isDefaultFogDensity)
                     return;
-                _timeOfDaySelection = value;
-                OnPropertyChangedWithValue(value, nameof(TimeOfDaySelection));
+                _isDefaultFogDensity = value;
+                FogDensity.IsEnabled = !value;
+                OnPropertyChanged(nameof(IsDefaultFogDensity));
             }
         }
 
@@ -413,15 +460,15 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public string SeasonText
+        public string DayOfYearText
         {
-            get => _seasonText;
+            get => _dayOfYearText;
             set
             {
-                if (value == _seasonText)
+                if (value == _dayOfYearText)
                     return;
-                _seasonText = value;
-                OnPropertyChanged(nameof(SeasonText));
+                _dayOfYearText = value;
+                OnPropertyChanged(nameof(DayOfYearText));
             }
         }
 
@@ -435,6 +482,45 @@ namespace EnhancedBattleTest.UI
                     return;
                 _timeOfDayText = value;
                 OnPropertyChangedWithValue(value, nameof(TimeOfDayText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string RainDensityText
+        {
+            get => _rainDensityText;
+            set
+            {
+                if (value == _rainDensityText)
+                    return;
+                _rainDensityText = value;
+                OnPropertyChangedWithValue(value, nameof(RainDensityText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string FogDensityText
+        {
+            get => _fogDensityText;
+            set
+            {
+                if (value == _fogDensityText)
+                    return;
+                _fogDensityText = value;
+                OnPropertyChangedWithValue(value, nameof(FogDensityText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string FogDefaultText
+        {
+            get => _fogDefaultText;
+            set
+            {
+                if (value == _fogDefaultText)
+                    return;
+                _fogDefaultText = value;
+                OnPropertyChangedWithValue(value, nameof(FogDefaultText));
             }
         }
 
@@ -503,4 +589,16 @@ namespace EnhancedBattleTest.UI
             }
         }
     }
+
+    public sealed class WeatherItemVM : SelectorItemVM
+    {
+        public string WeatherId { get; }
+
+        public WeatherItemVM(string weatherId, TextObject name)
+            : base(name)
+        {
+            WeatherId = weatherId;
+        }
+    }
+
 }

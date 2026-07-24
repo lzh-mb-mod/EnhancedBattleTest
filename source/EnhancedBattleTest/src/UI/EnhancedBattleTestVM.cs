@@ -6,6 +6,7 @@ using EnhancedBattleTest.Data;
 using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.GameMode;
 using EnhancedBattleTest.UI.Basic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -23,6 +24,7 @@ namespace EnhancedBattleTest.UI
         private readonly EnhancedBattleTestState _state;
         private BattleConfig _config;
         private readonly List<SceneData> _scenes;
+        private bool _hasShownCampaignStateWarning;
 
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerMeleeMachines;
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerRangedMachines;
@@ -38,8 +40,6 @@ namespace EnhancedBattleTest.UI
         public TextVM SwapTeamText { get; }
 
         public TextVM MapText { get; }
-
-        public TextVM SeasonText { get; }
 
         public TextVM StartButtonText { get; }
 
@@ -165,7 +165,6 @@ namespace EnhancedBattleTest.UI
 
             MapText = new TextVM(GameTexts.FindText("str_ebt_map"));
 
-            SeasonText = new TextVM(GameTexts.FindText("str_ebt_season"));
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
 
@@ -223,26 +222,85 @@ namespace EnhancedBattleTest.UI
                     break;
             }
 
+            _config.MapConfig.DayOfYear = GetConfiguredDayOfYear();
+            MapSelectionGroup.DayOfYear.Value = _config.MapConfig.DayOfYear;
+
+            MapSelectionGroup.TimeOfDay.Value = _config.MapConfig.TimeOfDay;
+            float fogDensity = _config.MapConfig.FogDensity;
+            string weather = GetConfiguredWeather(
+                _config.MapConfig.Weather,
+                _config.MapConfig.RainDensity,
+                ref fogDensity);
+            MapSelectionGroup.SetWeather(weather);
+            MapSelectionGroup.SetFogDensity(fogDensity);
+        }
+
+        private string GetConfiguredWeather(
+            string weather,
+            float rainDensity,
+            ref float fogDensity)
+        {
+            switch (weather)
+            {
+                case "light_rain":
+                case "heavy_rain":
+                case "snowy":
+                case "blizzard":
+                    return weather;
+                case "rain_light":
+                    return "light_rain";
+                case "rain":
+                case "rain_heavy":
+                    return "heavy_rain";
+                case "snow_light":
+                case "snow":
+                    return "snowy";
+                case "snow_heavy":
+                    return "blizzard";
+                case "fog_light":
+                    fogDensity = 8f;
+                    return "clear";
+                case "fog_heavy":
+                    fogDensity = 32f;
+                    return "clear";
+                case "rainstorm":
+                    fogDensity = 16f;
+                    return "heavy_rain";
+            }
+
+            if (rainDensity <= 0f)
+                return "clear";
+
+            bool isWinter =
+                AtmosphereModel.GetSeasonIndex(_config.MapConfig.DayOfYear)
+                == (int)CampaignTime.Seasons.Winter;
+            if (isWinter)
+                return rainDensity < 0.75f ? "snowy" : "blizzard";
+
+            return rainDensity < 0.75f ? "light_rain" : "heavy_rain";
+        }
+
+        private int GetConfiguredDayOfYear()
+        {
+            if (_config.MapConfig.DayOfYear >= 1
+                && _config.MapConfig.DayOfYear <= CampaignTime.DaysInYear)
+                return _config.MapConfig.DayOfYear;
+
             switch (_config.MapConfig.Season)
             {
                 case "summer":
-                    MapSelectionGroup.SeasonSelection.SelectedIndex = 0;
-                    break;
+                    return 32;
                 case "fall":
-                    MapSelectionGroup.SeasonSelection.SelectedIndex = 1;
-                    break;
+                    return 53;
                 case "winter":
-                    MapSelectionGroup.SeasonSelection.SelectedIndex = 2;
-                    break;
+                    return 74;
                 case "spring":
-                    MapSelectionGroup.SeasonSelection.SelectedIndex = 3;
-                    break;
+                    return 11;
+                default:
+                    return Campaign.Current != null
+                        ? CampaignTime.Now.GetDayOfYear + 1
+                        : 1;
             }
-
-            MapSelectionGroup.TimeOfDaySelection.SelectedIndex = MapSelectionGroup.TimeOfDaySelection.ItemList.IndexOf(
-                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault(vm =>
-                    vm.TimeOfDay == _config.MapConfig.TimeOfDay) ??
-                MapSelectionGroup.TimeOfDaySelection.ItemList.FirstOrDefault());
         }
 
         public void ExecuteSwapTeam()
@@ -267,7 +325,11 @@ namespace EnhancedBattleTest.UI
             ApplyConfig();
             _config.Serialize();
             _config = null;
+            bool showCampaignStateWarning =
+                EnhancedBattleTestSaveGuard.ConsumePostBattleWarning();
             Game.Current.GameStateManager.PopState();
+            if (showCampaignStateWarning)
+                EnhancedBattleTestSaveGuard.ShowCampaignStateWarning(false);
         }
 
         public void ExecuteStart()
@@ -286,10 +348,27 @@ namespace EnhancedBattleTest.UI
             if (sceneData == null)
                 return;
             _config.Serialize();
+
+            if (_hasShownCampaignStateWarning)
+            {
+                OpenMission(sceneData);
+                return;
+            }
+
+            _hasShownCampaignStateWarning = true;
+            EnhancedBattleTestSaveGuard.ShowCampaignStateWarning(
+                true,
+                () => OpenMission(sceneData));
+        }
+
+        private void OpenMission(SceneData sceneData)
+        {
             GameTexts.SetVariable("MapName", sceneData.Name);
             Utility.DisplayLocalizedText("str_ebt_current_map");
-            Game.Current.GameStateManager.PopState();
-            EnhancedBattleTestMissions.OpenMission(_config, sceneData.SceneID);
+            EnhancedBattleTestMissions.OpenMission(
+                _config,
+                sceneData.SceneID,
+                sceneData.Terrain);
         }
 
         private bool ApplyConfig()
@@ -302,12 +381,13 @@ namespace EnhancedBattleTest.UI
                 _config.MapConfig.SceneLevel = MapSelectionGroup.SceneLevelSelection.SelectedItem.Level;
             if (MapSelectionGroup.WallHitpointSelection.SelectedItem != null)
                 _config.MapConfig.BreachedWallCount = MapSelectionGroup.WallHitpointSelection.SelectedItem.BreachedWallCount;
-            if (MapSelectionGroup.SeasonSelection.SelectedItem != null)
-                _config.MapConfig.Season = MapSelectionGroup.SelectedSeasonId;
-            if (MapSelectionGroup.TimeOfDaySelection.SelectedItem != null)
-            {
-                _config.MapConfig.TimeOfDay = MapSelectionGroup.SelectedTimeOfDay;
-            }
+            _config.MapConfig.DayOfYear = MapSelectionGroup.SelectedDayOfYear;
+            _config.MapConfig.Season = string.Empty;
+            _config.MapConfig.TimeOfDay = MapSelectionGroup.SelectedTimeOfDay;
+            _config.MapConfig.Weather = MapSelectionGroup.SelectedWeatherId;
+            _config.MapConfig.RainDensity = 0f;
+            _config.MapConfig.FogDensity =
+                MapSelectionGroup.SelectedFogDensity;
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();

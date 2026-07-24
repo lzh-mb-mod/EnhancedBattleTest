@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-16"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
   <tags>
@@ -66,5 +66,27 @@
     <string id="EnhancedBattleTest_siege_unsupported" text="战役模式暂时无法使用攻城战。" />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="准备一场自定义战斗测试。" />
     <string id="EnhancedBattleTest_campaign_menu_start" text="配置战斗" />
+    <string id="EnhancedBattleTest_campaign_state_warning_title" text="增强战斗测试警告" />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="增强战斗测试会尽力保持战役状态不变，但无法作出保证。战斗结束后，在重新加载战役前，手动保存和自动保存都将被禁用。" />
+    <string id="EnhancedBattleTest_save_disabled" text="增强战斗测试结束后，保存功能已被禁用，直至重新加载战役。" />
+    <string id="EnhancedBattleTest_save_before_battle_title" text="在配置战斗前保存？" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="是否要在打开战斗配置界面前保存战役？" />
+    <string id="EnhancedBattleTest_save_before_battle" text="先保存游戏" />
+    <string id="EnhancedBattleTest_continue_without_saving" text="不保存并继续" />
+    <string id="EnhancedBattleTest_rain_snow_density" text="雨雪强度" />
+    <string id="EnhancedBattleTest_weather" text="天气" />
+    <string id="EnhancedBattleTest_fog_density" text="雾浓度" />
+    <string id="EnhancedBattleTest_day_of_year" text="一年中的第几天" />
+    <string id="EnhancedBattleTest_weather_clear" text="晴朗" />
+    <string id="EnhancedBattleTest_weather_light_rain" text="小雨" />
+    <string id="EnhancedBattleTest_weather_heavy_rain" text="大雨" />
+    <string id="EnhancedBattleTest_weather_snowy" text="降雪" />
+    <string id="EnhancedBattleTest_weather_blizzard" text="暴风雪" />
+    <string id="EnhancedBattleTest_density_default" text="默认" />
+    <string id="EnhancedBattleTest_density_none" text="无" />
+    <string id="EnhancedBattleTest_density_light" text="低" />
+    <string id="EnhancedBattleTest_density_moderate" text="中" />
+    <string id="EnhancedBattleTest_density_heavy" text="高" />
+    <string id="EnhancedBattleTest_density_very_heavy" text="极高" />
   </strings>
 </base>
