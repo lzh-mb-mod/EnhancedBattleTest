@@ -66,9 +66,7 @@
 
     <string id="EnhancedBattleTest_tacticlevel" text="Taktik seviyesi" />
 
-    <string id="EnhancedBattleTest_siegenoplayer" text="Kuşatmada oyucu takımının komutana ihtiyacı var." />
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />
-    <string id="EnhancedBattleTest_siege_unsupported" text="Kuşatma savaşları sefer modunda geçici olarak kullanılamıyor." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Özel bir savaş testi hazırlayın." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Savaşı Yapılandır" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />

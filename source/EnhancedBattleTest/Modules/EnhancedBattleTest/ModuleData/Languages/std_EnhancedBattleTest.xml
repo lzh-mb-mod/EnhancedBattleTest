@@ -72,9 +72,7 @@
 
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
 
-    <string id="EnhancedBattleTest_siegenoplayer" text="In siege, player team should have general." />
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
-    <string id="EnhancedBattleTest_siege_unsupported" text="Siege battles are temporarily unavailable in campaign mode." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />
