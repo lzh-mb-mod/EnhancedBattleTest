@@ -19,14 +19,25 @@ namespace EnhancedBattleTest.UI
         public bool IsAttacker;
         public Action<CharacterConfig> SelectAction;
         public bool PauseGameActiveState;
+        public BasicCharacterObject PreferredBannerCharacter;
+        public bool UseSelectedCharacterForBanner;
 
-        public CharacterSelectionData(PartyConfig partyConfig, CharacterConfig config, bool isAttacker, Action<CharacterConfig> selectAction, bool pauseGameActiveState)
+        public CharacterSelectionData(
+            PartyConfig partyConfig,
+            CharacterConfig config,
+            bool isAttacker,
+            Action<CharacterConfig> selectAction,
+            bool pauseGameActiveState,
+            BasicCharacterObject preferredBannerCharacter,
+            bool useSelectedCharacterForBanner)
         {
             PartyConfig = partyConfig;
             Config = config;
             IsAttacker = isAttacker;
             SelectAction = selectAction;
             PauseGameActiveState = pauseGameActiveState;
+            PreferredBannerCharacter = preferredBannerCharacter;
+            UseSelectedCharacterForBanner = useSelectedCharacterForBanner;
         }
     }
 
@@ -161,7 +172,12 @@ namespace EnhancedBattleTest.UI
             Cultures.SelectedIndex = _characterCollection.Cultures.IndexOf(character.Culture.StringId) + 1;
             Groups.SelectedIndex = _characterCollection.GroupsInCultures[character.Culture.StringId]
                 .FindIndex(group => group.Info.StringId == character.GroupInfo.StringId) + 1;
-            Characters.SetConfig(data.PartyConfig, data.Config, data.IsAttacker);
+            Characters.SetConfig(
+                data.PartyConfig,
+                data.Config,
+                data.IsAttacker,
+                data.PreferredBannerCharacter,
+                data.UseSelectedCharacterForBanner);
             _updateInstantly = true;
         }
 

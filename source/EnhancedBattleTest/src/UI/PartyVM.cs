@@ -145,7 +145,9 @@ namespace EnhancedBattleTest.UI
                     _playerCharacterConfig,
                     isPlayerSide,
                     battleTypeConfig,
-                    RefreshBanner);
+                    RefreshBanner,
+                    GetPreferredBannerCharacter,
+                    () => true);
             }
             Generals = new TroopGroupVM(
                 _config,
@@ -154,7 +156,8 @@ namespace EnhancedBattleTest.UI
                 true,
                 isPlayerSide,
                 battleTypeConfig,
-                RefreshBanner);
+                RefreshBanner,
+                GetPreferredBannerCharacter);
             Troops = new TroopGroupVM(
                 _config,
                 _config.Troops,
@@ -162,7 +165,8 @@ namespace EnhancedBattleTest.UI
                 false,
                 isPlayerSide,
                 battleTypeConfig,
-                RefreshBanner);
+                RefreshBanner,
+                GetPreferredBannerCharacter);
             IsBannerEditorEnabled = _config.UseCustomBanner;
             UpdateConditionalControls();
             RefreshBanner();
@@ -190,6 +194,8 @@ namespace EnhancedBattleTest.UI
                 return;
 
             BannerEditorState.Config = _config;
+            BannerEditorState.PreferredCharacter =
+                GetPreferredBannerCharacter();
             BannerEditorState.OnDone = RefreshBanner;
             Game.Current.GameStateManager.PushState(
                 Game.Current.GameStateManager.CreateState<BannerEditorState>());
@@ -225,11 +231,16 @@ namespace EnhancedBattleTest.UI
 
         private Banner ResolveBanner()
         {
-            BasicCharacterObject preferredGeneral =
-                _isPlayerSide
-                    ? _playerCharacterConfig?.CharacterObject
-                    : null;
-            return _config.ResolveBanner(IsAttacker(), preferredGeneral);
+            return _config.ResolveBanner(
+                IsAttacker(),
+                GetPreferredBannerCharacter());
+        }
+
+        private BasicCharacterObject GetPreferredBannerCharacter()
+        {
+            return _isPlayerSide
+                ? _playerCharacterConfig?.CharacterObject
+                : null;
         }
 
         private bool IsAttacker()

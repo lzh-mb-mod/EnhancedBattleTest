@@ -31,11 +31,18 @@ namespace EnhancedBattleTest.UI
             CharacterConfig config,
             bool isPlayerSide,
             BattleTypeConfig battleTypeConfig,
-            Action onCharacterChanged = null)
+            Action onCharacterChanged = null,
+            Func<BasicCharacterObject> preferredBannerCharacter = null,
+            Func<bool> useSelectedCharacterForBanner = null)
         {
             _battleTypeConfig = battleTypeConfig;
             IsPlayerSide = isPlayerSide;
-            SetConfig(partyConfig, config, onCharacterChanged);
+            SetConfig(
+                partyConfig,
+                config,
+                onCharacterChanged,
+                preferredBannerCharacter,
+                useSelectedCharacterForBanner);
         }
 
         public override void RefreshValues()
@@ -47,7 +54,9 @@ namespace EnhancedBattleTest.UI
         private void SetConfig(
             PartyConfig partyConfig,
             CharacterConfig config,
-            Action onCharacterChanged)
+            Action onCharacterChanged,
+            Func<BasicCharacterObject> preferredBannerCharacter,
+            Func<bool> useSelectedCharacterForBanner)
         {
             _config = config;
             Name = new StringItemWithActionVM(
@@ -60,7 +69,10 @@ namespace EnhancedBattleTest.UI
                             _config.CopyFrom(characterConfig);
                             Name.ActionText = _config.Character.Name.ToString();
                             onCharacterChanged?.Invoke();
-                        }, false));
+                        },
+                        false,
+                        preferredBannerCharacter?.Invoke(),
+                        useSelectedCharacterForBanner?.Invoke() == true));
                 }, _config.Character.Name.ToString(), this);
         }
     }

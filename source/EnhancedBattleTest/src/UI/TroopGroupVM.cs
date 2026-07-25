@@ -14,6 +14,7 @@ namespace EnhancedBattleTest.UI
         private readonly bool _isPlayerSide;
         private readonly BattleTypeConfig _battleTypeConfig;
         private readonly Action _onCharacterChanged;
+        private readonly Func<BasicCharacterObject> _preferredBannerCharacter;
         private MBBindingList<TroopVM> _troops;
         private bool _isGeneralTroopGroup;
         private bool _pushEnabled;
@@ -65,13 +66,15 @@ namespace EnhancedBattleTest.UI
             bool isGeneralTroopGroup,
             bool isPlayerSide,
             BattleTypeConfig battleTypeConfig,
-            Action onCharacterChanged = null)
+            Action onCharacterChanged = null,
+            Func<BasicCharacterObject> preferredBannerCharacter = null)
         {
             _partyConfig = partyConfig;
             _config = config;
             _isPlayerSide = isPlayerSide;
             _battleTypeConfig = battleTypeConfig;
             _onCharacterChanged = onCharacterChanged;
+            _preferredBannerCharacter = preferredBannerCharacter;
             Troops = new MBBindingList<TroopVM>();
             IsGeneralTroopGroup = isGeneralTroopGroup;
             TroopGroupName = new TextVM(groupName);
@@ -79,7 +82,8 @@ namespace EnhancedBattleTest.UI
             {
                 Troops.Add(new TroopVM(partyConfig, troopConfig,
                     isPlayerSide, battleTypeConfig, isGeneralTroopGroup,
-                    onCharacterChanged));
+                    onCharacterChanged, preferredBannerCharacter,
+                    () => IsBannerCharacter(troopConfig.Character)));
             }
 
             UpdateEnabled();
@@ -119,7 +123,9 @@ namespace EnhancedBattleTest.UI
                 _isPlayerSide,
                 _battleTypeConfig,
                 IsGeneralTroopGroup,
-                _onCharacterChanged));
+                _onCharacterChanged,
+                _preferredBannerCharacter,
+                () => IsBannerCharacter(newTroop.Character)));
             _onCharacterChanged?.Invoke();
             UpdateEnabled();
         }
@@ -165,6 +171,14 @@ namespace EnhancedBattleTest.UI
         {
             PushEnabled = Troops.Count < 2000;
             PopEnabled = Troops.Count > (IsGeneralTroopGroup ? 1 : 0);
+        }
+
+        private bool IsBannerCharacter(CharacterConfig character)
+        {
+            return _preferredBannerCharacter?.Invoke() == null
+                   && ReferenceEquals(
+                       _partyConfig.GetBannerCharacterConfig(),
+                       character);
         }
     }
 }

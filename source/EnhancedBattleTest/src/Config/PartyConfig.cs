@@ -47,36 +47,38 @@ namespace EnhancedBattleTest.Config
                     return customBanner;
             }
 
-            Banner preferredBanner =
-                (preferredGeneral as CharacterObject)?.HeroObject?.ClanBanner;
-            if (preferredBanner != null)
-                return preferredBanner;
+            BasicCharacterObject bannerCharacter =
+                preferredGeneral
+                ?? GetBannerCharacterConfig()?.CharacterObject;
+            Banner characterBanner =
+                (bannerCharacter as CharacterObject)?.HeroObject?.ClanBanner;
+            if (characterBanner != null)
+                return characterBanner;
 
-            if (HasGeneral)
-            {
-                Banner clanBanner = Generals.Troops
-                    .Select(troop => troop?.Character?.CharacterObject as CharacterObject)
-                    .Where(character => character != null)
-                    .Select(character => character.HeroObject?.ClanBanner)
-                    .FirstOrDefault(banner => banner != null);
-                if (clanBanner != null)
-                    return clanBanner;
-            }
-
-            BasicCultureObject culture = preferredGeneral?.Culture;
-            culture = culture ?? (HasGeneral
-                ? Generals.Troops
-                    .Select(troop => troop?.Character?.CharacterObject?.Culture)
-                    .FirstOrDefault(candidate => candidate != null)
-                : null);
-            culture = culture ?? Troops.Troops
-                .Where(troop => troop?.Number > 0)
-                .Select(troop => troop.Character?.CharacterObject?.Culture)
-                .FirstOrDefault(candidate => candidate != null);
+            BasicCultureObject culture = bannerCharacter?.Culture;
             if (culture != null)
                 return Utility.BannerFor(culture, isAttacker);
 
             return TryCreateBanner(DefaultBannerKey) ?? Banner.CreateRandomBanner();
+        }
+
+        public CharacterConfig GetBannerCharacterConfig()
+        {
+            if (HasGeneral)
+            {
+                CharacterConfig general = Generals.Troops
+                    .Select(troop => troop?.Character)
+                    .FirstOrDefault(character =>
+                        character?.CharacterObject != null);
+                if (general != null)
+                    return general;
+            }
+
+            return Troops.Troops
+                .Where(troop => troop?.Number > 0)
+                .Select(troop => troop.Character)
+                .FirstOrDefault(character =>
+                    character?.CharacterObject != null);
         }
 
         public Tuple<uint, uint> ResolveColors(bool isAttacker)

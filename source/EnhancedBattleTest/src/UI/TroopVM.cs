@@ -24,14 +24,18 @@ namespace EnhancedBattleTest.UI
             bool isPlayerSide,
             BattleTypeConfig battleTypeConfig,
             bool isGeneralTroop = false,
-            Action onCharacterChanged = null)
+            Action onCharacterChanged = null,
+            Func<BasicCharacterObject> preferredBannerCharacter = null,
+            Func<bool> useSelectedCharacterForBanner = null)
         {
             CharacterButton = new CharacterButtonVM(
                 partyConfig,
                 config.Character,
                 isPlayerSide,
                 battleTypeConfig,
-                onCharacterChanged);
+                onCharacterChanged,
+                preferredBannerCharacter,
+                useSelectedCharacterForBanner);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0, 5000, true);
             Number.OnValueChanged += number =>

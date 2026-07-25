@@ -15,6 +15,8 @@ namespace EnhancedBattleTest.UI
         private PartyConfig _partyConfig;
         private SPCharacterConfig _config = new SPCharacterConfig();
         private bool _isAttacker;
+        private BasicCharacterObject _preferredBannerCharacter;
+        private bool _useSelectedCharacterForBanner;
         public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
 
         public TextVM MaleRatioText { get; }
@@ -46,13 +48,20 @@ namespace EnhancedBattleTest.UI
             };
         }
 
-        public override void SetConfig(PartyConfig partyConfig, CharacterConfig config, bool isAttacker)
+        public override void SetConfig(
+            PartyConfig partyConfig,
+            CharacterConfig config,
+            bool isAttacker,
+            BasicCharacterObject preferredBannerCharacter,
+            bool useSelectedCharacterForBanner)
         {
             if (!(config is SPCharacterConfig spConfig))
                 return;
             _partyConfig = partyConfig;
             _config = spConfig;
             _isAttacker = isAttacker;
+            _preferredBannerCharacter = preferredBannerCharacter;
+            _useSelectedCharacterForBanner = useSelectedCharacterForBanner;
             FemaleRatio.Value = _config.FemaleRatio;
             SetCharacterToViewModel();
         }
@@ -78,10 +87,18 @@ namespace EnhancedBattleTest.UI
         {
             if (_partyConfig != null)
             {
-                var colors = _partyConfig.ResolveColors(_isAttacker);
+                BasicCharacterObject preferredCharacter =
+                    _useSelectedCharacterForBanner
+                        ? character
+                        : _preferredBannerCharacter;
+                _partyConfig.ResolveAppearance(
+                    _isAttacker,
+                    out Banner banner,
+                    out var colors,
+                    preferredCharacter);
                 Character.ArmorColor1 = colors.Item1;
                 Character.ArmorColor2 = colors.Item2;
-                Character.BannerCodeText = _partyConfig.ResolveBanner(_isAttacker).Serialize();
+                Character.BannerCodeText = banner.Serialize();
             }
             else
             {
