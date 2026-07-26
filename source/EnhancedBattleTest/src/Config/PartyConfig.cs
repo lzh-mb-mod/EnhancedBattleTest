@@ -81,6 +81,18 @@ namespace EnhancedBattleTest.Config
                     character?.CharacterObject != null);
         }
 
+        public BasicCharacterObject GetFirstGeneralCharacter(
+            BasicCharacterObject excludedCharacter = null)
+        {
+            if (!HasGeneral)
+                return null;
+
+            return Generals.Troops
+                .Select(troop => troop?.Character?.CharacterObject)
+                .FirstOrDefault(character =>
+                    character != null && character != excludedCharacter);
+        }
+
         public Tuple<uint, uint> ResolveColors(bool isAttacker)
         {
             ResolveAppearance(isAttacker, out _, out Tuple<uint, uint> colors);

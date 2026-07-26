@@ -147,7 +147,8 @@ namespace EnhancedBattleTest.UI
                     battleTypeConfig,
                     RefreshBanner,
                     GetPreferredBannerCharacter,
-                    () => true);
+                    () => GetPreferredBannerCharacter()
+                          == _playerCharacterConfig.CharacterObject);
             }
             Generals = new TroopGroupVM(
                 _config,
@@ -186,6 +187,9 @@ namespace EnhancedBattleTest.UI
         {
             IsPlayerCharacterVisible =
                 _isPlayerSide && _playerCharacterConfig != null;
+            RefreshBanner();
+            Generals.RefreshValues();
+            Troops.RefreshValues();
         }
 
         public void EditBanner()
@@ -238,9 +242,16 @@ namespace EnhancedBattleTest.UI
 
         private BasicCharacterObject GetPreferredBannerCharacter()
         {
-            return _isPlayerSide
-                ? _playerCharacterConfig?.CharacterObject
-                : null;
+            if (!_isPlayerSide || _playerCharacterConfig == null)
+                return null;
+
+            BasicCharacterObject playerCharacter =
+                _playerCharacterConfig.CharacterObject;
+            if (_battleTypeConfig.PlayerType == PlayerType.Commander)
+                return playerCharacter;
+
+            return _config.GetFirstGeneralCharacter(playerCharacter)
+                   ?? playerCharacter;
         }
 
         private bool IsAttacker()

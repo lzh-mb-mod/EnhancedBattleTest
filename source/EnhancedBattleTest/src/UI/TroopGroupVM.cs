@@ -175,10 +175,13 @@ namespace EnhancedBattleTest.UI
 
         private bool IsBannerCharacter(CharacterConfig character)
         {
-            return _preferredBannerCharacter?.Invoke() == null
-                   && ReferenceEquals(
-                       _partyConfig.GetBannerCharacterConfig(),
-                       character);
+            BasicCharacterObject preferredCharacter =
+                _preferredBannerCharacter?.Invoke();
+            return preferredCharacter != null
+                ? preferredCharacter == character?.CharacterObject
+                : ReferenceEquals(
+                    _partyConfig.GetBannerCharacterConfig(),
+                    character);
         }
     }
 }

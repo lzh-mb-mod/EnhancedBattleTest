@@ -97,6 +97,10 @@ namespace EnhancedBattleTest.Data
             {
                 BattleSideEnum playerSide = config.BattleTypeConfig.PlayerSide;
                 bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
+                BasicCharacterObject playerBannerCharacter =
+                    GetPlayerBannerCharacter(
+                        config,
+                        selectedPlayerCharacter);
                 playerParty = CreateParty(
                     new TextObject("{=sSJSTe5p}Player Party"),
                     config.PlayerTeamConfig.PrimaryParty,
@@ -104,7 +108,7 @@ namespace EnhancedBattleTest.Data
                     selectedPlayerCharacter,
                     selectedPlayerCharacter != null,
                     true,
-                    true,
+                    playerBannerCharacter,
                     out CharacterObject playerCharacter,
                     out List<CharacterObject> playerSpawnPriorityCharacters,
                     out List<string> playerPriorityCharacterIds);
@@ -127,7 +131,7 @@ namespace EnhancedBattleTest.Data
                     null,
                     false,
                     false,
-                    false,
+                    null,
                     out _,
                     out enemySpawnPriorityCharacters,
                     out _);
@@ -333,7 +337,7 @@ namespace EnhancedBattleTest.Data
             CharacterObject controlledCharacter,
             bool addControlledCharacter,
             bool isInPlayerTeam,
-            bool useControlledCharacterBanner,
+            BasicCharacterObject preferredBannerCharacter,
             out CharacterObject playerCharacter,
             out List<CharacterObject> spawnPriorityCharacters,
             out List<string> priorityCharacterIds)
@@ -354,7 +358,7 @@ namespace EnhancedBattleTest.Data
                 isAttacker,
                 out Banner banner,
                 out Tuple<uint, uint> colors,
-                useControlledCharacterBanner ? controlledCharacter : null);
+                preferredBannerCharacter);
             MobileParty party = null;
             _isCreatingTemporaryParty = true;
             try
@@ -545,7 +549,7 @@ namespace EnhancedBattleTest.Data
                     isPlayerSide
                     && playerPrimaryPartyIsInArmy
                     && config.IsInArmy,
-                    false,
+                    null,
                     out _,
                     out List<CharacterObject> partySpawnPriorityCharacters,
                     out _);
@@ -567,6 +571,18 @@ namespace EnhancedBattleTest.Data
             MapEventSide mapEventSide = mapEvent.GetMapEventSide(side);
             foreach (MobileParty party in alliedParties)
                 party.Party.MapEventSide = mapEventSide;
+        }
+
+        private static BasicCharacterObject GetPlayerBannerCharacter(
+            BattleConfig config,
+            CharacterObject playerCharacter)
+        {
+            if (config.BattleTypeConfig.PlayerType == PlayerType.Commander)
+                return playerCharacter;
+
+            return config.PlayerTeamConfig.PrimaryParty
+                       .GetFirstGeneralCharacter(playerCharacter)
+                   ?? playerCharacter;
         }
 
         private static void DestroyParties(

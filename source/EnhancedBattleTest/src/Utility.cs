@@ -59,16 +59,30 @@ namespace EnhancedBattleTest
 
         public static Banner BannerFor(BasicCultureObject culture, bool isAttacker)
         {
-            if (culture.BannerKey != null)
-                return new Banner(culture.BannerKey, BackgroundColor(culture, isAttacker),
-                    ForegroundColor(culture, isAttacker));
-            else
+            if (!string.IsNullOrEmpty(culture.BannerKey))
             {
-                var banner = Banner.CreateRandomBanner();
-                banner.ChangePrimaryColor(BackgroundColor(culture, isAttacker));
-                banner.ChangeIconColors(ForegroundColor(culture, isAttacker));
+                var banner = new Banner(culture.BannerKey);
+                uint backgroundColor = BackgroundColor(culture, isAttacker);
+                uint foregroundColor = ForegroundColor(culture, isAttacker);
+                if (backgroundColor != uint.MaxValue)
+                    banner.ChangePrimaryColor(backgroundColor);
+                if (foregroundColor != uint.MaxValue)
+                    banner.ChangeIconColors(foregroundColor);
                 return banner;
             }
+
+            var randomBanner = Banner.CreateRandomBanner();
+            uint fallbackBackground = BackgroundColor(culture, isAttacker);
+            uint fallbackForeground = ForegroundColor(culture, isAttacker);
+            randomBanner.ChangePrimaryColor(
+                fallbackBackground != uint.MaxValue
+                    ? fallbackBackground
+                    : ClothingColor1(culture, isAttacker));
+            randomBanner.ChangeIconColors(
+                fallbackForeground != uint.MaxValue
+                    ? fallbackForeground
+                    : ClothingColor2(culture, isAttacker));
+            return randomBanner;
         }
 
         public static Banner SPBannerFor(BasicCultureObject culture, bool isAttacker)
