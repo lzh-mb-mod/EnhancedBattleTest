@@ -1,6 +1,7 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
 using HarmonyLib;
+using System;
 using TaleWorlds.CampaignSystem.AgentOrigins;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
@@ -12,6 +13,20 @@ namespace EnhancedBattleTest.Patch
     {
         private static void Prefix(AgentBuildData agentBuildData)
         {
+            if (!(agentBuildData?.AgentOrigin is PartyGroupAgentOrigin origin)
+                || !EnhancedBattleTestPartyController.IsTestParty(origin.Party))
+                return;
+
+            if (EnhancedBattleTestPartyController.TryGetTemporaryPartyAppearance(
+                    origin.Party,
+                    out _,
+                    out Tuple<uint, uint> colors))
+            {
+                agentBuildData
+                    .ClothingColor1(colors.Item1)
+                    .ClothingColor2(colors.Item2);
+            }
+
             EquipmentModifierType? modifierType =
                 EnhancedBattleTestPartyController.Current?.EquipmentModifierType;
             if (!modifierType.HasValue)
@@ -19,9 +34,6 @@ namespace EnhancedBattleTest.Patch
 
             BasicCharacterObject character = agentBuildData?.AgentCharacter;
             if (character == null || character.IsHero)
-                return;
-            if (!(agentBuildData.AgentOrigin is PartyGroupAgentOrigin origin)
-                || !EnhancedBattleTestPartyController.IsTestParty(origin.Party))
                 return;
 
             agentBuildData.Equipment(
