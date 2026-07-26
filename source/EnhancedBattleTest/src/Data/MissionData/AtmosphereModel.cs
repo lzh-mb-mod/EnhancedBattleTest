@@ -61,7 +61,7 @@ namespace EnhancedBattleTest.Data.MissionData
             modifiedEnvironmentMultiplier = Math.Max(
                 (float)Math.Pow(modifiedEnvironmentMultiplier, 1.5),
                 0.001f);
-            Vec3 position = MobileParty.MainParty?.GetLogicalPosition()
+            Vec3 position = MobileParty.MainParty?.GetPositionAsVec3()
                             ?? Vec3.Zero;
             AtmosphereState atmosphereState =
                 Campaign.Current.Models.MapWeatherModel

@@ -14,7 +14,7 @@ namespace EnhancedBattleTest.UI
         private bool _isActive;
         private CharacterCollection _characterCollection;
         private CharacterSelectionVM _dataSource;
-        private IGauntletMovie _movie;
+        private GauntletMovieIdentifier _movie;
         private ScreenBase _screen;
         private GauntletLayer _gauntletLayer;
         private bool _isLastActiveGameStatePaused;
@@ -86,7 +86,7 @@ namespace EnhancedBattleTest.UI
 
         private void CreateLayer()
         {
-            _gauntletLayer = new GauntletLayer(50, "GauntletLayer");
+            _gauntletLayer = new GauntletLayer("GauntletLayer", 50);
             _movie = _gauntletLayer.LoadMovie(nameof(CharacterSelectionView), _dataSource);
             _screen.AddLayer(_gauntletLayer);
             _gauntletLayer.IsFocusLayer = true;

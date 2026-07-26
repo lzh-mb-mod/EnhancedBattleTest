@@ -59,9 +59,9 @@ namespace EnhancedBattleTest
 
         public static Banner BannerFor(BasicCultureObject culture, bool isAttacker)
         {
-            if (!string.IsNullOrEmpty(culture.BannerKey))
+            if (!culture.Banner.IsBannerDataListEmpty())
             {
-                var banner = new Banner(culture.BannerKey);
+                var banner = new Banner(culture.Banner);
                 uint backgroundColor = BackgroundColor(culture, isAttacker);
                 uint foregroundColor = ForegroundColor(culture, isAttacker);
                 if (backgroundColor != uint.MaxValue)
@@ -87,8 +87,8 @@ namespace EnhancedBattleTest
 
         public static Banner SPBannerFor(BasicCultureObject culture, bool isAttacker)
         {
-            if (culture.BannerKey != null)
-                return new Banner(culture.BannerKey, ClothingColor1(culture, isAttacker),
+            if (!culture.Banner.IsBannerDataListEmpty())
+                return new Banner(culture.Banner, ClothingColor1(culture, isAttacker),
                     ClothingColor2(culture, isAttacker));
             else
             {

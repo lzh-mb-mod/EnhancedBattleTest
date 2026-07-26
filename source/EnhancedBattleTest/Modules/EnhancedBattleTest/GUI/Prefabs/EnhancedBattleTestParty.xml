@@ -33,7 +33,7 @@
           <Children>
             <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="EditBanner" IsEnabled="@IsBannerEditorEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" MarginLeft="20">
               <Children>
-                <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Kingdom.TornBanner.Big" AdditionalArgs="@AdditionalArgs" ImageId="@Id" ImageTypeCode="@ImageTypeCode" />
+                <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Kingdom.TornBanner.Big" AdditionalArgs="@AdditionalArgs" ImageId="@Id" TextureProviderName="@TextureProviderName" />
               </Children>
             </ButtonWidget>
             <RichTextWidget DataSource="{CustomBannerText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="25" HorizontalAlignment="Left" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />

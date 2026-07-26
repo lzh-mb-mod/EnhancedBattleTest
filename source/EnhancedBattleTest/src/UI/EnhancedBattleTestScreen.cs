@@ -20,7 +20,7 @@ namespace EnhancedBattleTest.UI
         private readonly TextObject _title;
         private EnhancedBattleTestVM _dataSource;
         private GauntletLayer _gauntletLayer;
-        private IGauntletMovie _gauntletMovie;
+        private GauntletMovieIdentifier _gauntletMovie;
         private bool _isMovieLoaded;
 
         public CharacterSelectionView CharacterSelectionView;
@@ -52,7 +52,8 @@ namespace EnhancedBattleTest.UI
         {
             base.OnInitialize();
             _dataSource = new EnhancedBattleTestVM(_state, _title);
-            _gauntletLayer = new GauntletLayer(1) { IsFocusLayer = true };
+            _gauntletLayer =
+                new GauntletLayer("GauntletLayer", 1) { IsFocusLayer = true };
             LoadMovie();
             _gauntletLayer.Input.RegisterHotKeyCategory(HotKeyManager.GetCategory("GenericPanelGameKeyCategory"));
             _gauntletLayer.InputRestrictions.SetInputRestrictions(true, InputUsageMask.All);

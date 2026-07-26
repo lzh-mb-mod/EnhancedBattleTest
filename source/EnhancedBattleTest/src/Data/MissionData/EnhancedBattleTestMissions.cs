@@ -84,7 +84,6 @@ namespace EnhancedBattleTest.Data.MissionData
                     DoNotUseLoadingScreen = false,
                     PlayingInCampaignMode = true,
                     AtmosphereOnCampaign = atmosphereInfo,
-                    TimeOfDay = config.MapConfig.TimeOfDay,
                     TerrainType = (int)terrainType,
                     DecalAtlasGroup = (int)DecalAtlasGroup.Battle,
                     RandomTerrainSeed = MBRandom.RandomInt(10000)
@@ -146,7 +145,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new MissionBoundaryCrossingHandler(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new DeploymentMissionController(isPlayerAttacker),
+                    new BattleDeploymentMissionController(isPlayerAttacker),
                     new BattleDeploymentHandler(isPlayerAttacker)
                 });
             return mission;
@@ -212,7 +211,6 @@ namespace EnhancedBattleTest.Data.MissionData
                     AtmosphereOnCampaign = atmosphereInfo,
                     SceneLevels = GetSiegeSceneLevels(
                         config.MapConfig.SceneLevel),
-                    TimeOfDay = config.MapConfig.TimeOfDay,
                     TerrainType = (int)terrainType,
                     DecalAtlasGroup = (int)DecalAtlasGroup.Town
                 },

@@ -66,10 +66,10 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
                 && currentMainAgent != _playerAgent
                 && currentMainAgent.IsActive())
             {
-                currentMainAgent.Controller = Agent.ControllerType.AI;
+                currentMainAgent.Controller = AgentControllerType.AI;
             }
 
-            _playerAgent.Controller = Agent.ControllerType.Player;
+            _playerAgent.Controller = AgentControllerType.Player;
         }
     }
 }

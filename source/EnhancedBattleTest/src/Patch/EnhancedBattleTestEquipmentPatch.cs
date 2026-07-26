@@ -39,7 +39,9 @@ namespace EnhancedBattleTest.Patch
                     Equipment.GetRandomEquipmentElements(
                         character,
                         modifierType.Value == EquipmentModifierType.Random,
-                        agentBuildData.AgentCivilianEquipment,
+                        agentBuildData.AgentCivilianEquipment
+                            ? Equipment.EquipmentType.Civilian
+                            : Equipment.EquipmentType.Battle,
                         agentBuildData.AgentEquipmentSeed));
             }
 

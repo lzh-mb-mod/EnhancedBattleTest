@@ -37,7 +37,7 @@ namespace EnhancedBattleTest.Data
     public class SceneData
     {
         public string SceneID { get; set; } = "";
-        public TextObject Name { get; set; } = new TextObject();
+        public TextObject Name { get; set; } = TextObject.GetEmpty();
         public TerrainType Terrain { get; set; }
         public List<TerrainType> TerrainTypes { get; set; }
         public ForestDensity ForestDensity { get; set; }

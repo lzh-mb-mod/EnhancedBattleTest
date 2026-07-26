@@ -2,7 +2,6 @@ using EnhancedBattleTest.Data;
 using HarmonyLib;
 using System;
 using System.Reflection;
-using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 
@@ -37,22 +36,5 @@ namespace EnhancedBattleTest.Patch
             }
         }
 
-        [HarmonyPatch(
-            typeof(MobileParty),
-            nameof(MobileParty.LeaderHero),
-            MethodType.Getter)]
-        private static class PartyLeaderPatch
-        {
-            private static void Postfix(
-                MobileParty __instance,
-                ref Hero __result)
-            {
-                if (EnhancedBattleTestPartyController
-                    .TryGetTemporaryPartyLeader(
-                        __instance,
-                        out Hero leader))
-                    __result = leader;
-            }
-        }
     }
 }

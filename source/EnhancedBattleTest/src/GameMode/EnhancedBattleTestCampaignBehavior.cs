@@ -52,7 +52,7 @@ namespace EnhancedBattleTest.GameMode
                         string.IsNullOrEmpty(backgroundMesh)
                             ? "wait_fallback"
                             : backgroundMesh);
-                    MobileParty.MainParty?.Ai.SetMoveModeHold();
+                    MobileParty.MainParty?.SetMoveModeHold();
                 });
 
             AddConfigureBattleOption(campaignGameStarter, MenuId);

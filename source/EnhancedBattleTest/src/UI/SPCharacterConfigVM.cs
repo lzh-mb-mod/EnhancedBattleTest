@@ -185,8 +185,11 @@ namespace EnhancedBattleTest.UI
             Character.BodyProperties = null;
             Character.BodyProperties = FaceGen.GetRandomBodyProperties(character.Race, isFemale,
                 character.GetBodyPropertiesMin(false), character.GetBodyPropertiesMax(),
-                (int)equipment.HairCoverType, seed, character.HairTags, character.BeardTags,
-                character.TattooTags).ToString();
+                (int)equipment.HairCoverType, seed,
+                character.BodyPropertyRange.HairTags,
+                character.BodyPropertyRange.BeardTags,
+                character.BodyPropertyRange.TattooTags,
+                0f).ToString();
             Character.MountCreationKey =
                 MountCreationKey.GetRandomMountKey(equipment[10].Item, Common.GetDJB2(character.StringId)).ToString();
             RefreshReview(character, equipment);

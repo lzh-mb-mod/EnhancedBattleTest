@@ -1,5 +1,6 @@
 using HarmonyLib;
 using SandBox.View.Map;
+using SandBox.View.Map.Visuals;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.GameMenus;
 
@@ -15,7 +16,9 @@ namespace EnhancedBattleTest.Patch
                 if (!GameMode.EnhancedBattleTestCampaignBehavior.CanOpen())
                     return;
 
-                if (__instance.CurrentVisualOfTooltip?.PartyBase != PartyBase.MainParty)
+                var partyVisual =
+                    __instance.CurrentVisualOfTooltip as MapEntityVisual<PartyBase>;
+                if (partyVisual?.MapEntity != PartyBase.MainParty)
                     return;
 
                 GameMenu.ActivateGameMenu(

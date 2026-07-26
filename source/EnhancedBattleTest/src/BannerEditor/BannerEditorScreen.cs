@@ -85,7 +85,7 @@ namespace EnhancedBattleTest.BannerEditor
             base.OnFinalize();
 
             _bannerEditorLayer.OnFinalize();
-            if (LoadingWindow.GetGlobalLoadingWindowState())
+            if (LoadingWindow.IsLoadingWindowActive)
                 LoadingWindow.DisableGlobalLoadingWindow();
             TaleWorlds.Core.Game.Current.GameStateManager.UnregisterActiveStateDisableRequest(this);
         }

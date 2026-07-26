@@ -429,18 +429,6 @@ namespace EnhancedBattleTest.Data
                       out tacticLevel);
         }
 
-        public static bool TryGetTemporaryPartyLeader(
-            MobileParty party,
-            out Hero leader)
-        {
-            leader = null;
-            return party != null
-                   && TemporaryPartyProfiles.TryGetValue(
-                       party,
-                       out TemporaryPartyProfile profile)
-                   && (leader = profile.Leader) != null;
-        }
-
         public static void Cleanup()
         {
             if (_isCleaningUp)
@@ -521,8 +509,8 @@ namespace EnhancedBattleTest.Data
             _isCreatingTemporaryParty = true;
             try
             {
-                party = CustomPartyComponent.CreateQuestParty(
-                    MobileParty.MainParty.Position2D,
+                party = CustomPartyComponent.CreateCustomPartyWithTroopRoster(
+                    MobileParty.MainParty.Position,
                     0f,
                     null,
                     name,
@@ -531,6 +519,8 @@ namespace EnhancedBattleTest.Data
                     TroopRoster.CreateDummyTroopRoster(),
                     profile.Owner,
                     avoidHostileActions: true);
+                if (profile.Leader != null)
+                    party.ChangePartyLeader(profile.Leader);
                 TemporaryParties.Add(party);
                 TemporaryPartyProfiles.Add(party, profile);
                 TemporaryPartyPlayerTeamMembership.Add(
@@ -538,7 +528,7 @@ namespace EnhancedBattleTest.Data
                     isInPlayerTeam);
                 RegisterFemaleRatios(party, config);
                 party.IsVisible = false;
-                party.Ai.SetMoveModeHold();
+                party.SetMoveModeHold();
                 return party;
             }
             catch
@@ -885,8 +875,8 @@ namespace EnhancedBattleTest.Data
                 return;
 
             mapEvent.ResetBattleState();
-            mapEvent.AttackerSide.Casualties = 0;
-            mapEvent.DefenderSide.Casualties = 0;
+            mapEvent.AttackerSide.TroopCasualties = 0;
+            mapEvent.DefenderSide.TroopCasualties = 0;
         }
 
         private static PlayerIdentityState CreatePlayerIdentity(

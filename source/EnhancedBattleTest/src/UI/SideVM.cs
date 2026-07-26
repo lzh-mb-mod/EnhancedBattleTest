@@ -122,7 +122,7 @@ namespace EnhancedBattleTest.UI
         {
             return new PartyVM(
                 config,
-                new TextObject(),
+                TextObject.GetEmpty(),
                 _isPlayerSide,
                 _battleTypeConfig,
                 null,

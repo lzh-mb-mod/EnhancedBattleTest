@@ -8,6 +8,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+using TaleWorlds.Core.ViewModelCollection.ImageIdentifiers;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
 
@@ -20,7 +21,7 @@ namespace EnhancedBattleTest.UI
         private readonly Action<PartyVM> _remove;
         private readonly CharacterConfig _playerCharacterConfig;
         private bool _isPlayerSide;
-        private ImageIdentifierVM _banner;
+        private BannerImageIdentifierVM _banner;
         private bool _isBannerEditorEnabled;
         private bool _canConfigureArmy;
         private bool _isPlayerCharacterVisible;
@@ -68,7 +69,7 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
-        public ImageIdentifierVM Banner
+        public BannerImageIdentifierVM Banner
         {
             get => _banner;
             private set
@@ -256,10 +257,7 @@ namespace EnhancedBattleTest.UI
 
         private void RefreshBanner()
         {
-            Banner = new ImageIdentifierVM(
-                BannerCode.CreateFrom(
-                    ResolveBanner().Serialize()),
-                true);
+            Banner = new BannerImageIdentifierVM(ResolveBanner(), true);
         }
 
         private Banner ResolveBanner()

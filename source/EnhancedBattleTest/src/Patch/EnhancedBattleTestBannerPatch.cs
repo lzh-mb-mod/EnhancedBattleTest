@@ -67,8 +67,8 @@ namespace EnhancedBattleTest.Patch
         }
 
         [HarmonyPatch(
-            typeof(PartyGroupAgentOrigin),
-            nameof(PartyGroupAgentOrigin.IsPartyUnderPlayerCommand))]
+            typeof(PartyBase),
+            nameof(PartyBase.IsPartyUnderPlayerCommand))]
         private static class PartyUnderPlayerCommandPatch
         {
             private static bool Prefix(PartyBase party, ref bool __result)
