@@ -1,60 +1,161 @@
 <Prefab>
   <Window>
-    <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="EnhancedBattleTest.Popup">
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
       <Children>
-        <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="100" Brush="EnhancedBattleTest.MissionMenuBrush">
+        <Standard.Background />
+        <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" MarginBottom="30" Brush="EnhancedBattleTest.MissionMenuBrush">
           <Children>
 
             <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="20" Brush="CustomBattle.Title.Text" />
 
-
-            <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+            <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15">
               <Children>
-
-                <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
+                <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
                   <Children>
-                    <RichTextWidget DataSource="{CultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Cultures}" />
+                    <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="20">
+                      <Children>
+                        <RichTextWidget DataSource="{FactionCultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@FactionCultureSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{FactionCultures}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel DataSource="{Characters}" IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                      <Children>
+                        <RichTextWidget DataSource="{FactionText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@FactionSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Factions}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                      <Children>
+                        <RichTextWidget DataSource="{ClanCultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@ClanCultureSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{ClanCultures}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel DataSource="{Characters}" IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60" MarginRight="20">
+                      <Children>
+                        <RichTextWidget DataSource="{ClanText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@ClanSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Clans}" />
+                      </Children>
+                    </ListPanel>
                   </Children>
                 </ListPanel>
 
-                <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="15">
+                <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{GroupText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Groups}" />
+                    <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="20">
+                      <Children>
+                        <RichTextWidget DataSource="{HeroFilterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{HeroFilters}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                      <Children>
+                        <RichTextWidget DataSource="{OccupationText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Occupations}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                      <Children>
+                        <RichTextWidget DataSource="{GroupText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Groups}" />
+                      </Children>
+                    </ListPanel>
+                    <ButtonWidget DataSource="{Characters}" Command.Click="ClearAllFilters" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="Fixed" SuggestedHeight="43" VerticalAlignment="Bottom" MarginLeft="60" MarginRight="20" Brush="WideButton.Flat">
+                      <Children>
+                        <TextWidget DataSource="{ClearAllFiltersText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                      </Children>
+                    </ButtonWidget>
                   </Children>
                 </ListPanel>
-
-                <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
+                <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="625" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15">
                   <Children>
-                    <RichTextWidget DataSource="{OccupationText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Occupations}" />
+                    <RichTextWidget DataSource="{CharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                    <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="5">
+                      <Children>
+                        <Widget WidthSizePolicy="Fixed" SuggestedWidth="625" HeightSizePolicy="Fixed" SuggestedHeight="43">
+                          <Children>
+                            <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="400" SuggestedHeight="43" HorizontalAlignment="Center" Brush="SPOptions.Dropdown.Center">
+                              <Children>
+                                <EditableTextWidget Text="@SearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                              </Children>
+                            </BrushWidget>
+                          </Children>
+                        </Widget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Characters}" />
+                      </Children>
+                    </ListPanel>
                   </Children>
                 </ListPanel>
-
-                <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginRight="50" MarginTop="15">
-                  <Children>
-                    <RichTextWidget DataSource="{CharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
-                    <Standard.DropdownWithHorizontalControl HorizontalAlignment="Left" Parameter.SelectorDataSource="{Characters}" />
-                  </Children>
-                </ListPanel>
-
               </Children>
             </ListPanel>
 
-            <ListPanel DataSource="{Characters\Character}" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
+            <ListPanel DataSource="{Characters\Character}" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="Fixed" SuggestedWidth="970" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginTop="10" MarginBottom="10">
               <Children>
 
-                <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="700" MarginTop="10" ClipContents="true">
+                <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="StretchToParent" MarginRight="30" LayoutImp.LayoutMethod="VerticalBottomToTop">
                   <Children>
+                    <SPCharacterConfig />
+                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="20" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                      <Children>
+                        <RichTextWidget DataSource="{LevelText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                        <RichTextWidget DataSource="{LevelValue}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="12" Brush="CustomBattle.Value.Text" />
+                        <ListPanel IsVisible="@IsTierVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="30" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                          <Children>
+                            <RichTextWidget DataSource="{TierText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                            <RichTextWidget DataSource="{TierValue}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="12" Brush="CustomBattle.Value.Text" />
+                          </Children>
+                        </ListPanel>
+                      </Children>
+                    </ListPanel>
+                    <RichTextWidget DataSource="{SkillsText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15" Brush="CustomBattle.Value.Text" />
+                    <NavigatableGridWidget DataSource="{Skills}" WidthSizePolicy="Fixed" SuggestedWidth="360" HeightSizePolicy="CoverChildren" DefaultCellWidth="55" DefaultCellHeight="70" ColumnCount="6" HorizontalAlignment="Center" MarginTop="5" LayoutImp.VerticalLayoutMethod="TopToBottom">
+                      <ItemTemplate>
+                        <SkillIconVisualWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" SkillId="@SkillId" UseSmallestVariation="true" MarginLeft="3" MarginRight="3" MarginBottom="20">
+                          <Children>
+                            <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="20" IntText="@SkillValue" VerticalAlignment="Bottom" HorizontalAlignment="Center" PositionYOffset="20" ClipContents="false" Brush="Encyclopedia.Skill.Text" Brush.FontSize="20" />
+                            <HintWidget DataSource="{Hint}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+                          </Children>
+                        </SkillIconVisualWidget>
+                      </ItemTemplate>
+                    </NavigatableGridWidget>
+                  </Children>
+                </ListPanel>
 
-                    <!--Selected Character Tableau-->
-                    <CharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy ="Fixed" SuggestedWidth="500" SuggestedHeight="700" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" PositionYOffset="-30" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2"/>
-
+                <Widget WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" ClipContents="true" Sprite="General\CharacterCreation\character_creation_background_gradient">
+                  <Children>
+                    <CharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" MountCreationKey="@MountCreationKey" Race="@Race" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" DoNotUseCustomScale="true" />
+                    <RichTextWidget DataSource="{EquipmentText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="10" Brush="CustomBattle.Value.Text" DoNotAcceptEvents="true" />
+                    <NavigatableListPanel DataSource="{LeftEquipment}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" VerticalAlignment="Top" MarginLeft="15" MarginTop="45" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <ItemTemplate>
+                        <EquipmentTypeVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="42" SuggestedHeight="42" MarginBottom="6" Brush="EquipmentType.Image" IsVisible="@HasItem" Type="@Type" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+                      </ItemTemplate>
+                    </NavigatableListPanel>
+                    <NavigatableListPanel DataSource="{RightEquipment}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginRight="15" MarginTop="45" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <ItemTemplate>
+                        <EquipmentTypeVisualBrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="42" SuggestedHeight="42" MarginBottom="6" Brush="EquipmentType.Image" IsVisible="@HasItem" Type="@Type" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" />
+                      </ItemTemplate>
+                    </NavigatableListPanel>
                   </Children>
                 </Widget>
-
-                <SPCharacterConfig/>
 
               </Children>
             </ListPanel>
@@ -81,6 +182,6 @@
         </ListPanel>
 
       </Children>
-    </BrushWidget>
+    </Widget>
   </Window>
 </Prefab>

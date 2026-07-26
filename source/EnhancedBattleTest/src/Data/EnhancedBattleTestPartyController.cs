@@ -1,10 +1,13 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.SinglePlayer.Config;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.Encounters;
 using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
@@ -17,6 +20,53 @@ namespace EnhancedBattleTest.Data
 {
     public static class EnhancedBattleTestPartyController
     {
+        internal sealed class PlayerIdentityState
+        {
+            public MobileParty OriginalMainParty { get; }
+            public BasicCharacterObject OriginalPlayerTroop { get; }
+            public Hero BattleHero { get; }
+            public MobileParty OriginalBattleHeroParty { get; }
+            public bool IsTemporaryHero { get; }
+            public CharacterObject BattleCharacter => BattleHero.CharacterObject;
+
+            public PlayerIdentityState(
+                MobileParty originalMainParty,
+                BasicCharacterObject originalPlayerTroop,
+                Hero battleHero,
+                MobileParty originalBattleHeroParty,
+                bool isTemporaryHero)
+            {
+                OriginalMainParty = originalMainParty;
+                OriginalPlayerTroop = originalPlayerTroop;
+                BattleHero = battleHero;
+                OriginalBattleHeroParty = originalBattleHeroParty;
+                IsTemporaryHero = isTemporaryHero;
+            }
+        }
+
+        private sealed class TemporaryPartyProfile
+        {
+            public Hero Owner { get; }
+            public Hero Leader { get; }
+            public Clan Clan { get; }
+            public Banner Banner { get; }
+            public Tuple<uint, uint> Colors { get; }
+
+            public TemporaryPartyProfile(
+                Hero owner,
+                Hero leader,
+                Clan clan,
+                Banner banner,
+                Tuple<uint, uint> colors)
+            {
+                Owner = owner;
+                Leader = leader;
+                Clan = clan;
+                Banner = banner;
+                Colors = colors;
+            }
+        }
+
         public sealed class BattleContext
         {
             public MobileParty PlayerParty { get; }
@@ -26,14 +76,15 @@ namespace EnhancedBattleTest.Data
             public IReadOnlyList<MobileParty> OwnedTemporaryParties { get; }
             public MapEvent MapEvent { get; }
             public PartyGroupTroopSupplier[] TroopSuppliers { get; }
-            public MapEventSide OriginalMainPartyMapEventSide { get; }
             public CharacterObject PlayerCharacter { get; }
             public IReadOnlyList<CharacterObject> PlayerSpawnPriorityCharacters { get; }
             public IReadOnlyList<string> PlayerPriorityCharacterIds { get; }
             public IReadOnlyDictionary<Hero, int> OriginalHeroHitPoints { get; }
             public EquipmentModifierType EquipmentModifierType { get; }
+            internal PlayerIdentityState PlayerIdentity { get; }
+            internal PlayerEncounter OriginalPlayerEncounter { get; }
 
-            public BattleContext(
+            internal BattleContext(
                 MobileParty playerParty,
                 MobileParty enemyParty,
                 IReadOnlyList<MobileParty> playerParties,
@@ -41,12 +92,13 @@ namespace EnhancedBattleTest.Data
                 IReadOnlyList<MobileParty> ownedTemporaryParties,
                 MapEvent mapEvent,
                 PartyGroupTroopSupplier[] troopSuppliers,
-                MapEventSide originalMainPartyMapEventSide,
                 CharacterObject playerCharacter,
                 IReadOnlyList<CharacterObject> playerSpawnPriorityCharacters,
                 IReadOnlyList<string> playerPriorityCharacterIds,
                 IReadOnlyDictionary<Hero, int> originalHeroHitPoints,
-                EquipmentModifierType equipmentModifierType)
+                EquipmentModifierType equipmentModifierType,
+                PlayerIdentityState playerIdentity,
+                PlayerEncounter originalPlayerEncounter)
             {
                 PlayerParty = playerParty;
                 EnemyParty = enemyParty;
@@ -55,12 +107,13 @@ namespace EnhancedBattleTest.Data
                 OwnedTemporaryParties = ownedTemporaryParties;
                 MapEvent = mapEvent;
                 TroopSuppliers = troopSuppliers;
-                OriginalMainPartyMapEventSide = originalMainPartyMapEventSide;
                 PlayerCharacter = playerCharacter;
                 PlayerSpawnPriorityCharacters = playerSpawnPriorityCharacters;
                 PlayerPriorityCharacterIds = playerPriorityCharacterIds;
                 OriginalHeroHitPoints = originalHeroHitPoints;
                 EquipmentModifierType = equipmentModifierType;
+                PlayerIdentity = playerIdentity;
+                OriginalPlayerEncounter = originalPlayerEncounter;
             }
         }
 
@@ -71,12 +124,36 @@ namespace EnhancedBattleTest.Data
             new HashSet<MobileParty>();
         private static readonly HashSet<Hero> ParticipatingHeroes =
             new HashSet<Hero>();
-        private static readonly Dictionary<MobileParty, Tuple<Banner, uint, uint>>
-            TemporaryPartyAppearances =
-                new Dictionary<MobileParty, Tuple<Banner, uint, uint>>();
+        private static readonly Dictionary<MobileParty, TemporaryPartyProfile>
+            TemporaryPartyProfiles =
+                new Dictionary<MobileParty, TemporaryPartyProfile>();
         private static readonly Dictionary<MobileParty, bool>
             TemporaryPartyPlayerTeamMembership =
                 new Dictionary<MobileParty, bool>();
+        private static readonly Dictionary<MobileParty, int>
+            TemporaryPartyTacticLevels =
+                new Dictionary<MobileParty, int>();
+        private static readonly Dictionary<
+            MobileParty,
+            Dictionary<BasicCharacterObject, float>>
+            TemporaryPartyFemaleRatios =
+                new Dictionary<
+                    MobileParty,
+                    Dictionary<BasicCharacterObject, float>>();
+        private static readonly PropertyInfo MainPartyProperty =
+            AccessTools.Property(typeof(Campaign), nameof(Campaign.MainParty));
+        private static readonly PropertyInfo PlayerEncounterProperty =
+            AccessTools.Property(
+                typeof(Campaign),
+                nameof(Campaign.PlayerEncounter));
+        private static readonly FieldInfo PlayerEncounterMapEventField =
+            AccessTools.Field(typeof(PlayerEncounter), "_mapEvent");
+        private static readonly FieldInfo HeroPartyField =
+            AccessTools.Field(typeof(Hero), "_partyBelongedTo");
+        private static readonly MethodInfo UnregisterDeadHeroMethod =
+            AccessTools.Method(
+                typeof(CampaignObjectManager),
+                "UnregisterDeadHero");
 
         public static BattleContext Create(BattleConfig config)
         {
@@ -88,32 +165,43 @@ namespace EnhancedBattleTest.Data
             var enemyParties = new List<MobileParty>();
             var ownedTemporaryParties = new List<MobileParty>();
             MapEvent mapEvent = null;
-            MapEventSide originalMainPartyMapEventSide =
-                PartyBase.MainParty.MapEventSide;
             CharacterObject selectedPlayerCharacter =
                 GetPlayerCharacter(config.PlayerTeamConfig);
+            PlayerIdentityState playerIdentity =
+                CreatePlayerIdentity(selectedPlayerCharacter);
+            PlayerEncounter originalPlayerEncounter =
+                Campaign.Current.PlayerEncounter;
             Dictionary<Hero, int> originalHeroHitPoints = null;
             try
             {
                 BattleSideEnum playerSide = config.BattleTypeConfig.PlayerSide;
                 bool isPlayerAttacker = playerSide == BattleSideEnum.Attacker;
-                BasicCharacterObject playerBannerCharacter =
-                    GetPlayerBannerCharacter(
+                BasicCharacterObject preferredPlayerPartyCharacter =
+                    GetPreferredPlayerPartyCharacter(
                         config,
-                        selectedPlayerCharacter);
+                        playerIdentity.BattleCharacter);
                 playerParty = CreateParty(
                     new TextObject("{=sSJSTe5p}Player Party"),
                     config.PlayerTeamConfig.PrimaryParty,
                     isPlayerAttacker,
-                    selectedPlayerCharacter,
-                    selectedPlayerCharacter != null,
+                    playerIdentity.BattleCharacter,
                     true,
-                    playerBannerCharacter,
+                    true,
+                    preferredPlayerPartyCharacter,
                     out CharacterObject playerCharacter,
                     out List<CharacterObject> playerSpawnPriorityCharacters,
                     out List<string> playerPriorityCharacterIds);
                 playerParties.Add(playerParty);
                 ownedTemporaryParties.Add(playerParty);
+                if (config.PlayerTeamConfig.PlayerCharacter
+                        is SPCharacterConfig playerConfig
+                    && playerConfig.OverrideGender)
+                {
+                    SetFemaleRatio(
+                        playerParty,
+                        playerIdentity.BattleCharacter,
+                        playerConfig.FemaleRatio);
+                }
                 CreateAlliedParties(
                     config.PlayerTeamConfig.AlliedParties,
                     true,
@@ -122,6 +210,12 @@ namespace EnhancedBattleTest.Data
                     ownedTemporaryParties,
                     playerSpawnPriorityCharacters,
                     config.PlayerTeamConfig.PrimaryParty.IsInArmy);
+                if (config.PlayerTeamConfig.OverrideTacticLevel)
+                {
+                    RegisterTacticLevel(
+                        playerParties,
+                        config.PlayerTeamConfig.TacticLevel);
+                }
 
                 var enemySpawnPriorityCharacters = new List<CharacterObject>();
                 enemyParty = CreateParty(
@@ -145,6 +239,12 @@ namespace EnhancedBattleTest.Data
                     ownedTemporaryParties,
                     enemySpawnPriorityCharacters,
                     false);
+                if (config.EnemyTeamConfig.OverrideTacticLevel)
+                {
+                    RegisterTacticLevel(
+                        enemyParties,
+                        config.EnemyTeamConfig.TacticLevel);
+                }
                 originalHeroHitPoints = CaptureHeroHitPoints(ownedTemporaryParties);
                 ParticipatingHeroes.UnionWith(originalHeroHitPoints.Keys);
                 PrepareHeroesForBattle(originalHeroHitPoints.Keys);
@@ -169,6 +269,11 @@ namespace EnhancedBattleTest.Data
                         ? BattleSideEnum.Defender
                         : BattleSideEnum.Attacker,
                     enemyParties.Skip(1));
+                ApplyPlayerIdentity(playerIdentity, playerParty);
+                ApplyPlayerEncounter(
+                    mapEvent,
+                    attacker,
+                    defender);
                 var suppliers = new PartyGroupTroopSupplier[2];
                 FlattenedTroopRoster playerPriorityTroops =
                     CreatePriorityRoster(playerSpawnPriorityCharacters);
@@ -189,8 +294,6 @@ namespace EnhancedBattleTest.Data
                             ? playerPriorityTroops
                             : enemyPriorityTroops);
 
-                PartyBase.MainParty.MapEventSide =
-                    mapEvent.GetMapEventSide(playerSide);
                 Current = new BattleContext(
                     playerParty,
                     enemyParty,
@@ -199,12 +302,13 @@ namespace EnhancedBattleTest.Data
                     ownedTemporaryParties,
                     mapEvent,
                     suppliers,
-                    originalMainPartyMapEventSide,
                     playerCharacter,
                     playerSpawnPriorityCharacters,
                     playerPriorityCharacterIds,
                     originalHeroHitPoints,
-                    config.BattleTypeConfig.EquipmentModifierType);
+                    config.BattleTypeConfig.EquipmentModifierType,
+                    playerIdentity,
+                    originalPlayerEncounter);
                 EnhancedBattleTestSaveGuard.Disable();
                 return Current;
             }
@@ -214,15 +318,27 @@ namespace EnhancedBattleTest.Data
                 {
                     try
                     {
-                        RestoreMainPartyMapEventSide(
-                            mapEvent,
-                            originalMainPartyMapEventSide);
+                        RestorePlayerEncounter(originalPlayerEncounter);
                         PrepareMapEventForCleanup(mapEvent);
                         mapEvent?.FinalizeEvent();
                     }
                     finally
                     {
-                        DestroyParties(ownedTemporaryParties);
+                        try
+                        {
+                            RestorePlayerIdentity(playerIdentity);
+                        }
+                        finally
+                        {
+                            try
+                            {
+                                DestroyParties(ownedTemporaryParties);
+                            }
+                            finally
+                            {
+                                DestroyTemporaryHero(playerIdentity);
+                            }
+                        }
                     }
                 }
                 finally
@@ -274,20 +390,55 @@ namespace EnhancedBattleTest.Data
             out Tuple<uint, uint> colors)
         {
             if (party?.MobileParty != null
-                && TemporaryPartyAppearances.TryGetValue(
+                && TemporaryPartyProfiles.TryGetValue(
                     party.MobileParty,
-                    out Tuple<Banner, uint, uint> appearance))
+                    out TemporaryPartyProfile profile))
             {
-                banner = appearance.Item1;
-                colors = new Tuple<uint, uint>(
-                    appearance.Item2,
-                    appearance.Item3);
+                banner = profile.Banner;
+                colors = profile.Colors;
                 return true;
             }
 
             banner = null;
             colors = null;
             return false;
+        }
+
+        public static bool TryGetFemaleRatio(
+            PartyBase party,
+            BasicCharacterObject character,
+            out float femaleRatio)
+        {
+            femaleRatio = 0f;
+            return party?.MobileParty != null
+                   && character != null
+                   && TemporaryPartyFemaleRatios.TryGetValue(
+                       party.MobileParty,
+                       out Dictionary<BasicCharacterObject, float> ratios)
+                   && ratios.TryGetValue(character, out femaleRatio);
+        }
+
+        public static bool TryGetTacticLevel(
+            PartyBase party,
+            out int tacticLevel)
+        {
+            tacticLevel = 0;
+            return party?.MobileParty != null
+                   && TemporaryPartyTacticLevels.TryGetValue(
+                      party.MobileParty,
+                      out tacticLevel);
+        }
+
+        public static bool TryGetTemporaryPartyLeader(
+            MobileParty party,
+            out Hero leader)
+        {
+            leader = null;
+            return party != null
+                   && TemporaryPartyProfiles.TryGetValue(
+                       party,
+                       out TemporaryPartyProfile profile)
+                   && (leader = profile.Leader) != null;
         }
 
         public static void Cleanup()
@@ -304,15 +455,27 @@ namespace EnhancedBattleTest.Data
             {
                 try
                 {
-                    RestoreMainPartyMapEventSide(
-                        context.MapEvent,
-                        context.OriginalMainPartyMapEventSide);
+                    RestorePlayerEncounter(context.OriginalPlayerEncounter);
                     PrepareMapEventForCleanup(context.MapEvent);
                     context.MapEvent?.FinalizeEvent();
                 }
                 finally
                 {
-                    DestroyParties(context.OwnedTemporaryParties);
+                    try
+                    {
+                        RestorePlayerIdentity(context.PlayerIdentity);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            DestroyParties(context.OwnedTemporaryParties);
+                        }
+                        finally
+                        {
+                            DestroyTemporaryHero(context.PlayerIdentity);
+                        }
+                    }
                 }
             }
             finally
@@ -337,16 +500,11 @@ namespace EnhancedBattleTest.Data
             CharacterObject controlledCharacter,
             bool addControlledCharacter,
             bool isInPlayerTeam,
-            BasicCharacterObject preferredBannerCharacter,
+            BasicCharacterObject preferredCharacter,
             out CharacterObject playerCharacter,
             out List<CharacterObject> spawnPriorityCharacters,
             out List<string> priorityCharacterIds)
         {
-            BasicCultureObject culture = Utility.GetCulture(config);
-            Hero owner = GetOwner(config, culture);
-            Clan clan = owner?.Clan
-                        ?? Clan.All.FirstOrDefault(candidate => candidate.Culture == culture)
-                        ?? Clan.PlayerClan;
             TroopRoster roster = CreateRoster(
                 config,
                 controlledCharacter,
@@ -354,11 +512,11 @@ namespace EnhancedBattleTest.Data
                 out playerCharacter,
                 out spawnPriorityCharacters,
                 out priorityCharacterIds);
-            config.ResolveAppearance(
+            TemporaryPartyProfile profile = ResolvePartyProfile(
+                config,
                 isAttacker,
-                out Banner banner,
-                out Tuple<uint, uint> colors,
-                preferredBannerCharacter);
+                preferredCharacter,
+                roster);
             MobileParty party = null;
             _isCreatingTemporaryParty = true;
             try
@@ -368,21 +526,17 @@ namespace EnhancedBattleTest.Data
                     0f,
                     null,
                     name,
-                    clan,
+                    profile.Clan,
                     roster,
                     TroopRoster.CreateDummyTroopRoster(),
-                    owner,
+                    profile.Owner,
                     avoidHostileActions: true);
                 TemporaryParties.Add(party);
-                TemporaryPartyAppearances.Add(
-                    party,
-                    new Tuple<Banner, uint, uint>(
-                        banner,
-                        colors.Item1,
-                        colors.Item2));
+                TemporaryPartyProfiles.Add(party, profile);
                 TemporaryPartyPlayerTeamMembership.Add(
                     party,
                     isInPlayerTeam);
+                RegisterFemaleRatios(party, config);
                 party.IsVisible = false;
                 party.Ai.SetMoveModeHold();
                 return party;
@@ -490,16 +644,60 @@ namespace EnhancedBattleTest.Data
                 entry.Key.HitPoints = entry.Value;
         }
 
-        private static Hero GetOwner(PartyConfig config, BasicCultureObject culture)
+        private static TemporaryPartyProfile ResolvePartyProfile(
+            PartyConfig config,
+            bool isAttacker,
+            BasicCharacterObject preferredCharacter,
+            TroopRoster roster)
         {
-            Hero selectedHero = config.HasGeneral
+            BasicCultureObject culture = Utility.GetCulture(config);
+            Hero preferredHero =
+                (preferredCharacter as CharacterObject)?.HeroObject;
+            Hero configuredGeneral = config.HasGeneral
                 ? config.Generals.Troops
-                    .Select(troop => (troop.Character as SPCharacterConfig)?.ActualCharacterObject?.HeroObject)
+                    .Select(troop =>
+                        troop?.Character?.CharacterObject as CharacterObject)
+                    .Select(character => character?.HeroObject)
                     .FirstOrDefault(hero => hero != null)
                 : null;
-            return selectedHero
-                   ?? Hero.AllAliveHeroes.FirstOrDefault(hero => hero.Culture == culture)
-                   ?? Hero.MainHero;
+            Hero leader = GetLeader(
+                roster,
+                preferredHero,
+                configuredGeneral);
+            Hero owner = leader
+                         ?? Hero.AllAliveHeroes.FirstOrDefault(
+                             hero => hero.Culture == culture)
+                         ?? Hero.MainHero;
+            Clan clan = owner?.Clan
+                        ?? Clan.All.FirstOrDefault(
+                            candidate => candidate.Culture == culture)
+                        ?? Clan.PlayerClan;
+            config.ResolveAppearance(
+                isAttacker,
+                out Banner banner,
+                out Tuple<uint, uint> colors,
+                preferredCharacter);
+            return new TemporaryPartyProfile(
+                owner,
+                leader,
+                clan,
+                banner,
+                colors);
+        }
+
+        private static Hero GetLeader(
+            TroopRoster roster,
+            params Hero[] preferredLeaders)
+        {
+            Hero preferredLeader = preferredLeaders.FirstOrDefault(hero =>
+                    hero != null
+                    && roster.Contains(hero.CharacterObject));
+            if (preferredLeader != null)
+                return preferredLeader;
+
+            return roster.GetTroopRoster()
+                .Select(element => element.Character?.HeroObject)
+                .FirstOrDefault(hero => hero != null);
         }
 
         private static void DestroyParty(MobileParty party)
@@ -515,9 +713,81 @@ namespace EnhancedBattleTest.Data
             finally
             {
                 TemporaryParties.Remove(party);
-                TemporaryPartyAppearances.Remove(party);
+                TemporaryPartyProfiles.Remove(party);
                 TemporaryPartyPlayerTeamMembership.Remove(party);
+                TemporaryPartyFemaleRatios.Remove(party);
+                TemporaryPartyTacticLevels.Remove(party);
             }
+        }
+
+        private static void RegisterFemaleRatios(
+            MobileParty party,
+            PartyConfig config)
+        {
+            var weightedRatios =
+                new Dictionary<BasicCharacterObject, Tuple<float, int>>();
+
+            if (config.HasGeneral)
+            {
+                foreach (TroopConfig troop in config.Generals.Troops)
+                    AddFemaleRatio(weightedRatios, troop, 1);
+            }
+
+            foreach (TroopConfig troop in config.Troops.Troops)
+                AddFemaleRatio(weightedRatios, troop, troop.Number);
+
+            TemporaryPartyFemaleRatios[party] = weightedRatios.ToDictionary(
+                pair => pair.Key,
+                pair => pair.Value.Item1 / pair.Value.Item2);
+        }
+
+        private static void RegisterTacticLevel(
+            IEnumerable<MobileParty> parties,
+            int tacticLevel)
+        {
+            foreach (MobileParty party in parties)
+                TemporaryPartyTacticLevels[party] = tacticLevel;
+        }
+
+        private static void AddFemaleRatio(
+            IDictionary<BasicCharacterObject, Tuple<float, int>> ratios,
+            TroopConfig troop,
+            int count)
+        {
+            if (count <= 0
+                || !(troop?.Character is SPCharacterConfig characterConfig)
+                || !characterConfig.OverrideGender
+                || characterConfig.CharacterObject == null)
+                return;
+
+            float ratio = Math.Max(
+                0f,
+                Math.Min(1f, characterConfig.FemaleRatio));
+            ratios.TryGetValue(
+                characterConfig.CharacterObject,
+                out Tuple<float, int> current);
+            ratios[characterConfig.CharacterObject] = new Tuple<float, int>(
+                (current?.Item1 ?? 0f) + ratio * count,
+                (current?.Item2 ?? 0) + count);
+        }
+
+        private static void SetFemaleRatio(
+            MobileParty party,
+            BasicCharacterObject character,
+            float femaleRatio)
+        {
+            if (party == null || character == null)
+                return;
+
+            if (!TemporaryPartyFemaleRatios.TryGetValue(
+                    party,
+                    out Dictionary<BasicCharacterObject, float> ratios))
+            {
+                ratios = new Dictionary<BasicCharacterObject, float>();
+                TemporaryPartyFemaleRatios.Add(party, ratios);
+            }
+
+            ratios[character] = Math.Max(0f, Math.Min(1f, femaleRatio));
         }
 
         private static void CreateAlliedParties(
@@ -573,7 +843,7 @@ namespace EnhancedBattleTest.Data
                 party.Party.MapEventSide = mapEventSide;
         }
 
-        private static BasicCharacterObject GetPlayerBannerCharacter(
+        private static BasicCharacterObject GetPreferredPlayerPartyCharacter(
             BattleConfig config,
             CharacterObject playerCharacter)
         {
@@ -619,12 +889,82 @@ namespace EnhancedBattleTest.Data
             mapEvent.DefenderSide.Casualties = 0;
         }
 
-        private static void RestoreMainPartyMapEventSide(
-            MapEvent mapEvent,
-            MapEventSide originalMapEventSide)
+        private static PlayerIdentityState CreatePlayerIdentity(
+            CharacterObject selectedCharacter)
         {
-            if (PartyBase.MainParty?.MapEvent == mapEvent)
-                PartyBase.MainParty.MapEventSide = originalMapEventSide;
+            CharacterObject character = selectedCharacter
+                                        ?? Hero.MainHero.CharacterObject;
+            Hero battleHero = character.HeroObject;
+            bool isTemporaryHero = battleHero == null;
+            if (isTemporaryHero)
+            {
+                battleHero = HeroCreator.CreateSpecialHero(
+                    character,
+                    age: (int)character.Age);
+            }
+
+            return new PlayerIdentityState(
+                MobileParty.MainParty,
+                Game.Current.PlayerTroop,
+                battleHero,
+                battleHero.PartyBelongedTo,
+                isTemporaryHero);
+        }
+
+        private static void ApplyPlayerIdentity(
+            PlayerIdentityState identity,
+            MobileParty playerParty)
+        {
+            HeroPartyField.SetValue(identity.BattleHero, playerParty);
+            Game.Current.PlayerTroop = identity.BattleCharacter;
+            MainPartyProperty.SetValue(Campaign.Current, playerParty);
+        }
+
+        private static void RestorePlayerIdentity(PlayerIdentityState identity)
+        {
+            if (identity == null)
+                return;
+
+            MainPartyProperty.SetValue(
+                Campaign.Current,
+                identity.OriginalMainParty);
+            Game.Current.PlayerTroop = identity.OriginalPlayerTroop;
+            HeroPartyField.SetValue(
+                identity.BattleHero,
+                identity.OriginalBattleHeroParty);
+        }
+
+        private static void ApplyPlayerEncounter(
+            MapEvent mapEvent,
+            PartyBase attacker,
+            PartyBase defender)
+        {
+            PlayerEncounter.Start();
+            PlayerEncounter encounter = PlayerEncounter.Current;
+            encounter.SetupFields(attacker, defender);
+            PlayerEncounterMapEventField.SetValue(encounter, mapEvent);
+        }
+
+        private static void RestorePlayerEncounter(
+            PlayerEncounter originalEncounter)
+        {
+            PlayerEncounterProperty.SetValue(
+                Campaign.Current,
+                originalEncounter);
+        }
+
+        private static void DestroyTemporaryHero(PlayerIdentityState identity)
+        {
+            if (identity?.IsTemporaryHero != true)
+                return;
+
+            Hero hero = identity.BattleHero;
+            if (hero.IsAlive)
+                DisableHeroAction.Apply(hero);
+            UnregisterDeadHeroMethod.Invoke(
+                Campaign.Current.CampaignObjectManager,
+                new object[] { hero });
+            Game.Current.ObjectManager.UnregisterObject(hero.CharacterObject);
         }
 
     }

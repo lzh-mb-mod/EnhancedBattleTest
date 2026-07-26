@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- Add campaign party importing with culture, faction, clan, type, and name filters.
+- Add roster review before appending or replacing configured party members.
+- Add character search, hero and faction filters, skill and equipment review, and gender overrides.
+- Add multiple configurable parties per battle side and campaign-safe player identity handling.
+- Add an optional tactical-level override for each battle side.
+
+### Changed
+- Use native campaign parties and agent origins for improved compatibility with other mods.
+- Preserve character, faction, and clan selections while dependent filters are rebuilt.
+- Improve party, troop, character-selection, and roster-review layouts.
+- Resolve temporary party banner, colors, owner, and leader through one consistent profile.
+
+### Fixed
+- Prevent temporary battles from permanently changing campaign heroes, parties, equipment, banners, or save state.
+- Fix redundant filter refreshes and improve party-selection performance.
+- Fix player, general, and priority troop spawning in field and siege battles.
+- Fix tactical-level handling for temporary campaign parties.
+
 ## [v2.1.0] - 2021-03-21
 ## Added
 - Add support to add multiple troop types into one formation group.

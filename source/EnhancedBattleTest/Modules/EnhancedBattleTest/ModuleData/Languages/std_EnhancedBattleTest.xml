@@ -41,6 +41,57 @@
     <string id="EnhancedBattleTest_allied_party" text="Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_add_allied_party" text="Add Allied Party" />
     <string id="EnhancedBattleTest_remove_allied_party" text="Remove Party" />
+    <string id="EnhancedBattleTest_import_campaign_party" text="Import Campaign Party" />
+    <string id="EnhancedBattleTest_select_campaign_party" text="Select Campaign Party" />
+    <string id="EnhancedBattleTest_select_campaign_party_description" text="Replace this configured party's generals and troops with the selected campaign party's members." />
+    <string id="EnhancedBattleTest_campaign_party_selection" text="{PARTY_TYPE} - {FACTION_NAME} - {MEMBER_COUNT} members" />
+    <string id="EnhancedBattleTest_campaign_party_imported" text="Imported members from {PARTY_NAME}." />
+    <string id="EnhancedBattleTest_no_campaign_party_available" text="No campaign party with members is available." />
+    <string id="EnhancedBattleTest_search" text="Search" />
+    <string id="EnhancedBattleTest_party_type" text="Party Type" />
+    <string id="EnhancedBattleTest_party_name" text="Party Name" />
+    <string id="EnhancedBattleTest_party_type_lord" text="Lord Party" />
+    <string id="EnhancedBattleTest_party_type_caravan" text="Caravan" />
+    <string id="EnhancedBattleTest_party_type_villager" text="Villagers" />
+    <string id="EnhancedBattleTest_party_type_bandit" text="Bandits" />
+    <string id="EnhancedBattleTest_party_type_militia" text="Militia" />
+    <string id="EnhancedBattleTest_party_type_garrison" text="Garrison" />
+    <string id="EnhancedBattleTest_party_type_custom" text="Custom Party" />
+    <string id="EnhancedBattleTest_party_type_other" text="Other" />
+    <string id="EnhancedBattleTest_faction" text="Faction" />
+    <string id="EnhancedBattleTest_faction_culture" text="Faction Culture" />
+    <string id="EnhancedBattleTest_no_faction" text="No Faction" />
+    <string id="EnhancedBattleTest_clan" text="Clan" />
+    <string id="EnhancedBattleTest_clan_culture" text="Clan Culture" />
+    <string id="EnhancedBattleTest_hero_filter" text="Hero Type" />
+    <string id="EnhancedBattleTest_hero_filter_hero" text="Hero" />
+    <string id="EnhancedBattleTest_hero_filter_nonhero" text="Non-Hero" />
+    <string id="EnhancedBattleTest_insert_after" text="Insert Below" />
+    <string id="EnhancedBattleTest_remove" text="Remove" />
+    <string id="EnhancedBattleTest_move_up" text="Move Up" />
+    <string id="EnhancedBattleTest_move_down" text="Move Down" />
+    <string id="EnhancedBattleTest_level" text="Level" />
+    <string id="EnhancedBattleTest_skills" text="Skills" />
+    <string id="EnhancedBattleTest_equipment" text="Equipment" />
+    <string id="EnhancedBattleTest_override_gender" text="Override Gender" />
+    <string id="EnhancedBattleTest_clear_all_filters" text="Clear All Filters" />
+    <string id="EnhancedBattleTest_review_campaign_party" text="Review Campaign Party" />
+    <string id="EnhancedBattleTest_add_campaign_party_members" text="Add Members" />
+    <string id="EnhancedBattleTest_replace_campaign_party_members" text="Replace All Members" />
+    <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}: {MEMBER_COUNT} members" />
+    <string id="EnhancedBattleTest_no_leader" text="No Leader" />
+    <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} members" />
+    <string id="EnhancedBattleTest_save_configuration" text="Save Configuration" />
+    <string id="EnhancedBattleTest_save_configuration_description" text="Enter a name for this battle configuration." />
+    <string id="EnhancedBattleTest_load_configuration" text="Load Configuration" />
+    <string id="EnhancedBattleTest_load_configuration_description" text="Select a saved battle configuration." />
+    <string id="EnhancedBattleTest_configuration_saved" text="Saved configuration {CONFIGURATION_NAME}." />
+    <string id="EnhancedBattleTest_configuration_save_failed" text="The battle configuration could not be saved." />
+    <string id="EnhancedBattleTest_configuration_loaded" text="Loaded configuration {CONFIGURATION_NAME}." />
+    <string id="EnhancedBattleTest_no_saved_configuration" text="No named battle configuration has been saved." />
+    <string id="EnhancedBattleTest_configuration_load_failed" text="The selected battle configuration could not be loaded." />
+    <string id="EnhancedBattleTest_configuration_name_required" text="Enter a configuration name." />
+    <string id="EnhancedBattleTest_configuration_name_invalid" text="The configuration name contains invalid characters." />
     <string id="EnhancedBattleTest_player_allied_party" text="Player Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Enemy Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_generals" text="Generals" />
@@ -70,6 +121,7 @@
 
     <string id="EnhancedBattleTest_troop_group_general" text="General" />
 
+    <string id="EnhancedBattleTest_override_tactic_level" text="Override Tactical Level" />
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />

@@ -24,6 +24,8 @@ namespace EnhancedBattleTest.UI
         private bool _isMovieLoaded;
 
         public CharacterSelectionView CharacterSelectionView;
+        public PartySelectionView PartySelectionView;
+        public PartyRosterReviewView PartyRosterReviewView;
 
         public EnhancedBattleTestScreen(EnhancedBattleTestState state)
         {
@@ -62,6 +64,10 @@ namespace EnhancedBattleTest.UI
             collection.Initialize();
             CharacterSelectionView = new CharacterSelectionView();
             CharacterSelectionView.Initialize(this, collection);
+            PartySelectionView = new PartySelectionView();
+            PartySelectionView.Initialize(this);
+            PartyRosterReviewView = new PartyRosterReviewView();
+            PartyRosterReviewView.Initialize(this);
         }
 
         protected override void OnFinalize()
@@ -72,6 +78,8 @@ namespace EnhancedBattleTest.UI
             _gauntletLayer = null;
 
             CharacterSelectionView.OnFinalize();
+            PartySelectionView.OnFinalize();
+            PartyRosterReviewView.OnFinalize();
             base.OnFinalize();
         }
 
@@ -94,7 +102,8 @@ namespace EnhancedBattleTest.UI
         {
             base.OnFrameTick(dt);
 
-            if (_gauntletLayer.Input.IsHotKeyReleased("Exit"))
+            if (_gauntletLayer.Input.IsHotKeyReleased("Exit")
+                && !CharacterSelectionView.OnEscape())
                 _dataSource.ExecuteBack();
         }
 

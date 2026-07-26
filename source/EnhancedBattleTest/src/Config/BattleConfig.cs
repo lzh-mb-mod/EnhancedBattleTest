@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.Core;
 
 namespace EnhancedBattleTest.Config
 {
     public class BattleConfig
     {
+        private const string CurrentConfigFileName = "spconfig-v3.xml";
+        private const string NamedConfigFolderName = "Configurations";
+
         public static BattleConfig Instance;
 
         public TeamConfig PlayerTeamConfig = new TeamConfig();
@@ -40,38 +45,21 @@ namespace EnhancedBattleTest.Config
 
         private static TeamConfig CreatePlayerTeam()
         {
+            string playerCharacterId =
+                Hero.MainHero?.CharacterObject?.StringId;
             return new TeamConfig
             {
                 PrimaryParty = new PartyConfig
                 {
-                    BannerKey =
-                        "11.14.14.1536.1536.768.768.1.0.0.160.0.15.512.512.769.764.1.0.0",
                     UseCustomBanner = false,
                     IsInArmy = true,
-                    HasGeneral = true,
-                    Generals = new TroopGroupConfig(true)
-                    {
-                        Troops = new List<TroopConfig>
-                        {
-                            new TroopConfig("lord_4_6", 1),
-                            new TroopConfig("lord_4_1", 1),
-                            new TroopConfig("lord_4_25", 1)
-                        }
-                    },
-                    Troops = new TroopGroupConfig
-                    {
-                        Troops = new List<TroopConfig>
-                        {
-                            new TroopConfig("vlandian_infantry", 40),
-                            new TroopConfig("vlandian_billman", 40),
-                            new TroopConfig("vlandian_sharpshooter", 30),
-                            new TroopConfig("vlandian_militia_archer", 30),
-                            new TroopConfig("vlandian_banner_knight", 30),
-                            new TroopConfig("vlandian_champion", 30)
-                        }
-                    }
+                    HasGeneral = false,
+                    Generals = new TroopGroupConfig(),
+                    Troops = new TroopGroupConfig()
                 },
-                PlayerCharacter = CharacterConfig.Create("vlandian_infantry")
+                PlayerCharacter = string.IsNullOrEmpty(playerCharacterId)
+                    ? CharacterConfig.Create()
+                    : CharacterConfig.Create(playerCharacterId)
             };
         }
 
@@ -118,14 +106,11 @@ namespace EnhancedBattleTest.Config
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(BattleConfig));
-                var filePath = Path.Combine(SaveFolderPath(), "spconfig-v2.xml");
+                var filePath = Path.Combine(
+                    SaveFolderPath(),
+                    CurrentConfigFileName);
                 using TextReader reader = new StreamReader(filePath);
-                var result = (BattleConfig)serializer.Deserialize(reader);
-                result.PlayerTeamConfig?.NormalizeAfterDeserialize();
-                result.EnemyTeamConfig?.NormalizeAfterDeserialize();
-                RemoveUnavailableCharacters(result.PlayerTeamConfig);
-                RemoveUnavailableCharacters(result.EnemyTeamConfig);
-                return result;
+                return Normalize((BattleConfig)serializer.Deserialize(reader));
             }
 
             catch
@@ -180,18 +165,110 @@ namespace EnhancedBattleTest.Config
 
         public void Serialize()
         {
+            SerializeTo(Path.Combine(SaveFolderPath(), CurrentConfigFileName));
+        }
+
+        public bool Serialize(string configurationName)
+        {
+            return SerializeTo(GetNamedConfigPath(configurationName));
+        }
+
+        public static bool TryDeserialize(
+            string configurationName,
+            out BattleConfig config)
+        {
             try
             {
-                EnsureSaveDirectory();
-                var filePath = Path.Combine(SaveFolderPath(), "spconfig-v2.xml");
+                XmlSerializer serializer =
+                    new XmlSerializer(typeof(BattleConfig));
+                using TextReader reader =
+                    new StreamReader(GetNamedConfigPath(configurationName));
+                config = Normalize(
+                    (BattleConfig)serializer.Deserialize(reader));
+                return true;
+            }
+            catch
+            {
+                config = null;
+                return false;
+            }
+        }
+
+        public static IReadOnlyList<string> GetSavedConfigurationNames()
+        {
+            string folderPath = NamedConfigFolderPath();
+            if (!Directory.Exists(folderPath))
+                return Array.Empty<string>();
+
+            return Directory.GetFiles(folderPath, "*.xml")
+                .Select(Path.GetFileNameWithoutExtension)
+                .OrderBy(name => name)
+                .ToList();
+        }
+
+        public static Tuple<bool, string> ValidateConfigurationName(
+            string configurationName)
+        {
+            if (string.IsNullOrWhiteSpace(configurationName))
+                return Tuple.Create(
+                    false,
+                    GameTexts.FindText(
+                        "str_ebt_configuration_name_required").ToString());
+            if (configurationName.IndexOfAny(
+                    Path.GetInvalidFileNameChars()) >= 0)
+                return Tuple.Create(
+                    false,
+                    GameTexts.FindText(
+                        "str_ebt_configuration_name_invalid").ToString());
+
+            return Tuple.Create(true, string.Empty);
+        }
+
+        private bool SerializeTo(string filePath)
+        {
+            try
+            {
+                Directory.CreateDirectory(
+                    Path.GetDirectoryName(filePath)
+                    ?? SaveFolderPath());
                 using TextWriter writer = new StreamWriter(filePath);
                 XmlSerializer serializer = new XmlSerializer(typeof(BattleConfig));
                 serializer.Serialize(writer, this);
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                return false;
             }
+        }
+
+        private static BattleConfig Normalize(BattleConfig result)
+        {
+            result.PlayerTeamConfig?.NormalizeAfterDeserialize();
+            result.EnemyTeamConfig?.NormalizeAfterDeserialize();
+            RemoveUnavailableCharacters(result.PlayerTeamConfig);
+            RemoveUnavailableCharacters(result.EnemyTeamConfig);
+            return result;
+        }
+
+        private static string GetNamedConfigPath(string configurationName)
+        {
+            Tuple<bool, string> validation =
+                ValidateConfigurationName(configurationName);
+            if (!validation.Item1)
+                throw new ArgumentException(
+                    validation.Item2,
+                    nameof(configurationName));
+
+            return Path.Combine(
+                NamedConfigFolderPath(),
+                configurationName.Trim() + ".xml");
+        }
+
+        private static string NamedConfigFolderPath()
+        {
+            return Path.Combine(SaveFolderPath(), NamedConfigFolderName);
         }
 
         private static string SaveFolderPath()
@@ -199,10 +276,6 @@ namespace EnhancedBattleTest.Config
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),
                 "Mount and Blade II Bannerlord", "Configs", "EnhancedBattleTest");
 
-        }
-        private void EnsureSaveDirectory()
-        {
-            Directory.CreateDirectory(SaveFolderPath());
         }
     }
 }

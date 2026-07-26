@@ -1,0 +1,23 @@
+- [x] Leave a message when saving game is skipped.
+- [x] Select any party in campaign to fill the party members to configured party in configuration menu.
+- [x] Save current configuration to `spconfig-v3.xml`, default the player party to the campaign main hero with empty members, and support named save/load configurations.
+- [x] When selecting characters, add search plus hero/nonhero, faction, and clan filters.
+- [x] Allow party panels to be collapsed.
+- [x] Support inserting, removing, and reordering any configured troop entry.
+- [x] When importing a party:
+  - [x] Give the search text widget a background.
+  - [x] Prevent the party type and faction selectors from overlapping.
+  - [x] Review the roster before choosing to add members or replace all members.
+  - [x] Improve the party button content layout.
+  - [x] the party name exceeds the button. It's not the width issue: the button is not high enough.
+  - [x] there should be selectors for faction, culture, and clan. there should be several search widgets, for faction name, culture name, clan name, party name, respectively.
+  - [x] when reviewing member rosters, if there're too much members, the UI to add/replace members may not have enough height.
+  - [x] Change background of the view of reviewing member roster, and add background to member list in the view.
+- [x] Support reviewing character skills, levels and equipment
+- [x] When selecting character:
+  - [x] Split the culture option into 2: first is faction culture, filters factions in faction selctor; second is clan culture, filters clans in clan selector.
+  - [x] Support reset the character gender.
+  - [x] Fix reviewing of character skills/equipment: you can reference the Encyclopedia code.
+- [x] since we can claspe party section, we don't need to claspe genera/troop sections anymore.
+- [x] When general section is disabled, we can hide the content of it.
+- [x] It seems the +/- button overlaps with function of adding/remove button of each party member. We still cannot add before the first member.

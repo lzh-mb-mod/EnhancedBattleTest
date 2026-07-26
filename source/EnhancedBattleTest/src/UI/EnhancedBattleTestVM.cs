@@ -34,6 +34,7 @@ namespace EnhancedBattleTest.UI
         private bool _isDefenderCustomMachineSelectionEnabled;
         private SideVM _playerSide;
         private SideVM _enemySide;
+        private BattleTypeSelectionGroup _battleTypeSelectionGroup;
 
         public TextVM TitleText { get; }
 
@@ -42,6 +43,8 @@ namespace EnhancedBattleTest.UI
         public TextVM MapText { get; }
 
         public TextVM StartButtonText { get; }
+        public TextVM SaveConfigurationText { get; }
+        public TextVM LoadConfigurationText { get; }
 
         [DataSourceProperty]
         public SideVM PlayerSide
@@ -68,7 +71,18 @@ namespace EnhancedBattleTest.UI
                 OnPropertyChanged(nameof(EnemySide));
             }
         }
-        public BattleTypeSelectionGroup BattleTypeSelectionGroup { get; }
+        [DataSourceProperty]
+        public BattleTypeSelectionGroup BattleTypeSelectionGroup
+        {
+            get => _battleTypeSelectionGroup;
+            private set
+            {
+                if (_battleTypeSelectionGroup == value)
+                    return;
+                _battleTypeSelectionGroup = value;
+                OnPropertyChanged(nameof(BattleTypeSelectionGroup));
+            }
+        }
         public MapSelectionGroupVM MapSelectionGroup { get; }
 
         [DataSourceProperty]
@@ -167,6 +181,10 @@ namespace EnhancedBattleTest.UI
 
 
             StartButtonText = new TextVM(GameTexts.FindText("str_start"));
+            SaveConfigurationText =
+                new TextVM(GameTexts.FindText("str_ebt_save_configuration"));
+            LoadConfigurationText =
+                new TextVM(GameTexts.FindText("str_ebt_load_configuration"));
 
             PlayerSide = new SideVM(_config.PlayerTeamConfig, true,
                 _config.BattleTypeConfig);
@@ -189,6 +207,8 @@ namespace EnhancedBattleTest.UI
             EnemySide.RefreshValues();
             BattleTypeSelectionGroup.RefreshValues();
             MapSelectionGroup.RefreshValues();
+            SaveConfigurationText.RefreshValues();
+            LoadConfigurationText.RefreshValues();
         }
 
 
@@ -332,6 +352,94 @@ namespace EnhancedBattleTest.UI
                 EnhancedBattleTestSaveGuard.ShowCampaignStateWarning(false);
         }
 
+        public void ExecuteSaveConfiguration()
+        {
+            if (!ApplyConfig())
+                return;
+
+            InformationManager.ShowTextInquiry(
+                new TextInquiryData(
+                    GameTexts.FindText(
+                        "str_ebt_save_configuration").ToString(),
+                    GameTexts.FindText(
+                        "str_ebt_save_configuration_description").ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_done").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    name =>
+                    {
+                        string trimmedName = name.Trim();
+                        if (!_config.Serialize(trimmedName))
+                        {
+                            Utility.DisplayLocalizedText(
+                                "str_ebt_configuration_save_failed");
+                            return;
+                        }
+
+                        TextObject message = GameTexts.FindText(
+                            "str_ebt_configuration_saved");
+                        message.SetTextVariable(
+                            "CONFIGURATION_NAME",
+                            trimmedName);
+                        Utility.DisplayMessage(message.ToString());
+                    },
+                    null,
+                    false,
+                    BattleConfig.ValidateConfigurationName));
+        }
+
+        public void ExecuteLoadConfiguration()
+        {
+            IReadOnlyList<string> names =
+                BattleConfig.GetSavedConfigurationNames();
+            if (names.Count == 0)
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_no_saved_configuration");
+                return;
+            }
+
+            List<InquiryElement> configurations = names
+                .Select(name => new InquiryElement(name, name, null))
+                .ToList();
+            MBInformationManager.ShowMultiSelectionInquiry(
+                new MultiSelectionInquiryData(
+                    GameTexts.FindText(
+                        "str_ebt_load_configuration").ToString(),
+                    GameTexts.FindText(
+                        "str_ebt_load_configuration_description").ToString(),
+                    configurations,
+                    true,
+                    1,
+                    1,
+                    GameTexts.FindText("str_done").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    selected =>
+                    {
+                        string name = selected.FirstOrDefault()?.Identifier
+                            as string;
+                        if (string.IsNullOrEmpty(name)
+                            || !BattleConfig.TryDeserialize(
+                                name,
+                                out BattleConfig loadedConfig))
+                        {
+                            Utility.DisplayLocalizedText(
+                                "str_ebt_configuration_load_failed");
+                            return;
+                        }
+
+                        LoadConfiguration(loadedConfig);
+                        TextObject message = GameTexts.FindText(
+                            "str_ebt_configuration_loaded");
+                        message.SetTextVariable(
+                            "CONFIGURATION_NAME",
+                            name);
+                        Utility.DisplayMessage(message.ToString());
+                    },
+                    null));
+        }
+
         public void ExecuteStart()
         {
             if (!IsValid())
@@ -445,6 +553,31 @@ namespace EnhancedBattleTest.UI
         {
             PlayerSide.SetPlayerType(
                 isCommander ? PlayerType.Commander : PlayerType.Sergeant);
+        }
+
+        private void LoadConfiguration(BattleConfig config)
+        {
+            _config = config;
+            BattleConfig.Instance = config;
+            PlayerSide = new SideVM(
+                config.PlayerTeamConfig,
+                true,
+                config.BattleTypeConfig);
+            EnemySide = new SideVM(
+                config.EnemyTeamConfig,
+                false,
+                config.BattleTypeConfig);
+            BattleTypeSelectionGroup = new BattleTypeSelectionGroup(
+                config.BattleTypeConfig,
+                MapSelectionGroup,
+                OnPlayerTypeChange);
+            InitializeSiegeMachines();
+            MapSelectionGroup.OnGameTypeChange(
+                config.BattleTypeConfig.BattleType);
+            RecoverConfig();
+            OnPlayerTypeChange(
+                config.BattleTypeConfig.PlayerType
+                == PlayerType.Commander);
         }
 
         private void InitializeSiegeMachines()

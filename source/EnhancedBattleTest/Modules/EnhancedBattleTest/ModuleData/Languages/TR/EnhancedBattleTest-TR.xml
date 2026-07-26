@@ -6,6 +6,8 @@
   </tags>
   <strings>
     <string id="EnhancedBattleTest_singleplayerbattleoption" text="Tek Oyunculu Savaş Testi" />
+    <string id="EnhancedBattleTest_all" text="Tümü" />
+    <string id="EnhancedBattleTest_null_culture" text="Kültür Yok" />
 
     <string id="EnhancedBattleTest_battletype" text="Savaş Tipi" />
     <string id="EnhancedBattleTest_fieldbattle" text="Alan Savaşı" />
@@ -37,6 +39,57 @@
     <string id="EnhancedBattleTest_allied_party" text="Müttefik Grup {INDEX}" />
     <string id="EnhancedBattleTest_add_allied_party" text="Müttefik Grup Ekle" />
     <string id="EnhancedBattleTest_remove_allied_party" text="Grubu Kaldır" />
+    <string id="EnhancedBattleTest_import_campaign_party" text="Sefer Grubunu İçe Aktar" />
+    <string id="EnhancedBattleTest_select_campaign_party" text="Sefer Grubu Seç" />
+    <string id="EnhancedBattleTest_select_campaign_party_description" text="Bu yapılandırılmış grubun komutanlarını ve birliklerini seçilen sefer grubunun üyeleriyle değiştirin." />
+    <string id="EnhancedBattleTest_campaign_party_selection" text="{PARTY_TYPE} - {FACTION_NAME} - {MEMBER_COUNT} üye" />
+    <string id="EnhancedBattleTest_campaign_party_imported" text="{PARTY_NAME} grubunun üyeleri içe aktarıldı." />
+    <string id="EnhancedBattleTest_no_campaign_party_available" text="Üyesi olan kullanılabilir bir sefer grubu yok." />
+    <string id="EnhancedBattleTest_search" text="Ara" />
+    <string id="EnhancedBattleTest_party_type" text="Grup Türü" />
+    <string id="EnhancedBattleTest_party_name" text="Grup Adı" />
+    <string id="EnhancedBattleTest_party_type_lord" text="Lord Grubu" />
+    <string id="EnhancedBattleTest_party_type_caravan" text="Kervan" />
+    <string id="EnhancedBattleTest_party_type_villager" text="Köylüler" />
+    <string id="EnhancedBattleTest_party_type_bandit" text="Haydutlar" />
+    <string id="EnhancedBattleTest_party_type_militia" text="Milis" />
+    <string id="EnhancedBattleTest_party_type_garrison" text="Garnizon" />
+    <string id="EnhancedBattleTest_party_type_custom" text="Özel Grup" />
+    <string id="EnhancedBattleTest_party_type_other" text="Diğer" />
+    <string id="EnhancedBattleTest_faction" text="Hizip" />
+    <string id="EnhancedBattleTest_faction_culture" text="Hizip Kültürü" />
+    <string id="EnhancedBattleTest_no_faction" text="Hizip Yok" />
+    <string id="EnhancedBattleTest_clan" text="Klan" />
+    <string id="EnhancedBattleTest_clan_culture" text="Klan Kültürü" />
+    <string id="EnhancedBattleTest_hero_filter" text="Kahraman Türü" />
+    <string id="EnhancedBattleTest_hero_filter_hero" text="Kahraman" />
+    <string id="EnhancedBattleTest_hero_filter_nonhero" text="Kahraman Değil" />
+    <string id="EnhancedBattleTest_insert_after" text="Altına Ekle" />
+    <string id="EnhancedBattleTest_remove" text="Kaldır" />
+    <string id="EnhancedBattleTest_move_up" text="Yukarı Taşı" />
+    <string id="EnhancedBattleTest_move_down" text="Aşağı Taşı" />
+    <string id="EnhancedBattleTest_level" text="Seviye" />
+    <string id="EnhancedBattleTest_skills" text="Yetenekler" />
+    <string id="EnhancedBattleTest_equipment" text="Ekipman" />
+    <string id="EnhancedBattleTest_override_gender" text="Cinsiyeti Geçersiz Kıl" />
+    <string id="EnhancedBattleTest_clear_all_filters" text="Tüm Filtreleri Temizle" />
+    <string id="EnhancedBattleTest_review_campaign_party" text="Sefer Grubunu İncele" />
+    <string id="EnhancedBattleTest_add_campaign_party_members" text="Üyeleri Ekle" />
+    <string id="EnhancedBattleTest_replace_campaign_party_members" text="Tüm Üyeleri Değiştir" />
+    <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}: {MEMBER_COUNT} üye" />
+    <string id="EnhancedBattleTest_no_leader" text="Lider Yok" />
+    <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} üye" />
+    <string id="EnhancedBattleTest_save_configuration" text="Yapılandırmayı Kaydet" />
+    <string id="EnhancedBattleTest_save_configuration_description" text="Bu savaş yapılandırması için bir ad girin." />
+    <string id="EnhancedBattleTest_load_configuration" text="Yapılandırmayı Yükle" />
+    <string id="EnhancedBattleTest_load_configuration_description" text="Kaydedilmiş bir savaş yapılandırması seçin." />
+    <string id="EnhancedBattleTest_configuration_saved" text="{CONFIGURATION_NAME} yapılandırması kaydedildi." />
+    <string id="EnhancedBattleTest_configuration_save_failed" text="Savaş yapılandırması kaydedilemedi." />
+    <string id="EnhancedBattleTest_configuration_loaded" text="{CONFIGURATION_NAME} yapılandırması yüklendi." />
+    <string id="EnhancedBattleTest_no_saved_configuration" text="Adlandırılmış bir savaş yapılandırması kaydedilmemiş." />
+    <string id="EnhancedBattleTest_configuration_load_failed" text="Seçilen savaş yapılandırması yüklenemedi." />
+    <string id="EnhancedBattleTest_configuration_name_required" text="Bir yapılandırma adı girin." />
+    <string id="EnhancedBattleTest_configuration_name_invalid" text="Yapılandırma adı geçersiz karakterler içeriyor." />
     <string id="EnhancedBattleTest_player_allied_party" text="Oyuncu Müttefik Grubu {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Düşman Müttefik Grubu {INDEX}" />
     <string id="EnhancedBattleTest_generals" text="Komutanlar" />
@@ -58,12 +111,14 @@
     <string id="EnhancedBattleTest_ishero" text="Kahraman" />
     <string id="EnhancedBattleTest_maleside" text="Erkek" />
     <string id="EnhancedBattleTest_femaleside" text="Kadın" />
+    <string id="EnhancedBattleTest_open_encyclopedia" text="Ansiklopediyi Aç" />
 
     <string id="EnhancedBattleTest_no_map" text="Harita Mevcut Değil." />
     <string id="EnhancedBattleTest_current_map" text="Şimdiki Harita {MapName}." />
 
     <string id="EnhancedBattleTest_troop_group_general" text="Komutan" />
 
+    <string id="EnhancedBattleTest_override_tactic_level" text="Taktik Seviyesini Geçersiz Kıl" />
     <string id="EnhancedBattleTest_tacticlevel" text="Taktik seviyesi" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />

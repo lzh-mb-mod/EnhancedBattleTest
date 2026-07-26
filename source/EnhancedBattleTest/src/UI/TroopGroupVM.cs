@@ -19,6 +19,7 @@ namespace EnhancedBattleTest.UI
         private bool _isGeneralTroopGroup;
         private bool _pushEnabled;
         private bool _popEnabled;
+        private bool _isContentVisible = true;
 
         [DataSourceProperty]
         public bool IsGeneralTroopGroup
@@ -34,6 +35,19 @@ namespace EnhancedBattleTest.UI
         }
 
         public TextVM TroopGroupName { get; }
+
+        [DataSourceProperty]
+        public bool IsContentVisible
+        {
+            get => _isContentVisible;
+            private set
+            {
+                if (_isContentVisible == value)
+                    return;
+                _isContentVisible = value;
+                OnPropertyChanged(nameof(IsContentVisible));
+            }
+        }
 
         [DataSourceProperty]
         public MBBindingList<TroopVM> Troops
@@ -78,14 +92,7 @@ namespace EnhancedBattleTest.UI
             Troops = new MBBindingList<TroopVM>();
             IsGeneralTroopGroup = isGeneralTroopGroup;
             TroopGroupName = new TextVM(groupName);
-            foreach (var troopConfig in config.Troops)
-            {
-                Troops.Add(new TroopVM(partyConfig, troopConfig,
-                    isPlayerSide, battleTypeConfig, isGeneralTroopGroup,
-                    onCharacterChanged, preferredBannerCharacter,
-                    () => IsBannerCharacter(troopConfig.Character)));
-            }
-
+            Reload();
             UpdateEnabled();
         }
 
@@ -100,6 +107,36 @@ namespace EnhancedBattleTest.UI
             UpdateEnabled();
         }
 
+        public void Reload()
+        {
+            var troops = new MBBindingList<TroopVM>();
+            for (int i = 0; i < _config.Troops.Count; ++i)
+            {
+                int index = i;
+                TroopConfig troopConfig = _config.Troops[index];
+                TroopConfig capturedConfig = troopConfig;
+                troops.Add(new TroopVM(
+                    _partyConfig,
+                    capturedConfig,
+                    _isPlayerSide,
+                    _battleTypeConfig,
+                    IsGeneralTroopGroup,
+                    _onCharacterChanged,
+                    _preferredBannerCharacter,
+                    () => IsBannerCharacter(capturedConfig.Character),
+                    () => InsertAfter(index),
+                    () => RemoveAt(index),
+                    () => Move(index, index - 1),
+                    () => Move(index, index + 1),
+                    index > 0,
+                    index < _config.Troops.Count - 1,
+                    !IsGeneralTroopGroup || _config.Troops.Count > 1));
+            }
+
+            Troops = troops;
+            UpdateEnabled();
+        }
+
         public bool IsValid()
         {
             foreach (var troopVm in _troops)
@@ -111,23 +148,72 @@ namespace EnhancedBattleTest.UI
             return true;
         }
 
+        public void SetContentVisible(bool value)
+        {
+            IsContentVisible = value;
+        }
+
         public void PushTroop()
         {
             var newTroop = _config.Troops.Count == 0
                 ? new TroopConfig()
                 : new TroopConfig(_config.Troops[_config.Troops.Count - 1]);
             _config.Troops.Add(newTroop);
-            Troops.Add(new TroopVM(
-                _partyConfig,
-                newTroop,
-                _isPlayerSide,
-                _battleTypeConfig,
-                IsGeneralTroopGroup,
-                _onCharacterChanged,
-                _preferredBannerCharacter,
-                () => IsBannerCharacter(newTroop.Character)));
+            Reload();
             _onCharacterChanged?.Invoke();
-            UpdateEnabled();
+        }
+
+        public void InsertFirst()
+        {
+            var newTroop = _config.Troops.Count == 0
+                ? new TroopConfig()
+                : new TroopConfig(_config.Troops[0]);
+            _config.Troops.Insert(0, newTroop);
+            Reload();
+            _onCharacterChanged?.Invoke();
+        }
+
+        public void RemoveFirst()
+        {
+            if (_config.Troops.Count > (IsGeneralTroopGroup ? 1 : 0))
+                _config.Troops.RemoveAt(0);
+            Reload();
+            _onCharacterChanged?.Invoke();
+        }
+
+        private void InsertAfter(int index)
+        {
+            if (index < 0 || index >= _config.Troops.Count)
+                return;
+
+            _config.Troops.Insert(
+                index + 1,
+                new TroopConfig(_config.Troops[index]));
+            Reload();
+            _onCharacterChanged?.Invoke();
+        }
+
+        private void RemoveAt(int index)
+        {
+            if (index < 0 || index >= _config.Troops.Count)
+                return;
+
+            _config.Troops.RemoveAt(index);
+            Reload();
+            _onCharacterChanged?.Invoke();
+        }
+
+        private void Move(int from, int to)
+        {
+            if (from < 0 || from >= _config.Troops.Count
+                || to < 0 || to >= _config.Troops.Count)
+                return;
+
+            TroopConfig troop = _config.Troops[from];
+            _config.Troops.RemoveAt(from);
+            _config.Troops.Insert(to, troop);
+            Reload();
+            _onCharacterChanged?.Invoke();
         }
 
         [DataSourceProperty]
@@ -148,10 +234,8 @@ namespace EnhancedBattleTest.UI
         {
             if (_config.Troops.Count > 0)
                 _config.Troops.RemoveAt(_config.Troops.Count - 1);
-            if (Troops.Count > 0)
-                Troops.RemoveAt(Troops.Count - 1);
+            Reload();
             _onCharacterChanged?.Invoke();
-            UpdateEnabled();
         }
 
         [DataSourceProperty]

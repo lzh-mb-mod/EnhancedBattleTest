@@ -1,35 +1,19 @@
 using EnhancedBattleTest.Data;
 using HarmonyLib;
 using SandBox.GameComponents;
+using SandBox.Missions.MissionLogics;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+using TaleWorlds.MountAndBlade;
 
 namespace EnhancedBattleTest.Patch
 {
     public static class EnhancedBattleTestBattleInitializationPatch
     {
-        [HarmonyPatch(
-            typeof(SandboxBattleInitializationModel),
-            "CanPlayerSideDeployWithOrderOfBattleAux")]
-        private static class CanPlayerSideDeployPatch
-        {
-            private static bool Prefix(ref bool __result)
-            {
-                EnhancedBattleTestPartyController.BattleContext context =
-                    EnhancedBattleTestPartyController.Current;
-                if (context == null)
-                    return true;
-
-                __result = context.PlayerParties
-                    .Sum(party => party.Party.NumberOfHealthyMembers) >= 20;
-                return false;
-            }
-        }
-
         [HarmonyPatch(
             typeof(SandboxBattleInitializationModel),
             nameof(SandboxBattleInitializationModel.GetAllAvailableTroopTypes))]
@@ -45,6 +29,17 @@ namespace EnhancedBattleTest.Patch
                 __result = GetAvailableTroopTypes(
                     context.PlayerParties.Select(party => party.Party));
                 return false;
+            }
+        }
+
+        [HarmonyPatch(
+            typeof(CampaignMissionComponent),
+            nameof(CampaignMissionComponent.OnMissionResultReady))]
+        private static class CampaignMissionResultPatch
+        {
+            private static bool Prefix()
+            {
+                return EnhancedBattleTestPartyController.Current == null;
             }
         }
 

@@ -4,14 +4,30 @@
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
-            <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" Brush="SPOptions.GameKeysGroup.Title.Text" Brush.TextHorizontalAlignment="Left" MarginLeft="20" />
-            <ButtonWidget IsVisible="@CanRemove" DoNotPassEventsToChildren="true" Command.Click="RemoveParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="160" SuggestedHeight="38" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+            <PartyHeaderToggleWidget DoNotPassEventsToChildren="true" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" CollapseIndicator="PartyName\CollapseIndicator" WidgetToClose="..\..\PartyContent" ListPanel="..\..\PartyContent" RenderLate="true" UpdateChildrenStates="true">
               <Children>
-                <RichTextWidget DataSource="{RemovePartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                <RichTextWidget Id="PartyName" DataSource="{Name}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" Brush="SPOptions.GameKeysGroup.Title.Text" Brush.TextHorizontalAlignment="Left" MarginLeft="45">
+                  <Children>
+                    <BrushWidget Id="CollapseIndicator" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedHeight="19" SuggestedWidth="19" VerticalAlignment="Center" PositionXOffset="-26" Brush="SPOptions.GameKeysgroup.ExpandIndicator" OverrideDefaultStateSwitchingEnabled="true" />
+                  </Children>
+                </RichTextWidget>
+              </Children>
+            </PartyHeaderToggleWidget>
+            <ButtonWidget IsVisible="@CanRemove" DoNotPassEventsToChildren="true" Command.Click="RemoveParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="160" SuggestedHeight="50" Brush="WideButton.Flat" UpdateChildrenStates="true">
+              <Children>
+                <TextWidget DataSource="{RemovePartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
               </Children>
             </ButtonWidget>
           </Children>
         </ListPanel>
+
+        <ListPanel Id="PartyContent" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+          <Children>
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ImportCampaignParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" MarginLeft="20" MarginTop="10" Brush="WideButton.Flat" UpdateChildrenStates="true">
+              <Children>
+                <TextWidget DataSource="{ImportPartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+              </Children>
+            </ButtonWidget>
 
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
@@ -47,8 +63,10 @@
           </Children>
         </ListPanel>
 
-        <EnhancedBattleTestGeneralTroopGroup DataSource="{Generals}" />
-        <EnhancedBattleTestNonGeneralTroopGroup DataSource="{Troops}" />
+            <EnhancedBattleTestGeneralTroopGroup DataSource="{Generals}" />
+            <EnhancedBattleTestNonGeneralTroopGroup DataSource="{Troops}" />
+          </Children>
+        </ListPanel>
       </Children>
     </ListPanel>
   </Window>

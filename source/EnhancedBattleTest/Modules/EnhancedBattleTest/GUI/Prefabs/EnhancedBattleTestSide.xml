@@ -6,7 +6,18 @@
 
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="85">
           <Children>
-            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="30" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+              <Children>
+                <RichTextWidget DataSource="{OverrideTacticLevelText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                <ButtonWidget IsSelected="@IsTacticLevelOverrideEnabled" ButtonType="Toggle" DoNotPassEventsToChildren="true" ToggleIndicator="ToggleIndicator" MarginLeft="15" VerticalAlignment="Center" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="50" SuggestedHeight="50" Brush="SPOptions.Checkbox.Empty.Button">
+                  <Children>
+                    <ImageWidget Id="ToggleIndicator" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="SPOptions.Checkbox.Full.Button" />
+                  </Children>
+                </ButtonWidget>
+              </Children>
+            </ListPanel>
+
+            <ListPanel IsVisible="@IsTacticLevelOverrideEnabled" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
               <Children>
                 <RichTextWidget DataSource="{TacticText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" VerticalAlignment="Center" Brush="SPOptions.Slider.Value.Text" IsEnabled="false" />
                 <SliderWidget DataSource="{TacticLevel}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="338" SuggestedHeight="42" MarginLeft="20" VerticalAlignment="Center" DoNotUpdateHandleSize="true" Filler="Filler" Handle="SliderHandle" IsDiscrete="@IsDiscrete" MaxValueFloat="@Max" MinValueFloat="@Min" ValueFloat="@Value">
@@ -44,9 +55,9 @@
                                 </ListPanel>
                               </ItemTemplate>
                             </ListPanel>
-                            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="AddAlliedParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="240" SuggestedHeight="42" MarginLeft="30" MarginTop="20" MarginBottom="50" Brush="ButtonBrush2" PositiveBehaviourBrush="ButtonBrush1">
+                            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="AddAlliedParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="240" SuggestedHeight="50" MarginLeft="30" MarginTop="20" MarginBottom="50" Brush="WideButton.Flat" UpdateChildrenStates="true">
                               <Children>
-                                <RichTextWidget DataSource="{AddAlliedPartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                                <TextWidget DataSource="{AddAlliedPartyText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                               </Children>
                             </ButtonWidget>
                           </Children>

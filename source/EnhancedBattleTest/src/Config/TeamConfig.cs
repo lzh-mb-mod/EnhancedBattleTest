@@ -7,6 +7,7 @@ namespace EnhancedBattleTest.Config
         public PartyConfig PrimaryParty { get; set; } = new PartyConfig();
         public List<PartyConfig> AlliedParties { get; set; } = new List<PartyConfig>();
         public CharacterConfig PlayerCharacter { get; set; }
+        public bool OverrideTacticLevel;
         public int TacticLevel;
 
         public string BannerKey

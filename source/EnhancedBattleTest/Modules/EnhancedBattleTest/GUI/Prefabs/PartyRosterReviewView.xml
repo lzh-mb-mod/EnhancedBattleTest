@@ -1,0 +1,61 @@
+<Prefab>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+        <Standard.Background />
+        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="850" SuggestedHeight="900" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" Brush="EnhancedBattleTest.MissionMenuBrush">
+          <Children>
+            <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="25" Brush="CustomBattle.Title.Text" />
+            <RichTextWidget DataSource="{SummaryText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginRight="30" MarginTop="15" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+            <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="760" HorizontalAlignment="Center" MarginTop="15" MarginBottom="15" Brush="EnhancedBattleTest.Popup">
+              <Children>
+                <ScrollablePanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="690" HorizontalAlignment="Center" MarginTop="25" MarginBottom="25" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="RosterClip" InnerPanel="RosterClip\Roster" MouseScrollAxis="Vertical" VerticalScrollbar="..\RosterScrollbar">
+                  <Children>
+                    <Widget Id="RosterClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                      <Children>
+                        <ListPanel Id="Roster" DataSource="{Members}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                          <ItemTemplate>
+                            <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="34" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                              <Children>
+                                <ScrollingRichTextWidget Text="@Name" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" Brush="CustomBattle.Value.Text" IsAutoScrolling="false" />
+                                <RichTextWidget Text="@Number" WidthSizePolicy="Fixed" SuggestedWidth="80" HeightSizePolicy="StretchToParent" HorizontalAlignment="Right" Brush="CustomBattle.Value.Text" />
+                              </Children>
+                            </ListPanel>
+                          </ItemTemplate>
+                        </ListPanel>
+                      </Children>
+                    </Widget>
+                  </Children>
+                </ScrollablePanel>
+                <ScrollbarWidget Id="RosterScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="16" HorizontalAlignment="Right" MarginRight="15" MarginTop="25" MarginBottom="25" AlignmentAxis="Vertical" Handle="RosterScrollbarHandle" MaxValue="100" MinValue="0">
+                  <Children>
+                    <Widget Id="RosterScrollbarHandle" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+                  </Children>
+                </ScrollbarWidget>
+              </Children>
+            </BrushWidget>
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="25" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+              <Children>
+                <ButtonWidget Command.Click="Add" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="230" SuggestedHeight="50" Brush="WideButton.Flat">
+                  <Children>
+                    <RichTextWidget DataSource="{AddText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                  </Children>
+                </ButtonWidget>
+                <ButtonWidget Command.Click="Replace" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="260" SuggestedHeight="50" MarginLeft="15" Brush="WideButton.Flat">
+                  <Children>
+                    <RichTextWidget DataSource="{ReplaceText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                  </Children>
+                </ButtonWidget>
+                <ButtonWidget Command.Click="Close" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="180" SuggestedHeight="50" MarginLeft="15" Brush="WideButton.Flat">
+                  <Children>
+                    <RichTextWidget DataSource="{CancelText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                  </Children>
+                </ButtonWidget>
+              </Children>
+            </ListPanel>
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

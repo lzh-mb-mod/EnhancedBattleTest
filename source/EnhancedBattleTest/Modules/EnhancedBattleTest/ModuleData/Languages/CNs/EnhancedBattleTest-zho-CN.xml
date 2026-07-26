@@ -41,6 +41,57 @@
     <string id="EnhancedBattleTest_allied_party" text="友军部队 {INDEX}" />
     <string id="EnhancedBattleTest_add_allied_party" text="添加友军部队" />
     <string id="EnhancedBattleTest_remove_allied_party" text="移除部队" />
+    <string id="EnhancedBattleTest_import_campaign_party" text="导入战役部队" />
+    <string id="EnhancedBattleTest_select_campaign_party" text="选择战役部队" />
+    <string id="EnhancedBattleTest_select_campaign_party_description" text="使用所选战役部队的成员替换当前配置部队的将领和士兵。" />
+    <string id="EnhancedBattleTest_campaign_party_selection" text="{PARTY_TYPE} - {FACTION_NAME} - {MEMBER_COUNT} 人" />
+    <string id="EnhancedBattleTest_campaign_party_imported" text="已从 {PARTY_NAME} 导入成员。" />
+    <string id="EnhancedBattleTest_no_campaign_party_available" text="没有可用的有成员战役部队。" />
+    <string id="EnhancedBattleTest_search" text="搜索" />
+    <string id="EnhancedBattleTest_party_type" text="部队类型" />
+    <string id="EnhancedBattleTest_party_name" text="部队名称" />
+    <string id="EnhancedBattleTest_party_type_lord" text="领主部队" />
+    <string id="EnhancedBattleTest_party_type_caravan" text="商队" />
+    <string id="EnhancedBattleTest_party_type_villager" text="村民" />
+    <string id="EnhancedBattleTest_party_type_bandit" text="强盗" />
+    <string id="EnhancedBattleTest_party_type_militia" text="民兵" />
+    <string id="EnhancedBattleTest_party_type_garrison" text="驻军" />
+    <string id="EnhancedBattleTest_party_type_custom" text="自定义部队" />
+    <string id="EnhancedBattleTest_party_type_other" text="其他" />
+    <string id="EnhancedBattleTest_faction" text="阵营" />
+    <string id="EnhancedBattleTest_faction_culture" text="阵营文化" />
+    <string id="EnhancedBattleTest_no_faction" text="无阵营" />
+    <string id="EnhancedBattleTest_clan" text="家族" />
+    <string id="EnhancedBattleTest_clan_culture" text="家族文化" />
+    <string id="EnhancedBattleTest_hero_filter" text="英雄类型" />
+    <string id="EnhancedBattleTest_hero_filter_hero" text="英雄" />
+    <string id="EnhancedBattleTest_hero_filter_nonhero" text="非英雄" />
+    <string id="EnhancedBattleTest_insert_after" text="在下方新增" />
+    <string id="EnhancedBattleTest_remove" text="移除" />
+    <string id="EnhancedBattleTest_move_up" text="上移" />
+    <string id="EnhancedBattleTest_move_down" text="下移" />
+    <string id="EnhancedBattleTest_level" text="等级" />
+    <string id="EnhancedBattleTest_skills" text="技能" />
+    <string id="EnhancedBattleTest_equipment" text="装备" />
+    <string id="EnhancedBattleTest_override_gender" text="覆盖性别" />
+    <string id="EnhancedBattleTest_clear_all_filters" text="清除全部筛选" />
+    <string id="EnhancedBattleTest_review_campaign_party" text="检查战役部队" />
+    <string id="EnhancedBattleTest_add_campaign_party_members" text="添加成员" />
+    <string id="EnhancedBattleTest_replace_campaign_party_members" text="替换全部成员" />
+    <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}：{MEMBER_COUNT} 人" />
+    <string id="EnhancedBattleTest_no_leader" text="无领队" />
+    <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} 人" />
+    <string id="EnhancedBattleTest_save_configuration" text="保存配置" />
+    <string id="EnhancedBattleTest_save_configuration_description" text="输入此战斗配置的名称。" />
+    <string id="EnhancedBattleTest_load_configuration" text="加载配置" />
+    <string id="EnhancedBattleTest_load_configuration_description" text="选择一个已保存的战斗配置。" />
+    <string id="EnhancedBattleTest_configuration_saved" text="已保存配置 {CONFIGURATION_NAME}。" />
+    <string id="EnhancedBattleTest_configuration_save_failed" text="无法保存战斗配置。" />
+    <string id="EnhancedBattleTest_configuration_loaded" text="已加载配置 {CONFIGURATION_NAME}。" />
+    <string id="EnhancedBattleTest_no_saved_configuration" text="尚未保存任何命名战斗配置。" />
+    <string id="EnhancedBattleTest_configuration_load_failed" text="无法加载所选战斗配置。" />
+    <string id="EnhancedBattleTest_configuration_name_required" text="请输入配置名称。" />
+    <string id="EnhancedBattleTest_configuration_name_invalid" text="配置名称包含无效字符。" />
     <string id="EnhancedBattleTest_player_allied_party" text="玩家友军部队 {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="敌方友军部队 {INDEX}" />
     <string id="EnhancedBattleTest_generals" text="将领" />
@@ -70,6 +121,7 @@
 
     <string id="EnhancedBattleTest_troop_group_general" text="将军" />
 
+    <string id="EnhancedBattleTest_override_tactic_level" text="覆盖战术等级" />
     <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />

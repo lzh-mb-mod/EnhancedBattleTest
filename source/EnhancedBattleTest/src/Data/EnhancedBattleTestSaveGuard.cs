@@ -8,17 +8,20 @@ namespace EnhancedBattleTest.Data
     {
         public static bool IsSavingDisabled { get; private set; }
         private static bool _postBattleWarningPending;
+        private static bool _savingSkippedMessageShown;
 
         public static void Disable()
         {
             IsSavingDisabled = true;
             _postBattleWarningPending = true;
+            _savingSkippedMessageShown = false;
         }
 
         public static void Reset()
         {
             IsSavingDisabled = false;
             _postBattleWarningPending = false;
+            _savingSkippedMessageShown = false;
         }
 
         public static bool ConsumePostBattleWarning()
@@ -55,6 +58,15 @@ namespace EnhancedBattleTest.Data
         public static void ShowSavingDisabledMessage()
         {
             Utility.DisplayLocalizedText("str_ebt_save_disabled");
+        }
+
+        public static void ShowSavingDisabledMessageOnce()
+        {
+            if (_savingSkippedMessageShown)
+                return;
+
+            _savingSkippedMessageShown = true;
+            ShowSavingDisabledMessage();
         }
     }
 }

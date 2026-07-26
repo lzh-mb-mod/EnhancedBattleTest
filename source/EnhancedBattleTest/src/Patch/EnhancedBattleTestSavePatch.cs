@@ -11,7 +11,11 @@ namespace EnhancedBattleTest.Patch
         {
             private static bool Prefix()
             {
-                return !EnhancedBattleTestSaveGuard.IsSavingDisabled;
+                if (!EnhancedBattleTestSaveGuard.IsSavingDisabled)
+                    return true;
+
+                EnhancedBattleTestSaveGuard.ShowSavingDisabledMessageOnce();
+                return false;
             }
         }
 
@@ -20,7 +24,11 @@ namespace EnhancedBattleTest.Patch
         {
             private static bool Prefix()
             {
-                return !EnhancedBattleTestSaveGuard.IsSavingDisabled;
+                if (!EnhancedBattleTestSaveGuard.IsSavingDisabled)
+                    return true;
+
+                EnhancedBattleTestSaveGuard.ShowSavingDisabledMessageOnce();
+                return false;
             }
         }
 

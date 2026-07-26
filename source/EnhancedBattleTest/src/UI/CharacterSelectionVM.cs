@@ -47,22 +47,83 @@ namespace EnhancedBattleTest.UI
         private List<Group> _groupsInSelection;
         private readonly Action _endSelection;
         private readonly CharacterCollection _characterCollection;
+        private readonly List<string> _factionCulturesInSelection =
+            new List<string>();
+        private readonly List<string> _clanCulturesInSelection =
+            new List<string>();
         private CharacterSelectionData _data;
         private bool _updateInstantly = true;
+        private bool _suspendFilterRefresh;
+        private bool _areHeroFiltersVisible = true;
+        private string _factionCultureSearchText = string.Empty;
+        private string _clanCultureSearchText = string.Empty;
 
         public TextVM TitleText { get; }
-        public TextVM CultureText { get; }
+        public TextVM FactionCultureText { get; }
+        public TextVM ClanCultureText { get; }
         public TextVM GroupText { get; }
 
         public TextVM DoneText { get; }
         public TextVM CancelText { get; }
 
-        public SelectorVM<SelectorItemVM> Cultures { get; }
+        public SelectorVM<SelectorItemVM> FactionCultures { get; }
+        public SelectorVM<SelectorItemVM> ClanCultures { get; }
 
         public SelectorVM<SelectorItemVM> Groups { get; }
 
         public CharactersInGroupVM Characters { get; }
 
+        [DataSourceProperty]
+        public bool AreHeroFiltersVisible
+        {
+            get => _areHeroFiltersVisible;
+            private set
+            {
+                if (_areHeroFiltersVisible == value)
+                    return;
+
+                _areHeroFiltersVisible = value;
+                OnPropertyChangedWithValue(value, nameof(AreHeroFiltersVisible));
+            }
+        }
+
+        [DataSourceProperty]
+        public string FactionCultureSearchText
+        {
+            get => _factionCultureSearchText;
+            set
+            {
+                value = value ?? string.Empty;
+                if (_factionCultureSearchText == value)
+                    return;
+
+                _factionCultureSearchText = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(FactionCultureSearchText));
+                if (!_suspendFilterRefresh)
+                    RefreshFactionCultures();
+            }
+        }
+
+        [DataSourceProperty]
+        public string ClanCultureSearchText
+        {
+            get => _clanCultureSearchText;
+            set
+            {
+                value = value ?? string.Empty;
+                if (_clanCultureSearchText == value)
+                    return;
+
+                _clanCultureSearchText = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(ClanCultureSearchText));
+                if (!_suspendFilterRefresh)
+                    RefreshClanCultures();
+            }
+        }
 
         public CharacterSelectionVM(
             CharacterCollection characterCollection,
@@ -75,21 +136,27 @@ namespace EnhancedBattleTest.UI
             _characterCollection = characterCollection;
 
             TitleText = new TextVM(GameTexts.FindText("str_ebt_select_character"));
-            CultureText = new TextVM(GameTexts.FindText("str_ebt_culture"));
+            FactionCultureText =
+                new TextVM(GameTexts.FindText("str_ebt_faction_culture"));
+            ClanCultureText =
+                new TextVM(GameTexts.FindText("str_ebt_clan_culture"));
             GroupText = new TextVM(GameTexts.FindText("str_ebt_group"));
             DoneText = new TextVM(GameTexts.FindText("str_done"));
             CancelText = new TextVM(GameTexts.FindText("str_cancel"));
 
-            Characters = CharactersInGroupVM.Create(_characterCollection);
+            Characters = CharactersInGroupVM.Create(
+                _characterCollection,
+                ClearAllFilters,
+                visible => AreHeroFiltersVisible = visible);
             Groups = new SelectorVM<SelectorItemVM>(0, null);
             _groupsInSelection = new List<Group>();
-            Cultures = new SelectorVM<SelectorItemVM>(
-                _characterCollection.Cultures
-                    .Select(cultureId =>
-                        cultureId == "null"
-                            ? GameTexts.FindText("str_ebt_null_culture")
-                            : MBObjectManager.Instance.GetObject<BasicCultureObject>(cultureId).Name)
-                    .Prepend(GameTexts.FindText("str_ebt_all")), 0, OnSelectedCultureChanged);
+            FactionCultures =
+                new SelectorVM<SelectorItemVM>(0, OnFilterChanged);
+            ClanCultures =
+                new SelectorVM<SelectorItemVM>(0, OnFilterChanged);
+            RefreshFactionCultures();
+            RefreshClanCultures();
+            RefreshGroups();
         }
 
         public override void OnFinalize()
@@ -97,30 +164,19 @@ namespace EnhancedBattleTest.UI
             EnhancedBattleTestSubModule.Instance.OnSelectCharacter -= this.Open;
         }
 
-        private void OnSelectedCultureChanged(SelectorVM<SelectorItemVM> cultures)
+        private void RefreshGroups()
         {
-            var selectedCulture = SelectedCultureId(cultures);
-            if (selectedCulture == null)
-            {
-                _groupsInSelection = _characterCollection.GroupsInCultures.Values.SelectMany(list => list)
-                    .DistinctBy(group => group.Info.FormationClass).ToList();
-                var groups = _groupsInSelection.Select(g => g.Info.Name).Prepend(GameTexts.FindText("str_ebt_all"))
-                    .ToList();
-                var index = Groups.SelectedIndex;
-                if (index >= groups.Count)
-                    index = 0;
-                RefreshSelector(Groups, groups, index, OnSelectedGroupChanged);
-            }
-            else
-            {
-                _groupsInSelection = _characterCollection.GroupsInCultures[selectedCulture];
-                var groups = _groupsInSelection.Select(group => group.Info.Name)
-                    .Prepend(GameTexts.FindText("str_ebt_all")).ToList();
-                var index = Groups.SelectedIndex;
-                if (index >= groups.Count)
-                    index = 0;
-                RefreshSelector(Groups, groups, index, OnSelectedGroupChanged);
-            }
+            _groupsInSelection = _characterCollection.GroupsInCultures.Values
+                .SelectMany(list => list)
+                .DistinctBy(group => group.Info.FormationClass)
+                .ToList();
+            var groups = _groupsInSelection.Select(group => group.Info.Name)
+                .Prepend(GameTexts.FindText("str_ebt_all"))
+                .ToList();
+            int index = Groups.SelectedIndex;
+            if (index >= groups.Count)
+                index = 0;
+            RefreshSelector(Groups, groups, index, OnSelectedGroupChanged);
         }
 
         private void RefreshSelector(SelectorVM<SelectorItemVM> selector, List<TextObject> texts, int index, Action<SelectorVM<SelectorItemVM>> action)
@@ -143,12 +199,36 @@ namespace EnhancedBattleTest.UI
 
         private void OnSelectedGroupChanged(SelectorVM<SelectorItemVM> groups)
         {
-            Characters.SelectedCultureAndGroupChanged(SelectedCultureId(Cultures), SelectedGroup(groups), _updateInstantly);
+            if (!_suspendFilterRefresh)
+                UpdateCharacterFilters();
         }
 
-        private string SelectedCultureId(SelectorVM<SelectorItemVM> cultures)
+        private void OnFilterChanged(SelectorVM<SelectorItemVM> selector)
         {
-            return cultures == null || cultures.SelectedIndex < 1 ? null : _characterCollection.Cultures[cultures.SelectedIndex - 1];
+            if (!_suspendFilterRefresh)
+                UpdateCharacterFilters();
+        }
+
+        private void UpdateCharacterFilters()
+        {
+            Characters.SelectedCultureAndGroupChanged(
+                SelectedCultureId(
+                    FactionCultures,
+                    _factionCulturesInSelection),
+                SelectedCultureId(
+                    ClanCultures,
+                    _clanCulturesInSelection),
+                SelectedGroup(Groups),
+                _updateInstantly);
+        }
+
+        private static string SelectedCultureId(
+            SelectorVM<SelectorItemVM> selector,
+            List<string> cultures)
+        {
+            return selector == null || selector.SelectedIndex < 1
+                ? null
+                : cultures[selector.SelectedIndex - 1];
         }
 
         private Group SelectedGroup(SelectorVM<SelectorItemVM> groups)
@@ -169,9 +249,20 @@ namespace EnhancedBattleTest.UI
             _data = data;
             var character = data.Config.Character;
             _updateInstantly = false;
-            Cultures.SelectedIndex = _characterCollection.Cultures.IndexOf(character.Culture.StringId) + 1;
-            Groups.SelectedIndex = _characterCollection.GroupsInCultures[character.Culture.StringId]
-                .FindIndex(group => group.Info.StringId == character.GroupInfo.StringId) + 1;
+            FactionCultureSearchText = string.Empty;
+            ClanCultureSearchText = string.Empty;
+            var characterObject =
+                (character as SinglePlayer.Data.SPCharacter)?.CharacterObject;
+            FactionCultures.SelectedIndex =
+                _factionCulturesInSelection.IndexOf(
+                    characterObject?.HeroObject?.MapFaction?.Culture?.StringId)
+                + 1;
+            ClanCultures.SelectedIndex =
+                _clanCulturesInSelection.IndexOf(
+                    characterObject?.HeroObject?.Clan?.Culture?.StringId) + 1;
+            Groups.SelectedIndex = _groupsInSelection.FindIndex(group =>
+                group.Info.FormationClass
+                == character.GroupInfo.FormationClass) + 1;
             Characters.SetConfig(
                 data.PartyConfig,
                 data.Config,
@@ -179,6 +270,82 @@ namespace EnhancedBattleTest.UI
                 data.PreferredBannerCharacter,
                 data.UseSelectedCharacterForBanner);
             _updateInstantly = true;
+        }
+
+        private void ClearAllFilters()
+        {
+            _updateInstantly = false;
+            _suspendFilterRefresh = true;
+            FactionCultureSearchText = string.Empty;
+            ClanCultureSearchText = string.Empty;
+            FactionCultures.SelectedIndex = 0;
+            ClanCultures.SelectedIndex = 0;
+            Groups.SelectedIndex = 0;
+            Characters.ClearFilters(false);
+            RefreshFactionCultures();
+            RefreshClanCultures();
+            _suspendFilterRefresh = false;
+            _updateInstantly = true;
+            UpdateCharacterFilters();
+        }
+
+        private void RefreshFactionCultures()
+        {
+            RefreshCultures(
+                FactionCultures,
+                _factionCulturesInSelection,
+                FactionCultureSearchText);
+        }
+
+        private void RefreshClanCultures()
+        {
+            RefreshCultures(
+                ClanCultures,
+                _clanCulturesInSelection,
+                ClanCultureSearchText);
+        }
+
+        private void RefreshCultures(
+            SelectorVM<SelectorItemVM> selector,
+            List<string> culturesInSelection,
+            string searchText)
+        {
+            string selectedCultureId =
+                SelectedCultureId(selector, culturesInSelection);
+            string search = searchText.Trim();
+            culturesInSelection.Clear();
+            culturesInSelection.AddRange(_characterCollection.Cultures
+                .Where(cultureId =>
+                    string.IsNullOrEmpty(search)
+                    || Contains(CultureName(cultureId).ToString(), search)
+                    || Contains(cultureId, search)));
+            var cultures = culturesInSelection
+                .Select(CultureName)
+                .Prepend(GameTexts.FindText("str_ebt_all"))
+                .ToList();
+            int index = selectedCultureId == null
+                ? 0
+                : culturesInSelection.IndexOf(selectedCultureId) + 1;
+            RefreshSelector(
+                selector,
+                cultures,
+                Math.Max(index, 0),
+                OnFilterChanged);
+        }
+
+        private static TextObject CultureName(string cultureId)
+        {
+            return cultureId == "null"
+                ? GameTexts.FindText("str_ebt_null_culture")
+                : MBObjectManager.Instance
+                    .GetObject<BasicCultureObject>(cultureId).Name;
+        }
+
+        private static bool Contains(string value, string search)
+        {
+            return value?.IndexOf(
+                       search,
+                       StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 
         private void Done()

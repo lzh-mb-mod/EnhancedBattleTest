@@ -2,6 +2,11 @@ using EnhancedBattleTest.BannerEditor;
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -26,6 +31,7 @@ namespace EnhancedBattleTest.UI
         public TextVM InArmyText { get; }
         public TextVM PlayerCharacterText { get; }
         public TextVM RemovePartyText { get; }
+        public TextVM ImportPartyText { get; }
         public BoolVM EnableGeneral { get; }
         public BoolVM UseCustomBanner { get; }
         public BoolVM InArmy { get; }
@@ -121,10 +127,13 @@ namespace EnhancedBattleTest.UI
             PlayerCharacterText =
                 new TextVM(GameTexts.FindText("str_ebt_player_character"));
             RemovePartyText = new TextVM(GameTexts.FindText("str_ebt_remove_allied_party"));
+            ImportPartyText =
+                new TextVM(GameTexts.FindText("str_ebt_import_campaign_party"));
             EnableGeneral = new BoolVM(_config.HasGeneral);
             EnableGeneral.OnValueChanged += value =>
             {
                 _config.HasGeneral = value;
+                Generals?.SetContentVisible(value);
                 RefreshBanner();
             };
             UseCustomBanner = new BoolVM(_config.UseCustomBanner);
@@ -159,6 +168,7 @@ namespace EnhancedBattleTest.UI
                 battleTypeConfig,
                 RefreshBanner,
                 GetPreferredBannerCharacter);
+            Generals.SetContentVisible(_config.HasGeneral);
             Troops = new TroopGroupVM(
                 _config,
                 _config.Troops,
@@ -181,6 +191,24 @@ namespace EnhancedBattleTest.UI
         public void RemoveParty()
         {
             _remove?.Invoke(this);
+        }
+
+        public void ImportCampaignParty()
+        {
+            if (Campaign.Current == null)
+                return;
+            if (!Campaign.Current.MobileParties.Any(party =>
+                    party != null
+                    && party.IsActive
+                    && party.MemberRoster.Count > 0))
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_no_campaign_party_available");
+                return;
+            }
+
+            EnhancedBattleTestSubModule.Instance.SelectParty(
+                new PartySelectionData(ReviewImport));
         }
 
         public void SetPlayerType(PlayerType playerType)
@@ -219,6 +247,7 @@ namespace EnhancedBattleTest.UI
             InArmyText.RefreshValues();
             PlayerCharacterText.RefreshValues();
             RemovePartyText.RefreshValues();
+            ImportPartyText.RefreshValues();
             PlayerCharacter?.RefreshValues();
             Generals.RefreshValues();
             Troops.RefreshValues();
@@ -265,5 +294,76 @@ namespace EnhancedBattleTest.UI
             CanConfigureArmy = _isPlayerSide;
             SetPlayerType(_battleTypeConfig.PlayerType);
         }
+
+        private void ReviewImport(MobileParty party)
+        {
+            EnhancedBattleTestSubModule.Instance.ReviewParty(
+                new PartyRosterReviewData(party, ImportRoster));
+        }
+
+        private void ImportRoster(MobileParty party, bool replace)
+        {
+            List<TroopRosterElement> roster = party.MemberRoster
+                .GetTroopRoster()
+                .Where(element =>
+                    element.Number > 0
+                    && element.Character != null)
+                .ToList();
+            List<TroopConfig> generals = roster
+                .Where(element => element.Character.IsHero)
+                .Select(element => new TroopConfig(
+                    element.Character.StringId,
+                    element.Number))
+                .ToList();
+            List<TroopConfig> troops = roster
+                .Where(element => !element.Character.IsHero)
+                .Select(element => new TroopConfig(
+                    element.Character.StringId,
+                    element.Number))
+                .ToList();
+            if (replace)
+            {
+                _config.Generals.Troops = generals;
+                _config.Troops.Troops = troops;
+            }
+            else
+            {
+                MergeTroops(_config.Generals.Troops, generals);
+                MergeTroops(_config.Troops.Troops, troops);
+            }
+
+            _config.HasGeneral = _config.Generals.Troops.Count > 0;
+            EnableGeneral.Value = _config.HasGeneral;
+            Generals.Reload();
+            Troops.Reload();
+            RefreshBanner();
+
+            TextObject message =
+                GameTexts.FindText("str_ebt_campaign_party_imported");
+            message.SetTextVariable("PARTY_NAME", party.Name);
+            Utility.DisplayMessage(message.ToString());
+        }
+
+        private static void MergeTroops(
+            List<TroopConfig> target,
+            IEnumerable<TroopConfig> additions)
+        {
+            foreach (TroopConfig addition in additions)
+            {
+                TroopConfig existing = target.FirstOrDefault(troop =>
+                    troop.Character?.CharacterObject
+                    == addition.Character?.CharacterObject);
+                if (existing != null)
+                {
+                    existing.Number =
+                        existing.Character.CharacterObject.IsHero
+                            ? 1
+                            : existing.Number + addition.Number;
+                }
+                else
+                    target.Add(addition);
+            }
+        }
+
     }
 }

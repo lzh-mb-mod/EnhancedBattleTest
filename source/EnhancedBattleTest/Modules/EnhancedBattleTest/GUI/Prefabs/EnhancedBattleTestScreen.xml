@@ -65,7 +65,7 @@
                     <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Title.Text" />
                     <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="650" SuggestedHeight="7" HorizontalAlignment="Center" VerticalAlignment="Top" PositionYOffset="75" Sprite="TownManagement\title_divider" />
 
-                    <ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="90" MarginBottom="90" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="CenterOptionsClip" InnerPanel="CenterOptionsClip\CenterOptions" MouseScrollAxis="Vertical" VerticalScrollbar="..\CenterOptionsScrollbar">
+                    <ScrollablePanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginTop="90" MarginBottom="170" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="CenterOptionsClip" InnerPanel="CenterOptionsClip\CenterOptions" MouseScrollAxis="Vertical" VerticalScrollbar="..\CenterOptionsScrollbar">
                       <Children>
                         <Widget Id="CenterOptionsClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
                           <Children>
@@ -349,7 +349,7 @@
                         <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">
                           <Children>
 
-                            <ListPanel Id="SearchResultList" DataSource="{MapSearchResults}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="5" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                            <ListPanel Id="SearchResultList" DataSource="{MapSearchResults}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="5" LayoutImp.LayoutMethod="VerticalBottomToTop">
                               <ItemTemplate>
 
                                 <ButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="25" MarginBottom="5" Brush="Standard.DropdownItem" Command.Click="ExecuteSelection">
@@ -367,26 +367,39 @@
                       </Children>
                     </ScrollablePanel> -->
 
-                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom">
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom" LayoutImp.LayoutMethod="VerticalBottomToTop">
                       <Children>
-
-                        <!-- <ButtonWidget DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="!RefreshButton.Width" SuggestedHeight="!RefreshButton.Height" HorizontalAlignment="Left" VerticalAlignment="Bottom" MarginRight="40" Brush="RefreshButton.Flat" Command.Click="ExecuteRandomize" UpdateChildrenStates="true">
+                        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                           <Children>
-                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@RandomizeButtonText" />
-                          </Children>
-                        </ButtonWidget> -->
+                            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteSaveConfiguration" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="240" SuggestedHeight="50" HorizontalAlignment="Center" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                              <Children>
+                                <TextWidget DataSource="{SaveConfigurationText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                              </Children>
+                            </ButtonWidget>
 
-                        <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" VerticalAlignment="Bottom" Brush="WideButton.Flat" Command.Click="ExecuteStart" UpdateChildrenStates="true">
-                          <Children>
-                            <TextWidget DataSource="{StartButtonText}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteLoadConfiguration" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="240" SuggestedHeight="50" HorizontalAlignment="Center" MarginLeft="15" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                              <Children>
+                                <TextWidget DataSource="{LoadConfigurationText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                              </Children>
+                            </ButtonWidget>
                           </Children>
-                        </ButtonWidget>
+                        </ListPanel>
 
-                        <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteBack" SuggestedWidth="!CloseButton.Width" SuggestedHeight="!CloseButton.Height" HorizontalAlignment="Right" VerticalAlignment="Bottom" MarginLeft="40" Brush="CloseButton.Flat">
+                        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="8" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                           <Children>
-                            <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@BackButtonText" />
+                            <ButtonWidget DoNotPassEventsToChildren="true" SuggestedWidth="!SpectateButton.Width" SuggestedHeight="!SpectateButton.Height" HorizontalAlignment="Center" Brush="WideButton.Flat" Command.Click="ExecuteStart" UpdateChildrenStates="true">
+                              <Children>
+                                <TextWidget DataSource="{StartButtonText}" Text="@Text" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="200" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
+                              </Children>
+                            </ButtonWidget>
+
+                            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ExecuteBack" SuggestedWidth="!CloseButton.Width" SuggestedHeight="!CloseButton.Height" HorizontalAlignment="Right" VerticalAlignment="Bottom" MarginLeft="40" Brush="CloseButton.Flat">
+                              <Children>
+                                <TextWidget WidthSizePolicy="CoverChildren" HeightSizePolicy="Fixed" SuggestedHeight="25" VerticalAlignment="Top" PositionYOffset="-25" HorizontalAlignment="Center" Brush="MPLobby.Matchmaking.CircleButtonText" Text="@BackButtonText" />
+                              </Children>
+                            </ButtonWidget>
                           </Children>
-                        </ButtonWidget>
+                        </ListPanel>
 
                       </Children>
                     </ListPanel>

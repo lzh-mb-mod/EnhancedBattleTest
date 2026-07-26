@@ -1,0 +1,123 @@
+<Prefab>
+  <Window>
+    <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
+      <Children>
+        <Standard.Background />
+        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1400" SuggestedHeight="950" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" Brush="EnhancedBattleTest.MissionMenuBrush">
+          <Children>
+            <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="25" Brush="CustomBattle.Title.Text" />
+
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+              <Children>
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+                        <RichTextWidget DataSource="{CultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@CultureSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Cultures}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+                        <RichTextWidget DataSource="{FactionText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@FactionSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Factions}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+                        <RichTextWidget DataSource="{ClanText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@ClanSearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Clans}" />
+                      </Children>
+                    </ListPanel>
+                  </Children>
+                </ListPanel>
+
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="12" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                  <Children>
+                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="330" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+                        <RichTextWidget DataSource="{PartyTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" Parameter.SelectorDataSource="{PartyTypes}" />
+                      </Children>
+                    </ListPanel>
+                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="500" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                      <Children>
+                        <RichTextWidget DataSource="{PartyNameText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                        <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
+                          <Children>
+                            <EditableTextWidget Text="@PartySearchText" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="10" MarginRight="10" Brush="CustomBattle.Search.TextBox" />
+                          </Children>
+                        </BrushWidget>
+                      </Children>
+                    </ListPanel>
+                  </Children>
+                </ListPanel>
+              </Children>
+            </ListPanel>
+
+            <Widget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1320" SuggestedHeight="470" HorizontalAlignment="Center" MarginTop="20">
+              <Children>
+                <ScrollablePanel WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="1300" HorizontalAlignment="Left" AutoHideScrollBarHandle="true" AutoHideScrollBars="true" ClipRect="PartyListClip" InnerPanel="PartyListClip\PartyList" MouseScrollAxis="Vertical" VerticalScrollbar="..\PartyListScrollbar">
+                  <Children>
+                    <Widget Id="PartyListClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
+                      <Children>
+                        <ListPanel Id="PartyList" DataSource="{Parties}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                          <ItemTemplate>
+                            <ButtonWidget Id="PartyButton" Command.Click="Select" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="1000" HeightSizePolicy="Fixed" SuggestedHeight="110" HorizontalAlignment="Center" MarginBottom="6" Brush="SPOptions.Dropdown.Center">
+                              <Children>
+                                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="15" MarginRight="50" MarginTop="20" MarginBottom="10" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                                  <Children>
+                                    <ScrollingRichTextWidget Text="@Name" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" Brush="SPOptions.GameKeysGroup.Title.Text" Brush.FontSize="20" IsAutoScrolling="false" ScrollOnHoverWidget="..\..\PartyButton" />
+                                    <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                                      <Children>
+                                        <RichTextWidget Text="@Leader" WidthSizePolicy="Fixed" SuggestedWidth="280" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                                        <RichTextWidget Text="@PartyType" WidthSizePolicy="Fixed" SuggestedWidth="180" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                                        <RichTextWidget Text="@Faction" WidthSizePolicy="Fixed" SuggestedWidth="300" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                                        <RichTextWidget Text="@MemberCount" WidthSizePolicy="Fixed" SuggestedWidth="180" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" Brush="CustomBattle.Value.Text" Brush.TextHorizontalAlignment="Right" />
+                                      </Children>
+                                    </ListPanel>
+                                  </Children>
+                                </ListPanel>
+                              </Children>
+                            </ButtonWidget>
+                          </ItemTemplate>
+                        </ListPanel>
+                      </Children>
+                    </Widget>
+                  </Children>
+                </ScrollablePanel>
+
+                <ScrollbarWidget Id="PartyListScrollbar" WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="16" HorizontalAlignment="Right" AlignmentAxis="Vertical" Handle="PartyListScrollbarHandle" MaxValue="100" MinValue="0">
+                  <Children>
+                    <Widget Id="PartyListScrollbarHandle" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" Brush="FaceGen.Scrollbar.Handle" />
+                  </Children>
+                </ScrollbarWidget>
+              </Children>
+            </Widget>
+
+            <ButtonWidget Command.Click="Close" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" HorizontalAlignment="Center" MarginTop="15" MarginBottom="20" Brush="SPOptions.Dropdown.Center">
+              <Children>
+                <RichTextWidget DataSource="{CancelText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+              </Children>
+            </ButtonWidget>
+          </Children>
+        </ListPanel>
+      </Children>
+    </Widget>
+  </Window>
+</Prefab>

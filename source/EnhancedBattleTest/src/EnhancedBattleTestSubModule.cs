@@ -27,6 +27,8 @@ namespace EnhancedBattleTest
         public static string ModuleFolderPath = Path.Combine(BasePath.Name, "Modules", ModuleId);
 
         public event Action<CharacterSelectionData> OnSelectCharacter;
+        public event Action<PartySelectionData> OnSelectParty;
+        public event Action<PartyRosterReviewData> OnReviewParty;
 
         protected override void OnSubModuleLoad()
         {
@@ -117,6 +119,16 @@ namespace EnhancedBattleTest
         public void SelectCharacter(CharacterSelectionData data)
         {
             OnSelectCharacter?.Invoke(data);
+        }
+
+        public void SelectParty(PartySelectionData data)
+        {
+            OnSelectParty?.Invoke(data);
+        }
+
+        public void ReviewParty(PartyRosterReviewData data)
+        {
+            OnReviewParty?.Invoke(data);
         }
     }
 }

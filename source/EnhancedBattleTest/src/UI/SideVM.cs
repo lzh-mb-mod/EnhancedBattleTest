@@ -12,13 +12,32 @@ namespace EnhancedBattleTest.UI
         private readonly TeamConfig _config;
         private readonly BattleTypeConfig _battleTypeConfig;
         private bool _isPlayerSide;
+        private bool _isTacticLevelOverrideEnabled;
 
         public TextVM Name { get; }
+        public TextVM OverrideTacticLevelText { get; }
         public TextVM TacticText { get; }
         public TextVM AddAlliedPartyText { get; }
         public NumberVM<float> TacticLevel { get; }
         public PartyVM PrimaryParty { get; }
         public MBBindingList<PartyVM> AlliedParties { get; }
+
+        [DataSourceProperty]
+        public bool IsTacticLevelOverrideEnabled
+        {
+            get => _isTacticLevelOverrideEnabled;
+            set
+            {
+                if (_isTacticLevelOverrideEnabled == value)
+                    return;
+
+                _isTacticLevelOverrideEnabled = value;
+                _config.OverrideTacticLevel = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(IsTacticLevelOverrideEnabled));
+            }
+        }
 
         public bool IsPlayerSide
         {
@@ -46,12 +65,16 @@ namespace EnhancedBattleTest.UI
                 isPlayerSide
                     ? new TextObject("{=BC7n6qxk}PLAYER")
                     : new TextObject("{=35IHscBa}ENEMY"));
+            OverrideTacticLevelText =
+                new TextVM(GameTexts.FindText(
+                    "str_ebt_override_tactic_level"));
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
             AddAlliedPartyText =
                 new TextVM(GameTexts.FindText("str_ebt_add_allied_party"));
             TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += value =>
                 _config.TacticLevel = (int)value;
+            IsTacticLevelOverrideEnabled = _config.OverrideTacticLevel;
             PrimaryParty = new PartyVM(
                 _config.PrimaryParty,
                 GameTexts.FindText("str_ebt_primary_party"),
@@ -87,6 +110,7 @@ namespace EnhancedBattleTest.UI
         {
             base.RefreshValues();
             Name.RefreshValues();
+            OverrideTacticLevelText.RefreshValues();
             TacticText.RefreshValues();
             AddAlliedPartyText.RefreshValues();
             PrimaryParty.RefreshValues();

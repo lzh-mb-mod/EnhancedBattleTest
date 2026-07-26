@@ -36,6 +36,57 @@
   <string id="str_ebt_allied_party" text="{=EnhancedBattleTest_allied_party}Allied Party {INDEX}" />
   <string id="str_ebt_add_allied_party" text="{=EnhancedBattleTest_add_allied_party}Add Allied Party" />
   <string id="str_ebt_remove_allied_party" text="{=EnhancedBattleTest_remove_allied_party}Remove Party" />
+  <string id="str_ebt_import_campaign_party" text="{=EnhancedBattleTest_import_campaign_party}Import Campaign Party" />
+  <string id="str_ebt_select_campaign_party" text="{=EnhancedBattleTest_select_campaign_party}Select Campaign Party" />
+  <string id="str_ebt_select_campaign_party_description" text="{=EnhancedBattleTest_select_campaign_party_description}Replace this configured party's generals and troops with the selected campaign party's members." />
+  <string id="str_ebt_campaign_party_selection" text="{=EnhancedBattleTest_campaign_party_selection}{PARTY_TYPE} - {FACTION_NAME} - {MEMBER_COUNT} members" />
+  <string id="str_ebt_campaign_party_imported" text="{=EnhancedBattleTest_campaign_party_imported}Imported members from {PARTY_NAME}." />
+  <string id="str_ebt_no_campaign_party_available" text="{=EnhancedBattleTest_no_campaign_party_available}No campaign party with members is available." />
+  <string id="str_ebt_search" text="{=EnhancedBattleTest_search}Search" />
+  <string id="str_ebt_party_type" text="{=EnhancedBattleTest_party_type}Party Type" />
+  <string id="str_ebt_party_name" text="{=EnhancedBattleTest_party_name}Party Name" />
+  <string id="str_ebt_party_type.Lord" text="{=EnhancedBattleTest_party_type_lord}Lord Party" />
+  <string id="str_ebt_party_type.Caravan" text="{=EnhancedBattleTest_party_type_caravan}Caravan" />
+  <string id="str_ebt_party_type.Villager" text="{=EnhancedBattleTest_party_type_villager}Villagers" />
+  <string id="str_ebt_party_type.Bandit" text="{=EnhancedBattleTest_party_type_bandit}Bandits" />
+  <string id="str_ebt_party_type.Militia" text="{=EnhancedBattleTest_party_type_militia}Militia" />
+  <string id="str_ebt_party_type.Garrison" text="{=EnhancedBattleTest_party_type_garrison}Garrison" />
+  <string id="str_ebt_party_type.Custom" text="{=EnhancedBattleTest_party_type_custom}Custom Party" />
+  <string id="str_ebt_party_type.Other" text="{=EnhancedBattleTest_party_type_other}Other" />
+  <string id="str_ebt_faction" text="{=EnhancedBattleTest_faction}Faction" />
+  <string id="str_ebt_faction_culture" text="{=EnhancedBattleTest_faction_culture}Faction Culture" />
+  <string id="str_ebt_no_faction" text="{=EnhancedBattleTest_no_faction}No Faction" />
+  <string id="str_ebt_clan" text="{=EnhancedBattleTest_clan}Clan" />
+  <string id="str_ebt_clan_culture" text="{=EnhancedBattleTest_clan_culture}Clan Culture" />
+  <string id="str_ebt_hero_filter" text="{=EnhancedBattleTest_hero_filter}Hero Type" />
+  <string id="str_ebt_hero_filter.Hero" text="{=EnhancedBattleTest_hero_filter_hero}Hero" />
+  <string id="str_ebt_hero_filter.NonHero" text="{=EnhancedBattleTest_hero_filter_nonhero}Non-Hero" />
+  <string id="str_ebt_insert_after" text="{=EnhancedBattleTest_insert_after}Insert Below" />
+  <string id="str_ebt_remove" text="{=EnhancedBattleTest_remove}Remove" />
+  <string id="str_ebt_move_up" text="{=EnhancedBattleTest_move_up}Move Up" />
+  <string id="str_ebt_move_down" text="{=EnhancedBattleTest_move_down}Move Down" />
+  <string id="str_ebt_level" text="{=EnhancedBattleTest_level}Level" />
+  <string id="str_ebt_skills" text="{=EnhancedBattleTest_skills}Skills" />
+  <string id="str_ebt_equipment" text="{=EnhancedBattleTest_equipment}Equipment" />
+  <string id="str_ebt_override_gender" text="{=EnhancedBattleTest_override_gender}Override Gender" />
+  <string id="str_ebt_clear_all_filters" text="{=EnhancedBattleTest_clear_all_filters}Clear All Filters" />
+  <string id="str_ebt_review_campaign_party" text="{=EnhancedBattleTest_review_campaign_party}Review Campaign Party" />
+  <string id="str_ebt_add_campaign_party_members" text="{=EnhancedBattleTest_add_campaign_party_members}Add Members" />
+  <string id="str_ebt_replace_campaign_party_members" text="{=EnhancedBattleTest_replace_campaign_party_members}Replace All Members" />
+  <string id="str_ebt_campaign_party_review_summary" text="{=EnhancedBattleTest_campaign_party_review_summary}{PARTY_NAME}: {MEMBER_COUNT} members" />
+  <string id="str_ebt_no_leader" text="{=EnhancedBattleTest_no_leader}No Leader" />
+  <string id="str_ebt_party_member_count" text="{=EnhancedBattleTest_party_member_count}{MEMBER_COUNT} members" />
+  <string id="str_ebt_save_configuration" text="{=EnhancedBattleTest_save_configuration}Save Configuration" />
+  <string id="str_ebt_save_configuration_description" text="{=EnhancedBattleTest_save_configuration_description}Enter a name for this battle configuration." />
+  <string id="str_ebt_load_configuration" text="{=EnhancedBattleTest_load_configuration}Load Configuration" />
+  <string id="str_ebt_load_configuration_description" text="{=EnhancedBattleTest_load_configuration_description}Select a saved battle configuration." />
+  <string id="str_ebt_configuration_saved" text="{=EnhancedBattleTest_configuration_saved}Saved configuration {CONFIGURATION_NAME}." />
+  <string id="str_ebt_configuration_save_failed" text="{=EnhancedBattleTest_configuration_save_failed}The battle configuration could not be saved." />
+  <string id="str_ebt_configuration_loaded" text="{=EnhancedBattleTest_configuration_loaded}Loaded configuration {CONFIGURATION_NAME}." />
+  <string id="str_ebt_no_saved_configuration" text="{=EnhancedBattleTest_no_saved_configuration}No named battle configuration has been saved." />
+  <string id="str_ebt_configuration_load_failed" text="{=EnhancedBattleTest_configuration_load_failed}The selected battle configuration could not be loaded." />
+  <string id="str_ebt_configuration_name_required" text="{=EnhancedBattleTest_configuration_name_required}Enter a configuration name." />
+  <string id="str_ebt_configuration_name_invalid" text="{=EnhancedBattleTest_configuration_name_invalid}The configuration name contains invalid characters." />
   <string id="str_ebt_player_allied_party" text="{=EnhancedBattleTest_player_allied_party}Player Allied Party {INDEX}" />
   <string id="str_ebt_enemy_allied_party" text="{=EnhancedBattleTest_enemy_allied_party}Enemy Allied Party {INDEX}" />
   <string id="str_ebt_generals" text="{=EnhancedBattleTest_generals}Generals" />
@@ -65,6 +116,7 @@
 
   <string id="str_troop_group_name.8" text="{=EnhancedBattleTest_troop_group_general}General" />
 
+  <string id="str_ebt_override_tactic_level" text="{=EnhancedBattleTest_override_tactic_level}Override Tactical Level" />
   <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
 
   <string id="str_ebt_sergeant_general_required" text="{=EnhancedBattleTest_sergeant_general_required}Sergeant mode requires an available general in the player team." />

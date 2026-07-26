@@ -63,6 +63,15 @@ namespace EnhancedBattleTest.UI
             MBCommon.PauseGameEngine();
         }
 
+        public bool OnEscape()
+        {
+            if (!_isActive)
+                return false;
+
+            EndSelection();
+            return true;
+        }
+
         private void EndSelection()
         {
             if (!_isActive)

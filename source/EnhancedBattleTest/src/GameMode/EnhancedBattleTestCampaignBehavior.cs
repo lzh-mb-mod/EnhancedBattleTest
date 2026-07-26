@@ -85,11 +85,7 @@ namespace EnhancedBattleTest.GameMode
                     args.optionLeaveType = GameMenuOption.LeaveType.Submenu;
                     return true;
                 },
-                args =>
-                {
-                    GameMenu.ExitToLast();
-                    EnhancedBattleTestSubModule.OpenBattleTest();
-                });
+                args => EnhancedBattleTestSubModule.OpenBattleTest());
         }
     }
 }

@@ -12,6 +12,7 @@ namespace EnhancedBattleTest.SinglePlayer.Config
     {
         [XmlIgnore]
         private string _characterId;
+        public bool OverrideGender;
         public float FemaleRatio;
 
         public string CharacterId
@@ -53,6 +54,7 @@ namespace EnhancedBattleTest.SinglePlayer.Config
             if (spOther == null)
                 return;
             CharacterId = spOther.CharacterId;
+            OverrideGender = spOther.OverrideGender;
             FemaleRatio = spOther.FemaleRatio;
         }
 

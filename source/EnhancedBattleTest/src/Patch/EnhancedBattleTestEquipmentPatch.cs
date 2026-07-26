@@ -29,19 +29,28 @@ namespace EnhancedBattleTest.Patch
 
             EquipmentModifierType? modifierType =
                 EnhancedBattleTestPartyController.Current?.EquipmentModifierType;
-            if (!modifierType.HasValue)
-                return;
-
             BasicCharacterObject character = agentBuildData?.AgentCharacter;
-            if (character == null || character.IsHero)
+            if (character == null)
                 return;
 
-            agentBuildData.Equipment(
-                Equipment.GetRandomEquipmentElements(
+            if (modifierType.HasValue && !character.IsHero)
+            {
+                agentBuildData.Equipment(
+                    Equipment.GetRandomEquipmentElements(
+                        character,
+                        modifierType.Value == EquipmentModifierType.Random,
+                        agentBuildData.AgentCivilianEquipment,
+                        agentBuildData.AgentEquipmentSeed));
+            }
+
+            if (EnhancedBattleTestPartyController.TryGetFemaleRatio(
+                    origin.Party,
                     character,
-                    modifierType.Value == EquipmentModifierType.Random,
-                    agentBuildData.AgentCivilianEquipment,
-                    agentBuildData.AgentEquipmentSeed));
+                    out float femaleRatio))
+            {
+                bool isFemale = MBRandom.RandomFloat < femaleRatio;
+                agentBuildData.IsFemale(isFemale);
+            }
         }
     }
 }
