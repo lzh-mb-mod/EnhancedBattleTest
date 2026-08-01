@@ -23,7 +23,7 @@
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{FactionCultures}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel DataSource="{Characters}" IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                    <ListPanel DataSource="{Characters}" IsEnabled="@AreHeroFiltersEnabled" AlphaFactor="@HeroFiltersAlpha" UpdateChildrenStates="true" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
                       <Children>
                         <RichTextWidget DataSource="{FactionText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -34,7 +34,7 @@
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Factions}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
+                    <ListPanel IsEnabled="@AreHeroFiltersEnabled" AlphaFactor="@HeroFiltersAlpha" UpdateChildrenStates="true" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60">
                       <Children>
                         <RichTextWidget DataSource="{ClanCultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -45,7 +45,7 @@
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{ClanCultures}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel DataSource="{Characters}" IsVisible="@AreHeroFiltersVisible" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60" MarginRight="20">
+                    <ListPanel DataSource="{Characters}" IsEnabled="@AreHeroFiltersEnabled" AlphaFactor="@HeroFiltersAlpha" UpdateChildrenStates="true" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="60" MarginRight="20">
                       <Children>
                         <RichTextWidget DataSource="{ClanText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -61,7 +61,7 @@
 
                 <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15">
                   <Children>
-                    <ListPanel DataSource="{Characters}" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="20">
+                    <ListPanel DataSource="{Characters}" IsEnabled="@IsHeroFilterEnabled" AlphaFactor="@HeroFilterAlpha" UpdateChildrenStates="true" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" MarginLeft="20">
                       <Children>
                         <RichTextWidget DataSource="{HeroFilterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{HeroFilters}" />

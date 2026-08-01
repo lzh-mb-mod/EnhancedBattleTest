@@ -20,23 +20,23 @@ namespace EnhancedBattleTest.Config
             }
         }
 
-        public TroopGroupConfig Generals
+        public TroopGroupConfig Heroes
         {
-            get => GetPrimaryParty().Generals;
-            set => GetPrimaryParty().Generals = value;
+            get => GetPrimaryParty().Heroes;
+            set => GetPrimaryParty().Heroes = value;
         }
 
-        public bool HasGeneral
+        public bool HasHeroes
         {
-            get => GetPrimaryParty().HasGeneral;
-            set => GetPrimaryParty().HasGeneral = value;
+            get => GetPrimaryParty().HasHeroes;
+            set => GetPrimaryParty().HasHeroes = value;
         }
 
         public TroopGroupConfig[] TroopGroups { get; set; }
 
         public bool ShouldSerializeBannerKey() => false;
-        public bool ShouldSerializeGenerals() => false;
-        public bool ShouldSerializeHasGeneral() => false;
+        public bool ShouldSerializeHeroes() => false;
+        public bool ShouldSerializeHasHeroes() => false;
         public bool ShouldSerializeTroopGroups() => false;
 
         public void NormalizeAfterDeserialize()

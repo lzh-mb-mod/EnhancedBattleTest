@@ -94,7 +94,7 @@
     <string id="EnhancedBattleTest_configuration_name_invalid" text="配置名称包含无效字符。" />
     <string id="EnhancedBattleTest_player_allied_party" text="玩家友军部队 {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="敌方友军部队 {INDEX}" />
-    <string id="EnhancedBattleTest_generals" text="将领" />
+    <string id="EnhancedBattleTest_heroes" text="英雄" />
     <string id="EnhancedBattleTest_troops" text="士兵" />
     <string id="EnhancedBattleTest_custom_banner" text="使用自定义旗帜" />
     <string id="EnhancedBattleTest_in_army" text="加入军团" />

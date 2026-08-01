@@ -101,9 +101,9 @@ namespace EnhancedBattleTest
 
         public static BasicCultureObject GetCulture(PartyConfig config)
         {
-            if (config.HasGeneral)
+            if (config.HasHeroes)
             {
-                var character = config.Generals.Troops.FirstOrDefault();
+                var character = config.Heroes.Troops.FirstOrDefault();
                 if (character?.Character?.CharacterObject?.Culture != null)
                     return character.Character.CharacterObject.Culture;
             }
@@ -112,6 +112,11 @@ namespace EnhancedBattleTest
             {
                 if (troopConfig.Number > 0
                     && troopConfig.Character?.CharacterObject?.Culture != null)
+                    return troopConfig.Character.CharacterObject.Culture;
+            }
+            foreach (var troopConfig in config.Troops.Troops)
+            {
+                if (troopConfig.Character?.CharacterObject?.Culture != null)
                     return troopConfig.Character.CharacterObject.Culture;
             }
             return Game.Current.ObjectManager.GetObject<BasicCultureObject>(culture => true);

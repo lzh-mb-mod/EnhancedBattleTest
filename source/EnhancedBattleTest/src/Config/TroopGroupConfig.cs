@@ -11,9 +11,9 @@ namespace EnhancedBattleTest.Config
             Troops = new List<TroopConfig>();
         }
 
-        public TroopGroupConfig(bool isGeneralTroopGroup)
+        public TroopGroupConfig(bool isHeroTroopGroup)
         {
-            Troops = isGeneralTroopGroup
+            Troops = isHeroTroopGroup
                 ? new List<TroopConfig>(1) {new TroopConfig()}
                 : new List<TroopConfig>();
         }

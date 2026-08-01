@@ -487,8 +487,8 @@ namespace EnhancedBattleTest.UI
             }
 
             return parties.Any(
-                party => party?.HasGeneral == true
-                         && party.Generals.Troops.Any(
+                party => party?.HasHeroes == true
+                         && party.Heroes.Troops.Any(
                              troop =>
                                  troop?.Character?.CharacterObject != null
                                  && troop.Character.CharacterObject

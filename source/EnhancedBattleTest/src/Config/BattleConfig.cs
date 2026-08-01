@@ -53,8 +53,8 @@ namespace EnhancedBattleTest.Config
                 {
                     UseCustomBanner = false,
                     IsInArmy = true,
-                    HasGeneral = false,
-                    Generals = new TroopGroupConfig(),
+                    HasHeroes = false,
+                    Heroes = new TroopGroupConfig(),
                     Troops = new TroopGroupConfig()
                 },
                 PlayerCharacter = string.IsNullOrEmpty(playerCharacterId)
@@ -73,8 +73,8 @@ namespace EnhancedBattleTest.Config
                         "11.12.12.4345.4345.768.768.1.0.0.462.13.13.512.512.769.764.1.0.0",
                     UseCustomBanner = false,
                     IsInArmy = true,
-                    HasGeneral = true,
-                    Generals = new TroopGroupConfig(true)
+                    HasHeroes = true,
+                    Heroes = new TroopGroupConfig(true)
                     {
                         Troops = new List<TroopConfig>
                         {
@@ -133,7 +133,7 @@ namespace EnhancedBattleTest.Config
                     team.PrimaryParty.Troops.Troops
                     .Select(troop => troop?.Character)
                     .FirstOrDefault(character => character?.CharacterObject != null)
-                    ?? team.PrimaryParty.Generals.Troops
+                    ?? team.PrimaryParty.Heroes.Troops
                         .Select(troop => troop?.Character)
                         .FirstOrDefault(character => character?.CharacterObject != null);
                 team.PlayerCharacter =
@@ -152,9 +152,9 @@ namespace EnhancedBattleTest.Config
                 return;
 
             party.Normalize();
-            party.Generals.Troops.RemoveAll(IsCharacterUnavailable);
-            if (party.Generals.Troops.Count == 0)
-                party.HasGeneral = false;
+            party.Heroes.Troops.RemoveAll(IsCharacterUnavailable);
+            if (party.Heroes.Troops.Count == 0)
+                party.HasHeroes = false;
             party.Troops.Troops.RemoveAll(IsCharacterUnavailable);
         }
 
@@ -249,7 +249,62 @@ namespace EnhancedBattleTest.Config
             result.EnemyTeamConfig?.NormalizeAfterDeserialize();
             RemoveUnavailableCharacters(result.PlayerTeamConfig);
             RemoveUnavailableCharacters(result.EnemyTeamConfig);
+            result.NormalizeCharacterGroups();
             return result;
+        }
+
+        public void NormalizeCharacterGroups()
+        {
+            NormalizeCharacterGroups(PlayerTeamConfig);
+            NormalizeCharacterGroups(EnemyTeamConfig);
+        }
+
+        private static void NormalizeCharacterGroups(TeamConfig team)
+        {
+            if (team == null)
+                return;
+
+            NormalizeCharacterGroups(team.PrimaryParty);
+            if (team.AlliedParties == null)
+                return;
+
+            foreach (PartyConfig party in team.AlliedParties)
+                NormalizeCharacterGroups(party);
+        }
+
+        private static void NormalizeCharacterGroups(PartyConfig party)
+        {
+            if (party == null)
+                return;
+
+            party.Normalize();
+            bool hadEnabledHeroes = party.HasHeroes;
+            List<TroopConfig> heroesInTroops = party.Troops.Troops
+                .Where(IsHero)
+                .ToList();
+            List<TroopConfig> nonHeroesInHeroes = party.Heroes.Troops
+                .Where(IsNonHero)
+                .ToList();
+
+            party.Troops.Troops.RemoveAll(IsHero);
+            party.Heroes.Troops.RemoveAll(IsNonHero);
+            party.Heroes.Troops.AddRange(heroesInTroops);
+            party.Troops.Troops.AddRange(nonHeroesInHeroes);
+            party.HasHeroes =
+                party.Heroes.Troops.Count > 0
+                && (hadEnabledHeroes || heroesInTroops.Count > 0);
+        }
+
+        private static bool IsHero(TroopConfig troop)
+        {
+            return troop?.Character?.CharacterObject is CharacterObject character
+                   && character.IsHero;
+        }
+
+        private static bool IsNonHero(TroopConfig troop)
+        {
+            return troop?.Character?.CharacterObject is CharacterObject character
+                   && !character.IsHero;
         }
 
         private static string GetNamedConfigPath(string configurationName)

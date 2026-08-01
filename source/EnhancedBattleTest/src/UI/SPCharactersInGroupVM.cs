@@ -30,7 +30,7 @@ namespace EnhancedBattleTest.UI
         private readonly List<IFaction> _factionsInSelection =
             new List<IFaction>();
         private readonly List<Clan> _clansInSelection = new List<Clan>();
-        private readonly Action<bool> _heroFilterVisibilityChanged;
+        private readonly Action<bool> _heroFiltersEnabledChanged;
         private string _factionCultureId;
         private string _clanCultureId;
         private Group _group;
@@ -38,6 +38,7 @@ namespace EnhancedBattleTest.UI
         private string _factionSearchText = string.Empty;
         private string _clanSearchText = string.Empty;
         private bool _suspendFilterUpdates;
+        private HeroFilter? _requiredHeroFilter;
         public TextVM OccupationText { get; }
         public TextVM SearchTextLabel { get; }
         public TextVM HeroFilterText { get; }
@@ -47,9 +48,20 @@ namespace EnhancedBattleTest.UI
         public SelectorVM<SelectorItemVM> HeroFilters { get; }
         public SelectorVM<SelectorItemVM> Factions { get; }
         public SelectorVM<SelectorItemVM> Clans { get; }
-        public bool AreHeroFiltersVisible =>
+        public bool AreHeroFiltersEnabled =>
             HeroFilters == null
             || (HeroFilter)HeroFilters.SelectedIndex != HeroFilter.NonHero;
+
+        [DataSourceProperty]
+        public float HeroFiltersAlpha =>
+            AreHeroFiltersEnabled ? 1f : 0.45f;
+
+        [DataSourceProperty]
+        public bool IsHeroFilterEnabled => !_requiredHeroFilter.HasValue;
+
+        [DataSourceProperty]
+        public float HeroFilterAlpha =>
+            IsHeroFilterEnabled ? 1f : 0.45f;
 
         [DataSourceProperty]
         public string FactionSearchText
@@ -105,10 +117,10 @@ namespace EnhancedBattleTest.UI
         public SPCharactersInGroupVM(
             CharacterCollection collection,
             Action clearAllFilters,
-            Action<bool> heroFilterVisibilityChanged)
+            Action<bool> heroFiltersEnabledChanged)
             : base(collection, clearAllFilters)
         {
-            _heroFilterVisibilityChanged = heroFilterVisibilityChanged;
+            _heroFiltersEnabledChanged = heroFiltersEnabledChanged;
             OccupationText = new TextVM(new TextObject("{=GZxFIeiJ}Occupation"));
             SearchTextLabel = new TextVM(GameTexts.FindText("str_ebt_search"));
             HeroFilterText =
@@ -220,7 +232,7 @@ namespace EnhancedBattleTest.UI
             SearchText = string.Empty;
             FactionSearchText = string.Empty;
             ClanSearchText = string.Empty;
-            HeroFilters.SelectedIndex = 0;
+            HeroFilters.SelectedIndex = RequiredHeroFilterIndex();
             CharacterObject character = spConfig.ActualCharacterObject;
             IFaction faction = character?.HeroObject?.MapFaction;
             Clan clan = character?.HeroObject?.Clan;
@@ -232,7 +244,8 @@ namespace EnhancedBattleTest.UI
                 ? 0
                 : Math.Max(_clansInSelection.IndexOf(clan) + 1, 0);
             Occupations.SelectedIndex = -1;
-            Occupations.SelectedIndex = (int)character.Occupation;
+            Occupations.SelectedIndex =
+                character == null ? 0 : (int)character.Occupation;
         }
 
         public override void ClearFilters(bool updateInstantly)
@@ -241,7 +254,7 @@ namespace EnhancedBattleTest.UI
             SearchText = string.Empty;
             FactionSearchText = string.Empty;
             ClanSearchText = string.Empty;
-            HeroFilters.SelectedIndex = 0;
+            HeroFilters.SelectedIndex = RequiredHeroFilterIndex();
             Factions.SelectedIndex = 0;
             Clans.SelectedIndex = 0;
             Occupations.SelectedIndex = 0;
@@ -271,8 +284,9 @@ namespace EnhancedBattleTest.UI
         {
             if (selector == HeroFilters)
             {
-                OnPropertyChanged(nameof(AreHeroFiltersVisible));
-                _heroFilterVisibilityChanged?.Invoke(AreHeroFiltersVisible);
+                OnPropertyChanged(nameof(AreHeroFiltersEnabled));
+                OnPropertyChanged(nameof(HeroFiltersAlpha));
+                _heroFiltersEnabledChanged?.Invoke(AreHeroFiltersEnabled);
             }
             if (!_suspendFilterUpdates)
                 UpdateCharacterList();
@@ -323,9 +337,26 @@ namespace EnhancedBattleTest.UI
 
         private HeroFilter CurrentHeroFilter()
         {
-            return HeroFilters == null
+            return _requiredHeroFilter
+                ?? (HeroFilters == null
                 ? HeroFilter.All
-                : (HeroFilter)HeroFilters.SelectedIndex;
+                : (HeroFilter)HeroFilters.SelectedIndex);
+        }
+
+        public void SetRequiredHeroFilter(bool? heroOnly)
+        {
+            _requiredHeroFilter = heroOnly.HasValue
+                ? heroOnly.Value ? HeroFilter.Hero : HeroFilter.NonHero
+                : (HeroFilter?)null;
+            OnPropertyChanged(nameof(IsHeroFilterEnabled));
+            OnPropertyChanged(nameof(HeroFilterAlpha));
+            HeroFilters.SelectedIndex = RequiredHeroFilterIndex();
+            UpdateCharacterList();
+        }
+
+        private int RequiredHeroFilterIndex()
+        {
+            return (int)(_requiredHeroFilter ?? HeroFilter.All);
         }
 
         private IEnumerable<Character> GetCharactersInGroup(Group group)
@@ -354,20 +385,45 @@ namespace EnhancedBattleTest.UI
             if (heroFilter == HeroFilter.NonHero && characterObject.IsHero)
                 return false;
 
+            if (_factionCultureId != null)
+            {
+                BasicCultureObject culture = characterObject.IsHero
+                    ? characterObject.HeroObject?.MapFaction?.Culture
+                    : characterObject.Culture;
+                if (CultureId(culture) != _factionCultureId)
+                    return false;
+            }
+
+            if (characterObject.IsHero
+                && _clanCultureId != null
+                && CultureId(characterObject.HeroObject?.Clan?.Culture)
+                != _clanCultureId)
+            {
+                return false;
+            }
+
             if (heroFilter != HeroFilter.NonHero)
             {
                 IFaction faction = Factions?.SelectedIndex > 0
-                    ? _factionsInSelection[Factions.SelectedIndex - 1]
+                    ? _factionsInSelection.ElementAtOrDefault(
+                        Factions.SelectedIndex - 1)
                     : null;
                 if (faction != null
                     && characterObject.HeroObject?.MapFaction != faction)
                     return false;
 
-                Clan clan = Clans?.SelectedIndex > 0
-                    ? _clansInSelection[Clans.SelectedIndex - 1]
-                    : null;
-                if (clan != null && characterObject.HeroObject?.Clan != clan)
-                    return false;
+                if (characterObject.IsHero)
+                {
+                    Clan clan = Clans?.SelectedIndex > 0
+                        ? _clansInSelection.ElementAtOrDefault(
+                            Clans.SelectedIndex - 1)
+                        : null;
+                    if (clan != null
+                        && characterObject.HeroObject?.Clan != clan)
+                    {
+                        return false;
+                    }
+                }
             }
 
             string search = SearchText.Trim();
@@ -386,7 +442,7 @@ namespace EnhancedBattleTest.UI
             _factionsInSelection.Clear();
             _factionsInSelection.AddRange(_factions.Where(faction =>
                 (_factionCultureId == null
-                 || faction.Culture?.StringId == _factionCultureId)
+                 || CultureId(faction.Culture) == _factionCultureId)
                 && (string.IsNullOrEmpty(search)
                     || Contains(faction.Name?.ToString(), search)
                     || Contains(faction.StringId, search))));
@@ -404,12 +460,13 @@ namespace EnhancedBattleTest.UI
                 : null;
             string search = ClanSearchText.Trim();
             IFaction selectedFaction = Factions?.SelectedIndex > 0
-                ? _factionsInSelection[Factions.SelectedIndex - 1]
+                ? _factionsInSelection.ElementAtOrDefault(
+                    Factions.SelectedIndex - 1)
                 : null;
             _clansInSelection.Clear();
             _clansInSelection.AddRange(_clans.Where(clan =>
                 (_clanCultureId == null
-                 || clan.Culture?.StringId == _clanCultureId)
+                 || CultureId(clan.Culture) == _clanCultureId)
                 && (selectedFaction == null
                     || clan.MapFaction == selectedFaction)
                 && (string.IsNullOrEmpty(search)
@@ -441,13 +498,14 @@ namespace EnhancedBattleTest.UI
             selector.SetOnChangeAction(null);
             selector.ItemList = items;
             selector.SelectedIndex = -1;
-            selector.SetOnChangeAction(onChanged);
             int index = selected == null
                 ? 0
                 : selected is IFaction faction
                     ? _factionsInSelection.IndexOf(faction) + 1
                     : _clansInSelection.IndexOf((Clan)selected) + 1;
             selector.SelectedIndex = Math.Max(index, 0);
+            selector.SetOnChangeAction(onChanged);
+            onChanged?.Invoke(selector);
         }
 
         private static bool Contains(string value, string search)
@@ -455,6 +513,11 @@ namespace EnhancedBattleTest.UI
             return value?.IndexOf(
                        search,
                        StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
+        private static string CultureId(BasicCultureObject culture)
+        {
+            return culture?.StringId ?? "null";
         }
     }
 }

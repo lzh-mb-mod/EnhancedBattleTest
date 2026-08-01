@@ -21,6 +21,8 @@ namespace EnhancedBattleTest.UI
         public bool PauseGameActiveState;
         public BasicCharacterObject PreferredBannerCharacter;
         public bool UseSelectedCharacterForBanner;
+        public bool? HeroOnly;
+        public Action CancelAction;
 
         public CharacterSelectionData(
             PartyConfig partyConfig,
@@ -29,7 +31,9 @@ namespace EnhancedBattleTest.UI
             Action<CharacterConfig> selectAction,
             bool pauseGameActiveState,
             BasicCharacterObject preferredBannerCharacter,
-            bool useSelectedCharacterForBanner)
+            bool useSelectedCharacterForBanner,
+            bool? heroOnly = null,
+            Action cancelAction = null)
         {
             PartyConfig = partyConfig;
             Config = config;
@@ -38,6 +42,8 @@ namespace EnhancedBattleTest.UI
             PauseGameActiveState = pauseGameActiveState;
             PreferredBannerCharacter = preferredBannerCharacter;
             UseSelectedCharacterForBanner = useSelectedCharacterForBanner;
+            HeroOnly = heroOnly;
+            CancelAction = cancelAction;
         }
     }
 
@@ -54,7 +60,7 @@ namespace EnhancedBattleTest.UI
         private CharacterSelectionData _data;
         private bool _updateInstantly = true;
         private bool _suspendFilterRefresh;
-        private bool _areHeroFiltersVisible = true;
+        private bool _areHeroFiltersEnabled = true;
         private string _factionCultureSearchText = string.Empty;
         private string _clanCultureSearchText = string.Empty;
 
@@ -74,18 +80,23 @@ namespace EnhancedBattleTest.UI
         public CharactersInGroupVM Characters { get; }
 
         [DataSourceProperty]
-        public bool AreHeroFiltersVisible
+        public bool AreHeroFiltersEnabled
         {
-            get => _areHeroFiltersVisible;
+            get => _areHeroFiltersEnabled;
             private set
             {
-                if (_areHeroFiltersVisible == value)
+                if (_areHeroFiltersEnabled == value)
                     return;
 
-                _areHeroFiltersVisible = value;
-                OnPropertyChangedWithValue(value, nameof(AreHeroFiltersVisible));
+                _areHeroFiltersEnabled = value;
+                OnPropertyChangedWithValue(value, nameof(AreHeroFiltersEnabled));
+                OnPropertyChanged(nameof(HeroFiltersAlpha));
             }
         }
+
+        [DataSourceProperty]
+        public float HeroFiltersAlpha =>
+            AreHeroFiltersEnabled ? 1f : 0.45f;
 
         [DataSourceProperty]
         public string FactionCultureSearchText
@@ -147,7 +158,7 @@ namespace EnhancedBattleTest.UI
             Characters = CharactersInGroupVM.Create(
                 _characterCollection,
                 ClearAllFilters,
-                visible => AreHeroFiltersVisible = visible);
+                enabled => AreHeroFiltersEnabled = enabled);
             Groups = new SelectorVM<SelectorItemVM>(0, null);
             _groupsInSelection = new List<Group>();
             FactionCultures =
@@ -192,8 +203,9 @@ namespace EnhancedBattleTest.UI
             selector.SetOnChangeAction(null);
             selector.ItemList = bindings;
             selector.SelectedIndex = -1;
-            selector.SetOnChangeAction(action);
             selector.SelectedIndex = index;
+            selector.SetOnChangeAction(action);
+            action?.Invoke(selector);
         }
 
 
@@ -253,16 +265,22 @@ namespace EnhancedBattleTest.UI
             ClanCultureSearchText = string.Empty;
             var characterObject =
                 (character as SinglePlayer.Data.SPCharacter)?.CharacterObject;
+            string factionCultureId = data.HeroOnly == false
+                ? characterObject?.Culture?.StringId
+                : characterObject?.HeroObject?.MapFaction?.Culture?.StringId;
             FactionCultures.SelectedIndex =
                 _factionCulturesInSelection.IndexOf(
-                    characterObject?.HeroObject?.MapFaction?.Culture?.StringId)
-                + 1;
+                    factionCultureId) + 1;
             ClanCultures.SelectedIndex =
                 _clanCulturesInSelection.IndexOf(
                     characterObject?.HeroObject?.Clan?.Culture?.StringId) + 1;
-            Groups.SelectedIndex = _groupsInSelection.FindIndex(group =>
-                group.Info.FormationClass
-                == character.GroupInfo.FormationClass) + 1;
+            Groups.SelectedIndex = character == null
+                ? 0
+                : _groupsInSelection.FindIndex(group =>
+                    group.Info.FormationClass
+                    == character.GroupInfo.FormationClass) + 1;
+            if (Characters is SPCharactersInGroupVM characters)
+                characters.SetRequiredHeroFilter(data.HeroOnly);
             Characters.SetConfig(
                 data.PartyConfig,
                 data.Config,
@@ -351,10 +369,16 @@ namespace EnhancedBattleTest.UI
         private void Done()
         {
             _data.SelectAction?.Invoke(_data.Config);
-            Close();
+            EndSelection();
         }
 
         private void Close()
+        {
+            _data.CancelAction?.Invoke();
+            EndSelection();
+        }
+
+        private void EndSelection()
         {
             _endSelection?.Invoke();
         }

@@ -10,6 +10,7 @@ namespace EnhancedBattleTest.UI
     {
         private CharacterConfig _config;
         private readonly BattleTypeConfig _battleTypeConfig;
+        private Action<Action> _selectCharacter;
         public bool IsPlayerSide { get; set; }
         private StringItemWithActionVM _name;
 
@@ -33,7 +34,8 @@ namespace EnhancedBattleTest.UI
             BattleTypeConfig battleTypeConfig,
             Action onCharacterChanged = null,
             Func<BasicCharacterObject> preferredBannerCharacter = null,
-            Func<bool> useSelectedCharacterForBanner = null)
+            Func<bool> useSelectedCharacterForBanner = null,
+            bool? heroOnly = null)
         {
             _battleTypeConfig = battleTypeConfig;
             IsPlayerSide = isPlayerSide;
@@ -42,7 +44,8 @@ namespace EnhancedBattleTest.UI
                 config,
                 onCharacterChanged,
                 preferredBannerCharacter,
-                useSelectedCharacterForBanner);
+                useSelectedCharacterForBanner,
+                heroOnly);
         }
 
         public override void RefreshValues()
@@ -56,24 +59,39 @@ namespace EnhancedBattleTest.UI
             CharacterConfig config,
             Action onCharacterChanged,
             Func<BasicCharacterObject> preferredBannerCharacter,
-            Func<bool> useSelectedCharacterForBanner)
+            Func<bool> useSelectedCharacterForBanner,
+            bool? heroOnly)
         {
             _config = config;
-            Name = new StringItemWithActionVM(
-                o =>
-                {
-                    EnhancedBattleTestSubModule.Instance.SelectCharacter(new CharacterSelectionData(partyConfig, _config.Clone(),
-                        IsPlayerSide == (_battleTypeConfig.PlayerSide == BattleSideEnum.Attacker),
+            _selectCharacter = cancelAction =>
+                EnhancedBattleTestSubModule.Instance.SelectCharacter(
+                    new CharacterSelectionData(
+                        partyConfig,
+                        _config.Clone(),
+                        IsPlayerSide
+                        == (_battleTypeConfig.PlayerSide
+                            == BattleSideEnum.Attacker),
                         characterConfig =>
                         {
                             _config.CopyFrom(characterConfig);
-                            Name.ActionText = _config.Character.Name.ToString();
+                            Name.ActionText =
+                                _config.Character.Name.ToString();
                             onCharacterChanged?.Invoke();
                         },
                         false,
                         preferredBannerCharacter?.Invoke(),
-                        useSelectedCharacterForBanner?.Invoke() == true));
-                }, _config.Character.Name.ToString(), this);
+                        useSelectedCharacterForBanner?.Invoke() == true,
+                        heroOnly,
+                        cancelAction));
+            Name = new StringItemWithActionVM(
+                o => SelectCharacter(),
+                _config.Character.Name.ToString(),
+                this);
+        }
+
+        public void SelectCharacter(Action cancelAction = null)
+        {
+            _selectCharacter?.Invoke(cancelAction);
         }
     }
 }

@@ -327,8 +327,8 @@ namespace EnhancedBattleTest.Data.MissionData
 
         private static TextObject GetGeneralName(PartyConfig config)
         {
-            return config.HasGeneral
-                ? config.Generals.Troops
+            return config.HasHeroes
+                ? config.Heroes.Troops
                     .Select(troop => troop.Character.CharacterObject)
                     .FirstOrDefault(character => character != null)
                     ?.Name
