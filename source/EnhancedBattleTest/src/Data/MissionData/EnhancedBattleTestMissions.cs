@@ -153,6 +153,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new BattleDeploymentMissionController(isPlayerAttacker),
                     new BattleDeploymentHandler(isPlayerAttacker)
                 });
+            mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
             return mission;
         }
 
@@ -207,7 +208,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 CreateWallHitPointPercentages(
                     config.MapConfig.BreachedWallCount);
 
-            return MissionState.OpenNew(
+            Mission mission = MissionState.OpenNew(
                 "SiegeMissionWithDeployment",
                 new MissionInitializerRecord(scene)
                 {
@@ -301,6 +302,8 @@ namespace EnhancedBattleTest.Data.MissionData
                     };
                     return behaviors;
                 });
+            mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
+            return mission;
         }
 
         private static List<MissionSiegeWeapon> CreateSiegeWeapons(
