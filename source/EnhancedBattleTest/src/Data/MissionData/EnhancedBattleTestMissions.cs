@@ -108,7 +108,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new EnhancedBattleTestPlayerAgentLogic(
                         context.PlayerCharacter,
                         context.PlayerParty.Party),
-                    new MissionAgentSpawnLogic(
+                    new DefaultBattleMissionAgentSpawnLogic(
                         context.TroopSuppliers,
                         playerSide,
                         Mission.BattleSizeType.Battle),
@@ -253,7 +253,7 @@ namespace EnhancedBattleTest.Data.MissionData
                             false,
                             wallHitPointPercentages,
                             hasAnySiegeTower),
-                        new MissionAgentSpawnLogic(
+                        new DefaultBattleMissionAgentSpawnLogic(
                             context.TroopSuppliers,
                             playerSide,
                             Mission.BattleSizeType.Siege),

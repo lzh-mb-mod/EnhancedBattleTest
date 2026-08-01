@@ -1,6 +1,6 @@
 <Prefab>
   <Window>
-    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
       <Children>
         <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
@@ -12,9 +12,9 @@
           </Children>
         </ListPanel>
 
-        <ListPanel DataSource="{Troops}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+        <ListPanel DataSource="{Troops}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
           <ItemTemplate>
-            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
               <Children>
                 <EnhancedBattleTestCharacterButton DataSource="{CharacterButton}" HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="15" />
 

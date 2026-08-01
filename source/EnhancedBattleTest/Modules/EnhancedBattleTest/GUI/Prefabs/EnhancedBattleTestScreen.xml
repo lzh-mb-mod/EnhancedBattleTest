@@ -69,7 +69,7 @@
                       <Children>
                         <Widget Id="CenterOptionsClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
                           <Children>
-                            <ListPanel Id="CenterOptions" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" MarginBottom="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                            <ListPanel Id="CenterOptions" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" MarginBottom="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
                               <Children>
 
                         <!--_____Map Selection_________-->
@@ -231,7 +231,7 @@
                             <!--<Standard.DropdownWithHorizontalControl DataSource="{..\AttackerSiegePrioritySelection}" HorizontalAlignment="Right" />-->
 
                             <!--Attacker Machines-->
-                            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginRight="!SiegeMachines.MarginRight">
+                            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalTopToBottom" MarginRight="!SiegeMachines.MarginRight">
                               <Children>
 
                                 <!--Attacker Melee Machines-->
@@ -273,7 +273,7 @@
                             <!--Defender Machines-->
                             <Widget WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Center" MarginRight="!SiegeMachines.MarginRight">
                               <Children>
-                                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
                                   <Children>
                                     <ListPanel DataSource="{..\DefenderMachines}" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren">
                                       <ItemTemplate>
@@ -349,7 +349,7 @@
                         <Widget Id="SearchResultListRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="17" MarginRight="10" MarginTop="8" MarginBottom="17" ClipContents="true">
                           <Children>
 
-                            <ListPanel Id="SearchResultList" DataSource="{MapSearchResults}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="5" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                            <ListPanel Id="SearchResultList" DataSource="{MapSearchResults}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Top" MarginTop="5" LayoutImp.LayoutMethod="VerticalTopToBottom">
                               <ItemTemplate>
 
                                 <ButtonWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="25" MarginBottom="5" Brush="Standard.DropdownItem" Command.Click="ExecuteSelection">
@@ -367,7 +367,7 @@
                       </Children>
                     </ScrollablePanel> -->
 
-                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginBottom="10" VerticalAlignment="Bottom" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                           <Children>

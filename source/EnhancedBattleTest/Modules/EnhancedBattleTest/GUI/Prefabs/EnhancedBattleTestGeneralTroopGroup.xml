@@ -1,6 +1,6 @@
 <Prefab>
   <Window>
-    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="540" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="540" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginTop="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
       <Children>
 
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginRight="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
@@ -24,7 +24,7 @@
           </Children>
         </ListPanel>
 
-        <ListPanel IsVisible="@IsContentVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+        <ListPanel IsVisible="@IsContentVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginTop="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
           <Children>
             <EnhancedBattleTestTroopList />
           </Children>

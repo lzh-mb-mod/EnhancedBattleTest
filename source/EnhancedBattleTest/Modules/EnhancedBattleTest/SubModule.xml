@@ -2,15 +2,15 @@
 <Module>
   <Name value="EnhancedBattleTest"/>
   <Id value="EnhancedBattleTest"/>
-  <Version value="v3.1.0"/>
+  <Version value="v3.2.0"/>
   <SingleplayerModule value="true"/>
   <MultiplayerModule value="false"/>
   <DependedModules>
-    <DependedModule Id="Native" DependentVersion="v1.3.15" />
-    <DependedModule Id="SandBoxCore" DependentVersion="v1.3.15" />
-    <DependedModule Id="Sandbox" DependentVersion="v1.3.15" />
-	  <DependedModule Id="CustomBattle" DependentVersion="v1.3.15"/>
-    <DependedModule Id="StoryMode" DependentVersion="v1.3.15" />
+    <DependedModule Id="Native" DependentVersion="v1.4.7" />
+    <DependedModule Id="SandBoxCore" DependentVersion="v1.4.7" />
+    <DependedModule Id="Sandbox" DependentVersion="v1.4.7" />
+	  <DependedModule Id="CustomBattle" DependentVersion="v1.4.7"/>
+    <DependedModule Id="StoryMode" DependentVersion="v1.4.7" />
   </DependedModules>
   <SubModules>
     <SubModule>

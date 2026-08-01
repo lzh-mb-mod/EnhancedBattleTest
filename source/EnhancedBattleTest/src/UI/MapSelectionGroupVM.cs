@@ -157,7 +157,10 @@ namespace EnhancedBattleTest.UI
             _siegeMaps.Clear();
             foreach (var sceneData in _scenes)
             {
-                MapItemVM mapItemVm = new MapItemVM(sceneData.Name.ToString(), sceneData.SceneID);
+                MapItemVM mapItemVm = new MapItemVM(
+                    sceneData.Name.ToString(),
+                    sceneData.SceneID,
+                    null);
                 if (sceneData.IsVillageMap)
                     _villageMaps.Add(mapItemVm);
                 else if (sceneData.IsSiegeMap)

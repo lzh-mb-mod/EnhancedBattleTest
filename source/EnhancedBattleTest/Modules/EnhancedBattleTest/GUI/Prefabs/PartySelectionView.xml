@@ -3,15 +3,15 @@
     <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
       <Children>
         <Standard.Background />
-        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1400" SuggestedHeight="950" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" Brush="EnhancedBattleTest.MissionMenuBrush">
+        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="1400" SuggestedHeight="950" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalTopToBottom" Brush="EnhancedBattleTest.MissionMenuBrush">
           <Children>
             <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="25" Brush="CustomBattle.Title.Text" />
 
-            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+            <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
               <Children>
                 <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                   <Children>
-                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <RichTextWidget DataSource="{CultureText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -22,7 +22,7 @@
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Cultures}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <RichTextWidget DataSource="{FactionText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -33,7 +33,7 @@
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" MarginTop="5" Parameter.SelectorDataSource="{Factions}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="330" HeightSizePolicy="CoverChildren" MarginLeft="100" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <RichTextWidget DataSource="{ClanText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="250" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -49,13 +49,13 @@
 
                 <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="12" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                   <Children>
-                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="330" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="330" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <RichTextWidget DataSource="{PartyTypeText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <Standard.DropdownWithHorizontalControl HorizontalAlignment="Center" Parameter.SelectorDataSource="{PartyTypes}" />
                       </Children>
                     </ListPanel>
-                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="500" MarginLeft="100" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                    <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="CoverChildren" SuggestedWidth="500" MarginLeft="100" LayoutImp.LayoutMethod="VerticalTopToBottom">
                       <Children>
                         <RichTextWidget DataSource="{PartyNameText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
                         <BrushWidget WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="500" SuggestedHeight="43" HorizontalAlignment="Center" MarginTop="5" Brush="SPOptions.Dropdown.Center">
@@ -76,11 +76,11 @@
                   <Children>
                     <Widget Id="PartyListClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
                       <Children>
-                        <ListPanel Id="PartyList" DataSource="{Parties}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                        <ListPanel Id="PartyList" DataSource="{Parties}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
                           <ItemTemplate>
                             <ButtonWidget Id="PartyButton" Command.Click="Select" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="1000" HeightSizePolicy="Fixed" SuggestedHeight="110" HorizontalAlignment="Center" MarginBottom="6" Brush="SPOptions.Dropdown.Center">
                               <Children>
-                                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="15" MarginRight="50" MarginTop="20" MarginBottom="10" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" MarginLeft="15" MarginRight="50" MarginTop="20" MarginBottom="10" LayoutImp.LayoutMethod="VerticalTopToBottom">
                                   <Children>
                                     <ScrollingRichTextWidget Text="@Name" WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="40" Brush="SPOptions.GameKeysGroup.Title.Text" Brush.FontSize="20" IsAutoScrolling="false" ScrollOnHoverWidget="..\..\PartyButton" />
                                     <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">

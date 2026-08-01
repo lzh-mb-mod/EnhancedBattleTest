@@ -3,7 +3,7 @@
     <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
       <Children>
         <Standard.Background />
-        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="850" SuggestedHeight="900" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalBottomToTop" Brush="EnhancedBattleTest.MissionMenuBrush">
+        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="850" SuggestedHeight="900" HorizontalAlignment="Center" VerticalAlignment="Center" LayoutImp.LayoutMethod="VerticalTopToBottom" Brush="EnhancedBattleTest.MissionMenuBrush">
           <Children>
             <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="25" Brush="CustomBattle.Title.Text" />
             <RichTextWidget DataSource="{SummaryText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginRight="30" MarginTop="15" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
@@ -13,7 +13,7 @@
                   <Children>
                     <Widget Id="RosterClip" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
                       <Children>
-                        <ListPanel Id="Roster" DataSource="{Members}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
+                        <ListPanel Id="Roster" DataSource="{Members}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
                           <ItemTemplate>
                             <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="34" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                               <Children>

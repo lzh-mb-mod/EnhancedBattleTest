@@ -1,6 +1,6 @@
 <Prefab>
   <Window>
-    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="560" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginTop="20" MarginBottom="25" LayoutImp.LayoutMethod="VerticalBottomToTop">
+    <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="560" HeightSizePolicy="CoverChildren" MarginLeft="10" MarginTop="20" MarginBottom="25" LayoutImp.LayoutMethod="VerticalTopToBottom">
       <Children>
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
@@ -21,7 +21,7 @@
           </Children>
         </ListPanel>
 
-        <ListPanel Id="PartyContent" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+        <ListPanel Id="PartyContent" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
           <Children>
             <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="ImportCampaignParty" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="300" SuggestedHeight="50" MarginLeft="20" MarginTop="10" Brush="WideButton.Flat" UpdateChildrenStates="true">
               <Children>
@@ -56,7 +56,7 @@
           </Children>
         </ListPanel>
 
-        <ListPanel IsVisible="@IsPlayerCharacterVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="10" LayoutImp.LayoutMethod="VerticalBottomToTop">
+        <ListPanel IsVisible="@IsPlayerCharacterVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="20" MarginTop="10" LayoutImp.LayoutMethod="VerticalTopToBottom">
           <Children>
             <RichTextWidget DataSource="{PlayerCharacterText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="SPOptions.GameKeysGroup.Title.Text" />
             <EnhancedBattleTestCharacterButton DataSource="{PlayerCharacter}" MarginTop="10" />

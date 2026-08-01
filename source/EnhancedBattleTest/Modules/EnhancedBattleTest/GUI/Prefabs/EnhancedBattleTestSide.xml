@@ -4,7 +4,7 @@
       <Children>
         <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Character.Title.Text" />
 
-        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="85">
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalTopToBottom" MarginTop="85">
           <Children>
             <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="30" LayoutImp.LayoutMethod="HorizontalLeftToRight">
               <Children>
@@ -42,12 +42,12 @@
                   <Children>
                     <Widget Id="ClipRect" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" ClipContents="true">
                       <Children>
-                        <ListPanel Id="Parties" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                        <ListPanel Id="Parties" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
                           <Children>
                             <EnhancedBattleTestParty DataSource="{PrimaryParty}" />
-                            <ListPanel DataSource="{AlliedParties}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                            <ListPanel DataSource="{AlliedParties}" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
                               <ItemTemplate>
-                                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalBottomToTop">
+                                <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" LayoutImp.LayoutMethod="VerticalTopToBottom">
                                   <Children>
                                     <BrushWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="2" MarginLeft="25" MarginRight="25" MarginTop="10" Brush="SPOptions.CollapserLine" />
                                     <EnhancedBattleTestParty />

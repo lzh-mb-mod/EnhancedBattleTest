@@ -1,6 +1,6 @@
 <Prefab>
   <Window>
-    <ListPanel LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top">
+    <ListPanel LayoutImp.LayoutMethod="VerticalTopToBottom" WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top">
       <Children>
 
         <ButtonWidget IsSelected="@IsGenderOverrideEnabled" ButtonType="Toggle" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" SuggestedWidth="338" HeightSizePolicy="Fixed" SuggestedHeight="50" HorizontalAlignment="Center" VerticalAlignment="Top" Brush="WideButton.Flat">
@@ -9,7 +9,7 @@
           </Children>
         </ButtonWidget>
 
-        <ListPanel IsVisible="@IsGenderOverrideEnabled" LayoutImp.LayoutMethod="VerticalBottomToTop" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="10">
+        <ListPanel IsVisible="@IsGenderOverrideEnabled" LayoutImp.LayoutMethod="VerticalTopToBottom" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="10">
           <Children>
 
             <ListPanel LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="Fixed" SuggestedWidth="338" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center">
