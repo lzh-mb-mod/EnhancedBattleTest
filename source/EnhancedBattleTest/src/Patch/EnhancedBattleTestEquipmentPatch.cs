@@ -33,12 +33,14 @@ namespace EnhancedBattleTest.Patch
             if (character == null)
                 return;
 
-            if (modifierType.HasValue && !character.IsHero)
+            if (modifierType.HasValue
+                && modifierType.Value != EquipmentModifierType.Random
+                && !character.IsHero)
             {
                 agentBuildData.Equipment(
                     Equipment.GetRandomEquipmentElements(
                         character,
-                        modifierType.Value == EquipmentModifierType.Random,
+                        randomEquipmentModifier: false,
                         agentBuildData.AgentCivilianEquipment
                             ? Equipment.EquipmentType.Civilian
                             : Equipment.EquipmentType.Battle,
@@ -51,7 +53,8 @@ namespace EnhancedBattleTest.Patch
                     out float femaleRatio))
             {
                 bool isFemale = MBRandom.RandomFloat < femaleRatio;
-                agentBuildData.IsFemale(isFemale);
+                if (isFemale != character.IsFemale)
+                    agentBuildData.IsFemale(isFemale);
             }
         }
     }
