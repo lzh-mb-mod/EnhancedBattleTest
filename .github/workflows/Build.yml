@@ -71,9 +71,12 @@ jobs:
           pathTarget: depotdownloader
 
       - name: Download Bannerlord binaries
+        env:
+          STEAM_USERNAME: ${{secrets.STEAM_LOGIN}}
+          STEAM_PASSWORD: ${{secrets.STEAM_PASSWORD}}
         run: |
-          depotdownloader/DepotDownloader.exe -app 261550 -depot 261551 -branch ${{steps.dotenv.outputs.game_branch}} -username ${{secrets.STEAM_LOGIN}}****** -filelist ./.github/resources/FileFilters.regexp -dir bannerlord
-          depotdownloader/DepotDownloader.exe -app 261550 -depot 261552 -branch ${{steps.dotenv.outputs.game_branch}} -username ${{secrets.STEAM_LOGIN}}****** -filelist ./.github/resources/FileFilters.regexp -dir bannerlord
+          depotdownloader/DepotDownloader.exe -app 261550 -depot 261551 -branch ${{steps.dotenv.outputs.game_branch}} -username "$env:STEAM_USERNAME" -password "$env:STEAM_PASSWORD" -filelist ./.github/resources/FileFilters.regexp -dir bannerlord
+          depotdownloader/DepotDownloader.exe -app 261550 -depot 261552 -branch ${{steps.dotenv.outputs.game_branch}} -username "$env:STEAM_USERNAME" -password "$env:STEAM_PASSWORD" -filelist ./.github/resources/FileFilters.regexp -dir bannerlord
 
       - name: Build solution
         run: |

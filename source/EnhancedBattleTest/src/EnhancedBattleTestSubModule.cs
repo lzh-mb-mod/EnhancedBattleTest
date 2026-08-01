@@ -58,7 +58,6 @@ namespace EnhancedBattleTest
         {
             EnhancedBattleTestPartyController.Cleanup();
             EnhancedBattleTestSaveGuard.Reset();
-            _harmony?.UnpatchAll(HarmonyId);
             Instance = null;
             base.OnSubModuleUnloaded();
         }
