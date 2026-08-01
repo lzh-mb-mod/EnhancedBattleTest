@@ -24,7 +24,7 @@ namespace EnhancedBattleTest.UI
         private readonly EnhancedBattleTestState _state;
         private BattleConfig _config;
         private readonly List<SceneData> _scenes;
-        private bool _hasShownCampaignStateWarning;
+        private bool _hasConfirmedCampaignStateWarning;
 
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerMeleeMachines;
         private MBBindingList<CustomBattleSiegeMachineVM> _attackerRangedMachines;
@@ -455,16 +455,18 @@ namespace EnhancedBattleTest.UI
                 return;
             _config.Serialize();
 
-            if (_hasShownCampaignStateWarning)
+            if (_hasConfirmedCampaignStateWarning)
             {
                 OpenMission(sceneData);
                 return;
             }
-
-            _hasShownCampaignStateWarning = true;
             EnhancedBattleTestSaveGuard.ShowCampaignStateWarning(
                 true,
-                () => OpenMission(sceneData));
+                () =>
+                {
+                    _hasConfirmedCampaignStateWarning = true;
+                    OpenMission(sceneData);
+                });
         }
 
         private bool HasAvailableSergeantGeneral()
