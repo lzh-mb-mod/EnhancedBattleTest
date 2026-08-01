@@ -1,5 +1,4 @@
 using TaleWorlds.Engine.GauntletUI;
-using TaleWorlds.GauntletUI.Data;
 using TaleWorlds.Library;
 using TaleWorlds.ScreenSystem;
 
@@ -10,7 +9,7 @@ namespace EnhancedBattleTest.UI
         private bool _isActive;
         private ScreenBase _screen;
         private GauntletLayer _layer;
-        private IGauntletMovie _movie;
+        private GauntletMovieIdentifier _movie;
         private PartyRosterReviewVM _dataSource;
 
         public void Initialize(ScreenBase screen)
@@ -33,7 +32,7 @@ namespace EnhancedBattleTest.UI
             if (_isActive)
                 return;
             _isActive = true;
-            _layer = new GauntletLayer(50, "GauntletLayer")
+            _layer = new GauntletLayer("GauntletLayer", 50)
             {
                 IsFocusLayer = true
             };
