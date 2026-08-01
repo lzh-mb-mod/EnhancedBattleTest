@@ -89,7 +89,7 @@
   <string id="str_ebt_configuration_name_invalid" text="{=EnhancedBattleTest_configuration_name_invalid}The configuration name contains invalid characters." />
   <string id="str_ebt_player_allied_party" text="{=EnhancedBattleTest_player_allied_party}Player Allied Party {INDEX}" />
   <string id="str_ebt_enemy_allied_party" text="{=EnhancedBattleTest_enemy_allied_party}Enemy Allied Party {INDEX}" />
-  <string id="str_ebt_generals" text="{=EnhancedBattleTest_generals}Generals" />
+  <string id="str_ebt_heroes" text="{=EnhancedBattleTest_heroes}Heroes" />
   <string id="str_ebt_troops" text="{=EnhancedBattleTest_troops}Troops" />
   <string id="str_ebt_custom_banner" text="{=EnhancedBattleTest_custom_banner}Use Custom Banner" />
   <string id="str_ebt_in_army" text="{=EnhancedBattleTest_in_army}In Army" />

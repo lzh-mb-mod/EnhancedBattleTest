@@ -17,7 +17,7 @@ namespace EnhancedBattleTest.BannerEditor
 
         public static BasicCharacterObject Character =>
             PreferredCharacter
-            ?? Config.Generals.Troops
+            ?? Config.Heroes.Troops
                 .Select(troop => troop?.Character?.CharacterObject)
                 .FirstOrDefault(character => character != null)
             ?? Config.Troops.Troops

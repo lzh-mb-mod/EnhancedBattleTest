@@ -92,7 +92,7 @@
     <string id="EnhancedBattleTest_configuration_name_invalid" text="Yapılandırma adı geçersiz karakterler içeriyor." />
     <string id="EnhancedBattleTest_player_allied_party" text="Oyuncu Müttefik Grubu {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Düşman Müttefik Grubu {INDEX}" />
-    <string id="EnhancedBattleTest_generals" text="Komutanlar" />
+    <string id="EnhancedBattleTest_heroes" text="Kahramanlar" />
     <string id="EnhancedBattleTest_troops" text="Birlikler" />
     <string id="EnhancedBattleTest_custom_banner" text="Özel Sancak Kullan" />
     <string id="EnhancedBattleTest_in_army" text="Orduda" />

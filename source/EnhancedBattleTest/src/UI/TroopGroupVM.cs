@@ -1,6 +1,8 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
 using System;
+using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -15,22 +17,23 @@ namespace EnhancedBattleTest.UI
         private readonly BattleTypeConfig _battleTypeConfig;
         private readonly Action _onCharacterChanged;
         private readonly Func<BasicCharacterObject> _preferredBannerCharacter;
+        private readonly Func<BasicCharacterObject> _playerCharacter;
         private MBBindingList<TroopVM> _troops;
-        private bool _isGeneralTroopGroup;
+        private bool _isHeroTroopGroup;
         private bool _pushEnabled;
         private bool _popEnabled;
         private bool _isContentVisible = true;
 
         [DataSourceProperty]
-        public bool IsGeneralTroopGroup
+        public bool IsHeroTroopGroup
         {
-            get => _isGeneralTroopGroup;
+            get => _isHeroTroopGroup;
             set
             {
-                if (_isGeneralTroopGroup == value)
+                if (_isHeroTroopGroup == value)
                     return;
-                _isGeneralTroopGroup = value;
-                OnPropertyChanged(nameof(IsGeneralTroopGroup));
+                _isHeroTroopGroup = value;
+                OnPropertyChanged(nameof(IsHeroTroopGroup));
             }
         }
 
@@ -77,11 +80,12 @@ namespace EnhancedBattleTest.UI
             PartyConfig partyConfig,
             TroopGroupConfig config,
             TextObject groupName,
-            bool isGeneralTroopGroup,
+            bool isHeroTroopGroup,
             bool isPlayerSide,
             BattleTypeConfig battleTypeConfig,
             Action onCharacterChanged = null,
-            Func<BasicCharacterObject> preferredBannerCharacter = null)
+            Func<BasicCharacterObject> preferredBannerCharacter = null,
+            Func<BasicCharacterObject> playerCharacter = null)
         {
             _partyConfig = partyConfig;
             _config = config;
@@ -89,8 +93,9 @@ namespace EnhancedBattleTest.UI
             _battleTypeConfig = battleTypeConfig;
             _onCharacterChanged = onCharacterChanged;
             _preferredBannerCharacter = preferredBannerCharacter;
+            _playerCharacter = playerCharacter;
             Troops = new MBBindingList<TroopVM>();
-            IsGeneralTroopGroup = isGeneralTroopGroup;
+            IsHeroTroopGroup = isHeroTroopGroup;
             TroopGroupName = new TextVM(groupName);
             Reload();
             UpdateEnabled();
@@ -120,7 +125,7 @@ namespace EnhancedBattleTest.UI
                     capturedConfig,
                     _isPlayerSide,
                     _battleTypeConfig,
-                    IsGeneralTroopGroup,
+                    IsHeroTroopGroup,
                     _onCharacterChanged,
                     _preferredBannerCharacter,
                     () => IsBannerCharacter(capturedConfig.Character),
@@ -130,7 +135,7 @@ namespace EnhancedBattleTest.UI
                     () => Move(index, index + 1),
                     index > 0,
                     index < _config.Troops.Count - 1,
-                    !IsGeneralTroopGroup || _config.Troops.Count > 1));
+                    !IsHeroTroopGroup || _config.Troops.Count > 1));
             }
 
             Troops = troops;
@@ -155,27 +160,20 @@ namespace EnhancedBattleTest.UI
 
         public void PushTroop()
         {
-            var newTroop = _config.Troops.Count == 0
-                ? new TroopConfig()
-                : new TroopConfig(_config.Troops[_config.Troops.Count - 1]);
-            _config.Troops.Add(newTroop);
-            Reload();
-            _onCharacterChanged?.Invoke();
+            TroopConfig newTroop = CreateNewTroop(
+                _config.Troops.LastOrDefault());
+            AddAndSelect(_config.Troops.Count, newTroop);
         }
 
         public void InsertFirst()
         {
-            var newTroop = _config.Troops.Count == 0
-                ? new TroopConfig()
-                : new TroopConfig(_config.Troops[0]);
-            _config.Troops.Insert(0, newTroop);
-            Reload();
-            _onCharacterChanged?.Invoke();
+            TroopConfig newTroop = CreateNewTroop(null);
+            AddAndSelect(0, newTroop);
         }
 
         public void RemoveFirst()
         {
-            if (_config.Troops.Count > (IsGeneralTroopGroup ? 1 : 0))
+            if (_config.Troops.Count > (IsHeroTroopGroup ? 1 : 0))
                 _config.Troops.RemoveAt(0);
             Reload();
             _onCharacterChanged?.Invoke();
@@ -186,11 +184,72 @@ namespace EnhancedBattleTest.UI
             if (index < 0 || index >= _config.Troops.Count)
                 return;
 
-            _config.Troops.Insert(
+            AddAndSelect(
                 index + 1,
-                new TroopConfig(_config.Troops[index]));
+                CreateNewTroop(_config.Troops[index]));
+        }
+
+        private TroopConfig CreateNewTroop(TroopConfig source)
+        {
+            TroopConfig result = source == null
+                ? new TroopConfig()
+                : new TroopConfig(source);
+            result.Number = 1;
+            if (!IsHeroTroopGroup)
+            {
+                if (source != null)
+                    return result;
+
+                CultureObject culture =
+                    Utility.GetCulture(_partyConfig) as CultureObject;
+                CharacterObject basicTroop = culture?.BasicTroop
+                    ?? Game.Current.ObjectManager
+                        .GetObjectTypeList<BasicCharacterObject>()
+                        .OfType<CharacterObject>()
+                        .First(character =>
+                            !character.IsHero
+                            && !character.IsTemplate
+                            && !character.IsChildTemplate);
+                result.Character =
+                    CharacterConfig.Create(basicTroop.StringId);
+                return result;
+            }
+
+            var usedCharacters = _partyConfig.Heroes.Troops
+                .Concat(_partyConfig.Troops.Troops)
+                .Select(troop => troop?.Character?.CharacterObject)
+                .Where(character => character != null)
+                .ToHashSet();
+            if (IsHeroTroopGroup && _playerCharacter?.Invoke() is
+                BasicCharacterObject playerCharacter)
+            {
+                usedCharacters.Add(playerCharacter);
+            }
+            var candidates = Game.Current.ObjectManager
+                .GetObjectTypeList<BasicCharacterObject>()
+                .OfType<CharacterObject>()
+                .Where(character =>
+                    !character.IsTemplate
+                    && !character.IsChildTemplate
+                    && character.IsHero)
+                .ToList();
+            CharacterObject character = candidates.FirstOrDefault(
+                    candidate => !usedCharacters.Contains(candidate))
+                ?? candidates.First();
+            result.Character = CharacterConfig.Create(character.StringId);
+            return result;
+        }
+
+        private void AddAndSelect(int index, TroopConfig newTroop)
+        {
+            _config.Troops.Insert(index, newTroop);
             Reload();
-            _onCharacterChanged?.Invoke();
+            Troops[index].SelectCharacter(() =>
+            {
+                _config.Troops.Remove(newTroop);
+                Reload();
+                _onCharacterChanged?.Invoke();
+            });
         }
 
         private void RemoveAt(int index)
@@ -254,7 +313,7 @@ namespace EnhancedBattleTest.UI
         private void UpdateEnabled()
         {
             PushEnabled = Troops.Count < 2000;
-            PopEnabled = Troops.Count > (IsGeneralTroopGroup ? 1 : 0);
+            PopEnabled = Troops.Count > (IsHeroTroopGroup ? 1 : 0);
         }
 
         private bool IsBannerCharacter(CharacterConfig character)

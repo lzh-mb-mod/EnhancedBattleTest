@@ -22,18 +22,18 @@ namespace EnhancedBattleTest.Config
 
         public bool UseCustomBanner;
         public bool IsInArmy;
-        public bool HasGeneral;
-        public TroopGroupConfig Generals { get; set; } = new TroopGroupConfig();
+        public bool HasHeroes;
+        public TroopGroupConfig Heroes { get; set; } = new TroopGroupConfig();
         public TroopGroupConfig Troops { get; set; } = new TroopGroupConfig();
 
         public void Normalize()
         {
-            Generals = Generals ?? new TroopGroupConfig();
+            Heroes = Heroes ?? new TroopGroupConfig();
             Troops = Troops ?? new TroopGroupConfig();
-            Generals.Troops = Generals.Troops ?? new System.Collections.Generic.List<TroopConfig>();
+            Heroes.Troops = Heroes.Troops ?? new System.Collections.Generic.List<TroopConfig>();
             Troops.Troops = Troops.Troops ?? new System.Collections.Generic.List<TroopConfig>();
-            if (Generals.Troops.Count == 0)
-                HasGeneral = false;
+            if (Heroes.Troops.Count == 0)
+                HasHeroes = false;
         }
 
         public Banner ResolveBanner(
@@ -64,30 +64,34 @@ namespace EnhancedBattleTest.Config
 
         public CharacterConfig GetBannerCharacterConfig()
         {
-            if (HasGeneral)
+            if (HasHeroes)
             {
-                CharacterConfig general = Generals.Troops
+                CharacterConfig hero = Heroes.Troops
                     .Select(troop => troop?.Character)
                     .FirstOrDefault(character =>
                         character?.CharacterObject != null);
-                if (general != null)
-                    return general;
+                if (hero != null)
+                    return hero;
             }
 
-            return Troops.Troops
+            CharacterConfig troop = Troops.Troops
                 .Where(troop => troop?.Number > 0)
                 .Select(troop => troop.Character)
                 .FirstOrDefault(character =>
                     character?.CharacterObject != null);
+            return troop ?? Troops.Troops
+                .Select(troopConfig => troopConfig?.Character)
+                .FirstOrDefault(character =>
+                    character?.CharacterObject != null);
         }
 
-        public BasicCharacterObject GetFirstGeneralCharacter(
+        public BasicCharacterObject GetFirstHeroCharacter(
             BasicCharacterObject excludedCharacter = null)
         {
-            if (!HasGeneral)
+            if (!HasHeroes)
                 return null;
 
-            return Generals.Troops
+            return Heroes.Troops
                 .Select(troop => troop?.Character?.CharacterObject)
                 .FirstOrDefault(character =>
                     character != null && character != excludedCharacter);

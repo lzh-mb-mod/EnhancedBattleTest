@@ -129,10 +129,10 @@ namespace EnhancedBattleTest.UI
             RemovePartyText = new TextVM(GameTexts.FindText("str_ebt_remove_allied_party"));
             ImportPartyText =
                 new TextVM(GameTexts.FindText("str_ebt_import_campaign_party"));
-            EnableGeneral = new BoolVM(_config.HasGeneral);
+            EnableGeneral = new BoolVM(_config.HasHeroes);
             EnableGeneral.OnValueChanged += value =>
             {
-                _config.HasGeneral = value;
+                _config.HasHeroes = value;
                 Generals?.SetContentVisible(value);
                 RefreshBanner();
             };
@@ -161,14 +161,15 @@ namespace EnhancedBattleTest.UI
             }
             Generals = new TroopGroupVM(
                 _config,
-                _config.Generals,
-                GameTexts.FindText("str_ebt_generals"),
+                _config.Heroes,
+                GameTexts.FindText("str_ebt_heroes"),
                 true,
                 isPlayerSide,
                 battleTypeConfig,
                 RefreshBanner,
-                GetPreferredBannerCharacter);
-            Generals.SetContentVisible(_config.HasGeneral);
+                GetPreferredBannerCharacter,
+                () => _playerCharacterConfig?.CharacterObject);
+            Generals.SetContentVisible(_config.HasHeroes);
             Troops = new TroopGroupVM(
                 _config,
                 _config.Troops,
@@ -177,7 +178,8 @@ namespace EnhancedBattleTest.UI
                 isPlayerSide,
                 battleTypeConfig,
                 RefreshBanner,
-                GetPreferredBannerCharacter);
+                GetPreferredBannerCharacter,
+                () => _playerCharacterConfig?.CharacterObject);
             IsBannerEditorEnabled = _config.UseCustomBanner;
             UpdateConditionalControls();
             RefreshBanner();
@@ -279,7 +281,8 @@ namespace EnhancedBattleTest.UI
             if (_battleTypeConfig.PlayerType == PlayerType.Commander)
                 return playerCharacter;
 
-            return _config.GetFirstGeneralCharacter(playerCharacter)
+            return _config.GetFirstHeroCharacter(playerCharacter)
+                   ?? _config.GetBannerCharacterConfig()?.CharacterObject
                    ?? playerCharacter;
         }
 
@@ -323,17 +326,17 @@ namespace EnhancedBattleTest.UI
                 .ToList();
             if (replace)
             {
-                _config.Generals.Troops = generals;
+                _config.Heroes.Troops = generals;
                 _config.Troops.Troops = troops;
             }
             else
             {
-                MergeTroops(_config.Generals.Troops, generals);
+                MergeTroops(_config.Heroes.Troops, generals);
                 MergeTroops(_config.Troops.Troops, troops);
             }
 
-            _config.HasGeneral = _config.Generals.Troops.Count > 0;
-            EnableGeneral.Value = _config.HasGeneral;
+            _config.HasHeroes = _config.Heroes.Troops.Count > 0;
+            EnableGeneral.Value = _config.HasHeroes;
             Generals.Reload();
             Troops.Reload();
             RefreshBanner();

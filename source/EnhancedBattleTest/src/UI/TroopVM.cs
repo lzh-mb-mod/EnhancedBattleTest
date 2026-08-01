@@ -61,7 +61,8 @@ namespace EnhancedBattleTest.UI
                 battleTypeConfig,
                 onCharacterChanged,
                 preferredBannerCharacter,
-                useSelectedCharacterForBanner);
+                useSelectedCharacterForBanner,
+                isGeneralTroop);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0, 5000, true);
             Number.OnValueChanged += number =>
@@ -99,6 +100,11 @@ namespace EnhancedBattleTest.UI
         public void InsertAfter()
         {
             _insertAfter?.Invoke();
+        }
+
+        public void SelectCharacter(Action cancelAction = null)
+        {
+            CharacterButton.SelectCharacter(cancelAction);
         }
 
         public void Remove()

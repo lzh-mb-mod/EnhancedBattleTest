@@ -94,7 +94,7 @@
     <string id="EnhancedBattleTest_configuration_name_invalid" text="The configuration name contains invalid characters." />
     <string id="EnhancedBattleTest_player_allied_party" text="Player Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Enemy Allied Party {INDEX}" />
-    <string id="EnhancedBattleTest_generals" text="Generals" />
+    <string id="EnhancedBattleTest_heroes" text="Heroes" />
     <string id="EnhancedBattleTest_troops" text="Troops" />
     <string id="EnhancedBattleTest_custom_banner" text="Use Custom Banner" />
     <string id="EnhancedBattleTest_in_army" text="In Army" />

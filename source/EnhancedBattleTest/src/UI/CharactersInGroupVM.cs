@@ -80,7 +80,11 @@ namespace EnhancedBattleTest.UI
             Config = config;
             OnSetConfig(config);
             Characters.SelectedIndex = -1;
-            Characters.SelectedIndex = CharactersInCurrentGroup.FindIndex(c => c.StringId == Config.Character.StringId);
+            Characters.SelectedIndex = Config.Character == null
+                ? -1
+                : CharactersInCurrentGroup.FindIndex(
+                    character =>
+                        character.StringId == Config.Character.StringId);
             Character.SetConfig(
                 partyConfig,
                 Config,

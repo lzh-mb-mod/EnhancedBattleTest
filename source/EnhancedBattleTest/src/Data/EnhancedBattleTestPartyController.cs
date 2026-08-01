@@ -158,6 +158,7 @@ namespace EnhancedBattleTest.Data
         public static BattleContext Create(BattleConfig config)
         {
             Cleanup();
+            config.NormalizeCharacterGroups();
 
             MobileParty playerParty = null;
             MobileParty enemyParty = null;
@@ -248,6 +249,7 @@ namespace EnhancedBattleTest.Data
                 originalHeroHitPoints = CaptureHeroHitPoints(ownedTemporaryParties);
                 ParticipatingHeroes.UnionWith(originalHeroHitPoints.Keys);
                 PrepareHeroesForBattle(originalHeroHitPoints.Keys);
+                ApplyPlayerIdentity(playerIdentity, playerParty);
 
                 PartyBase attacker = playerSide == BattleSideEnum.Attacker
                     ? playerParty.Party
@@ -269,7 +271,6 @@ namespace EnhancedBattleTest.Data
                         ? BattleSideEnum.Defender
                         : BattleSideEnum.Attacker,
                     enemyParties.Skip(1));
-                ApplyPlayerIdentity(playerIdentity, playerParty);
                 ApplyPlayerEncounter(
                     mapEvent,
                     attacker,
@@ -564,9 +565,9 @@ namespace EnhancedBattleTest.Data
             playerCharacter = controlledCharacter;
             spawnPriorityCharacters = new List<CharacterObject>();
             priorityCharacterIds = new List<string>();
-            if (config.HasGeneral)
+            if (config.HasHeroes)
             {
-                foreach (TroopConfig troop in config.Generals.Troops)
+                foreach (TroopConfig troop in config.Heroes.Troops)
                 {
                     if (troop.Character.CharacterObject is CharacterObject character)
                     {
@@ -653,8 +654,8 @@ namespace EnhancedBattleTest.Data
             BasicCultureObject culture = Utility.GetCulture(config);
             Hero preferredHero =
                 (preferredCharacter as CharacterObject)?.HeroObject;
-            Hero configuredGeneral = config.HasGeneral
-                ? config.Generals.Troops
+            Hero configuredGeneral = config.HasHeroes
+                ? config.Heroes.Troops
                     .Select(troop =>
                         troop?.Character?.CharacterObject as CharacterObject)
                     .Select(character => character?.HeroObject)
@@ -727,9 +728,9 @@ namespace EnhancedBattleTest.Data
             var weightedRatios =
                 new Dictionary<BasicCharacterObject, Tuple<float, int>>();
 
-            if (config.HasGeneral)
+            if (config.HasHeroes)
             {
-                foreach (TroopConfig troop in config.Generals.Troops)
+                foreach (TroopConfig troop in config.Heroes.Troops)
                     AddFemaleRatio(weightedRatios, troop, 1);
             }
 
@@ -851,7 +852,7 @@ namespace EnhancedBattleTest.Data
                 return playerCharacter;
 
             return config.PlayerTeamConfig.PrimaryParty
-                       .GetFirstGeneralCharacter(playerCharacter)
+                       .GetFirstHeroCharacter(playerCharacter)
                    ?? playerCharacter;
         }
 
