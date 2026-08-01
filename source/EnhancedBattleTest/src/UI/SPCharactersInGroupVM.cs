@@ -50,20 +50,25 @@ namespace EnhancedBattleTest.UI
         public SelectorVM<SelectorItemVM> HeroFilters { get; }
         public SelectorVM<SelectorItemVM> Factions { get; }
         public SelectorVM<SelectorItemVM> Clans { get; }
+
+        [DataSourceProperty]
         public bool AreHeroFiltersEnabled =>
-            HeroFilters == null
-            || (HeroFilter)HeroFilters.SelectedIndex != HeroFilter.NonHero;
+            _requiredHeroFilter.HasValue
+                ? _requiredHeroFilter.Value == HeroFilter.Hero
+                : HeroFilters == null
+                  || (HeroFilter)HeroFilters.SelectedIndex
+                  != HeroFilter.NonHero;
 
         [DataSourceProperty]
         public float HeroFiltersAlpha =>
-            AreHeroFiltersEnabled ? 1f : 0.45f;
+            AreHeroFiltersEnabled ? 1f : 0.65f;
 
         [DataSourceProperty]
         public bool IsHeroFilterEnabled => !_requiredHeroFilter.HasValue;
 
         [DataSourceProperty]
         public float HeroFilterAlpha =>
-            IsHeroFilterEnabled ? 1f : 0.45f;
+            IsHeroFilterEnabled ? 1f : 0.65f;
 
         [DataSourceProperty]
         public string FactionSearchText
@@ -143,6 +148,8 @@ namespace EnhancedBattleTest.UI
                 {
                     switch (occupation)
                     {
+                        case Occupation.NotAssigned:
+                            return GameTexts.FindText("str_ebt_all");
                         case Occupation.GoodsTrader:
                         case Occupation.BannerBearer:
                             return new TextObject(occupation.ToString());
@@ -350,9 +357,12 @@ namespace EnhancedBattleTest.UI
             _requiredHeroFilter = heroOnly.HasValue
                 ? heroOnly.Value ? HeroFilter.Hero : HeroFilter.NonHero
                 : (HeroFilter?)null;
+            HeroFilters.SelectedIndex = RequiredHeroFilterIndex();
             OnPropertyChanged(nameof(IsHeroFilterEnabled));
             OnPropertyChanged(nameof(HeroFilterAlpha));
-            HeroFilters.SelectedIndex = RequiredHeroFilterIndex();
+            OnPropertyChanged(nameof(AreHeroFiltersEnabled));
+            OnPropertyChanged(nameof(HeroFiltersAlpha));
+            _heroFiltersEnabledChanged?.Invoke(AreHeroFiltersEnabled);
             UpdateCharacterList();
         }
 
