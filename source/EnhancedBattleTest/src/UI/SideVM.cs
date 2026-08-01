@@ -1,5 +1,7 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -11,6 +13,9 @@ namespace EnhancedBattleTest.UI
     {
         private readonly TeamConfig _config;
         private readonly BattleTypeConfig _battleTypeConfig;
+        private readonly Func<IEnumerable<BasicCharacterObject>>
+            _heroPlayerCharacters;
+        private readonly Func<IEnumerable<BasicCharacterObject>> _partyHeroes;
         private bool _isPlayerSide;
         private bool _isTacticLevelOverrideEnabled;
 
@@ -56,10 +61,14 @@ namespace EnhancedBattleTest.UI
         public SideVM(
             TeamConfig config,
             bool isPlayerSide,
-            BattleTypeConfig battleTypeConfig)
+            BattleTypeConfig battleTypeConfig,
+            Func<IEnumerable<BasicCharacterObject>> heroPlayerCharacters,
+            Func<IEnumerable<BasicCharacterObject>> partyHeroes)
         {
             _config = config;
             _battleTypeConfig = battleTypeConfig;
+            _heroPlayerCharacters = heroPlayerCharacters;
+            _partyHeroes = partyHeroes;
             _isPlayerSide = isPlayerSide;
             Name = new TextVM(
                 isPlayerSide
@@ -80,7 +89,10 @@ namespace EnhancedBattleTest.UI
                 GameTexts.FindText("str_ebt_primary_party"),
                 isPlayerSide,
                 battleTypeConfig,
-                _config.PlayerCharacter);
+                _config.PlayerCharacter,
+                null,
+                _heroPlayerCharacters,
+                _partyHeroes);
             AlliedParties = new MBBindingList<PartyVM>();
             foreach (PartyConfig party in _config.AlliedParties)
                 AlliedParties.Add(CreateAlliedPartyVM(party));
@@ -126,7 +138,9 @@ namespace EnhancedBattleTest.UI
                 _isPlayerSide,
                 _battleTypeConfig,
                 null,
-                RemoveAlliedParty);
+                RemoveAlliedParty,
+                _heroPlayerCharacters,
+                _partyHeroes);
         }
 
         private void RemoveAlliedParty(PartyVM party)

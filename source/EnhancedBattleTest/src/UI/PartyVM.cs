@@ -113,7 +113,10 @@ namespace EnhancedBattleTest.UI
             bool isPlayerSide,
             BattleTypeConfig battleTypeConfig,
             CharacterConfig playerCharacterConfig = null,
-            Action<PartyVM> remove = null)
+            Action<PartyVM> remove = null,
+            Func<IEnumerable<BasicCharacterObject>>
+                heroPlayerCharacters = null,
+            Func<IEnumerable<BasicCharacterObject>> partyHeroes = null)
         {
             _config = config;
             _battleTypeConfig = battleTypeConfig;
@@ -157,7 +160,9 @@ namespace EnhancedBattleTest.UI
                     RefreshBanner,
                     GetPreferredBannerCharacter,
                     () => GetPreferredBannerCharacter()
-                          == _playerCharacterConfig.CharacterObject);
+                          == _playerCharacterConfig.CharacterObject,
+                    null,
+                    partyHeroes);
             }
             Generals = new TroopGroupVM(
                 _config,
@@ -168,7 +173,7 @@ namespace EnhancedBattleTest.UI
                 battleTypeConfig,
                 RefreshBanner,
                 GetPreferredBannerCharacter,
-                () => _playerCharacterConfig?.CharacterObject);
+                heroPlayerCharacters);
             Generals.SetContentVisible(_config.HasHeroes);
             Troops = new TroopGroupVM(
                 _config,
@@ -179,7 +184,7 @@ namespace EnhancedBattleTest.UI
                 battleTypeConfig,
                 RefreshBanner,
                 GetPreferredBannerCharacter,
-                () => _playerCharacterConfig?.CharacterObject);
+                heroPlayerCharacters);
             IsBannerEditorEnabled = _config.UseCustomBanner;
             UpdateConditionalControls();
             RefreshBanner();

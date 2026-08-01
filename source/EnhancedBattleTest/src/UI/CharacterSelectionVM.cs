@@ -22,6 +22,7 @@ namespace EnhancedBattleTest.UI
         public BasicCharacterObject PreferredBannerCharacter;
         public bool UseSelectedCharacterForBanner;
         public bool? HeroOnly;
+        public IEnumerable<BasicCharacterObject> UnavailableHeroes;
         public Action CancelAction;
 
         public CharacterSelectionData(
@@ -33,6 +34,7 @@ namespace EnhancedBattleTest.UI
             BasicCharacterObject preferredBannerCharacter,
             bool useSelectedCharacterForBanner,
             bool? heroOnly = null,
+            IEnumerable<BasicCharacterObject> unavailableHeroes = null,
             Action cancelAction = null)
         {
             PartyConfig = partyConfig;
@@ -43,6 +45,7 @@ namespace EnhancedBattleTest.UI
             PreferredBannerCharacter = preferredBannerCharacter;
             UseSelectedCharacterForBanner = useSelectedCharacterForBanner;
             HeroOnly = heroOnly;
+            UnavailableHeroes = unavailableHeroes;
             CancelAction = cancelAction;
         }
     }
@@ -280,7 +283,10 @@ namespace EnhancedBattleTest.UI
                     group.Info.FormationClass
                     == character.GroupInfo.FormationClass) + 1;
             if (Characters is SPCharactersInGroupVM characters)
+            {
                 characters.SetRequiredHeroFilter(data.HeroOnly);
+                characters.SetUnavailableHeroes(data.UnavailableHeroes);
+            }
             Characters.SetConfig(
                 data.PartyConfig,
                 data.Config,

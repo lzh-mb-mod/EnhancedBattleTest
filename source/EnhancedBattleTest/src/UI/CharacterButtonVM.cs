@@ -1,5 +1,6 @@
 ﻿using EnhancedBattleTest.Config;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Generic;
 using TaleWorlds.Library;
@@ -35,7 +36,8 @@ namespace EnhancedBattleTest.UI
             Action onCharacterChanged = null,
             Func<BasicCharacterObject> preferredBannerCharacter = null,
             Func<bool> useSelectedCharacterForBanner = null,
-            bool? heroOnly = null)
+            bool? heroOnly = null,
+            Func<IEnumerable<BasicCharacterObject>> unavailableHeroes = null)
         {
             _battleTypeConfig = battleTypeConfig;
             IsPlayerSide = isPlayerSide;
@@ -45,7 +47,8 @@ namespace EnhancedBattleTest.UI
                 onCharacterChanged,
                 preferredBannerCharacter,
                 useSelectedCharacterForBanner,
-                heroOnly);
+                heroOnly,
+                unavailableHeroes);
         }
 
         public override void RefreshValues()
@@ -60,7 +63,8 @@ namespace EnhancedBattleTest.UI
             Action onCharacterChanged,
             Func<BasicCharacterObject> preferredBannerCharacter,
             Func<bool> useSelectedCharacterForBanner,
-            bool? heroOnly)
+            bool? heroOnly,
+            Func<IEnumerable<BasicCharacterObject>> unavailableHeroes)
         {
             _config = config;
             _selectCharacter = cancelAction =>
@@ -82,6 +86,7 @@ namespace EnhancedBattleTest.UI
                         preferredBannerCharacter?.Invoke(),
                         useSelectedCharacterForBanner?.Invoke() == true,
                         heroOnly,
+                        unavailableHeroes?.Invoke(),
                         cancelAction));
             Name = new StringItemWithActionVM(
                 o => SelectCharacter(),

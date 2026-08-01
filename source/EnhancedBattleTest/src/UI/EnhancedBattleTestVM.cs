@@ -186,10 +186,8 @@ namespace EnhancedBattleTest.UI
             LoadConfigurationText =
                 new TextVM(GameTexts.FindText("str_ebt_load_configuration"));
 
-            PlayerSide = new SideVM(_config.PlayerTeamConfig, true,
-                _config.BattleTypeConfig);
-            EnemySide = new SideVM(_config.EnemyTeamConfig, false,
-                _config.BattleTypeConfig);
+            PlayerSide = CreateSide(_config.PlayerTeamConfig, true);
+            EnemySide = CreateSide(_config.EnemyTeamConfig, false);
 
             MapSelectionGroup = new MapSelectionGroupVM(_scenes);
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
@@ -342,8 +340,6 @@ namespace EnhancedBattleTest.UI
 
         public void ExecuteBack()
         {
-            ApplyConfig();
-            _config.Serialize();
             _config = null;
             bool showCampaignStateWarning =
                 EnhancedBattleTestSaveGuard.ConsumePostBattleWarning();
@@ -376,6 +372,7 @@ namespace EnhancedBattleTest.UI
                                 "str_ebt_configuration_save_failed");
                             return;
                         }
+                        _config.Serialize();
 
                         TextObject message = GameTexts.FindText(
                             "str_ebt_configuration_saved");
@@ -529,6 +526,7 @@ namespace EnhancedBattleTest.UI
                 AttackerRangedMachines.Select(vm => vm.MachineID).ToList();
             _config.SiegeMachineConfig.DefenderMachines =
                 DefenderMachines.Select(vm => vm.MachineID).ToList();
+            _config.NormalizeCharacterGroups();
             return true;
         }
 
@@ -549,6 +547,55 @@ namespace EnhancedBattleTest.UI
             return _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
         }
 
+        private SideVM CreateSide(TeamConfig team, bool isPlayerSide)
+        {
+            return new SideVM(
+                team,
+                isPlayerSide,
+                _config.BattleTypeConfig,
+                GetHeroPlayerCharacters,
+                GetPartyHeroes);
+        }
+
+        private IEnumerable<BasicCharacterObject>
+            GetHeroPlayerCharacters()
+        {
+            return new[]
+                {
+                    _config.PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
+                    _config.EnemyTeamConfig?.PlayerCharacter?.CharacterObject
+                }
+                .Where(character =>
+                    character is CharacterObject characterObject
+                    && characterObject.IsHero)
+                .Distinct();
+        }
+
+        private IEnumerable<BasicCharacterObject> GetPartyHeroes()
+        {
+            return GetParties(_config.PlayerTeamConfig)
+                .Concat(GetParties(_config.EnemyTeamConfig))
+                .SelectMany(party => party.Heroes.Troops)
+                .Select(troop => troop?.Character?.CharacterObject)
+                .Where(character =>
+                    character is CharacterObject characterObject
+                    && characterObject.IsHero)
+                .Distinct();
+        }
+
+        private static IEnumerable<PartyConfig> GetParties(TeamConfig team)
+        {
+            if (team?.PrimaryParty != null)
+                yield return team.PrimaryParty;
+            if (team?.AlliedParties == null)
+                yield break;
+            foreach (PartyConfig party in team.AlliedParties)
+            {
+                if (party != null)
+                    yield return party;
+            }
+        }
+
         private void OnPlayerTypeChange(bool isCommander)
         {
             PlayerSide.SetPlayerType(
@@ -559,14 +606,8 @@ namespace EnhancedBattleTest.UI
         {
             _config = config;
             BattleConfig.Instance = config;
-            PlayerSide = new SideVM(
-                config.PlayerTeamConfig,
-                true,
-                config.BattleTypeConfig);
-            EnemySide = new SideVM(
-                config.EnemyTeamConfig,
-                false,
-                config.BattleTypeConfig);
+            PlayerSide = CreateSide(config.PlayerTeamConfig, true);
+            EnemySide = CreateSide(config.EnemyTeamConfig, false);
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(
                 config.BattleTypeConfig,
                 MapSelectionGroup,

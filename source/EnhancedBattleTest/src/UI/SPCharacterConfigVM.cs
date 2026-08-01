@@ -44,6 +44,8 @@ namespace EnhancedBattleTest.UI
         public TextVM LevelValue { get; }
         public TextVM TierText { get; }
         public TextVM TierValue { get; }
+        public TextVM GroupText { get; }
+        public TextVM GroupValue { get; }
         public TextVM SkillsText { get; }
         public TextVM EquipmentText { get; }
         public MBBindingList<CharacterReviewItemVM> Skills { get; } =
@@ -105,6 +107,8 @@ namespace EnhancedBattleTest.UI
             LevelValue = new TextVM(new TextObject("0"));
             TierText = new TextVM(GameTexts.FindText("str_party_troop_tier"));
             TierValue = new TextVM(new TextObject("0"));
+            GroupText = new TextVM(GameTexts.FindText("str_ebt_group"));
+            GroupValue = new TextVM(new TextObject(string.Empty));
             SkillsText = new TextVM(GameTexts.FindText("str_ebt_skills"));
             EquipmentText =
                 new TextVM(GameTexts.FindText("str_ebt_equipment"));
@@ -217,6 +221,9 @@ namespace EnhancedBattleTest.UI
             TierValue.Text = IsTierVisible
                 ? characterObject.Tier.ToString()
                 : string.Empty;
+            GroupValue.Text =
+                _config.Character?.GroupInfo?.Name?.ToString()
+                ?? string.Empty;
             Skills.Clear();
             var reviewSkills =
                 TaleWorlds.CampaignSystem.Extensions.Skills.All

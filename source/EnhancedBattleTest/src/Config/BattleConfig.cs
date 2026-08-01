@@ -115,9 +115,7 @@ namespace EnhancedBattleTest.Config
 
             catch
             {
-                var result = CreateDefault();
-                result.Serialize();
-                return result;
+                return CreateDefault();
             }
         }
 
@@ -257,6 +255,21 @@ namespace EnhancedBattleTest.Config
         {
             NormalizeCharacterGroups(PlayerTeamConfig);
             NormalizeCharacterGroups(EnemyTeamConfig);
+            var playerHeroes = new[]
+                {
+                    PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
+                    EnemyTeamConfig?.PlayerCharacter?.CharacterObject
+                }
+                .OfType<CharacterObject>()
+                .Where(character => character.IsHero)
+                .Cast<BasicCharacterObject>()
+                .ToHashSet();
+            RemovePlayerCharactersFromHeroes(
+                PlayerTeamConfig,
+                playerHeroes);
+            RemovePlayerCharactersFromHeroes(
+                EnemyTeamConfig,
+                playerHeroes);
         }
 
         private static void NormalizeCharacterGroups(TeamConfig team)
@@ -305,6 +318,35 @@ namespace EnhancedBattleTest.Config
         {
             return troop?.Character?.CharacterObject is CharacterObject character
                    && !character.IsHero;
+        }
+
+        private static void RemovePlayerCharactersFromHeroes(
+            TeamConfig team,
+            HashSet<BasicCharacterObject> playerHeroes)
+        {
+            if (team == null || playerHeroes.Count == 0)
+                return;
+
+            RemoveHeroes(team.PrimaryParty, playerHeroes);
+            if (team.AlliedParties == null)
+                return;
+
+            foreach (PartyConfig party in team.AlliedParties)
+                RemoveHeroes(party, playerHeroes);
+        }
+
+        private static void RemoveHeroes(
+            PartyConfig party,
+            HashSet<BasicCharacterObject> playerHeroes)
+        {
+            if (party == null)
+                return;
+
+            party.Heroes.Troops.RemoveAll(troop =>
+                playerHeroes.Contains(
+                    troop?.Character?.CharacterObject));
+            if (party.Heroes.Troops.Count == 0)
+                party.HasHeroes = false;
         }
 
         private static string GetNamedConfigPath(string configurationName)

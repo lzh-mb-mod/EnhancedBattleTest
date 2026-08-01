@@ -124,6 +124,12 @@
                             <RichTextWidget DataSource="{TierValue}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="12" Brush="CustomBattle.Value.Text" />
                           </Children>
                         </ListPanel>
+                        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="30" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                          <Children>
+                            <RichTextWidget DataSource="{GroupText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="CustomBattle.Value.Text" />
+                            <RichTextWidget DataSource="{GroupValue}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="12" Brush="CustomBattle.Value.Text" />
+                          </Children>
+                        </ListPanel>
                       </Children>
                     </ListPanel>
                     <RichTextWidget DataSource="{SkillsText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="15" Brush="CustomBattle.Value.Text" />
