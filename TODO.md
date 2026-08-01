@@ -18,11 +18,11 @@
   - [x] Split the culture option into 2: first is faction culture, filters factions in faction selctor; second is clan culture, filters clans in clan selector.
   - [x] Support reset the character gender.
   - [x] Fix reviewing of character skills/equipment: you can reference the Encyclopedia code.
-  - [ ] Should show character group (infantry/ranged/calvary/horse archer) after character level and/or tier
+  - [x] Show character group (infantry/ranged/cavalry/horse archer) after character level and/or tier.
 - [x] since we can claspe party section, we don't need to claspe genera/troop sections anymore.
 - [x] When general section is disabled, we can hide the content of it.
 - [x] It seems the +/- button overlaps with function of adding/remove button of each party member. We still cannot add before the first member.
-- [ ] configuration should be saved only when clicking start or save.
-- [ ] Should create village battle like StartVillageBattleMission. Reference MenuHelper.EncounterAttackConsequence. Need to check v1.2.12 too.
-- [ ] Need to fill MissionInitializerRecord.PatchEncounterDir, MissionInitializerRecord.SceneHasMapPatch and MissionInitializerRecord.PatchCoordinates. Reference MenuHelper.EncounterAttackConsequence. Need to check v1.2.12 too.
-- [ ] Ensures heros are not repeated because repeated heros won't be spawned.
+- [x] Save configuration only when clicking Start or Save.
+- [x] Create village battles like `StartVillageBattleMission`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
+- [x] Fill `MissionInitializerRecord.PatchEncounterDir`, `SceneHasMapPatch`, and `PatchCoordinates`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
+- [x] Ensure hero player characters are not repeated in any party on either side.

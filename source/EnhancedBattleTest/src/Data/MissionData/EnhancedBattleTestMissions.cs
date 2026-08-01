@@ -4,6 +4,7 @@ using SandBox.Missions.MissionLogics;
 using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Map;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
 using TaleWorlds.Engine;
@@ -77,17 +78,35 @@ namespace EnhancedBattleTest.Data.MissionData
             if (isDayInWinter || usesWinterWeather)
                 terrainType = TerrainType.Snow;
 
+            var initializer = new MissionInitializerRecord(scene)
+            {
+                DoNotUseLoadingScreen = false,
+                PlayingInCampaignMode = true,
+                AtmosphereOnCampaign = atmosphereInfo,
+                TerrainType = (int)terrainType,
+                DecalAtlasGroup = config.BattleTypeConfig.BattleType
+                    == BattleType.Village
+                    ? (int)DecalAtlasGroup.Town
+                    : (int)DecalAtlasGroup.Battle,
+                RandomTerrainSeed = MBRandom.RandomInt(10000)
+            };
+            if (config.BattleTypeConfig.BattleType == BattleType.Battle)
+            {
+                MapPatchData patch = Campaign.Current.MapSceneWrapper
+                    .GetMapPatchAtPosition(context.PlayerParty.Position);
+                initializer.NeedsRandomTerrain = false;
+                initializer.SceneHasMapPatch = true;
+                initializer.PatchCoordinates = patch.normalizedCoordinates;
+                initializer.PatchEncounterDir =
+                    (context.MapEvent.AttackerSide.LeaderParty.Position.ToVec2()
+                     - context.MapEvent.DefenderSide.LeaderParty.Position
+                         .ToVec2())
+                    .Normalized();
+            }
+
             Mission mission = MissionState.OpenNew(
                 "Battle",
-                new MissionInitializerRecord(scene)
-                {
-                    DoNotUseLoadingScreen = false,
-                    PlayingInCampaignMode = true,
-                    AtmosphereOnCampaign = atmosphereInfo,
-                    TerrainType = (int)terrainType,
-                    DecalAtlasGroup = (int)DecalAtlasGroup.Battle,
-                    RandomTerrainSeed = MBRandom.RandomInt(10000)
-                },
+                initializer,
                 missionController => new MissionBehavior[]
                 {
                     new EnhancedBattleTestCleanupLogic(),

@@ -1,6 +1,7 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
 using System;
+using System.Collections.Generic;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -39,6 +40,7 @@ namespace EnhancedBattleTest.UI
             Action onCharacterChanged = null,
             Func<BasicCharacterObject> preferredBannerCharacter = null,
             Func<bool> useSelectedCharacterForBanner = null,
+            Func<IEnumerable<BasicCharacterObject>> unavailableHeroes = null,
             Action insertAfter = null,
             Action remove = null,
             Action moveUp = null,
@@ -62,7 +64,8 @@ namespace EnhancedBattleTest.UI
                 onCharacterChanged,
                 preferredBannerCharacter,
                 useSelectedCharacterForBanner,
-                isGeneralTroop);
+                isGeneralTroop,
+                unavailableHeroes);
             NumberText = new TextVM(GameTexts.FindText("str_ebt_number"));
             Number = new NumberVM<int>(config.Number, 0, 5000, true);
             Number.OnValueChanged += number =>

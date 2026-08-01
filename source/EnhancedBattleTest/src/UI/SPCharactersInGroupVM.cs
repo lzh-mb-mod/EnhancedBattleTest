@@ -39,6 +39,8 @@ namespace EnhancedBattleTest.UI
         private string _clanSearchText = string.Empty;
         private bool _suspendFilterUpdates;
         private HeroFilter? _requiredHeroFilter;
+        private HashSet<BasicCharacterObject> _unavailableHeroes =
+            new HashSet<BasicCharacterObject>();
         public TextVM OccupationText { get; }
         public TextVM SearchTextLabel { get; }
         public TextVM HeroFilterText { get; }
@@ -354,6 +356,14 @@ namespace EnhancedBattleTest.UI
             UpdateCharacterList();
         }
 
+        public void SetUnavailableHeroes(
+            IEnumerable<BasicCharacterObject> unavailableHeroes)
+        {
+            _unavailableHeroes = unavailableHeroes?.ToHashSet()
+                ?? new HashSet<BasicCharacterObject>();
+            UpdateCharacterList();
+        }
+
         private int RequiredHeroFilterIndex()
         {
             return (int)(_requiredHeroFilter ?? HeroFilter.All);
@@ -384,6 +394,11 @@ namespace EnhancedBattleTest.UI
                 return false;
             if (heroFilter == HeroFilter.NonHero && characterObject.IsHero)
                 return false;
+            if (characterObject.IsHero
+                && _unavailableHeroes.Contains(characterObject))
+            {
+                return false;
+            }
 
             if (_factionCultureId != null)
             {

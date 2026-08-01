@@ -17,11 +17,11 @@ namespace EnhancedBattleTest.UI
         private readonly BattleTypeConfig _battleTypeConfig;
         private readonly Action _onCharacterChanged;
         private readonly Func<BasicCharacterObject> _preferredBannerCharacter;
-        private readonly Func<BasicCharacterObject> _playerCharacter;
+        private readonly Func<System.Collections.Generic.IEnumerable<
+            BasicCharacterObject>> _heroPlayerCharacters;
         private MBBindingList<TroopVM> _troops;
         private bool _isHeroTroopGroup;
         private bool _pushEnabled;
-        private bool _popEnabled;
         private bool _isContentVisible = true;
 
         [DataSourceProperty]
@@ -85,7 +85,8 @@ namespace EnhancedBattleTest.UI
             BattleTypeConfig battleTypeConfig,
             Action onCharacterChanged = null,
             Func<BasicCharacterObject> preferredBannerCharacter = null,
-            Func<BasicCharacterObject> playerCharacter = null)
+            Func<System.Collections.Generic.IEnumerable<
+                BasicCharacterObject>> heroPlayerCharacters = null)
         {
             _partyConfig = partyConfig;
             _config = config;
@@ -93,7 +94,7 @@ namespace EnhancedBattleTest.UI
             _battleTypeConfig = battleTypeConfig;
             _onCharacterChanged = onCharacterChanged;
             _preferredBannerCharacter = preferredBannerCharacter;
-            _playerCharacter = playerCharacter;
+            _heroPlayerCharacters = heroPlayerCharacters;
             Troops = new MBBindingList<TroopVM>();
             IsHeroTroopGroup = isHeroTroopGroup;
             TroopGroupName = new TextVM(groupName);
@@ -129,6 +130,7 @@ namespace EnhancedBattleTest.UI
                     _onCharacterChanged,
                     _preferredBannerCharacter,
                     () => IsBannerCharacter(capturedConfig.Character),
+                    () => GetUnavailableHeroes(capturedConfig),
                     () => InsertAfter(index),
                     () => RemoveAt(index),
                     () => Move(index, index - 1),
@@ -169,14 +171,6 @@ namespace EnhancedBattleTest.UI
         {
             TroopConfig newTroop = CreateNewTroop(null);
             AddAndSelect(0, newTroop);
-        }
-
-        public void RemoveFirst()
-        {
-            if (_config.Troops.Count > (IsHeroTroopGroup ? 1 : 0))
-                _config.Troops.RemoveAt(0);
-            Reload();
-            _onCharacterChanged?.Invoke();
         }
 
         private void InsertAfter(int index)
@@ -220,10 +214,14 @@ namespace EnhancedBattleTest.UI
                 .Select(troop => troop?.Character?.CharacterObject)
                 .Where(character => character != null)
                 .ToHashSet();
-            if (IsHeroTroopGroup && _playerCharacter?.Invoke() is
-                BasicCharacterObject playerCharacter)
+            if (IsHeroTroopGroup)
             {
-                usedCharacters.Add(playerCharacter);
+                foreach (BasicCharacterObject playerCharacter in
+                    _heroPlayerCharacters?.Invoke()
+                    ?? Enumerable.Empty<BasicCharacterObject>())
+                {
+                    usedCharacters.Add(playerCharacter);
+                }
             }
             var candidates = Game.Current.ObjectManager
                 .GetObjectTypeList<BasicCharacterObject>()
@@ -288,32 +286,9 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-
-        public void PopTroop()
-        {
-            if (_config.Troops.Count > 0)
-                _config.Troops.RemoveAt(_config.Troops.Count - 1);
-            Reload();
-            _onCharacterChanged?.Invoke();
-        }
-
-        [DataSourceProperty]
-        public bool PopEnabled
-        {
-            get => _popEnabled;
-            set
-            {
-                if (_popEnabled == value)
-                    return;
-                _popEnabled = value;
-                OnPropertyChanged(nameof(PopEnabled));
-            }
-        }
-
         private void UpdateEnabled()
         {
             PushEnabled = Troops.Count < 2000;
-            PopEnabled = Troops.Count > (IsHeroTroopGroup ? 1 : 0);
         }
 
         private bool IsBannerCharacter(CharacterConfig character)
@@ -325,6 +300,20 @@ namespace EnhancedBattleTest.UI
                 : ReferenceEquals(
                     _partyConfig.GetBannerCharacterConfig(),
                     character);
+        }
+
+        private System.Collections.Generic.IEnumerable<BasicCharacterObject>
+            GetUnavailableHeroes(TroopConfig current)
+        {
+            if (!IsHeroTroopGroup)
+                return Enumerable.Empty<BasicCharacterObject>();
+
+            return (_heroPlayerCharacters?.Invoke()
+                    ?? Enumerable.Empty<BasicCharacterObject>())
+                .Where(character =>
+                    character is CharacterObject characterObject
+                    && characterObject.IsHero)
+                .Distinct();
         }
     }
 }

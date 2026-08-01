@@ -9,11 +9,6 @@
                 <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" Text="+" />
               </Children>
             </ButtonWidget>
-            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="RemoveFirst" IsEnabled="@PopEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="80" SuggestedHeight="50" MarginLeft="30" Brush="WideButton.Flat" UpdateChildrenStates="true">
-              <Children>
-                <TextWidget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" Text="-" />
-              </Children>
-            </ButtonWidget>
           </Children>
         </ListPanel>
 
@@ -23,24 +18,24 @@
               <Children>
                 <EnhancedBattleTestCharacterButton DataSource="{CharacterButton}" HorizontalAlignment="Left" VerticalAlignment="Center" MarginTop="15" />
 
-                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="5" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" MarginLeft="30" MarginTop="5" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                   <Children>
-                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="InsertAfter" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="125" SuggestedHeight="40" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="InsertAfter" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="150" SuggestedHeight="50" Brush="WideButton.Flat" UpdateChildrenStates="true">
                       <Children>
                         <TextWidget DataSource="{InsertText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                       </Children>
                     </ButtonWidget>
-                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="Remove" IsEnabled="@CanRemove" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="40" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="Remove" IsEnabled="@CanRemove" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="100" SuggestedHeight="50" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
                       <Children>
                         <TextWidget DataSource="{RemoveText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                       </Children>
                     </ButtonWidget>
-                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="MoveUp" IsEnabled="@CanMoveUp" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="40" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="MoveUp" IsEnabled="@CanMoveUp" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="50" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
                       <Children>
                         <TextWidget DataSource="{MoveUpText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                       </Children>
                     </ButtonWidget>
-                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="MoveDown" IsEnabled="@CanMoveDown" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="40" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                    <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="MoveDown" IsEnabled="@CanMoveDown" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="90" SuggestedHeight="50" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
                       <Children>
                         <TextWidget DataSource="{MoveDownText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="MPTeamSelection.SpectateButton.Text" />
                       </Children>
