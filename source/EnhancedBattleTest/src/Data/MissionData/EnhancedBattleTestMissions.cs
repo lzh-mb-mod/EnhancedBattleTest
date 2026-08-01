@@ -90,20 +90,6 @@ namespace EnhancedBattleTest.Data.MissionData
                     : (int)DecalAtlasGroup.Battle,
                 RandomTerrainSeed = MBRandom.RandomInt(10000)
             };
-            if (config.BattleTypeConfig.BattleType == BattleType.Battle)
-            {
-                MapPatchData patch = Campaign.Current.MapSceneWrapper
-                    .GetMapPatchAtPosition(context.PlayerParty.Position);
-                initializer.NeedsRandomTerrain = false;
-                initializer.SceneHasMapPatch = true;
-                initializer.PatchCoordinates = patch.normalizedCoordinates;
-                initializer.PatchEncounterDir =
-                    (context.MapEvent.AttackerSide.LeaderParty.Position.ToVec2()
-                     - context.MapEvent.DefenderSide.LeaderParty.Position
-                         .ToVec2())
-                    .Normalized();
-            }
-
             Mission mission = MissionState.OpenNew(
                 "Battle",
                 initializer,
