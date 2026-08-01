@@ -335,7 +335,7 @@ namespace EnhancedBattleTest.UI
                 var item =
                     new CharacterEquipmentItemVM(equipment[index].Item);
                 if (index == EquipmentIndex.HorseHarness && item.HasItem)
-                    item.Type = ItemObject.ItemTypeEnum.Horse.ToString();
+                    item.Type = (int)ItemObject.ItemTypeEnum.Horse;
                 target.Add(item);
             }
         }
