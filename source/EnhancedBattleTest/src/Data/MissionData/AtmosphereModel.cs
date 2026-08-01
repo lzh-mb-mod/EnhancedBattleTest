@@ -63,6 +63,9 @@ namespace EnhancedBattleTest.Data.MissionData
                 0.001f);
             Vec3 position = MobileParty.MainParty?.GetPositionAsVec3()
                             ?? Vec3.Zero;
+            CampaignVec2 campaignPosition = MobileParty.MainParty.Position;
+            Vec2 windVector = Campaign.Current.Models.MapWeatherModel
+                .GetWindForPosition(campaignPosition);
             AtmosphereState atmosphereState =
                 Campaign.Current.Models.MapWeatherModel
                     .GetInterpolatedAtmosphereState(
@@ -77,6 +80,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 : fogDensity;
             return new AtmosphereInfo()
             {
+                Seed = (uint)CampaignTime.Now.ToSeconds,
                 //AtmosphereName = "TOD_12_00_SemiCloudy",
                 InterpolatedAtmosphereName = atmosphereName,
                 SunInfo =
@@ -138,6 +142,16 @@ namespace EnhancedBattleTest.Data.MissionData
                 SnowInfo = new SnowInformation
                 {
                     Density = snowValue
+                },
+                NauticalInfo =
+                {
+                    WaveStrength = campaignPosition.IsOnLand
+                        ? 0.26f
+                        : windVector.Length,
+                    WindVector = windVector,
+                    CanUseLowAltitudeAtmosphere = 0,
+                    UseSceneWindDirection = 1,
+                    IsRiverBattle = 0
                 },
                 AreaInfo =
                 {
