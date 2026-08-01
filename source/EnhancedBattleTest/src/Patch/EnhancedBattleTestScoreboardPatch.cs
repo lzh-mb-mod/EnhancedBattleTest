@@ -14,11 +14,10 @@ namespace EnhancedBattleTest.Patch
         nameof(SPScoreboardVM.ExecuteQuitAction))]
     public static class EnhancedBattleTestScoreboardPatch
     {
-        private static readonly MethodInfo OnToggleMethod =
-            AccessTools.Method(
+        private static readonly FieldInfo OnToggleField =
+            AccessTools.Field(
                 typeof(ScoreboardBaseVM),
-                "OnToggle",
-                new[] { typeof(bool) });
+                "OnToggle");
 
         private static bool Prefix(SPScoreboardVM __instance)
         {
@@ -45,7 +44,7 @@ namespace EnhancedBattleTest.Patch
             if (result == BattleEndLogic.ExitResult.NeedsPlayerConfirmation
                 || result == BattleEndLogic.ExitResult.SurrenderSiege)
             {
-                OnToggleMethod.Invoke(__instance, new object[] { false });
+                ((Action<bool>)OnToggleField.GetValue(__instance))?.Invoke(false);
                 basicMissionHandler.CreateWarningWidgetForResult(result);
             }
             else if (battleEndLogic == null
