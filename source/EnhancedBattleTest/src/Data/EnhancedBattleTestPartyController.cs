@@ -140,6 +140,13 @@ namespace EnhancedBattleTest.Data
                 new Dictionary<
                     MobileParty,
                     Dictionary<BasicCharacterObject, float>>();
+        private static readonly Dictionary<
+            MobileParty,
+            Dictionary<BasicCharacterObject, List<int>>>
+            TemporaryPartyEquipmentSets =
+                new Dictionary<
+                    MobileParty,
+                    Dictionary<BasicCharacterObject, List<int>>>();
         private static readonly PropertyInfo MainPartyProperty =
             AccessTools.Property(typeof(Campaign), nameof(Campaign.MainParty));
         private static readonly PropertyInfo PlayerEncounterProperty =
@@ -202,6 +209,14 @@ namespace EnhancedBattleTest.Data
                         playerParty,
                         playerIdentity.BattleCharacter,
                         playerConfig.FemaleRatio);
+                }
+                if (config.PlayerTeamConfig.PlayerCharacter
+                        is SPCharacterConfig playerEquipmentConfig)
+                {
+                    SetEquipmentSet(
+                        playerParty,
+                        playerIdentity.BattleCharacter,
+                        playerEquipmentConfig.EquipmentSetIndex);
                 }
                 CreateAlliedParties(
                     config.PlayerTeamConfig.AlliedParties,
@@ -419,6 +434,32 @@ namespace EnhancedBattleTest.Data
                    && ratios.TryGetValue(character, out femaleRatio);
         }
 
+        public static bool TryGetEquipmentSet(
+            PartyBase party,
+            BasicCharacterObject character,
+            int seed,
+            out Equipment equipment)
+        {
+            equipment = null;
+            if (party?.MobileParty == null
+                || !(character is CharacterObject characterObject)
+                || !TemporaryPartyEquipmentSets.TryGetValue(
+                    party.MobileParty,
+                    out Dictionary<BasicCharacterObject, List<int>> sets)
+                || !sets.TryGetValue(character, out List<int> indices)
+                || indices.Count == 0)
+                return false;
+
+            int selectedIndex = indices[(int)((uint)seed % indices.Count)];
+            IReadOnlyList<Equipment> equipmentSets =
+                SPCharacterConfig.GetBattleEquipmentSets(characterObject);
+            if (selectedIndex < 0 || selectedIndex >= equipmentSets.Count)
+                return false;
+
+            equipment = equipmentSets[selectedIndex];
+            return true;
+        }
+
         public static bool TryGetTacticLevel(
             PartyBase party,
             out int tacticLevel)
@@ -528,6 +569,7 @@ namespace EnhancedBattleTest.Data
                     party,
                     isInPlayerTeam);
                 RegisterFemaleRatios(party, config);
+                RegisterEquipmentSets(party, config);
                 party.IsVisible = false;
                 party.SetMoveModeHold();
                 return party;
@@ -707,6 +749,7 @@ namespace EnhancedBattleTest.Data
                 TemporaryPartyProfiles.Remove(party);
                 TemporaryPartyPlayerTeamMembership.Remove(party);
                 TemporaryPartyFemaleRatios.Remove(party);
+                TemporaryPartyEquipmentSets.Remove(party);
                 TemporaryPartyTacticLevels.Remove(party);
             }
         }
@@ -730,6 +773,23 @@ namespace EnhancedBattleTest.Data
             TemporaryPartyFemaleRatios[party] = weightedRatios.ToDictionary(
                 pair => pair.Key,
                 pair => pair.Value.Item1 / pair.Value.Item2);
+        }
+
+        private static void RegisterEquipmentSets(
+            MobileParty party,
+            PartyConfig config)
+        {
+            var sets = new Dictionary<BasicCharacterObject, List<int>>();
+            if (config.HasHeroes)
+            {
+                foreach (TroopConfig troop in config.Heroes.Troops)
+                    AddEquipmentSet(sets, troop, 1);
+            }
+
+            foreach (TroopConfig troop in config.Troops.Troops)
+                AddEquipmentSet(sets, troop, troop.Number);
+
+            TemporaryPartyEquipmentSets[party] = sets;
         }
 
         private static void RegisterTacticLevel(
@@ -760,6 +820,47 @@ namespace EnhancedBattleTest.Data
             ratios[characterConfig.CharacterObject] = new Tuple<float, int>(
                 (current?.Item1 ?? 0f) + ratio * count,
                 (current?.Item2 ?? 0) + count);
+        }
+
+        private static void AddEquipmentSet(
+            IDictionary<BasicCharacterObject, List<int>> sets,
+            TroopConfig troop,
+            int count)
+        {
+            if (count <= 0
+                || !(troop?.Character is SPCharacterConfig characterConfig)
+                || characterConfig.CharacterObject == null)
+                return;
+
+            if (!sets.TryGetValue(
+                    characterConfig.CharacterObject,
+                    out List<int> indices))
+            {
+                indices = new List<int>();
+                sets.Add(characterConfig.CharacterObject, indices);
+            }
+
+            for (int i = 0; i < count; i++)
+                indices.Add(characterConfig.EquipmentSetIndex);
+        }
+
+        private static void SetEquipmentSet(
+            MobileParty party,
+            BasicCharacterObject character,
+            int equipmentSetIndex)
+        {
+            if (party == null || character == null)
+                return;
+
+            if (!TemporaryPartyEquipmentSets.TryGetValue(
+                    party,
+                    out Dictionary<BasicCharacterObject, List<int>> sets))
+            {
+                sets = new Dictionary<BasicCharacterObject, List<int>>();
+                TemporaryPartyEquipmentSets.Add(party, sets);
+            }
+
+            sets[character] = new List<int> { equipmentSetIndex };
         }
 
         private static void SetFemaleRatio(

@@ -99,7 +99,7 @@ namespace EnhancedBattleTest.UI
 
         [DataSourceProperty]
         public float HeroFiltersAlpha =>
-            AreHeroFiltersEnabled ? 1f : 0.45f;
+            AreHeroFiltersEnabled ? 1f : 0.65f;
 
         [DataSourceProperty]
         public string FactionCultureSearchText

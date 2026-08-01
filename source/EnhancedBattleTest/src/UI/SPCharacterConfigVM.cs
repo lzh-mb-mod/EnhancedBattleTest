@@ -4,6 +4,7 @@ using EnhancedBattleTest.SinglePlayer.Config;
 using EnhancedBattleTest.SinglePlayer.Data;
 using EnhancedBattleTest.UI.Basic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -31,6 +32,8 @@ namespace EnhancedBattleTest.UI
         private bool _useSelectedCharacterForBanner;
         private bool _isGenderOverrideEnabled;
         private bool _isTierVisible;
+        private bool _isEquipmentSetSelectorVisible;
+        private string _equipmentSetText;
         public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
 
         public TextVM MaleRatioText { get; }
@@ -54,6 +57,36 @@ namespace EnhancedBattleTest.UI
             new MBBindingList<CharacterEquipmentItemVM>();
         public MBBindingList<CharacterEquipmentItemVM> RightEquipment { get; } =
             new MBBindingList<CharacterEquipmentItemVM>();
+
+        [DataSourceProperty]
+        public bool IsEquipmentSetSelectorVisible
+        {
+            get => _isEquipmentSetSelectorVisible;
+            private set
+            {
+                if (_isEquipmentSetSelectorVisible == value)
+                    return;
+
+                _isEquipmentSetSelectorVisible = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(IsEquipmentSetSelectorVisible));
+            }
+        }
+
+        [DataSourceProperty]
+        public string EquipmentSetText
+        {
+            get => _equipmentSetText;
+            private set
+            {
+                if (_equipmentSetText == value)
+                    return;
+
+                _equipmentSetText = value;
+                OnPropertyChangedWithValue(value, nameof(EquipmentSetText));
+            }
+        }
 
         [DataSourceProperty]
         public bool IsGenderOverrideEnabled
@@ -144,7 +177,34 @@ namespace EnhancedBattleTest.UI
             if (character == null)
                 return;
             _config.CharacterId = character.StringId;
+            _config.EquipmentSetIndex = 0;
             FemaleRatio.Value = _config.FemaleRatio = _config.CharacterObject.IsFemale ? 1 : 0;
+            SetCharacterToViewModel();
+        }
+
+        public void ExecuteSelectPreviousEquipmentSet()
+        {
+            IReadOnlyList<Equipment> equipmentSets =
+                _config.GetBattleEquipmentSets();
+            if (equipmentSets.Count < 2)
+                return;
+
+            _config.EquipmentSetIndex--;
+            if (_config.EquipmentSetIndex < 0)
+                _config.EquipmentSetIndex = equipmentSets.Count - 1;
+            SetCharacterToViewModel();
+        }
+
+        public void ExecuteSelectNextEquipmentSet()
+        {
+            IReadOnlyList<Equipment> equipmentSets =
+                _config.GetBattleEquipmentSets();
+            if (equipmentSets.Count < 2)
+                return;
+
+            _config.EquipmentSetIndex++;
+            if (_config.EquipmentSetIndex >= equipmentSets.Count)
+                _config.EquipmentSetIndex = 0;
             SetCharacterToViewModel();
         }
 
@@ -199,19 +259,22 @@ namespace EnhancedBattleTest.UI
             RefreshReview(character, equipment);
         }
 
-        private static Equipment ResolveEquipment(
-            BasicCharacterObject character)
+        private Equipment ResolveEquipment(BasicCharacterObject character)
         {
-            if (character is CharacterObject characterObject)
-            {
-                if (characterObject.HeroObject?.BattleEquipment != null)
-                    return characterObject.HeroObject.BattleEquipment;
-                Equipment battleEquipment =
-                    characterObject.BattleEquipments.FirstOrDefault();
-                if (battleEquipment != null)
-                    return battleEquipment;
-            }
-            return character.Equipment;
+            IReadOnlyList<Equipment> equipmentSets =
+                _config.GetBattleEquipmentSets();
+            IsEquipmentSetSelectorVisible = equipmentSets.Count > 1;
+
+            int selectedIndex = _config.EquipmentSetIndex;
+            if (selectedIndex < 0 || selectedIndex >= equipmentSets.Count)
+                selectedIndex = _config.EquipmentSetIndex = 0;
+
+            var text = new TextObject("{=vggt7exj}Set {CURINDEX}/{COUNT}");
+            text.SetTextVariable("CURINDEX", selectedIndex + 1);
+            text.SetTextVariable("COUNT", equipmentSets.Count);
+            EquipmentSetText = text.ToString();
+            return equipmentSets.ElementAtOrDefault(selectedIndex)
+                   ?? character.Equipment;
         }
 
         private void RefreshReview(
@@ -246,11 +309,12 @@ namespace EnhancedBattleTest.UI
             AddEquipment(
                 LeftEquipment,
                 equipment,
-                EquipmentIndex.Horse,
+                EquipmentIndex.Head,
                 EquipmentIndex.Cape,
                 EquipmentIndex.Body,
                 EquipmentIndex.Gloves,
                 EquipmentIndex.Leg,
+                EquipmentIndex.Horse,
                 EquipmentIndex.HorseHarness);
 
             RightEquipment.Clear();
@@ -270,7 +334,13 @@ namespace EnhancedBattleTest.UI
             params EquipmentIndex[] indices)
         {
             foreach (EquipmentIndex index in indices)
-                target.Add(new CharacterEquipmentItemVM(equipment[index].Item));
+            {
+                var item =
+                    new CharacterEquipmentItemVM(equipment[index].Item);
+                if (index == EquipmentIndex.HorseHarness && item.HasItem)
+                    item.Type = ItemObject.ItemTypeEnum.Horse.ToString();
+                target.Add(item);
+            }
         }
 
         private static int GetEncyclopediaSkillOrder(SkillObject skill)

@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
 using EnhancedBattleTest.SinglePlayer.Data;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
@@ -14,6 +15,7 @@ namespace EnhancedBattleTest.SinglePlayer.Config
         private string _characterId;
         public bool OverrideGender;
         public float FemaleRatio;
+        public int EquipmentSetIndex;
 
         public string CharacterId
         {
@@ -56,6 +58,48 @@ namespace EnhancedBattleTest.SinglePlayer.Config
             CharacterId = spOther.CharacterId;
             OverrideGender = spOther.OverrideGender;
             FemaleRatio = spOther.FemaleRatio;
+            EquipmentSetIndex = spOther.EquipmentSetIndex;
+        }
+
+        public IReadOnlyList<Equipment> GetBattleEquipmentSets()
+        {
+            return GetBattleEquipmentSets(ActualCharacterObject);
+        }
+
+        public static IReadOnlyList<Equipment> GetBattleEquipmentSets(
+            CharacterObject character)
+        {
+            var result = new List<Equipment>();
+            Equipment heroEquipment = character?.HeroObject?.BattleEquipment;
+            if (heroEquipment != null)
+                result.Add(heroEquipment);
+
+            if (character != null)
+            {
+                foreach (Equipment equipment in character.BattleEquipments)
+                {
+                    if (equipment != null
+                        && !result.Any(existing =>
+                            existing.IsEquipmentEqualTo(equipment)))
+                    {
+                        result.Add(equipment);
+                    }
+                }
+            }
+
+            if (result.Count == 0 && character?.Equipment != null)
+                result.Add(character.Equipment);
+            return result;
+        }
+
+        public Equipment GetSelectedEquipment()
+        {
+            IReadOnlyList<Equipment> equipmentSets =
+                GetBattleEquipmentSets();
+            return EquipmentSetIndex >= 0
+                   && EquipmentSetIndex < equipmentSets.Count
+                ? equipmentSets[EquipmentSetIndex]
+                : null;
         }
 
         public SPCharacterConfig()
