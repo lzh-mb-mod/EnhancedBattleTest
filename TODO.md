@@ -27,7 +27,7 @@
 - [x] Create village battles like `StartVillageBattleMission`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
 - [x] Fill `MissionInitializerRecord.PatchEncounterDir`, `SceneHasMapPatch`, and `PatchCoordinates`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
 - [x] Ensure hero player characters are not repeated in any party on either side.
-- [ ] Fix the issue that in config menu, the banner image shape doesn't match the clickable button.
-- [x] Show the button image to inspect the clickable area before adjusting and hiding it.
+- [x] Fix the issue that in config menu, the banner image shape doesn't match the clickable button.
+- [x] If custom banner is enabled, highlight the banner while the mouse is hovering over it.
 - [x] In config screen, player character can be disabled. The player character will not be spawned and the player will not control any units.
-- [ ] find a better way to keep compatible with Camp Menu: chain the menu like this: if both menus are open, exiting one will switch to another menu.
+- [x] Keep compatibility with Camp Menu by opening the EBT menu first, then switching to Camp Menu when leaving it.

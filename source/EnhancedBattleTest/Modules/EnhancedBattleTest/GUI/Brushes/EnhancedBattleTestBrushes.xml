@@ -35,4 +35,23 @@
       </Style>
     </Styles>
   </Brush>
+  <Brush Name="EnhancedBattleTest.BannerButton">
+    <Layers>
+      <BrushLayer Name="Default" Sprite="StdAssets\banner_new" OverlayXOffset="0" OverlayYOffset="-3" />
+    </Layers>
+    <Styles>
+      <Style Name="Default">
+        <BrushLayer Name="Default" />
+      </Style>
+      <Style Name="Hovered">
+        <BrushLayer Name="Default" ColorFactor="1.25" />
+      </Style>
+      <Style Name="Pressed">
+        <BrushLayer Name="Default" ColorFactor="0.9" />
+      </Style>
+      <Style Name="Disabled">
+        <BrushLayer Name="Default" />
+      </Style>
+    </Styles>
+  </Brush>
 </Brushes>

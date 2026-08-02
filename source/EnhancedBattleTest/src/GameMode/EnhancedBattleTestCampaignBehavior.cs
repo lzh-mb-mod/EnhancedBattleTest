@@ -10,7 +10,7 @@ namespace EnhancedBattleTest.GameMode
     public sealed class EnhancedBattleTestCampaignBehavior : CampaignBehaviorBase
     {
         public const string MenuId = "enhanced_battle_test_menu";
-        private const string CampMenuId = "camp_menu";
+        public const string CampMenuId = "camp_menu";
 
         public override void RegisterEvents()
         {
@@ -32,11 +32,9 @@ namespace EnhancedBattleTest.GameMode
                    && MobileParty.MainParty.CurrentSettlement == null;
         }
 
-        public static string GetMainPartyMenuId()
+        public static bool HasCampMenu()
         {
-            return Campaign.Current?.GameMenuManager.GetGameMenu(CampMenuId) != null
-                ? CampMenuId
-                : MenuId;
+            return Campaign.Current?.GameMenuManager.GetGameMenu(CampMenuId) != null;
         }
 
         private static void OnSessionLaunched(CampaignGameStarter campaignGameStarter)
@@ -56,8 +54,6 @@ namespace EnhancedBattleTest.GameMode
                 });
 
             AddConfigureBattleOption(campaignGameStarter, MenuId);
-            if (Campaign.Current.GameMenuManager.GetGameMenu(CampMenuId) != null)
-                AddConfigureBattleOption(campaignGameStarter, CampMenuId);
 
             campaignGameStarter.AddGameMenuOption(
                 MenuId,
@@ -68,7 +64,13 @@ namespace EnhancedBattleTest.GameMode
                     args.optionLeaveType = GameMenuOption.LeaveType.Leave;
                     return true;
                 },
-                args => GameMenu.ExitToLast(),
+                args =>
+                {
+                    if (HasCampMenu())
+                        GameMenu.SwitchToMenu(CampMenuId);
+                    else
+                        GameMenu.ExitToLast();
+                },
                 true);
         }
 
