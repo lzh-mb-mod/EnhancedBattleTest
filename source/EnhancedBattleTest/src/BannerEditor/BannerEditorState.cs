@@ -42,6 +42,11 @@ namespace EnhancedBattleTest.BannerEditor
 
         public override bool IsMenuState => true;
 
-
+        public static void Clear()
+        {
+            Config = null;
+            OnDone = null;
+            PreferredCharacter = null;
+        }
     }
 }

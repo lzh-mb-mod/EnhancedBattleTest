@@ -176,6 +176,7 @@ namespace EnhancedBattleTest.UI
         public override void OnFinalize()
         {
             EnhancedBattleTestSubModule.Instance.OnSelectCharacter -= this.Open;
+            base.OnFinalize();
         }
 
         private void RefreshGroups()
