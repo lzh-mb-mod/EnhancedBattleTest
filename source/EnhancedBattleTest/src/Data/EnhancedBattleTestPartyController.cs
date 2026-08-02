@@ -174,7 +174,9 @@ namespace EnhancedBattleTest.Data
             var ownedTemporaryParties = new List<MobileParty>();
             MapEvent mapEvent = null;
             CharacterObject selectedPlayerCharacter =
-                GetPlayerCharacter(config.PlayerTeamConfig);
+                config.BattleTypeConfig.PlayerType == PlayerType.None
+                    ? null
+                    : GetPlayerCharacter(config.PlayerTeamConfig);
             PlayerIdentityState playerIdentity =
                 CreatePlayerIdentity(selectedPlayerCharacter);
             PlayerEncounter originalPlayerEncounter =
@@ -187,13 +189,13 @@ namespace EnhancedBattleTest.Data
                 BasicCharacterObject preferredPlayerPartyCharacter =
                     GetPreferredPlayerPartyCharacter(
                         config,
-                        playerIdentity.BattleCharacter);
+                        selectedPlayerCharacter);
                 playerParty = CreateParty(
                     new TextObject("{=sSJSTe5p}Player Party"),
                     config.PlayerTeamConfig.PrimaryParty,
                     isPlayerAttacker,
-                    playerIdentity.BattleCharacter,
-                    true,
+                    selectedPlayerCharacter,
+                    selectedPlayerCharacter != null,
                     true,
                     preferredPlayerPartyCharacter,
                     out CharacterObject playerCharacter,
@@ -201,7 +203,8 @@ namespace EnhancedBattleTest.Data
                     out List<string> playerPriorityCharacterIds);
                 playerParties.Add(playerParty);
                 ownedTemporaryParties.Add(playerParty);
-                if (config.PlayerTeamConfig.PlayerCharacter
+                if (selectedPlayerCharacter != null
+                    && config.PlayerTeamConfig.PlayerCharacter
                         is SPCharacterConfig playerConfig
                     && playerConfig.OverrideGender)
                 {
@@ -210,7 +213,8 @@ namespace EnhancedBattleTest.Data
                         playerIdentity.BattleCharacter,
                         playerConfig.FemaleRatio);
                 }
-                if (config.PlayerTeamConfig.PlayerCharacter
+                if (selectedPlayerCharacter != null
+                    && config.PlayerTeamConfig.PlayerCharacter
                         is SPCharacterConfig playerEquipmentConfig)
                 {
                     SetEquipmentSet(

@@ -91,6 +91,11 @@ namespace EnhancedBattleTest.Data.MissionData
                     : (int)DecalAtlasGroup.Battle,
                 RandomTerrainSeed = MBRandom.RandomInt(10000)
             };
+            var spawnLogic = new MissionAgentSpawnLogic(
+                context.TroopSuppliers,
+                playerSide,
+                Mission.BattleSizeType.Battle);
+            bool hasPlayerCharacter = context.PlayerCharacter != null;
             Mission mission = MissionState.OpenNew(
                 "Battle",
                 initializer,
@@ -109,10 +114,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new EnhancedBattleTestPlayerAgentLogic(
                         context.PlayerCharacter,
                         context.PlayerParty.Party),
-                    new MissionAgentSpawnLogic(
-                        context.TroopSuppliers,
-                        playerSide,
-                        Mission.BattleSizeType.Battle),
+                    spawnLogic,
                     new BattlePowerCalculationLogic(),
                     new BattleSpawnLogic("battle_set"),
                     new SandBoxBattleMissionSpawnHandler(),
@@ -151,8 +153,16 @@ namespace EnhancedBattleTest.Data.MissionData
                     new MissionBoundaryCrossingHandler(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new DeploymentMissionController(isPlayerAttacker),
-                    new BattleDeploymentHandler(isPlayerAttacker)
+                    hasPlayerCharacter
+                        ? new DeploymentMissionController(isPlayerAttacker)
+                        : null,
+                    hasPlayerCharacter
+                        ? new BattleDeploymentHandler(isPlayerAttacker)
+                        : null,
+                    !hasPlayerCharacter
+                        ? new EnhancedBattleTestNoPlayerDeploymentLogic(
+                            spawnLogic)
+                        : null
                 });
             return mission;
         }
@@ -303,6 +313,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     };
                     return behaviors;
                 });
+            return mission;
         }
 
         private static List<MissionSiegeWeapon> CreateSiegeWeapons(

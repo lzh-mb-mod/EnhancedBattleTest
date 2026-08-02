@@ -14,6 +14,7 @@
   <string id="str_ebt_player_type" text="{=EnhancedBattleTest_playertype}Player Type" />
   <string id="str_ebt_player_type.Commander" text="{=EnhancedBattleTest_commander}Commander" />
   <string id="str_ebt_player_type.Sergeant" text="{=EnhancedBattleTest_sergeant}Sergeant" />
+  <string id="str_ebt_player_type.None" text="{=EnhancedBattleTest_player_type_none}None" />
 
   <string id="str_ebt_player_side" text="{=EnhancedBattleTest_playerside}Player Side" />
   <string id="str_ebt_side.Attacker" text="{=EnhancedBattleTest_attacker}Attacker" />
@@ -120,6 +121,7 @@
   <string id="str_ebt_tactic_level" text="{=EnhancedBattleTest_tacticlevel}Tactic Level" />
 
   <string id="str_ebt_sergeant_general_required" text="{=EnhancedBattleTest_sergeant_general_required}Sergeant mode requires an available general in the player team." />
+  <string id="str_ebt_siege_player_character_required" text="{=EnhancedBattleTest_siege_player_character_required}Siege battles require a player character." />
   <string id="str_ebt_campaign_menu_desc" text="{=EnhancedBattleTest_campaign_menu_desc}Prepare a custom battle test." />
   <string id="str_ebt_campaign_menu_start" text="{=EnhancedBattleTest_campaign_menu_start}Configure Battle" />
   <string id="str_ebt_campaign_state_warning_title" text="{=EnhancedBattleTest_campaign_state_warning_title}Enhanced Battle Test Warning" />
