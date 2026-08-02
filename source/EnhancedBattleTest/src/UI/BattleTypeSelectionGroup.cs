@@ -13,7 +13,7 @@ namespace EnhancedBattleTest.UI
     {
         private readonly BattleTypeConfig _config;
         private readonly MapSelectionGroupVM _mapSelectionGroup;
-        private readonly Action<bool> _onPlayerTypeChange;
+        private readonly Action<PlayerType> _onPlayerTypeChange;
         private SelectorVM<SelectorItemVM> _battleTypeSelection;
         private SelectorVM<SelectorItemVM> _playerTypeSelection;
         private SelectorVM<SelectorItemVM> _playerSideSelection;
@@ -29,7 +29,7 @@ namespace EnhancedBattleTest.UI
         public BattleTypeSelectionGroup(
           BattleTypeConfig config,
           MapSelectionGroupVM mapSelectionGroup,
-          Action<bool> onPlayerTypeChange)
+          Action<PlayerType> onPlayerTypeChange)
         {
             _config = config;
             _mapSelectionGroup = mapSelectionGroup;
@@ -55,6 +55,7 @@ namespace EnhancedBattleTest.UI
             {
                 GameTexts.FindText("str_ebt_player_type", "Commander"),
                 GameTexts.FindText("str_ebt_player_type", "Sergeant"),
+                GameTexts.FindText("str_ebt_player_type", "None"),
             }, (int)_config.PlayerType, OnPlayerTypeSelectionChange);
             PlayerSideSelection = new SelectorVM<SelectorItemVM>(new List<TextObject>()
             {
@@ -88,7 +89,7 @@ namespace EnhancedBattleTest.UI
         private void OnPlayerTypeSelectionChange(SelectorVM<SelectorItemVM> selector)
         {
             _config.PlayerType = (PlayerType)selector.SelectedIndex;
-            _onPlayerTypeChange(selector.SelectedIndex == 0);
+            _onPlayerTypeChange(_config.PlayerType);
         }
 
         private void OnPlayerSideChanged(SelectorVM<SelectorItemVM> selector)

@@ -31,7 +31,7 @@
 
         <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginTop="10" LayoutImp.LayoutMethod="HorizontalLeftToRight">
           <Children>
-            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="EditBanner" IsEnabled="@IsBannerEditorEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" MarginLeft="20">
+            <ButtonWidget DoNotPassEventsToChildren="true" Command.Click="EditBanner" IsEnabled="@IsBannerEditorEnabled" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" MarginLeft="20" Brush="WideButton.Flat" UpdateChildrenStates="true">
               <Children>
                 <MaskedTextureWidget DataSource="{Banner}" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="85" SuggestedHeight="102" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="Kingdom.TornBanner.Big" AdditionalArgs="@AdditionalArgs" ImageId="@Id" TextureProviderName="@TextureProviderName" />
               </Children>

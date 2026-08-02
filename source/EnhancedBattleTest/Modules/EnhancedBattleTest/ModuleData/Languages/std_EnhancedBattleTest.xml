@@ -19,6 +19,7 @@
     <string id="EnhancedBattleTest_playertype" text="Player Role" />
     <string id="EnhancedBattleTest_commander" text="Commander" />
     <string id="EnhancedBattleTest_sergeant" text="Sergeant" />
+    <string id="EnhancedBattleTest_player_type_none" text="None" />
 
     <string id="EnhancedBattleTest_playerside" text="Player Side" />
     <string id="EnhancedBattleTest_attacker" text="Attacker" />
@@ -125,6 +126,7 @@
     <string id="EnhancedBattleTest_tacticlevel" text="Tactic Level" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
+    <string id="EnhancedBattleTest_siege_player_character_required" text="Siege battles require a player character." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />

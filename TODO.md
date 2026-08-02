@@ -19,6 +19,7 @@
   - [x] Support reset the character gender.
   - [x] Fix reviewing of character skills/equipment: you can reference the Encyclopedia code.
   - [x] Show character group (infantry/ranged/cavalry/horse archer) after character level and/or tier.
+  - [ ] support zoom in/out in character preview.
 - [x] since we can claspe party section, we don't need to claspe genera/troop sections anymore.
 - [x] When general section is disabled, we can hide the content of it.
 - [x] It seems the +/- button overlaps with function of adding/remove button of each party member. We still cannot add before the first member.
@@ -26,3 +27,7 @@
 - [x] Create village battles like `StartVillageBattleMission`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
 - [x] Fill `MissionInitializerRecord.PatchEncounterDir`, `SceneHasMapPatch`, and `PatchCoordinates`. Reference `MenuHelper.EncounterAttackConsequence`; verified against v1.2.12.
 - [x] Ensure hero player characters are not repeated in any party on either side.
+- [ ] Fix the issue that in config menu, the banner image shape doesn't match the clickable button.
+- [x] Show the button image to inspect the clickable area before adjusting and hiding it.
+- [x] In config screen, player character can be disabled. The player character will not be spawned and the player will not control any units.
+- [ ] find a better way to keep compatible with Camp Menu: chain the menu like this: if both menus are open, exiting one will switch to another menu.

@@ -441,6 +441,13 @@ namespace EnhancedBattleTest.UI
         {
             if (!IsValid())
                 return;
+            if (_config.BattleTypeConfig.BattleType == BattleType.Siege
+                && _config.BattleTypeConfig.PlayerType == PlayerType.None)
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_siege_player_character_required");
+                return;
+            }
             if (!HasAvailableSergeantGeneral())
             {
                 Utility.DisplayLocalizedText(
@@ -562,6 +569,9 @@ namespace EnhancedBattleTest.UI
         private IEnumerable<BasicCharacterObject>
             GetHeroPlayerCharacters()
         {
+            if (_config.BattleTypeConfig.PlayerType == PlayerType.None)
+                return Enumerable.Empty<BasicCharacterObject>();
+
             return new[]
                 {
                     _config.PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
@@ -598,10 +608,9 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        private void OnPlayerTypeChange(bool isCommander)
+        private void OnPlayerTypeChange(PlayerType playerType)
         {
-            PlayerSide.SetPlayerType(
-                isCommander ? PlayerType.Commander : PlayerType.Sergeant);
+            PlayerSide.SetPlayerType(playerType);
         }
 
         private void LoadConfiguration(BattleConfig config)
@@ -618,9 +627,7 @@ namespace EnhancedBattleTest.UI
             MapSelectionGroup.OnGameTypeChange(
                 config.BattleTypeConfig.BattleType);
             RecoverConfig();
-            OnPlayerTypeChange(
-                config.BattleTypeConfig.PlayerType
-                == PlayerType.Commander);
+            OnPlayerTypeChange(config.BattleTypeConfig.PlayerType);
         }
 
         private void InitializeSiegeMachines()

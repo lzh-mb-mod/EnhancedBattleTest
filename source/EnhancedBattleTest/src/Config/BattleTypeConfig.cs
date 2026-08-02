@@ -13,6 +13,7 @@ namespace EnhancedBattleTest.Config
     {
         Commander,
         Sergeant,
+        None,
     }
     public enum EquipmentModifierType
     {

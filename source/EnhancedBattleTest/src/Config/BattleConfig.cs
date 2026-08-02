@@ -255,15 +255,18 @@ namespace EnhancedBattleTest.Config
         {
             NormalizeCharacterGroups(PlayerTeamConfig);
             NormalizeCharacterGroups(EnemyTeamConfig);
-            var playerHeroes = new[]
-                {
-                    PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
-                    EnemyTeamConfig?.PlayerCharacter?.CharacterObject
-                }
-                .OfType<CharacterObject>()
-                .Where(character => character.IsHero)
-                .Cast<BasicCharacterObject>()
-                .ToHashSet();
+            HashSet<BasicCharacterObject> playerHeroes =
+                BattleTypeConfig.PlayerType == PlayerType.None
+                    ? new HashSet<BasicCharacterObject>()
+                    : new[]
+                        {
+                            PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
+                            EnemyTeamConfig?.PlayerCharacter?.CharacterObject
+                        }
+                        .OfType<CharacterObject>()
+                        .Where(character => character.IsHero)
+                        .Cast<BasicCharacterObject>()
+                        .ToHashSet();
             RemovePlayerCharactersFromHeroes(
                 PlayerTeamConfig,
                 playerHeroes);

@@ -17,6 +17,7 @@
     <string id="EnhancedBattleTest_playertype" text="Oyuncu Rolü" />
     <string id="EnhancedBattleTest_commander" text="Komutan" />
     <string id="EnhancedBattleTest_sergeant" text="Çavuş" />
+    <string id="EnhancedBattleTest_player_type_none" text="Yok" />
 
     <string id="EnhancedBattleTest_playerside" text="Oyuncu Tarafı" />
     <string id="EnhancedBattleTest_attacker" text="Saldıran" />
@@ -122,6 +123,7 @@
     <string id="EnhancedBattleTest_tacticlevel" text="Taktik seviyesi" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />
+    <string id="EnhancedBattleTest_siege_player_character_required" text="Kuşatma savaşları bir oyuncu karakteri gerektirir." />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="Özel bir savaş testi hazırlayın." />
     <string id="EnhancedBattleTest_campaign_menu_start" text="Savaşı Yapılandır" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />
