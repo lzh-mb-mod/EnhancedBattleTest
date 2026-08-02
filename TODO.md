@@ -19,7 +19,7 @@
   - [x] Support reset the character gender.
   - [x] Fix reviewing of character skills/equipment: you can reference the Encyclopedia code.
   - [x] Show character group (infantry/ranged/cavalry/horse archer) after character level and/or tier.
-  - [ ] support zoom in/out in character preview.
+  - [x] Support zoom in/out in the character preview.
 - [x] since we can claspe party section, we don't need to claspe genera/troop sections anymore.
 - [x] When general section is disabled, we can hide the content of it.
 - [x] It seems the +/- button overlaps with function of adding/remove button of each party member. We still cannot add before the first member.
