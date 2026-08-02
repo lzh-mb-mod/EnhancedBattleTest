@@ -39,14 +39,13 @@ namespace EnhancedBattleTest.UI
         {
             if (!_isInitialized)
                 return;
+            if (_isActive)
+                EndSelection();
             _isInitialized = false;
             _screen = null;
-            _isActive = false;
             _characterCollection = null;
             _dataSource.OnFinalize();
             _dataSource = null;
-            _gauntletLayer = null;
-            _movie = null;
             GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
         }
 
@@ -100,6 +99,9 @@ namespace EnhancedBattleTest.UI
             _gauntletLayer.IsFocusLayer = false;
             ScreenManager.TryLoseFocus(_gauntletLayer);
             _screen.RemoveLayer(_gauntletLayer);
+            _gauntletLayer.ReleaseMovie(_movie);
+            _movie = null;
+            _gauntletLayer = null;
         }
     }
 }
