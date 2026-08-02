@@ -222,7 +222,9 @@ namespace EnhancedBattleTest.UI
         public void SetPlayerType(PlayerType playerType)
         {
             IsPlayerCharacterVisible =
-                _isPlayerSide && _playerCharacterConfig != null;
+                _isPlayerSide
+                && _playerCharacterConfig != null
+                && playerType != PlayerType.None;
             RefreshBanner();
             Generals.RefreshValues();
             Troops.RefreshValues();
@@ -284,9 +286,12 @@ namespace EnhancedBattleTest.UI
             if (_battleTypeConfig.PlayerType == PlayerType.Commander)
                 return playerCharacter;
 
-            return _config.GetFirstHeroCharacter(playerCharacter)
-                   ?? _config.GetBannerCharacterConfig()?.CharacterObject
-                   ?? playerCharacter;
+            BasicCharacterObject preferredCharacter =
+                _config.GetFirstHeroCharacter(playerCharacter)
+                ?? _config.GetBannerCharacterConfig()?.CharacterObject;
+            return _battleTypeConfig.PlayerType == PlayerType.Sergeant
+                ? preferredCharacter ?? playerCharacter
+                : preferredCharacter;
         }
 
         private bool IsAttacker()

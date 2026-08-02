@@ -19,6 +19,7 @@
     <string id="EnhancedBattleTest_playertype" text="玩家角色" />
     <string id="EnhancedBattleTest_commander" text="指挥官" />
     <string id="EnhancedBattleTest_sergeant" text="军士" />
+    <string id="EnhancedBattleTest_player_type_none" text="无" />
 
     <string id="EnhancedBattleTest_playerside" text="玩家方" />
     <string id="EnhancedBattleTest_attacker" text="进攻方" />
@@ -125,6 +126,7 @@
     <string id="EnhancedBattleTest_tacticlevel" text="战术等级" />
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />
+    <string id="EnhancedBattleTest_siege_player_character_required" text="攻城战必须设置玩家角色。" />
     <string id="EnhancedBattleTest_campaign_menu_desc" text="准备一场自定义战斗测试。" />
     <string id="EnhancedBattleTest_campaign_menu_start" text="配置战斗" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="增强战斗测试警告" />

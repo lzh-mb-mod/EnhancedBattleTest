@@ -90,6 +90,11 @@ namespace EnhancedBattleTest.Data.MissionData
                     : (int)DecalAtlasGroup.Battle,
                 RandomTerrainSeed = MBRandom.RandomInt(10000)
             };
+            var spawnLogic = new DefaultBattleMissionAgentSpawnLogic(
+                context.TroopSuppliers,
+                playerSide,
+                Mission.BattleSizeType.Battle);
+            bool hasPlayerCharacter = context.PlayerCharacter != null;
             Mission mission = MissionState.OpenNew(
                 "Battle",
                 initializer,
@@ -108,10 +113,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new EnhancedBattleTestPlayerAgentLogic(
                         context.PlayerCharacter,
                         context.PlayerParty.Party),
-                    new DefaultBattleMissionAgentSpawnLogic(
-                        context.TroopSuppliers,
-                        playerSide,
-                        Mission.BattleSizeType.Battle),
+                    spawnLogic,
                     new BattlePowerCalculationLogic(),
                     new BattleSpawnLogic("battle_set"),
                     new SandBoxBattleMissionSpawnHandler(),
@@ -150,10 +152,19 @@ namespace EnhancedBattleTest.Data.MissionData
                     new MissionBoundaryCrossingHandler(),
                     new HighlightsController(),
                     new BattleHighlightsController(),
-                    new BattleDeploymentMissionController(isPlayerAttacker),
-                    new BattleDeploymentHandler(isPlayerAttacker)
+                    hasPlayerCharacter
+                        ? new BattleDeploymentMissionController(isPlayerAttacker)
+                        : null,
+                    hasPlayerCharacter
+                        ? new BattleDeploymentHandler(isPlayerAttacker)
+                        : null,
+                    !hasPlayerCharacter
+                        ? new EnhancedBattleTestNoPlayerDeploymentLogic(
+                            spawnLogic)
+                        : null
                 });
-            mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
+            if (hasPlayerCharacter)
+                mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
             return mission;
         }
 
@@ -302,7 +313,8 @@ namespace EnhancedBattleTest.Data.MissionData
                     };
                     return behaviors;
                 });
-            mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
+            if (context.PlayerCharacter != null)
+                mission.SetPlayerCanTakeControlOfAnotherAgentWhenDead();
             return mission;
         }
 
