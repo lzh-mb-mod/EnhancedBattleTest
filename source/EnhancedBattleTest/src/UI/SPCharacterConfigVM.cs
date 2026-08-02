@@ -34,7 +34,7 @@ namespace EnhancedBattleTest.UI
         private bool _isTierVisible;
         private bool _isEquipmentSetSelectorVisible;
         private string _equipmentSetText;
-        public CharacterViewModel Character { get; } = new CharacterViewModel(CharacterViewModel.StanceTypes.None);
+        public CharacterPreviewVM Character { get; }
 
         public TextVM MaleRatioText { get; }
         public TextVM FemaleRatioText { get; }
@@ -131,6 +131,10 @@ namespace EnhancedBattleTest.UI
 
         public SPCharacterConfigVM()
         {
+            Character = new CharacterPreviewVM(
+                CharacterViewModel.StanceTypes.None,
+                ZoomIn,
+                ZoomOut);
             MaleRatioText = new TextVM(GameTexts.FindText("str_ebt_male_ratio"));
             FemaleRatioText = new TextVM(GameTexts.FindText("str_ebt_female_ratio"));
             OpenEncyclopediaText = new TextVM(GameTexts.FindText("str_ebt_open_encyclopedia"));
@@ -206,6 +210,11 @@ namespace EnhancedBattleTest.UI
             if (_config.EquipmentSetIndex >= equipmentSets.Count)
                 _config.EquipmentSetIndex = 0;
             SetCharacterToViewModel();
+        }
+
+        protected override void OnPreviewZoomChanged(float value)
+        {
+            Character.PreviewZoom = value;
         }
 
         private void SetCharacterToViewModel()
