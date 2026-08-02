@@ -75,6 +75,7 @@ namespace EnhancedBattleTest.UI
         {
             UnloadMovie();
             RemoveLayer(this._gauntletLayer);
+            _dataSource?.OnFinalize();
             _dataSource = null;
             _gauntletLayer = null;
 
