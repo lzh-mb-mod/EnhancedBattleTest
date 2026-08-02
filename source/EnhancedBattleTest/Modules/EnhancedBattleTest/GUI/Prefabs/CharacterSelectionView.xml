@@ -220,7 +220,21 @@
 
                 <Widget WidthSizePolicy="Fixed" SuggestedWidth="550" HeightSizePolicy="StretchToParent" ClipContents="true" Sprite="General\CharacterCreation\character_creation_background_gradient">
                   <Children>
-                    <CharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" MountCreationKey="@MountCreationKey" Race="@Race" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" DoNotUseCustomScale="true" />
+                    <EnhancedBattleTestCharacterTableauWidget DataSource="{Character}" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" BodyProperties="@BodyProperties" IsFemale="@IsFemale" EquipmentCode="@EquipmentCode" CharStringId="@CharStringId" StanceIndex="@StanceIndex" BannerCodeText="@BannerCodeText" MountCreationKey="@MountCreationKey" Race="@Race" ArmorColor1="@ArmorColor1" ArmorColor2="@ArmorColor2" DoNotUseCustomScale="true" Zoom="@PreviewZoom" Command.ZoomIn="ZoomIn" Command.ZoomOut="ZoomOut" />
+                    <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Right" VerticalAlignment="Bottom" MarginRight="15" MarginBottom="15" LayoutImp.LayoutMethod="HorizontalLeftToRight">
+                      <Children>
+                        <ButtonWidget Command.Click="ZoomOut" IsEnabled="@CanZoomOut" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="42" SuggestedHeight="42" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                          <Children>
+                            <TextWidget Text="-" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                          </Children>
+                        </ButtonWidget>
+                        <ButtonWidget Command.Click="ZoomIn" IsEnabled="@CanZoomIn" DoNotPassEventsToChildren="true" WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="42" SuggestedHeight="42" MarginLeft="5" Brush="WideButton.Flat" UpdateChildrenStates="true">
+                          <Children>
+                            <TextWidget Text="+" WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" VerticalAlignment="Center" Brush="CustomBattle.Value.Text" />
+                          </Children>
+                        </ButtonWidget>
+                      </Children>
+                    </ListPanel>
                     <RichTextWidget DataSource="{EquipmentText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="10" Brush="CustomBattle.Value.Text" DoNotAcceptEvents="true" />
                     <ListPanel IsVisible="@IsEquipmentSetSelectorVisible" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="38" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                       <Children>
