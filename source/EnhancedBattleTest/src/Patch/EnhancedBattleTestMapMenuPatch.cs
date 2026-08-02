@@ -11,18 +11,23 @@ namespace EnhancedBattleTest.Patch
         [HarmonyPatch(typeof(MapScreen), "HandleLeftMouseButtonClick")]
         private static class MapScreenHandleLeftMouseButtonClickPatch
         {
-            private static void Postfix(MapScreen __instance)
+            private static void Prefix(MapScreen __instance, out bool __state)
             {
-                if (!GameMode.EnhancedBattleTestCampaignBehavior.CanOpen())
-                    return;
-
                 var partyVisual =
                     __instance.CurrentVisualOfTooltip as MapEntityVisual<PartyBase>;
-                if (partyVisual?.MapEntity != PartyBase.MainParty)
+                __state =
+                    GameMode.EnhancedBattleTestCampaignBehavior.CanOpen()
+                    && partyVisual?.MapEntity == PartyBase.MainParty;
+            }
+
+            [HarmonyPriority(Priority.Last)]
+            private static void Postfix(bool __state)
+            {
+                if (!__state)
                     return;
 
                 GameMenu.ActivateGameMenu(
-                    GameMode.EnhancedBattleTestCampaignBehavior.GetMainPartyMenuId());
+                    GameMode.EnhancedBattleTestCampaignBehavior.MenuId);
             }
         }
     }

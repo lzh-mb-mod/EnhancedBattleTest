@@ -427,7 +427,7 @@ namespace EnhancedBattleTest.UI
                 return false;
             }
 
-            if (heroFilter != HeroFilter.NonHero)
+            if (heroFilter != HeroFilter.NonHero && characterObject.IsHero)
             {
                 IFaction faction = Factions?.SelectedIndex > 0
                     ? _factionsInSelection.ElementAtOrDefault(
@@ -437,17 +437,14 @@ namespace EnhancedBattleTest.UI
                     && characterObject.HeroObject?.MapFaction != faction)
                     return false;
 
-                if (characterObject.IsHero)
+                Clan clan = Clans?.SelectedIndex > 0
+                    ? _clansInSelection.ElementAtOrDefault(
+                        Clans.SelectedIndex - 1)
+                    : null;
+                if (clan != null
+                    && characterObject.HeroObject?.Clan != clan)
                 {
-                    Clan clan = Clans?.SelectedIndex > 0
-                        ? _clansInSelection.ElementAtOrDefault(
-                            Clans.SelectedIndex - 1)
-                        : null;
-                    if (clan != null
-                        && characterObject.HeroObject?.Clan != clan)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
 
