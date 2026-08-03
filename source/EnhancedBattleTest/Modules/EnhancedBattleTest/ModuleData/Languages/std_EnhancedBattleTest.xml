@@ -84,6 +84,10 @@
     <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} members" />
     <string id="EnhancedBattleTest_save_configuration" text="Save Configuration" />
     <string id="EnhancedBattleTest_save_configuration_description" text="Enter a name for this battle configuration." />
+    <string id="EnhancedBattleTest_save_configuration_destination_description" text="Select a configuration to overwrite, or save as a new configuration." />
+    <string id="EnhancedBattleTest_save_as_new_configuration" text="Save as New Configuration" />
+    <string id="EnhancedBattleTest_overwrite_configuration" text="Overwrite Configuration" />
+    <string id="EnhancedBattleTest_overwrite_configuration_description" text="Replace {CONFIGURATION_NAME} with the current battle configuration?" />
     <string id="EnhancedBattleTest_load_configuration" text="Load Configuration" />
     <string id="EnhancedBattleTest_load_configuration_description" text="Select a saved battle configuration." />
     <string id="EnhancedBattleTest_configuration_saved" text="Saved configuration {CONFIGURATION_NAME}." />
@@ -93,6 +97,7 @@
     <string id="EnhancedBattleTest_configuration_load_failed" text="The selected battle configuration could not be loaded." />
     <string id="EnhancedBattleTest_configuration_name_required" text="Enter a configuration name." />
     <string id="EnhancedBattleTest_configuration_name_invalid" text="The configuration name contains invalid characters." />
+    <string id="EnhancedBattleTest_configuration_name_exists" text="A configuration with this name already exists. Select it from the save list to overwrite it." />
     <string id="EnhancedBattleTest_player_allied_party" text="Player Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Enemy Allied Party {INDEX}" />
     <string id="EnhancedBattleTest_heroes" text="Heroes" />
@@ -133,7 +138,7 @@
     <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
     <string id="EnhancedBattleTest_save_disabled" text="Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
     <string id="EnhancedBattleTest_save_before_battle_title" text="Save Before Battle Configuration?" />
-    <string id="EnhancedBattleTest_save_before_battle_description" text="Would you like to save the campaign before opening the battle configuration screen?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="Enhanced Battle Test temporarily changes the campaign state to run a battle. Although it tries to restore the state afterward, some changes may remain. Continuing the campaign afterward is not encouraged; load a saved game if you want to continue playing. After the battle, all manual and automatic saving will be disabled until the campaign is reloaded. Saving now provides a safe point to reload. Would you like to save the game first?" />
     <string id="EnhancedBattleTest_save_before_battle" text="Save the game first" />
     <string id="EnhancedBattleTest_continue_without_saving" text="Continue without saving" />
     <string id="EnhancedBattleTest_rain_snow_density" text="Rain/Snow Density" />

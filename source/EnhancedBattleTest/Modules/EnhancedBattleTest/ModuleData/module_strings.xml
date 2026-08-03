@@ -79,6 +79,10 @@
   <string id="str_ebt_party_member_count" text="{=EnhancedBattleTest_party_member_count}{MEMBER_COUNT} members" />
   <string id="str_ebt_save_configuration" text="{=EnhancedBattleTest_save_configuration}Save Configuration" />
   <string id="str_ebt_save_configuration_description" text="{=EnhancedBattleTest_save_configuration_description}Enter a name for this battle configuration." />
+  <string id="str_ebt_save_configuration_destination_description" text="{=EnhancedBattleTest_save_configuration_destination_description}Select a configuration to overwrite, or save as a new configuration." />
+  <string id="str_ebt_save_as_new_configuration" text="{=EnhancedBattleTest_save_as_new_configuration}Save as New Configuration" />
+  <string id="str_ebt_overwrite_configuration" text="{=EnhancedBattleTest_overwrite_configuration}Overwrite Configuration" />
+  <string id="str_ebt_overwrite_configuration_description" text="{=EnhancedBattleTest_overwrite_configuration_description}Replace {CONFIGURATION_NAME} with the current battle configuration?" />
   <string id="str_ebt_load_configuration" text="{=EnhancedBattleTest_load_configuration}Load Configuration" />
   <string id="str_ebt_load_configuration_description" text="{=EnhancedBattleTest_load_configuration_description}Select a saved battle configuration." />
   <string id="str_ebt_configuration_saved" text="{=EnhancedBattleTest_configuration_saved}Saved configuration {CONFIGURATION_NAME}." />
@@ -88,6 +92,7 @@
   <string id="str_ebt_configuration_load_failed" text="{=EnhancedBattleTest_configuration_load_failed}The selected battle configuration could not be loaded." />
   <string id="str_ebt_configuration_name_required" text="{=EnhancedBattleTest_configuration_name_required}Enter a configuration name." />
   <string id="str_ebt_configuration_name_invalid" text="{=EnhancedBattleTest_configuration_name_invalid}The configuration name contains invalid characters." />
+  <string id="str_ebt_configuration_name_exists" text="{=EnhancedBattleTest_configuration_name_exists}A configuration with this name already exists. Select it from the save list to overwrite it." />
   <string id="str_ebt_player_allied_party" text="{=EnhancedBattleTest_player_allied_party}Player Allied Party {INDEX}" />
   <string id="str_ebt_enemy_allied_party" text="{=EnhancedBattleTest_enemy_allied_party}Enemy Allied Party {INDEX}" />
   <string id="str_ebt_heroes" text="{=EnhancedBattleTest_heroes}Heroes" />
@@ -128,7 +133,7 @@
   <string id="str_ebt_campaign_state_warning" text="{=EnhancedBattleTest_campaign_state_warning}Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
   <string id="str_ebt_save_disabled" text="{=EnhancedBattleTest_save_disabled}Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
   <string id="str_ebt_save_before_battle_title" text="{=EnhancedBattleTest_save_before_battle_title}Save Before Battle Configuration?" />
-  <string id="str_ebt_save_before_battle_description" text="{=EnhancedBattleTest_save_before_battle_description}Would you like to save the campaign before opening the battle configuration screen?" />
+  <string id="str_ebt_save_before_battle_description" text="{=EnhancedBattleTest_save_before_battle_description}Enhanced Battle Test temporarily changes the campaign state to run a battle. Although it tries to restore the state afterward, some changes may remain. Continuing the campaign afterward is not encouraged; load a saved game if you want to continue playing. After the battle, all manual and automatic saving will be disabled until the campaign is reloaded. Saving now provides a safe point to reload. Would you like to save the game first?" />
   <string id="str_ebt_save_before_battle" text="{=EnhancedBattleTest_save_before_battle}Save the game first" />
   <string id="str_ebt_continue_without_saving" text="{=EnhancedBattleTest_continue_without_saving}Continue without saving" />
   <string id="str_ebt_rain_snow_density" text="{=EnhancedBattleTest_rain_snow_density}Rain/Snow Density" />
