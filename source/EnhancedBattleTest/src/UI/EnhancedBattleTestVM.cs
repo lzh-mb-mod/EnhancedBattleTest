@@ -250,6 +250,9 @@ namespace EnhancedBattleTest.UI
                 _config.MapConfig.RainDensity,
                 ref fogDensity);
             MapSelectionGroup.SetWeather(weather);
+            MapSelectionGroup.CanUseLowAltitudeAtmosphere =
+                _config.MapConfig.CanUseLowAltitudeAtmosphere
+                || _config.MapConfig.Weather == "low_altitude";
             MapSelectionGroup.SetFogDensity(fogDensity);
         }
 
@@ -260,8 +263,10 @@ namespace EnhancedBattleTest.UI
         {
             switch (weather)
             {
+                case "after_rain":
                 case "light_rain":
                 case "heavy_rain":
+                case "rain_storm":
                 case "snowy":
                 case "blizzard":
                     return weather;
@@ -283,7 +288,9 @@ namespace EnhancedBattleTest.UI
                     return "clear";
                 case "rainstorm":
                     fogDensity = 16f;
-                    return "heavy_rain";
+                    return "rain_storm";
+                case "low_altitude":
+                    return "clear";
             }
 
             if (rainDensity <= 0f)
@@ -528,6 +535,8 @@ namespace EnhancedBattleTest.UI
             _config.MapConfig.RainDensity = 0f;
             _config.MapConfig.FogDensity =
                 MapSelectionGroup.SelectedFogDensity;
+            _config.MapConfig.CanUseLowAltitudeAtmosphere =
+                MapSelectionGroup.CanUseLowAltitudeAtmosphere;
 
             _config.SiegeMachineConfig.AttackerMeleeMachines =
                 AttackerMeleeMachines.Select(vm => vm.MachineID).ToList();

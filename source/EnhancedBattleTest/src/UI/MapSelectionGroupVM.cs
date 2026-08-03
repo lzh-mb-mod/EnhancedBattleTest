@@ -25,6 +25,7 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
         private SelectorVM<WeatherItemVM> _weatherSelection;
         private bool _isDefaultFogDensity;
+        private bool _canUseLowAltitudeAtmosphere;
         //private MBBindingList<MapItemVM> _mapSearchResults;
         private string _titleText;
 
@@ -34,6 +35,7 @@ namespace EnhancedBattleTest.UI
         private string _rainDensityText;
         private string _fogDensityText;
         private string _fogDefaultText;
+        private string _lowAltitudeAtmosphereText;
         private string _sceneLevelText;
         private string _wallHitpointsText;
         private string _attackerSiegeMachinesText;
@@ -113,6 +115,8 @@ namespace EnhancedBattleTest.UI
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
             RainDensityText =
                 GameTexts.FindText("str_ebt_weather").ToString();
+            LowAltitudeAtmosphereText =
+                GameTexts.FindText("str_ebt_low_altitude_atmosphere").ToString();
             FogDensityText = GameTexts.FindText("str_ebt_fog_density").ToString();
             FogDefaultText =
                 GameTexts.FindText("str_ebt_density_default").ToString();
@@ -130,8 +134,10 @@ namespace EnhancedBattleTest.UI
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
                 SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
             AddWeatherItem("clear", "str_ebt_weather_clear");
+            AddWeatherItem("after_rain", "str_ebt_weather_after_rain");
             AddWeatherItem("light_rain", "str_ebt_weather_light_rain");
             AddWeatherItem("heavy_rain", "str_ebt_weather_heavy_rain");
+            AddWeatherItem("rain_storm", "str_ebt_weather_rain_storm");
             AddWeatherItem("snowy", "str_ebt_weather_snowy");
             AddWeatherItem("blizzard", "str_ebt_weather_blizzard");
             WallHitpointSelection.SelectedIndex = 0;
@@ -260,6 +266,7 @@ namespace EnhancedBattleTest.UI
             SceneLevelSelection.ExecuteRandomize();
             WallHitpointSelection.ExecuteRandomize();
             WeatherSelection.ExecuteRandomize();
+            CanUseLowAltitudeAtmosphere = MBRandom.RandomInt(2) == 1;
             DayOfYear.Value = MBRandom.RandomInt(
                 1,
                 CampaignTime.DaysInYear + 1);
@@ -383,6 +390,19 @@ namespace EnhancedBattleTest.UI
                 _isDefaultFogDensity = value;
                 FogDensity.IsEnabled = !value;
                 OnPropertyChanged(nameof(IsDefaultFogDensity));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool CanUseLowAltitudeAtmosphere
+        {
+            get => _canUseLowAltitudeAtmosphere;
+            set
+            {
+                if (value == _canUseLowAltitudeAtmosphere)
+                    return;
+                _canUseLowAltitudeAtmosphere = value;
+                OnPropertyChanged(nameof(CanUseLowAltitudeAtmosphere));
             }
         }
 
@@ -521,6 +541,21 @@ namespace EnhancedBattleTest.UI
                     return;
                 _fogDefaultText = value;
                 OnPropertyChangedWithValue(value, nameof(FogDefaultText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string LowAltitudeAtmosphereText
+        {
+            get => _lowAltitudeAtmosphereText;
+            set
+            {
+                if (value == _lowAltitudeAtmosphereText)
+                    return;
+                _lowAltitudeAtmosphereText = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(LowAltitudeAtmosphereText));
             }
         }
 
