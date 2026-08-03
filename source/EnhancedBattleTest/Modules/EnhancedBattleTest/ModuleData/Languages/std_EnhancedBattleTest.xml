@@ -141,8 +141,10 @@
     <string id="EnhancedBattleTest_fog_density" text="Fog Density" />
     <string id="EnhancedBattleTest_day_of_year" text="Day of Year" />
     <string id="EnhancedBattleTest_weather_clear" text="Clear" />
+    <string id="EnhancedBattleTest_weather_after_rain" text="After Rain" />
     <string id="EnhancedBattleTest_weather_light_rain" text="Light Rain" />
     <string id="EnhancedBattleTest_weather_heavy_rain" text="Heavy Rain" />
+    <string id="EnhancedBattleTest_weather_rain_storm" text="Rain Storm" />
     <string id="EnhancedBattleTest_weather_snowy" text="Snow" />
     <string id="EnhancedBattleTest_weather_blizzard" text="Blizzard" />
     <string id="EnhancedBattleTest_density_default" text="Default" />

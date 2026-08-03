@@ -185,11 +185,17 @@ namespace EnhancedBattleTest.Data.MissionData
                 case "clear":
                     season = GetNonWinterSeason(dayOfYear, season);
                     break;
+                case "after_rain":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    rainValue = 0.65f;
+                    break;
                 case "light_rain":
                     season = GetNonWinterSeason(dayOfYear, season);
+                    isRaining = true;
                     rainValue = 0.701f;
                     break;
                 case "heavy_rain":
+                case "rain_storm":
                     season = GetNonWinterSeason(dayOfYear, season);
                     isRaining = true;
                     rainValue = 0.85f

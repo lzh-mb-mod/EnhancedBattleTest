@@ -130,8 +130,10 @@ namespace EnhancedBattleTest.UI
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
                 SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
             AddWeatherItem("clear", "str_ebt_weather_clear");
+            AddWeatherItem("after_rain", "str_ebt_weather_after_rain");
             AddWeatherItem("light_rain", "str_ebt_weather_light_rain");
             AddWeatherItem("heavy_rain", "str_ebt_weather_heavy_rain");
+            AddWeatherItem("rain_storm", "str_ebt_weather_rain_storm");
             AddWeatherItem("snowy", "str_ebt_weather_snowy");
             AddWeatherItem("blizzard", "str_ebt_weather_blizzard");
             WallHitpointSelection.SelectedIndex = 0;
@@ -386,7 +388,6 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        [DataSourceProperty]
         public bool IsCurrentMapSiege
         {
             get => _isCurrentMapSiege;
@@ -524,7 +525,6 @@ namespace EnhancedBattleTest.UI
             }
         }
 
-        [DataSourceProperty]
         public string SceneLevelText
         {
             get => _sceneLevelText;
