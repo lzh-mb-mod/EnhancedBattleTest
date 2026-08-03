@@ -68,7 +68,8 @@ namespace EnhancedBattleTest.Data.MissionData
                 config.MapConfig.DayOfYear,
                 config.MapConfig.TimeOfDay,
                 config.MapConfig.Weather,
-                config.MapConfig.FogDensity);
+                config.MapConfig.FogDensity,
+                config.MapConfig.CanUseLowAltitudeAtmosphere);
             bool isDayInWinter =
                 AtmosphereModel.GetSeasonIndex(config.MapConfig.DayOfYear)
                 == (int)CampaignTime.Seasons.Winter;
@@ -200,7 +201,8 @@ namespace EnhancedBattleTest.Data.MissionData
                     config.MapConfig.DayOfYear,
                     config.MapConfig.TimeOfDay,
                     config.MapConfig.Weather,
-                    config.MapConfig.FogDensity);
+                    config.MapConfig.FogDensity,
+                    config.MapConfig.CanUseLowAltitudeAtmosphere);
             bool usesWinterWeather =
                 atmosphereInfo.TimeInfo.Season
                 == (int)CampaignTime.Seasons.Winter;

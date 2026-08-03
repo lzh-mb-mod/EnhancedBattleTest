@@ -138,10 +138,13 @@
     <string id="EnhancedBattleTest_fog_density" text="Sis Yoğunluğu" />
     <string id="EnhancedBattleTest_day_of_year" text="Yılın Günü" />
     <string id="EnhancedBattleTest_weather_clear" text="Açık" />
+    <string id="EnhancedBattleTest_weather_after_rain" text="Yağmur Sonrası" />
     <string id="EnhancedBattleTest_weather_light_rain" text="Hafif Yağmur" />
     <string id="EnhancedBattleTest_weather_heavy_rain" text="Şiddetli Yağmur" />
+    <string id="EnhancedBattleTest_weather_rain_storm" text="Yağmur Fırtınası" />
     <string id="EnhancedBattleTest_weather_snowy" text="Kar" />
     <string id="EnhancedBattleTest_weather_blizzard" text="Kar Fırtınası" />
+    <string id="EnhancedBattleTest_low_altitude_atmosphere" text="Deniz Seviyesi Atmosferi" />
     <string id="EnhancedBattleTest_density_default" text="Varsayılan" />
     <string id="EnhancedBattleTest_density_none" text="Yok" />
     <string id="EnhancedBattleTest_density_light" text="Hafif" />

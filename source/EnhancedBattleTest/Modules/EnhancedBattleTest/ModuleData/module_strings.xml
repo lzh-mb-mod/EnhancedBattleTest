@@ -136,10 +136,13 @@
   <string id="str_ebt_fog_density" text="{=EnhancedBattleTest_fog_density}Fog Density" />
   <string id="str_ebt_day_of_year" text="{=EnhancedBattleTest_day_of_year}Day of Year" />
   <string id="str_ebt_weather_clear" text="{=EnhancedBattleTest_weather_clear}Clear" />
+  <string id="str_ebt_weather_after_rain" text="{=EnhancedBattleTest_weather_after_rain}After Rain" />
   <string id="str_ebt_weather_light_rain" text="{=EnhancedBattleTest_weather_light_rain}Light Rain" />
   <string id="str_ebt_weather_heavy_rain" text="{=EnhancedBattleTest_weather_heavy_rain}Heavy Rain" />
+  <string id="str_ebt_weather_rain_storm" text="{=EnhancedBattleTest_weather_rain_storm}Rain Storm" />
   <string id="str_ebt_weather_snowy" text="{=EnhancedBattleTest_weather_snowy}Snow" />
   <string id="str_ebt_weather_blizzard" text="{=EnhancedBattleTest_weather_blizzard}Blizzard" />
+  <string id="str_ebt_low_altitude_atmosphere" text="{=EnhancedBattleTest_low_altitude_atmosphere}Sea-Level Atmosphere" />
   <string id="str_ebt_density_default" text="{=EnhancedBattleTest_density_default}Default" />
   <string id="str_ebt_density_none" text="{=EnhancedBattleTest_density_none}None" />
   <string id="str_ebt_density_light" text="{=EnhancedBattleTest_density_light}Light" />

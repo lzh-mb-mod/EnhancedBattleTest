@@ -33,6 +33,7 @@ namespace EnhancedBattleTest.Data.MissionData
             float timeOfDay = 6f,
             string weather = "clear",
             float fogDensity = -1f,
+            bool canUseLowAltitudeAtmosphere = false,
             bool isInSettlement = false)
         {
             float seasonOfYear =
@@ -42,6 +43,13 @@ namespace EnhancedBattleTest.Data.MissionData
                 = GetSeasonRainAndSnowDataForOpeningMission(
                     dayOfYear,
                     weather);
+            //canUseLowAltitudeAtmosphere =
+            //    canUseLowAltitudeAtmosphere
+            //    || weather == "rain_storm"
+            //    || weather == "blizzard";
+            bool isInsideStorm =
+                weather == "rain_storm"
+                || weather == "blizzard";
             bool isWinter = season == CampaignTime.Seasons.Winter;
             string atmosphereName = GetSelectedAtmosphereId(
                 isWinter,
@@ -149,9 +157,11 @@ namespace EnhancedBattleTest.Data.MissionData
                         ? 0.26f
                         : windVector.Length,
                     WindVector = windVector,
-                    CanUseLowAltitudeAtmosphere = 0,
+                    CanUseLowAltitudeAtmosphere =
+                        canUseLowAltitudeAtmosphere ? 1 : 0,
                     UseSceneWindDirection = 1,
-                    IsRiverBattle = 0
+                    IsRiverBattle = 0,
+                    IsInsideStorm = isInsideStorm ? 1 : 0
                 },
                 AreaInfo =
                 {
@@ -199,11 +209,17 @@ namespace EnhancedBattleTest.Data.MissionData
                 case "clear":
                     season = GetNonWinterSeason(dayOfYear, season);
                     break;
+                case "after_rain":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    rainValue = 0.65f;
+                    break;
                 case "light_rain":
                     season = GetNonWinterSeason(dayOfYear, season);
+                    isRaining = true;
                     rainValue = 0.701f;
                     break;
                 case "heavy_rain":
+                case "rain_storm":
                     season = GetNonWinterSeason(dayOfYear, season);
                     isRaining = true;
                     rainValue = 0.85f

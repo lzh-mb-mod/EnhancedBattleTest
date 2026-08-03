@@ -14,5 +14,6 @@ namespace EnhancedBattleTest.Config
         public string Weather = "clear";
         public float RainDensity;
         public float FogDensity = -1f;
+        public bool CanUseLowAltitudeAtmosphere;
     }
 }

@@ -141,10 +141,13 @@
     <string id="EnhancedBattleTest_fog_density" text="雾浓度" />
     <string id="EnhancedBattleTest_day_of_year" text="一年中的第几天" />
     <string id="EnhancedBattleTest_weather_clear" text="晴朗" />
+    <string id="EnhancedBattleTest_weather_after_rain" text="雨后" />
     <string id="EnhancedBattleTest_weather_light_rain" text="小雨" />
     <string id="EnhancedBattleTest_weather_heavy_rain" text="大雨" />
+    <string id="EnhancedBattleTest_weather_rain_storm" text="暴雨" />
     <string id="EnhancedBattleTest_weather_snowy" text="降雪" />
     <string id="EnhancedBattleTest_weather_blizzard" text="暴风雪" />
+    <string id="EnhancedBattleTest_low_altitude_atmosphere" text="海面大气效果" />
     <string id="EnhancedBattleTest_density_default" text="默认" />
     <string id="EnhancedBattleTest_density_none" text="无" />
     <string id="EnhancedBattleTest_density_light" text="低" />
