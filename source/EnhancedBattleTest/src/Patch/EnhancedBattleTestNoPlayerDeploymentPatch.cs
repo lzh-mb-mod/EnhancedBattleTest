@@ -20,7 +20,7 @@ namespace EnhancedBattleTest.Patch
 
         [HarmonyPatch(
             typeof(MissionGauntletOrderOfBattleUIHandler),
-            nameof(MissionGauntletOrderOfBattleUIHandler.OnDeploymentFinished))]
+            "OnDeploymentFinish")]
         private static class MissionGauntletOrderOfBattleUIHandlerPatch
         {
             private static bool Prefix()

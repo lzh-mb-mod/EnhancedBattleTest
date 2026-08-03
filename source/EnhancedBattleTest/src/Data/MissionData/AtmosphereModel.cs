@@ -73,7 +73,9 @@ namespace EnhancedBattleTest.Data.MissionData
                 position,
                 sunInfo.IsMoon);
             float selectedFogDensity = fogDensity < 0f
-                ? calculatedFogDensity
+                ? weather == "rain_storm"
+                    ? 16f
+                    : calculatedFogDensity
                 : fogDensity;
             return new AtmosphereInfo()
             {
@@ -195,11 +197,15 @@ namespace EnhancedBattleTest.Data.MissionData
                     rainValue = 0.701f;
                     break;
                 case "heavy_rain":
-                case "rain_storm":
                     season = GetNonWinterSeason(dayOfYear, season);
                     isRaining = true;
                     rainValue = 0.85f
                                 + MBRandom.RandomFloatRanged(0f, 0.14999998f);
+                    break;
+                case "rain_storm":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    isRaining = true;
+                    rainValue = 1f;
                     break;
                 case "snowy":
                     season = CampaignTime.Seasons.Winter;
