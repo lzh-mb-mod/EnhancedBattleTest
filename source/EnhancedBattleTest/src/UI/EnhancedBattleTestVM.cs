@@ -360,6 +360,52 @@ namespace EnhancedBattleTest.UI
             if (!ApplyConfig())
                 return;
 
+            IReadOnlyList<string> names =
+                BattleConfig.GetSavedConfigurationNames();
+            if (names.Count == 0)
+            {
+                ShowNewConfigurationInquiry(names);
+                return;
+            }
+
+            List<InquiryElement> configurations = new List<InquiryElement>
+            {
+                new InquiryElement(
+                    null,
+                    GameTexts.FindText(
+                        "str_ebt_save_as_new_configuration").ToString(),
+                    null)
+            };
+            configurations.AddRange(
+                names.Select(name => new InquiryElement(name, name, null)));
+            MBInformationManager.ShowMultiSelectionInquiry(
+                new MultiSelectionInquiryData(
+                    GameTexts.FindText(
+                        "str_ebt_save_configuration").ToString(),
+                    GameTexts.FindText(
+                        "str_ebt_save_configuration_destination_description")
+                        .ToString(),
+                    configurations,
+                    true,
+                    1,
+                    1,
+                    GameTexts.FindText("str_done").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    selected =>
+                    {
+                        string name = selected.FirstOrDefault()?.Identifier
+                            as string;
+                        if (name == null)
+                            ShowNewConfigurationInquiry(names);
+                        else
+                            ShowOverwriteConfigurationInquiry(name);
+                    },
+                    null));
+        }
+
+        private void ShowNewConfigurationInquiry(
+            IReadOnlyList<string> existingNames)
+        {
             InformationManager.ShowTextInquiry(
                 new TextInquiryData(
                     GameTexts.FindText(
@@ -373,24 +419,69 @@ namespace EnhancedBattleTest.UI
                     name =>
                     {
                         string trimmedName = name.Trim();
-                        if (!_config.Serialize(trimmedName))
-                        {
-                            Utility.DisplayLocalizedText(
-                                "str_ebt_configuration_save_failed");
-                            return;
-                        }
-                        _config.Serialize();
-
-                        TextObject message = GameTexts.FindText(
-                            "str_ebt_configuration_saved");
-                        message.SetTextVariable(
-                            "CONFIGURATION_NAME",
-                            trimmedName);
-                        Utility.DisplayMessage(message.ToString());
+                        SaveConfiguration(trimmedName);
                     },
                     null,
                     false,
-                    BattleConfig.ValidateConfigurationName));
+                    name =>
+                    {
+                        Tuple<bool, string> validation =
+                            BattleConfig.ValidateConfigurationName(name);
+                        if (!validation.Item1)
+                            return validation;
+
+                        string trimmedName = name.Trim();
+                        if (existingNames.Any(existingName =>
+                                string.Equals(
+                                    existingName,
+                                    trimmedName,
+                                    StringComparison.OrdinalIgnoreCase)))
+                        {
+                            return Tuple.Create(
+                                false,
+                                GameTexts.FindText(
+                                    "str_ebt_configuration_name_exists")
+                                .ToString());
+                        }
+
+                        return validation;
+                    }));
+        }
+
+        private void ShowOverwriteConfigurationInquiry(string name)
+        {
+            TextObject description = GameTexts.FindText(
+                "str_ebt_overwrite_configuration_description");
+            description.SetTextVariable("CONFIGURATION_NAME", name);
+            InformationManager.ShowInquiry(
+                new InquiryData(
+                    GameTexts.FindText(
+                        "str_ebt_overwrite_configuration").ToString(),
+                    description.ToString(),
+                    true,
+                    true,
+                    GameTexts.FindText("str_continue").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    () => SaveConfiguration(name),
+                    null),
+                false,
+                false);
+        }
+
+        private void SaveConfiguration(string name)
+        {
+            if (!_config.Serialize(name))
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_configuration_save_failed");
+                return;
+            }
+            _config.Serialize();
+
+            TextObject message = GameTexts.FindText(
+                "str_ebt_configuration_saved");
+            message.SetTextVariable("CONFIGURATION_NAME", name);
+            Utility.DisplayMessage(message.ToString());
         }
 
         public void ExecuteLoadConfiguration()

@@ -82,6 +82,10 @@
     <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} üye" />
     <string id="EnhancedBattleTest_save_configuration" text="Yapılandırmayı Kaydet" />
     <string id="EnhancedBattleTest_save_configuration_description" text="Bu savaş yapılandırması için bir ad girin." />
+    <string id="EnhancedBattleTest_save_configuration_destination_description" text="Üzerine yazılacak bir yapılandırma seçin veya yeni bir yapılandırma olarak kaydedin." />
+    <string id="EnhancedBattleTest_save_as_new_configuration" text="Yeni Yapılandırma Olarak Kaydet" />
+    <string id="EnhancedBattleTest_overwrite_configuration" text="Yapılandırmanın Üzerine Yaz" />
+    <string id="EnhancedBattleTest_overwrite_configuration_description" text="{CONFIGURATION_NAME} mevcut savaş yapılandırmasıyla değiştirilsin mi?" />
     <string id="EnhancedBattleTest_load_configuration" text="Yapılandırmayı Yükle" />
     <string id="EnhancedBattleTest_load_configuration_description" text="Kaydedilmiş bir savaş yapılandırması seçin." />
     <string id="EnhancedBattleTest_configuration_saved" text="{CONFIGURATION_NAME} yapılandırması kaydedildi." />
@@ -91,6 +95,7 @@
     <string id="EnhancedBattleTest_configuration_load_failed" text="Seçilen savaş yapılandırması yüklenemedi." />
     <string id="EnhancedBattleTest_configuration_name_required" text="Bir yapılandırma adı girin." />
     <string id="EnhancedBattleTest_configuration_name_invalid" text="Yapılandırma adı geçersiz karakterler içeriyor." />
+    <string id="EnhancedBattleTest_configuration_name_exists" text="Bu adda bir yapılandırma zaten var. Üzerine yazmak için kaydetme listesinden seçin." />
     <string id="EnhancedBattleTest_player_allied_party" text="Oyuncu Müttefik Grubu {INDEX}" />
     <string id="EnhancedBattleTest_enemy_allied_party" text="Düşman Müttefik Grubu {INDEX}" />
     <string id="EnhancedBattleTest_heroes" text="Kahramanlar" />
@@ -130,7 +135,7 @@
     <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test, sefer durumunu korumak için elinden geleni yapar ancak değişmeden kalacağını garanti edemez. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır." />
     <string id="EnhancedBattleTest_save_disabled" text="Enhanced Battle Test savaşından sonra sefer yeniden yüklenene kadar kayıt devre dışıdır." />
     <string id="EnhancedBattleTest_save_before_battle_title" text="Savaş Yapılandırmasından Önce Kaydet?" />
-    <string id="EnhancedBattleTest_save_before_battle_description" text="Savaş yapılandırma ekranını açmadan önce seferi kaydetmek ister misiniz?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="Enhanced Battle Test, savaşı çalıştırmak için sefer durumunu geçici olarak değiştirir. Sonrasında durumu geri yüklemeye çalışsa da bazı değişiklikler kalabilir. Savaştan sonra mevcut sefere devam etmek önerilmez; oynamaya devam etmek istiyorsanız kayıtlı bir oyunu yükleyin. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır. Şimdi kaydetmek güvenli bir yeniden yükleme noktası sağlar. Önce oyunu kaydetmek ister misiniz?" />
     <string id="EnhancedBattleTest_save_before_battle" text="Önce oyunu kaydet" />
     <string id="EnhancedBattleTest_continue_without_saving" text="Kaydetmeden devam et" />
     <string id="EnhancedBattleTest_rain_snow_density" text="Yağmur/Kar Yoğunluğu" />
