@@ -313,7 +313,6 @@ namespace EnhancedBattleTest.Data.MissionData
                     };
                     return behaviors;
                 });
-            return mission;
         }
 
         private static List<MissionSiegeWeapon> CreateSiegeWeapons(

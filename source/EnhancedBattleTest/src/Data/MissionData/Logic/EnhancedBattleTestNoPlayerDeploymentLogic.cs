@@ -24,7 +24,6 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
                 return;
 
             Mission.OnDeploymentFinished();
-            Mission.OnAfterDeploymentFinished();
             _spawnLogic.SetReinforcementsSpawnEnabled(true);
             Mission.RemoveMissionBehavior(this);
         }

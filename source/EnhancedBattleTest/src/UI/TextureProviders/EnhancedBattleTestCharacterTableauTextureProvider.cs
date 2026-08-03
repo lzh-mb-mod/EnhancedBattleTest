@@ -162,7 +162,7 @@ namespace EnhancedBattleTest.UI
             base.Clear(clearNextFrame);
         }
 
-        protected override GauntletTexture OnGetTextureForRender(
+        public override GauntletTexture GetTexture(
             TwoDimensionContext twoDimensionContext,
             string name)
         {
