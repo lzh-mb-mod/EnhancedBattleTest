@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ master, beta, v1.2.12, test-workflow ]
+    branches: [ master, beta, v1.2.12, v1.3.15, test-workflow ]
     tags: [ release-v*, release-b*, release-e* ]
   pull_request:
     branches: [ master, beta, v1.2.12 ]

@@ -89,7 +89,7 @@ namespace EnhancedBattleTest.Data.MissionData
             return new AtmosphereInfo()
             {
                 Seed = (uint)CampaignTime.Now.ToSeconds,
-                //AtmosphereName = "TOD_12_00_SemiCloudy",
+                AtmosphereName = GetBaseAtmosphereName(timeOfDay, weather),
                 InterpolatedAtmosphereName = atmosphereName,
                 SunInfo =
                 {
@@ -191,6 +191,29 @@ namespace EnhancedBattleTest.Data.MissionData
             };
         }
 
+        private static string GetBaseAtmosphereName(
+            float timeOfDay,
+            string weather)
+        {
+            float normalizedTime = timeOfDay % 24f;
+            if (normalizedTime < 0f)
+                normalizedTime += 24f;
+
+            if (weather == "heavy_rain" || weather == "after_rain")
+            {
+                if (normalizedTime < 6f || normalizedTime >= 18f)
+                    return "TOD_01_00_HeavyRain";
+                return "TOD_12_00_Overcast";
+            }
+            if (weather == "rain_storm" || weather == "blizzard")
+            {
+                if (normalizedTime < 6f || normalizedTime >= 18f)
+                    return "TOD_01_00_HeavyRain";
+            }
+
+            return null;
+        }
+
         private static (
             CampaignTime.Seasons season,
             bool isRaining,
@@ -219,11 +242,14 @@ namespace EnhancedBattleTest.Data.MissionData
                     rainValue = 0.701f;
                     break;
                 case "heavy_rain":
+                    season = GetNonWinterSeason(dayOfYear, season);
+                    isRaining = true;
+                    rainValue = 0.85f;
+                    break;
                 case "rain_storm":
                     season = GetNonWinterSeason(dayOfYear, season);
                     isRaining = true;
-                    rainValue = 0.85f
-                                + MBRandom.RandomFloatRanged(0f, 0.14999998f);
+                    rainValue = 1f;
                     break;
                 case "snowy":
                     season = CampaignTime.Seasons.Winter;
@@ -233,8 +259,8 @@ namespace EnhancedBattleTest.Data.MissionData
                     break;
                 case "blizzard":
                     season = CampaignTime.Seasons.Winter;
-                    rainValue = 0.85f;
-                    snowValue = 0.85f;
+                    rainValue = 1f;
+                    snowValue = 1f;
                     break;
             }
 
