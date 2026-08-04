@@ -5,7 +5,11 @@
     <tag language="English" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_singleplayerbattleoption" text="Singleplayer Battle Test" />
+    <string id="EnhancedBattleTest_enhanced_battle_test" text="Enhanced Battle Test" />
+    <string id="EnhancedBattleTest_escape_menu_campaign_only" text="Available only on the campaign map." />
+    <string id="EnhancedBattleTest_escape_menu_captive" text="Unavailable while the player is a prisoner." />
+    <string id="EnhancedBattleTest_escape_menu_at_sea" text="Naval battle tests are not supported yet." />
+    <string id="EnhancedBattleTest_escape_menu_party_busy" text="Unavailable during a battle, siege, or raid." />
 
     <string id="EnhancedBattleTest_all" text="All" />
 
@@ -145,8 +149,6 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Siege battles require a player character." />
-    <string id="EnhancedBattleTest_campaign_menu_desc" text="Prepare a custom battle test." />
-    <string id="EnhancedBattleTest_campaign_menu_start" text="Configure Battle" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
     <string id="EnhancedBattleTest_save_disabled" text="Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
