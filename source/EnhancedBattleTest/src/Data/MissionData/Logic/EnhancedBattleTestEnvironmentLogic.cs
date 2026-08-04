@@ -9,6 +9,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
         private readonly float _timeOfDay;
         private readonly float _rainDensity;
         private readonly float _snowDensity;
+        private readonly SunInformation _sunInfo;
         private readonly float _fogDensity;
         private readonly Vec3 _fogColor;
         private readonly float _fogFalloff;
@@ -17,6 +18,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
 
         public EnhancedBattleTestEnvironmentLogic(
             float timeOfDay,
+            SunInformation sunInfo,
             float rainDensity,
             float snowDensity,
             float fogDensity,
@@ -25,6 +27,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             float targetExposure)
         {
             _timeOfDay = timeOfDay;
+            _sunInfo = sunInfo;
             _rainDensity = rainDensity;
             _snowDensity = snowDensity;
             _fogDensity = fogDensity;
@@ -55,16 +58,25 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             if (scene == null)
                 return;
 
-            //scene.TimeOfDay = _timeOfDay;
+            scene.TimeOfDay = _timeOfDay;
             //scene.SetWinterTimeFactor(_isWinter ? 0.75f : 0f);
             if (scene.IsAtmosphereIndoor)
                 return;
 
+            var sunColor = _sunInfo.Color;
+            scene.SetSun(
+                ref sunColor,
+                _sunInfo.Altitude,
+                _sunInfo.Angle,
+                _sunInfo.Brightness);
+            scene.SetSunSize(_sunInfo.Size);
+            scene.SetSunShaftStrength(_sunInfo.RayStrength);
+            scene.SetRainDensity(_rainDensity);
+            scene.SetSnowDensity(_snowDensity);
+
             if (!float.IsNaN(_targetExposure))
                 scene.SetTargetExposure(_targetExposure);
 
-            //scene.SetRainDensity(_rainDensity);
-            //scene.SetSnowDensity(_snowDensity);
             if (_fogDensity < 0f)
                 return;
 

@@ -2,6 +2,7 @@
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 
 namespace EnhancedBattleTest.Data.MissionData
@@ -179,15 +180,15 @@ namespace EnhancedBattleTest.Data.MissionData
                 case "overcast":
                 case "heavy_rain":
                     if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return float.NaN;
+                        return -11.7f;
                     return -10f;
                 case "rain_storm":
                     if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return float.NaN;
+                        return -7.7f;
                     return -6f;
                 case "blizzard":
                     if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return float.NaN;
+                        return -9f;
                     return -7f;
                 default:
                     return float.NaN;
@@ -351,16 +352,17 @@ namespace EnhancedBattleTest.Data.MissionData
 
         private static Vec3 GetFogColor(float environmentMultiplier, bool isMoon)
         {
-            //return isMoon
-            //    ? Vec3.Vec3Max(
-            //        new Vec3((float)(1.0 - (double)environmentMultiplier * 10.0),
-            //            (float)(0.75 + (double)environmentMultiplier * 1.5),
-            //            (float)(0.649999976158142 + (double)environmentMultiplier * 2.0)),
-            //        new Vec3(0.55f, 0.59f, 0.6f))
-            //    : new Vec3((float)(1.0 - (1.0 - (double)environmentMultiplier) / 7.0),
-            //        (float)(0.75 - (double)environmentMultiplier / 4.0),
-            //        (float)(0.550000011920929 - (double)environmentMultiplier / 5.0));
-            return new Vec3(0.72f, 0.76f, 0.8f);
+            float multiplier = MBMath.ClampFloat(
+                isMoon
+                    ? environmentMultiplier * 4f
+                    : environmentMultiplier,
+                0f,
+                1f);
+            return isMoon
+                ? new Vec3(0.12f, 0.16f, 0.22f)
+                  + new Vec3(0.2f, 0.22f, 0.24f) * multiplier
+                : new Vec3(0.58f, 0.65f, 0.72f)
+                  + new Vec3(0.22f, 0.2f, 0.18f) * multiplier;
         }
 
 

@@ -104,6 +104,7 @@ namespace EnhancedBattleTest.Data.MissionData
                     new EnhancedBattleTestCleanupLogic(),
                     new EnhancedBattleTestEnvironmentLogic(
                         config.MapConfig.TimeOfDay,
+                        atmosphereInfo.SunInfo,
                         atmosphereInfo.RainInfo.Density,
                         usesWinterWeather
                             ? atmosphereInfo.SnowInfo.Density
@@ -243,6 +244,7 @@ namespace EnhancedBattleTest.Data.MissionData
                         new EnhancedBattleTestCleanupLogic(),
                         new EnhancedBattleTestEnvironmentLogic(
                             config.MapConfig.TimeOfDay,
+                            atmosphereInfo.SunInfo,
                             atmosphereInfo.RainInfo.Density,
                             usesWinterWeather
                                 ? atmosphereInfo.SnowInfo.Density

@@ -83,6 +83,7 @@
     <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}: {MEMBER_COUNT} members" />
     <string id="EnhancedBattleTest_no_leader" text="No Leader" />
     <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} members" />
+    <string id="EnhancedBattleTest_total_troop_count" text="Total Troops: {TROOP_COUNT}" />
     <string id="EnhancedBattleTest_save_configuration" text="Save Configuration" />
     <string id="EnhancedBattleTest_save_configuration_description" text="Enter a name for this battle configuration." />
     <string id="EnhancedBattleTest_save_configuration_destination_description" text="Select a configuration to overwrite, or save as a new configuration." />

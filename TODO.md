@@ -1,4 +1,0 @@
-- [ ] Add total troop count on top of each side.
-- [ ] sun info needs to be set in environment logic
-- [ ] rain/snow needs to be set in environment logic.
-- [ ] Current fog color has too much brightness at night. The native fog color is too red. Please improve fog color.
