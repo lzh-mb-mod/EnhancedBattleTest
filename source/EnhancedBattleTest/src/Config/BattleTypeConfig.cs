@@ -27,5 +27,7 @@ namespace EnhancedBattleTest.Config
         public BattleSideEnum PlayerSide = BattleSideEnum.Attacker;
         public EquipmentModifierType EquipmentModifierType = EquipmentModifierType.Random;
         public bool BalanceTroopSpawnOrder;
+        public bool OverridePartyMorale = true;
+        public float PartyMorale = 50f;
     }
 }

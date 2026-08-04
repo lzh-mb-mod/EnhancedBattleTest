@@ -23,11 +23,14 @@ namespace EnhancedBattleTest.Config
         public bool UseCustomBanner;
         public bool IsInArmy;
         public bool HasHeroes;
+        public bool OverridePartyMorale = true;
+        public float PartyMorale = 50f;
         public TroopGroupConfig Heroes { get; set; } = new TroopGroupConfig();
         public TroopGroupConfig Troops { get; set; } = new TroopGroupConfig();
 
         public void Normalize()
         {
+            PartyMorale = Math.Max(0f, Math.Min(100f, PartyMorale));
             Heroes = Heroes ?? new TroopGroupConfig();
             Troops = Troops ?? new TroopGroupConfig();
             Heroes.Troops = Heroes.Troops ?? new System.Collections.Generic.List<TroopConfig>();

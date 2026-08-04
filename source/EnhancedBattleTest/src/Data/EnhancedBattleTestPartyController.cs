@@ -211,6 +211,10 @@ namespace EnhancedBattleTest.Data
                     out List<string> playerPriorityCharacterIds);
                 playerParties.Add(playerParty);
                 ownedTemporaryParties.Add(playerParty);
+                ApplyPartyMoraleOverride(
+                    playerParty,
+                    config.PlayerTeamConfig.PrimaryParty,
+                    config.BattleTypeConfig);
                 if (selectedPlayerCharacter != null
                     && config.PlayerTeamConfig.PlayerCharacter
                         is SPCharacterConfig playerConfig
@@ -232,6 +236,7 @@ namespace EnhancedBattleTest.Data
                 }
                 CreateAlliedParties(
                     config.PlayerTeamConfig.AlliedParties,
+                    config.BattleTypeConfig,
                     true,
                     isPlayerAttacker,
                     playerParties,
@@ -259,8 +264,13 @@ namespace EnhancedBattleTest.Data
                     out _);
                 enemyParties.Add(enemyParty);
                 ownedTemporaryParties.Add(enemyParty);
+                ApplyPartyMoraleOverride(
+                    enemyParty,
+                    config.EnemyTeamConfig.PrimaryParty,
+                    config.BattleTypeConfig);
                 CreateAlliedParties(
                     config.EnemyTeamConfig.AlliedParties,
+                    config.BattleTypeConfig,
                     false,
                     !isPlayerAttacker,
                     enemyParties,
@@ -272,6 +282,12 @@ namespace EnhancedBattleTest.Data
                     RegisterTacticLevel(
                         enemyParties,
                         config.EnemyTeamConfig.TacticLevel);
+                }
+                if (config.BattleTypeConfig.OverridePartyMorale)
+                {
+                    OverridePartyMorale(
+                        ownedTemporaryParties,
+                        config.BattleTypeConfig.PartyMorale);
                 }
                 originalHeroHitPoints = CaptureHeroHitPoints(ownedTemporaryParties);
                 ParticipatingHeroes.UnionWith(originalHeroHitPoints.Keys);
@@ -612,6 +628,37 @@ namespace EnhancedBattleTest.Data
             {
                 _isCreatingTemporaryParty = false;
             }
+        }
+
+        private static void OverridePartyMorale(
+            IEnumerable<MobileParty> parties,
+            float targetMorale)
+        {
+            float clampedTarget = Math.Max(
+                0f,
+                Math.Min(100f, targetMorale));
+            foreach (MobileParty party in parties)
+            {
+                if (party == null)
+                    continue;
+                party.RecentEventsMorale += clampedTarget - party.Morale;
+            }
+        }
+
+        private static void ApplyPartyMoraleOverride(
+            MobileParty party,
+            PartyConfig partyConfig,
+            BattleTypeConfig battleTypeConfig)
+        {
+            if (battleTypeConfig.OverridePartyMorale
+                || !partyConfig.OverridePartyMorale)
+            {
+                return;
+            }
+
+            OverridePartyMorale(
+                new[] { party },
+                partyConfig.PartyMorale);
         }
 
         private static TroopRoster CreateRoster(
@@ -998,6 +1045,7 @@ namespace EnhancedBattleTest.Data
 
         private static void CreateAlliedParties(
             IEnumerable<PartyConfig> configs,
+            BattleTypeConfig battleTypeConfig,
             bool isPlayerSide,
             bool isAttacker,
             ICollection<MobileParty> sideParties,
@@ -1031,6 +1079,10 @@ namespace EnhancedBattleTest.Data
                     out _);
                 sideParties.Add(party);
                 ownedTemporaryParties.Add(party);
+                ApplyPartyMoraleOverride(
+                    party,
+                    config,
+                    battleTypeConfig);
                 foreach (CharacterObject character in partySpawnPriorityCharacters)
                 {
                     if (!spawnPriorityCharacters.Contains(character))

@@ -14,6 +14,7 @@ namespace EnhancedBattleTest.UI
         private readonly BattleTypeConfig _config;
         private readonly MapSelectionGroupVM _mapSelectionGroup;
         private readonly Action<PlayerType> _onPlayerTypeChange;
+        private readonly Action _onPartyMoraleOverrideChanged;
         private SelectorVM<SelectorItemVM> _battleTypeSelection;
         private SelectorVM<SelectorItemVM> _playerTypeSelection;
         private SelectorVM<SelectorItemVM> _playerSideSelection;
@@ -26,15 +27,19 @@ namespace EnhancedBattleTest.UI
         public TextVM PlayerSideText { get; }
         public TextVM EquipmentModifierTypeText { get; }
         public TextVM BalanceTroopSpawnOrderText { get; }
+        public TextVM OverrideAllPartiesMoraleText { get; }
+        public NumberVM<float> PartyMorale { get; }
 
         public BattleTypeSelectionGroup(
           BattleTypeConfig config,
           MapSelectionGroupVM mapSelectionGroup,
-          Action<PlayerType> onPlayerTypeChange)
+          Action<PlayerType> onPlayerTypeChange,
+          Action onPartyMoraleOverrideChanged)
         {
             _config = config;
             _mapSelectionGroup = mapSelectionGroup;
             _onPlayerTypeChange = onPlayerTypeChange;
+            _onPartyMoraleOverrideChanged = onPartyMoraleOverrideChanged;
 
             BattleTypeText = new TextVM(GameTexts.FindText("str_ebt_battle_type"));
             PlayerTypeText = new TextVM(GameTexts.FindText("str_ebt_player_type"));
@@ -42,6 +47,16 @@ namespace EnhancedBattleTest.UI
             EquipmentModifierTypeText = new TextVM(GameTexts.FindText("str_ebt_equipment_modifier_type"));
             BalanceTroopSpawnOrderText = new TextVM(
                 GameTexts.FindText("str_ebt_balance_troop_spawn_order"));
+            OverrideAllPartiesMoraleText = new TextVM(
+                GameTexts.FindText("str_ebt_override_all_parties_morale"));
+            PartyMorale = new NumberVM<float>(
+                _config.PartyMorale,
+                0f,
+                100f,
+                true);
+            PartyMorale.IsEnabled = _config.OverridePartyMorale;
+            PartyMorale.OnValueChanged += value =>
+                _config.PartyMorale = value;
             RefreshValues();
         }
 
@@ -75,6 +90,7 @@ namespace EnhancedBattleTest.UI
             PlayerSideText.RefreshValues();
             EquipmentModifierTypeText.RefreshValues();
             BalanceTroopSpawnOrderText.RefreshValues();
+            OverrideAllPartiesMoraleText.RefreshValues();
         }
 
         public void RandomizeAll()
@@ -183,6 +199,21 @@ namespace EnhancedBattleTest.UI
                     return;
                 _config.BalanceTroopSpawnOrder = value;
                 OnPropertyChanged(nameof(BalanceTroopSpawnOrder));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool OverrideAllPartiesMorale
+        {
+            get => _config.OverridePartyMorale;
+            set
+            {
+                if (value == _config.OverridePartyMorale)
+                    return;
+                _config.OverridePartyMorale = value;
+                PartyMorale.IsEnabled = value;
+                OnPropertyChanged(nameof(OverrideAllPartiesMorale));
+                _onPartyMoraleOverrideChanged?.Invoke();
             }
         }
 
