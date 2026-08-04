@@ -83,7 +83,7 @@ namespace EnhancedBattleTest.UI
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
             AddAlliedPartyText =
                 new TextVM(GameTexts.FindText("str_ebt_add_allied_party"));
-            TotalTroopCountText = new TextVM(TextObject.GetEmpty());
+            TotalTroopCountText = new TextVM(new TextObject(string.Empty));
             TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += value =>
                 _config.TacticLevel = (int)value;
