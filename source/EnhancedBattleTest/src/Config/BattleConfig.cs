@@ -345,6 +345,9 @@ namespace EnhancedBattleTest.Config
             {
                 config.PlayerSide = BattleSideEnum.Attacker;
             }
+            config.PartyMorale = Math.Max(
+                0f,
+                Math.Min(100f, config.PartyMorale));
             if (!Enum.IsDefined(
                     typeof(EquipmentModifierType),
                     config.EquipmentModifierType))

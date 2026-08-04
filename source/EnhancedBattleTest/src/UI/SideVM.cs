@@ -120,6 +120,13 @@ namespace EnhancedBattleTest.UI
             UpdateTotalTroopCount();
         }
 
+        public void RefreshPartyMoraleOverrideVisibility()
+        {
+            PrimaryParty.RefreshPartyMoraleOverrideVisibility();
+            foreach (PartyVM party in AlliedParties)
+                party.RefreshPartyMoraleOverrideVisibility();
+        }
+
         public bool IsValid()
         {
             return PrimaryParty.IsValid()
