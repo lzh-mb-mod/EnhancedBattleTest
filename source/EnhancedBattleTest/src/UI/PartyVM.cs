@@ -26,22 +26,39 @@ namespace EnhancedBattleTest.UI
         private bool _isBannerEditorEnabled;
         private bool _canConfigureArmy;
         private bool _isPlayerCharacterVisible;
+        private bool _isPartyMoraleOverrideVisible;
 
         public TextVM Name { get; }
         public TextVM EnableGeneralText { get; }
         public TextVM CustomBannerText { get; }
         public TextVM InArmyText { get; }
+        public TextVM OverridePartyMoraleText { get; }
         public TextVM PlayerCharacterText { get; }
         public TextVM RemovePartyText { get; }
         public TextVM ImportPartyText { get; }
         public BoolVM EnableGeneral { get; }
         public BoolVM UseCustomBanner { get; }
         public BoolVM InArmy { get; }
+        public BoolVM OverridePartyMorale { get; }
+        public NumberVM<float> PartyMorale { get; }
         public CharacterButtonVM PlayerCharacter { get; }
         public TroopGroupVM Generals { get; }
         public TroopGroupVM Troops { get; }
         public bool CanRemove => _remove != null;
         public bool ShouldShowBanner => true;
+
+        [DataSourceProperty]
+        public bool IsPartyMoraleOverrideVisible
+        {
+            get => _isPartyMoraleOverrideVisible;
+            private set
+            {
+                if (_isPartyMoraleOverrideVisible == value)
+                    return;
+                _isPartyMoraleOverrideVisible = value;
+                OnPropertyChanged(nameof(IsPartyMoraleOverrideVisible));
+            }
+        }
 
         [DataSourceProperty]
         public bool CanConfigureArmy
@@ -131,6 +148,8 @@ namespace EnhancedBattleTest.UI
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
             CustomBannerText = new TextVM(GameTexts.FindText("str_ebt_custom_banner"));
             InArmyText = new TextVM(GameTexts.FindText("str_ebt_in_army"));
+            OverridePartyMoraleText = new TextVM(
+                GameTexts.FindText("str_ebt_override_party_morale"));
             PlayerCharacterText =
                 new TextVM(GameTexts.FindText("str_ebt_player_character"));
             RemovePartyText = new TextVM(GameTexts.FindText("str_ebt_remove_allied_party"));
@@ -154,6 +173,20 @@ namespace EnhancedBattleTest.UI
             };
             InArmy = new BoolVM(_config.IsInArmy);
             InArmy.OnValueChanged += value => _config.IsInArmy = value;
+            OverridePartyMorale = new BoolVM(_config.OverridePartyMorale);
+            PartyMorale = new NumberVM<float>(
+                _config.PartyMorale,
+                0f,
+                100f,
+                true);
+            PartyMorale.IsEnabled = _config.OverridePartyMorale;
+            OverridePartyMorale.OnValueChanged += value =>
+            {
+                _config.OverridePartyMorale = value;
+                PartyMorale.IsEnabled = value;
+            };
+            PartyMorale.OnValueChanged += value =>
+                _config.PartyMorale = value;
             if (_playerCharacterConfig != null)
             {
                 PlayerCharacter = new CharacterButtonVM(
@@ -258,6 +291,7 @@ namespace EnhancedBattleTest.UI
             EnableGeneralText.RefreshValues();
             CustomBannerText.RefreshValues();
             InArmyText.RefreshValues();
+            OverridePartyMoraleText.RefreshValues();
             PlayerCharacterText.RefreshValues();
             RemovePartyText.RefreshValues();
             ImportPartyText.RefreshValues();
@@ -312,7 +346,14 @@ namespace EnhancedBattleTest.UI
         private void UpdateConditionalControls()
         {
             CanConfigureArmy = _isPlayerSide;
+            RefreshPartyMoraleOverrideVisibility();
             SetPlayerType(_battleTypeConfig.PlayerType);
+        }
+
+        public void RefreshPartyMoraleOverrideVisibility()
+        {
+            IsPartyMoraleOverrideVisible =
+                !_battleTypeConfig.OverridePartyMorale;
         }
 
         private void ReviewImport(MobileParty party)

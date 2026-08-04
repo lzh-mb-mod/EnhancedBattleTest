@@ -29,6 +29,8 @@
     <string id="EnhancedBattleTest_modifier_type_random" text="随机" />
     <string id="EnhancedBattleTest_modifier_type_none" text="无" />
     <string id="EnhancedBattleTest_balance_troop_spawn_order" text="均衡兵种出场顺序" />
+    <string id="EnhancedBattleTest_override_all_parties_morale" text="覆盖所有部队士气" />
+    <string id="EnhancedBattleTest_override_party_morale" text="覆盖此部队士气" />
     <string id="EnhancedBattleTest_exposure_adjustment" text="曝光调整" />
     <string id="EnhancedBattleTest_exposure_adjustment_description" text="按 Ctrl+E 开关窗口。游戏不提供当前目标曝光值；没有 EBT 覆盖时初始值为 0。" />
     <string id="EnhancedBattleTest_min_exposure" text="最低曝光" />

@@ -197,7 +197,11 @@ namespace EnhancedBattleTest.UI
                 false);
 
             MapSelectionGroup = new MapSelectionGroupVM(_scenes);
-            BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
+            BattleTypeSelectionGroup = new BattleTypeSelectionGroup(
+                _config.BattleTypeConfig,
+                MapSelectionGroup,
+                OnPlayerTypeChange,
+                RefreshPartyMoraleOverrideVisibility);
 
             InitializeSiegeMachines(_config);
             SetDefaultSiegeMachines();
@@ -761,6 +765,12 @@ namespace EnhancedBattleTest.UI
             PlayerSide.SetPlayerType(playerType);
         }
 
+        private void RefreshPartyMoraleOverrideVisibility()
+        {
+            PlayerSide.RefreshPartyMoraleOverrideVisibility();
+            EnemySide.RefreshPartyMoraleOverrideVisibility();
+        }
+
         private bool TryLoadConfiguration(BattleConfig config)
         {
             try
@@ -777,7 +787,12 @@ namespace EnhancedBattleTest.UI
                     new BattleTypeSelectionGroup(
                         config.BattleTypeConfig,
                         MapSelectionGroup,
-                        OnPlayerTypeChange);
+                        OnPlayerTypeChange,
+                        () =>
+                        {
+                            playerSide.RefreshPartyMoraleOverrideVisibility();
+                            enemySide.RefreshPartyMoraleOverrideVisibility();
+                        });
                 CreateSiegeMachines(
                     config,
                     out MBBindingList<CustomBattleSiegeMachineVM>
