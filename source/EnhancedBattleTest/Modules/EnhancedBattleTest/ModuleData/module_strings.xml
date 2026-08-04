@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <strings>
-  <string id="str_ebt_singleplayer_battle_option" text="{=EnhancedBattleTest_singleplayerbattleoption}Singleplayer Battle Test" />
+  <string id="str_ebt_enhanced_battle_test" text="{=EnhancedBattleTest_enhanced_battle_test}Enhanced Battle Test" />
+  <string id="str_ebt_escape_menu_campaign_only" text="{=EnhancedBattleTest_escape_menu_campaign_only}Available only on the campaign map." />
+  <string id="str_ebt_escape_menu_captive" text="{=EnhancedBattleTest_escape_menu_captive}Unavailable while the player is a prisoner." />
+  <string id="str_ebt_escape_menu_at_sea" text="{=EnhancedBattleTest_escape_menu_at_sea}Naval battle tests are not supported yet." />
+  <string id="str_ebt_escape_menu_party_busy" text="{=EnhancedBattleTest_escape_menu_party_busy}Unavailable during a battle, siege, or raid." />
 
   <string id="str_ebt_all" text="{=EnhancedBattleTest_all}All" />
 
@@ -140,8 +144,6 @@
 
   <string id="str_ebt_sergeant_general_required" text="{=EnhancedBattleTest_sergeant_general_required}Sergeant mode requires an available general in the player team." />
   <string id="str_ebt_siege_player_character_required" text="{=EnhancedBattleTest_siege_player_character_required}Siege battles require a player character." />
-  <string id="str_ebt_campaign_menu_desc" text="{=EnhancedBattleTest_campaign_menu_desc}Prepare a custom battle test." />
-  <string id="str_ebt_campaign_menu_start" text="{=EnhancedBattleTest_campaign_menu_start}Configure Battle" />
   <string id="str_ebt_campaign_state_warning_title" text="{=EnhancedBattleTest_campaign_state_warning_title}Enhanced Battle Test Warning" />
   <string id="str_ebt_campaign_state_warning" text="{=EnhancedBattleTest_campaign_state_warning}Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
   <string id="str_ebt_save_disabled" text="{=EnhancedBattleTest_save_disabled}Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />

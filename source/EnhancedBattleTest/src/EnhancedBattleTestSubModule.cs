@@ -35,7 +35,7 @@ namespace EnhancedBattleTest
             base.OnSubModuleLoad();
             Instance = this;
             _harmony = new Harmony(HarmonyId);
-            _harmony.PatchAll(typeof(EnhancedBattleTestMapMenuPatch).Assembly);
+            _harmony.PatchAll(typeof(EnhancedBattleTestEscapeMenuPatch).Assembly);
         }
 
         protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
@@ -43,8 +43,6 @@ namespace EnhancedBattleTest
             base.OnGameStart(game, gameStarterObject);
             EnhancedBattleTestSaveGuard.Reset();
 
-            if (gameStarterObject is CampaignGameStarter campaignGameStarter)
-                campaignGameStarter.AddBehavior(new EnhancedBattleTestCampaignBehavior());
         }
 
         public override void OnGameEnd(Game game)

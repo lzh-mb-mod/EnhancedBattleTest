@@ -5,7 +5,11 @@
     <tag language="Türkçe" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_singleplayerbattleoption" text="Tek Oyunculu Savaş Testi" />
+    <string id="EnhancedBattleTest_enhanced_battle_test" text="Enhanced Battle Test" />
+    <string id="EnhancedBattleTest_escape_menu_campaign_only" text="Yalnızca sefer haritasında kullanılabilir." />
+    <string id="EnhancedBattleTest_escape_menu_captive" text="Oyuncu esirken kullanılamaz." />
+    <string id="EnhancedBattleTest_escape_menu_at_sea" text="Deniz savaşı testleri henüz desteklenmiyor." />
+    <string id="EnhancedBattleTest_escape_menu_party_busy" text="Savaş, kuşatma veya yağma sırasında kullanılamaz." />
     <string id="EnhancedBattleTest_all" text="Tümü" />
     <string id="EnhancedBattleTest_null_culture" text="Kültür Yok" />
 
@@ -142,8 +146,6 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Kuşatma savaşları bir oyuncu karakteri gerektirir." />
-    <string id="EnhancedBattleTest_campaign_menu_desc" text="Özel bir savaş testi hazırlayın." />
-    <string id="EnhancedBattleTest_campaign_menu_start" text="Savaşı Yapılandır" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test, sefer durumunu korumak için elinden geleni yapar ancak değişmeden kalacağını garanti edemez. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır." />
     <string id="EnhancedBattleTest_save_disabled" text="Enhanced Battle Test savaşından sonra sefer yeniden yüklenene kadar kayıt devre dışıdır." />

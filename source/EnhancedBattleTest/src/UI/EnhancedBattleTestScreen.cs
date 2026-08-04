@@ -30,7 +30,7 @@ namespace EnhancedBattleTest.UI
         public EnhancedBattleTestScreen(EnhancedBattleTestState state)
         {
             _state = state;
-            _title = GameTexts.FindText("str_ebt_singleplayer_battle_option");
+            _title = GameTexts.FindText("str_ebt_enhanced_battle_test");
         }
         void IGameStateListener.OnActivate()
         {
