@@ -200,12 +200,15 @@ namespace EnhancedBattleTest.UI
                     ?? Game.Current.ObjectManager
                         .GetObjectTypeList<BasicCharacterObject>()
                         .OfType<CharacterObject>()
-                        .First(character =>
+                        .FirstOrDefault(character =>
                             !character.IsHero
                             && !character.IsTemplate
                             && !character.IsChildTemplate);
-                result.Character =
-                    CharacterConfig.Create(basicTroop.StringId);
+                if (basicTroop != null)
+                {
+                    result.Character =
+                        CharacterConfig.Create(basicTroop.StringId);
+                }
                 return result;
             }
 
@@ -232,9 +235,9 @@ namespace EnhancedBattleTest.UI
                     && character.IsHero)
                 .ToList();
             CharacterObject character = candidates.FirstOrDefault(
-                    candidate => !usedCharacters.Contains(candidate))
-                ?? candidates.First();
-            result.Character = CharacterConfig.Create(character.StringId);
+                candidate => !usedCharacters.Contains(candidate));
+            if (character != null)
+                result.Character = CharacterConfig.Create(character.StringId);
             return result;
         }
 

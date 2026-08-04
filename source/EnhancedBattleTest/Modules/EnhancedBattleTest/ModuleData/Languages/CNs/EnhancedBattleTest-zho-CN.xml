@@ -28,6 +28,7 @@
     <string id="EnhancedBattleTest_equipment_modifier_type" text="士兵装备前缀" />
     <string id="EnhancedBattleTest_modifier_type_random" text="随机" />
     <string id="EnhancedBattleTest_modifier_type_none" text="无" />
+    <string id="EnhancedBattleTest_balance_troop_spawn_order" text="均衡兵种出场顺序" />
 
     <string id="EnhancedBattleTest_battle_size" text="战场规模" />
 
@@ -92,9 +93,12 @@
     <string id="EnhancedBattleTest_load_configuration_description" text="选择一个已保存的战斗配置。" />
     <string id="EnhancedBattleTest_configuration_saved" text="已保存配置 {CONFIGURATION_NAME}。" />
     <string id="EnhancedBattleTest_configuration_save_failed" text="无法保存战斗配置。" />
+    <string id="EnhancedBattleTest_current_configuration_save_failed" text="已保存命名配置，但无法更新当前战斗配置。" />
     <string id="EnhancedBattleTest_configuration_loaded" text="已加载配置 {CONFIGURATION_NAME}。" />
     <string id="EnhancedBattleTest_no_saved_configuration" text="尚未保存任何命名战斗配置。" />
     <string id="EnhancedBattleTest_configuration_load_failed" text="无法加载所选战斗配置。" />
+    <string id="EnhancedBattleTest_configuration_list_failed" text="无法读取已保存的战斗配置。" />
+    <string id="EnhancedBattleTest_current_configuration_corrupt" text="当前战斗配置已损坏，已加载默认设置。" />
     <string id="EnhancedBattleTest_configuration_name_required" text="请输入配置名称。" />
     <string id="EnhancedBattleTest_configuration_name_invalid" text="配置名称包含无效字符。" />
     <string id="EnhancedBattleTest_configuration_name_exists" text="已存在同名配置。请在保存列表中选择该配置进行覆盖。" />

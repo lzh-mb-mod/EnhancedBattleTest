@@ -26,5 +26,6 @@ namespace EnhancedBattleTest.Config
         public PlayerType PlayerType;
         public BattleSideEnum PlayerSide = BattleSideEnum.Attacker;
         public EquipmentModifierType EquipmentModifierType = EquipmentModifierType.Random;
+        public bool BalanceTroopSpawnOrder;
     }
 }

@@ -25,6 +25,7 @@ namespace EnhancedBattleTest.UI
 
         public TextVM PlayerSideText { get; }
         public TextVM EquipmentModifierTypeText { get; }
+        public TextVM BalanceTroopSpawnOrderText { get; }
 
         public BattleTypeSelectionGroup(
           BattleTypeConfig config,
@@ -39,6 +40,8 @@ namespace EnhancedBattleTest.UI
             PlayerTypeText = new TextVM(GameTexts.FindText("str_ebt_player_type"));
             PlayerSideText = new TextVM(GameTexts.FindText("str_ebt_player_side"));
             EquipmentModifierTypeText = new TextVM(GameTexts.FindText("str_ebt_equipment_modifier_type"));
+            BalanceTroopSpawnOrderText = new TextVM(
+                GameTexts.FindText("str_ebt_balance_troop_spawn_order"));
             RefreshValues();
         }
 
@@ -71,6 +74,7 @@ namespace EnhancedBattleTest.UI
             PlayerTypeText.RefreshValues();
             PlayerSideText.RefreshValues();
             EquipmentModifierTypeText.RefreshValues();
+            BalanceTroopSpawnOrderText.RefreshValues();
         }
 
         public void RandomizeAll()
@@ -166,6 +170,19 @@ namespace EnhancedBattleTest.UI
                     return;
                 _equipmentModifierTypeSelection = value;
                 OnPropertyChanged(nameof(EquipmentModifierTypeSelection));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool BalanceTroopSpawnOrder
+        {
+            get => _config.BalanceTroopSpawnOrder;
+            set
+            {
+                if (value == _config.BalanceTroopSpawnOrder)
+                    return;
+                _config.BalanceTroopSpawnOrder = value;
+                OnPropertyChanged(nameof(BalanceTroopSpawnOrder));
             }
         }
 

@@ -23,6 +23,7 @@
   <string id="str_ebt_equipment_modifier_type" text="{=EnhancedBattleTest_equipment_modifier_type}Soldier Equipment Modifier type" />
   <string id="str_ebt_modifier_type.Random" text="{=EnhancedBattleTest_modifier_type_random}Random" />
   <string id="str_ebt_modifier_type.None" text="{=EnhancedBattleTest_modifier_type_none}None" />
+  <string id="str_ebt_balance_troop_spawn_order" text="{=EnhancedBattleTest_balance_troop_spawn_order}Balance Troop Spawn Order" />
 
   <string id="str_ebt_battle_size" text="{=EnhancedBattleTest_battle_size}Battle Size" />
 
@@ -87,9 +88,12 @@
   <string id="str_ebt_load_configuration_description" text="{=EnhancedBattleTest_load_configuration_description}Select a saved battle configuration." />
   <string id="str_ebt_configuration_saved" text="{=EnhancedBattleTest_configuration_saved}Saved configuration {CONFIGURATION_NAME}." />
   <string id="str_ebt_configuration_save_failed" text="{=EnhancedBattleTest_configuration_save_failed}The battle configuration could not be saved." />
+  <string id="str_ebt_current_configuration_save_failed" text="{=EnhancedBattleTest_current_configuration_save_failed}The named configuration was saved, but the current battle configuration could not be updated." />
   <string id="str_ebt_configuration_loaded" text="{=EnhancedBattleTest_configuration_loaded}Loaded configuration {CONFIGURATION_NAME}." />
   <string id="str_ebt_no_saved_configuration" text="{=EnhancedBattleTest_no_saved_configuration}No named battle configuration has been saved." />
   <string id="str_ebt_configuration_load_failed" text="{=EnhancedBattleTest_configuration_load_failed}The selected battle configuration could not be loaded." />
+  <string id="str_ebt_configuration_list_failed" text="{=EnhancedBattleTest_configuration_list_failed}The saved battle configurations could not be read." />
+  <string id="str_ebt_current_configuration_corrupt" text="{=EnhancedBattleTest_current_configuration_corrupt}The current battle configuration is corrupt. Default settings were loaded." />
   <string id="str_ebt_configuration_name_required" text="{=EnhancedBattleTest_configuration_name_required}Enter a configuration name." />
   <string id="str_ebt_configuration_name_invalid" text="{=EnhancedBattleTest_configuration_name_invalid}The configuration name contains invalid characters." />
   <string id="str_ebt_configuration_name_exists" text="{=EnhancedBattleTest_configuration_name_exists}A configuration with this name already exists. Select it from the save list to overwrite it." />
