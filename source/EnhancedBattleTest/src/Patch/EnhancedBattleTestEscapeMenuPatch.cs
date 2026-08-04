@@ -43,7 +43,9 @@ namespace EnhancedBattleTest.Patch
             private static Tuple<bool, TextObject> GetDisabledReason()
             {
                 TextObject reason = GetUnavailableReason();
-                return Tuple.Create(reason != null, reason ?? TextObject.Empty);
+                return Tuple.Create(
+                    reason != null,
+                    reason ?? TextObject.GetEmpty());
             }
 
             private static TextObject GetUnavailableReason()
