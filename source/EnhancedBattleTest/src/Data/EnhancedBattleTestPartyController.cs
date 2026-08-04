@@ -737,6 +737,16 @@ namespace EnhancedBattleTest.Data
                     weights[selectedTroop] = 0;
                 }
             }
+
+            int balancedCount = priorityList.Count - preserved.Count;
+            for (int i = 0; i < balancedCount; i++)
+            {
+                var priority = priorityList[preserved.Count + i];
+                priorityList[preserved.Count + i] = (
+                    priority.Item1,
+                    priority.Item2,
+                    1f - (float)i / (balancedCount + 1));
+            }
         }
 
         private static CharacterObject GetPlayerCharacter(TeamConfig config)
