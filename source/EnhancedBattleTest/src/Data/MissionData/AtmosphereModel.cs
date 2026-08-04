@@ -29,6 +29,20 @@ namespace EnhancedBattleTest.Data.MissionData
             public bool IsMoon;
         }
 
+        public struct ExposureInfo
+        {
+            public float? Min;
+            public float? Max;
+            public float? Target;
+
+            public ExposureInfo(float? min, float? max, float? target)
+            {
+                Min = min;
+                Max = max;
+                Target = target;
+            }
+        }
+
         public static AtmosphereInfo CreateAtmosphereInfoForMission(
             int dayOfYear = 1,
             float timeOfDay = 6f,
@@ -192,28 +206,28 @@ namespace EnhancedBattleTest.Data.MissionData
             };
         }
 
-        public static float GetTargetExposure(float timeOfDay, string weather)
+        public static ExposureInfo? GetExposureInfo(
+            float timeOfDay,
+            string weather)
         {
             float normalizedTime = timeOfDay % 24f;
             if (normalizedTime < 0f)
                 normalizedTime += 24f;
+            bool isNight = normalizedTime < 6f || normalizedTime >= 18f;
             switch (weather)
             {
                 case "overcast":
                 case "heavy_rain":
-                    if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return -11.7f;
-                    return -10f;
                 case "rain_storm":
-                    if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return -7.7f;
-                    return -6f;
+                    return isNight
+                        ? new ExposureInfo(-6f, 0f, 0f)
+                        : new ExposureInfo(-15f, 0f, -10f);
                 case "blizzard":
-                    if (normalizedTime < 6f || normalizedTime >= 18f)
-                        return -9f;
-                    return -7f;
+                    return isNight
+                        ? new ExposureInfo(-6f, -1f, -0.8f)
+                        : new ExposureInfo(-15f, 0f, -11f);
                 default:
-                    return float.NaN;
+                    return null;
             }
         }
 
@@ -224,11 +238,17 @@ namespace EnhancedBattleTest.Data.MissionData
             float normalizedTime = timeOfDay % 24f;
             if (normalizedTime < 0f)
                 normalizedTime += 24f;
+            bool isNight = normalizedTime < 6f || normalizedTime >= 18f;
 
             if (weather == "heavy_rain" ||
-                weather == "overcast")
+                weather == "overcast" ||
+                weather == "rain_storm" ||
+                weather == "blizzard")
             {
-                return "TOD_12_00_Overcast";
+                if (isNight)
+                    return "TOD_01_00_HeavyRain";
+
+                return "TOD_12_00_HeavyRain";
             }
 
             return null;

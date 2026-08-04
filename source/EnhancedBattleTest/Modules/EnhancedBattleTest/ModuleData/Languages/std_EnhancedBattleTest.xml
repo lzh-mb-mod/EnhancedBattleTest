@@ -29,6 +29,12 @@
     <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
     <string id="EnhancedBattleTest_modifier_type_none" text="None" />
     <string id="EnhancedBattleTest_balance_troop_spawn_order" text="Balance Troop Spawn Order" />
+    <string id="EnhancedBattleTest_exposure_adjustment" text="Exposure Adjustment" />
+    <string id="EnhancedBattleTest_exposure_adjustment_description" text="Press Ctrl+E to toggle. The game does not expose its current target; without an EBT override it starts at 0." />
+    <string id="EnhancedBattleTest_min_exposure" text="Minimum Exposure" />
+    <string id="EnhancedBattleTest_max_exposure" text="Maximum Exposure" />
+    <string id="EnhancedBattleTest_target_exposure" text="Target Exposure" />
+    <string id="EnhancedBattleTest_apply" text="Apply" />
 
     <string id="EnhancedBattleTest_battle_size" text="Battle Size" />
 

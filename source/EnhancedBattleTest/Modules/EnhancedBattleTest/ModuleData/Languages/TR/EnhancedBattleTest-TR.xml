@@ -27,6 +27,12 @@
     <string id="EnhancedBattleTest_modifier_type_random" text="Rastgele" />
     <string id="EnhancedBattleTest_modifier_type_none" text="Değişiklik yok" />
     <string id="EnhancedBattleTest_balance_troop_spawn_order" text="Birlik Çıkış Sırasını Dengele" />
+    <string id="EnhancedBattleTest_exposure_adjustment" text="Pozlama Ayarı" />
+    <string id="EnhancedBattleTest_exposure_adjustment_description" text="Pencereyi açıp kapatmak için Ctrl+E'ye basın. Oyun mevcut hedefi sunmaz; EBT geçersiz kılması yoksa başlangıç değeri 0'dır." />
+    <string id="EnhancedBattleTest_min_exposure" text="Minimum Pozlama" />
+    <string id="EnhancedBattleTest_max_exposure" text="Maksimum Pozlama" />
+    <string id="EnhancedBattleTest_target_exposure" text="Hedef Pozlama" />
+    <string id="EnhancedBattleTest_apply" text="Uygula" />
 
     <string id="EnhancedBattleTest_battle_size" text="Savaş Boyutu" />
 
