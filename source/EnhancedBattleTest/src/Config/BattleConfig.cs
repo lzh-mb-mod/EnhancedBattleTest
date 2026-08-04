@@ -53,9 +53,28 @@ namespace EnhancedBattleTest.Config
                 {
                     UseCustomBanner = false,
                     IsInArmy = true,
-                    HasHeroes = false,
-                    Heroes = new TroopGroupConfig(),
-                    Troops = new TroopGroupConfig()
+                    HasHeroes = true,
+                    Heroes = new TroopGroupConfig(true)
+                    {
+                        Troops = new List<TroopConfig>
+                        {
+                            new TroopConfig("lord_4_6", 1),
+                            new TroopConfig("lord_4_1", 1),
+                            new TroopConfig("lord_4_25", 1)
+                        }
+                    },
+                    Troops = new TroopGroupConfig
+                    {
+                        Troops = new List<TroopConfig>
+                        {
+                            new TroopConfig("vlandian_infantry", 40),
+                            new TroopConfig("vlandian_billman", 40),
+                            new TroopConfig("vlandian_sharpshooter", 30),
+                            new TroopConfig("vlandian_militia_archer", 30),
+                            new TroopConfig("vlandian_banner_knight", 30),
+                            new TroopConfig("vlandian_champion", 30)
+                        }
+                    }
                 },
                 PlayerCharacter = string.IsNullOrEmpty(playerCharacterId)
                     ? CharacterConfig.Create()
