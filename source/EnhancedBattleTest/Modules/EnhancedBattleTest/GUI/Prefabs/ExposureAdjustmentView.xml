@@ -2,11 +2,11 @@
   <Window>
     <Widget WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent">
       <Children>
-        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="720" SuggestedHeight="440" HorizontalAlignment="Right" VerticalAlignment="Top" MarginRight="40" MarginTop="80" LayoutImp.LayoutMethod="VerticalBottomToTop" Brush="EnhancedBattleTest.MissionMenuBrush">
+        <ListPanel WidthSizePolicy="Fixed" HeightSizePolicy="Fixed" SuggestedWidth="720" SuggestedHeight="440" HorizontalAlignment="Right" VerticalAlignment="Top" MarginRight="40" MarginTop="80" LayoutImp.LayoutMethod="VerticalTopToBottom" Brush="EnhancedBattleTest.MissionMenuBrush">
           <Children>
             <TextWidget DataSource="{TitleText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="25" Brush="CustomBattle.Title.Text" />
             <RichTextWidget DataSource="{DescriptionText}" Text="@Text" WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="35" MarginRight="35" MarginTop="12" HorizontalAlignment="Center" Brush="CustomBattle.Value.Text" />
-            <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="35" MarginRight="35" MarginTop="20" LayoutImp.LayoutMethod="VerticalBottomToTop">
+            <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="CoverChildren" MarginLeft="35" MarginRight="35" MarginTop="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
               <Children>
                 <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="Fixed" SuggestedHeight="65" LayoutImp.LayoutMethod="HorizontalLeftToRight">
                   <Children>
