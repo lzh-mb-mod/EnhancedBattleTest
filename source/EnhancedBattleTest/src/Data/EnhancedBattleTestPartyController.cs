@@ -161,6 +161,14 @@ namespace EnhancedBattleTest.Data
             AccessTools.Method(
                 typeof(CampaignObjectManager),
                 "UnregisterDeadHero");
+        private static readonly PropertyInfo PartyGroupProperty =
+            AccessTools.Property(
+                typeof(PartyGroupTroopSupplier),
+                "PartyGroup");
+        private static readonly FieldInfo ReadyTroopsPriorityListField =
+            AccessTools.Field(
+                typeof(MapEventSide),
+                "_readyTroopsPriorityList");
 
         public static BattleContext Create(BattleConfig config)
         {
@@ -313,6 +321,13 @@ namespace EnhancedBattleTest.Data
                         playerSide == BattleSideEnum.Attacker
                             ? playerPriorityTroops
                             : enemyPriorityTroops);
+                if (config.BattleTypeConfig.BalanceTroopSpawnOrder)
+                {
+                    BalanceTroopSpawnOrder(
+                        suppliers[(int)BattleSideEnum.Defender]);
+                    BalanceTroopSpawnOrder(
+                        suppliers[(int)BattleSideEnum.Attacker]);
+                }
 
                 Current = new BattleContext(
                     playerParty,
@@ -637,6 +652,81 @@ namespace EnhancedBattleTest.Data
             }
 
             return roster;
+        }
+
+        private static void BalanceTroopSpawnOrder(
+            PartyGroupTroopSupplier supplier)
+        {
+            MapEventSide partyGroup =
+                (MapEventSide)PartyGroupProperty.GetValue(supplier);
+            var priorityList =
+                (List<(
+                    FlattenedTroopRosterElement,
+                    MapEventParty,
+                    float)>)ReadyTroopsPriorityListField.GetValue(partyGroup);
+            if (priorityList == null || priorityList.Count < 2)
+                return;
+
+            var preserved =
+                new List<(
+                    FlattenedTroopRosterElement,
+                    MapEventParty,
+                    float)>();
+            var queues = new Dictionary<
+                BasicCharacterObject,
+                Queue<(
+                    FlattenedTroopRosterElement,
+                    MapEventParty,
+                    float)>>();
+            var troopOrder = new List<BasicCharacterObject>();
+            foreach (var priority in priorityList)
+            {
+                BasicCharacterObject troop = priority.Item1.Troop;
+                if (troop.IsHero || priority.Item3 > 1f)
+                {
+                    preserved.Add(priority);
+                    continue;
+                }
+
+                if (!queues.TryGetValue(troop, out var queue))
+                {
+                    queue = new Queue<(
+                        FlattenedTroopRosterElement,
+                        MapEventParty,
+                        float)>();
+                    queues.Add(troop, queue);
+                    troopOrder.Add(troop);
+                }
+                queue.Enqueue(priority);
+            }
+
+            priorityList.Clear();
+            priorityList.AddRange(preserved);
+            var weights = troopOrder.ToDictionary(
+                troop => troop,
+                troop => queues[troop].Count);
+            var currentWeights = troopOrder.ToDictionary(
+                troop => troop,
+                troop => 0);
+            int totalWeight = weights.Values.Sum();
+            while (totalWeight > 0)
+            {
+                foreach (BasicCharacterObject troop in troopOrder)
+                    currentWeights[troop] += weights[troop];
+
+                BasicCharacterObject selectedTroop = troopOrder
+                    .Where(troop => queues[troop].Count > 0)
+                    .OrderByDescending(troop => currentWeights[troop])
+                    .ThenBy(troop => troopOrder.IndexOf(troop))
+                    .First();
+                priorityList.Add(queues[selectedTroop].Dequeue());
+                currentWeights[selectedTroop] -= totalWeight;
+                if (queues[selectedTroop].Count == 0)
+                {
+                    totalWeight -= weights[selectedTroop];
+                    weights[selectedTroop] = 0;
+                }
+            }
         }
 
         private static CharacterObject GetPlayerCharacter(TeamConfig config)

@@ -101,20 +101,30 @@ namespace EnhancedBattleTest.Config
             };
         }
 
-        public static BattleConfig Deserialize()
+        public static BattleConfig Deserialize(out bool recoveredFromError)
         {
+            string filePath = Path.Combine(
+                SaveFolderPath(),
+                CurrentConfigFileName);
+            if (!File.Exists(filePath))
+            {
+                recoveredFromError = false;
+                return CreateDefault();
+            }
+
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(BattleConfig));
-                var filePath = Path.Combine(
-                    SaveFolderPath(),
-                    CurrentConfigFileName);
                 using TextReader reader = new StreamReader(filePath);
-                return Normalize((BattleConfig)serializer.Deserialize(reader));
+                BattleConfig result = Normalize(
+                    (BattleConfig)serializer.Deserialize(reader));
+                recoveredFromError = false;
+                return result;
             }
-
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e);
+                recoveredFromError = true;
                 return CreateDefault();
             }
         }
@@ -128,14 +138,29 @@ namespace EnhancedBattleTest.Config
             if (team.PlayerCharacter?.CharacterObject == null)
             {
                 CharacterConfig defaultCharacter =
-                    team.PrimaryParty.Troops.Troops
-                    .Select(troop => troop?.Character)
-                    .FirstOrDefault(character => character?.CharacterObject != null)
-                    ?? team.PrimaryParty.Heroes.Troops
+                    GetParties(team)
+                        .SelectMany(party => party.Troops.Troops)
                         .Select(troop => troop?.Character)
-                        .FirstOrDefault(character => character?.CharacterObject != null);
+                        .FirstOrDefault(character =>
+                            character?.CharacterObject != null)
+                    ?? GetParties(team)
+                        .SelectMany(party => party.Heroes.Troops)
+                        .Select(troop => troop?.Character)
+                        .FirstOrDefault(character =>
+                            character?.CharacterObject != null);
+                CharacterObject fallbackCharacter =
+                    Game.Current?.ObjectManager
+                        .GetObjectTypeList<BasicCharacterObject>()
+                        .OfType<CharacterObject>()
+                        .FirstOrDefault(character =>
+                            !character.IsHero
+                            && !character.IsTemplate
+                            && !character.IsChildTemplate);
                 team.PlayerCharacter =
-                    defaultCharacter?.Clone() ?? CharacterConfig.Create();
+                    defaultCharacter?.Clone()
+                    ?? (fallbackCharacter == null
+                        ? CharacterConfig.Create()
+                        : CharacterConfig.Create(fallbackCharacter.StringId));
             }
             team.AlliedParties?.RemoveAll(party => party == null);
             if (team.AlliedParties == null)
@@ -161,9 +186,10 @@ namespace EnhancedBattleTest.Config
             return troop?.Character?.CharacterObject == null;
         }
 
-        public void Serialize()
+        public bool Serialize()
         {
-            SerializeTo(Path.Combine(SaveFolderPath(), CurrentConfigFileName));
+            return SerializeTo(
+                Path.Combine(SaveFolderPath(), CurrentConfigFileName));
         }
 
         public bool Serialize(string configurationName)
@@ -192,16 +218,31 @@ namespace EnhancedBattleTest.Config
             }
         }
 
-        public static IReadOnlyList<string> GetSavedConfigurationNames()
+        public static bool TryGetSavedConfigurationNames(
+            out IReadOnlyList<string> names)
         {
-            string folderPath = NamedConfigFolderPath();
-            if (!Directory.Exists(folderPath))
-                return Array.Empty<string>();
-
-            return Directory.GetFiles(folderPath, "*.xml")
-                .Select(Path.GetFileNameWithoutExtension)
-                .OrderBy(name => name)
-                .ToList();
+            try
+            {
+                string folderPath = NamedConfigFolderPath();
+                if (!Directory.Exists(folderPath))
+                {
+                    names = Array.Empty<string>();
+                }
+                else
+                {
+                    names = Directory.GetFiles(folderPath, "*.xml")
+                        .Select(Path.GetFileNameWithoutExtension)
+                        .OrderBy(name => name)
+                        .ToList();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                names = Array.Empty<string>();
+                return false;
+            }
         }
 
         public static Tuple<bool, string> ValidateConfigurationName(
@@ -224,14 +265,27 @@ namespace EnhancedBattleTest.Config
 
         private bool SerializeTo(string filePath)
         {
+            string temporaryPath = null;
             try
             {
-                Directory.CreateDirectory(
-                    Path.GetDirectoryName(filePath)
-                    ?? SaveFolderPath());
-                using TextWriter writer = new StreamWriter(filePath);
-                XmlSerializer serializer = new XmlSerializer(typeof(BattleConfig));
-                serializer.Serialize(writer, this);
+                string folderPath =
+                    Path.GetDirectoryName(filePath) ?? SaveFolderPath();
+                Directory.CreateDirectory(folderPath);
+                temporaryPath = Path.Combine(
+                    folderPath,
+                    Path.GetRandomFileName());
+                using (TextWriter writer = new StreamWriter(temporaryPath))
+                {
+                    XmlSerializer serializer =
+                        new XmlSerializer(typeof(BattleConfig));
+                    serializer.Serialize(writer, this);
+                }
+
+                if (File.Exists(filePath))
+                    File.Replace(temporaryPath, filePath, null);
+                else
+                    File.Move(temporaryPath, filePath);
+                temporaryPath = null;
                 return true;
             }
             catch (Exception e)
@@ -239,16 +293,78 @@ namespace EnhancedBattleTest.Config
                 Console.WriteLine(e);
                 return false;
             }
+            finally
+            {
+                if (temporaryPath != null)
+                {
+                    try
+                    {
+                        File.Delete(temporaryPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
         }
 
         private static BattleConfig Normalize(BattleConfig result)
         {
-            result.PlayerTeamConfig?.NormalizeAfterDeserialize();
-            result.EnemyTeamConfig?.NormalizeAfterDeserialize();
+            if (result == null)
+                throw new InvalidDataException(
+                    "The battle configuration is empty.");
+
+            result.PlayerTeamConfig =
+                result.PlayerTeamConfig ?? new TeamConfig();
+            result.EnemyTeamConfig =
+                result.EnemyTeamConfig ?? new TeamConfig();
+            result.BattleTypeConfig =
+                result.BattleTypeConfig ?? new BattleTypeConfig();
+            result.MapConfig = result.MapConfig ?? new MapConfig();
+            result.SiegeMachineConfig =
+                result.SiegeMachineConfig ?? new SiegeMachineConfig();
+            result.PlayerTeamConfig.NormalizeAfterDeserialize();
+            result.EnemyTeamConfig.NormalizeAfterDeserialize();
+            result.SiegeMachineConfig.NormalizeAfterDeserialize();
+            NormalizeBattleType(result.BattleTypeConfig);
             RemoveUnavailableCharacters(result.PlayerTeamConfig);
             RemoveUnavailableCharacters(result.EnemyTeamConfig);
             result.NormalizeCharacterGroups();
             return result;
+        }
+
+        private static void NormalizeBattleType(BattleTypeConfig config)
+        {
+            if (!Enum.IsDefined(typeof(BattleType), config.BattleType))
+                config.BattleType = BattleType.Battle;
+            if (!Enum.IsDefined(typeof(PlayerType), config.PlayerType))
+                config.PlayerType = PlayerType.Commander;
+            if (config.PlayerSide != BattleSideEnum.Attacker
+                && config.PlayerSide != BattleSideEnum.Defender)
+            {
+                config.PlayerSide = BattleSideEnum.Attacker;
+            }
+            if (!Enum.IsDefined(
+                    typeof(EquipmentModifierType),
+                    config.EquipmentModifierType))
+            {
+                config.EquipmentModifierType = EquipmentModifierType.Random;
+            }
+        }
+
+        private static IEnumerable<PartyConfig> GetParties(TeamConfig team)
+        {
+            if (team?.PrimaryParty != null)
+                yield return team.PrimaryParty;
+            if (team?.AlliedParties == null)
+                yield break;
+
+            foreach (PartyConfig party in team.AlliedParties)
+            {
+                if (party != null)
+                    yield return party;
+            }
         }
 
         public void NormalizeCharacterGroups()

@@ -26,6 +26,7 @@
     <string id="EnhancedBattleTest_equipment_modifier_type" text="Birlik Ekipmanı Değiştirme" />
     <string id="EnhancedBattleTest_modifier_type_random" text="Rastgele" />
     <string id="EnhancedBattleTest_modifier_type_none" text="Değişiklik yok" />
+    <string id="EnhancedBattleTest_balance_troop_spawn_order" text="Birlik Çıkış Sırasını Dengele" />
 
     <string id="EnhancedBattleTest_battle_size" text="Savaş Boyutu" />
 
@@ -90,9 +91,12 @@
     <string id="EnhancedBattleTest_load_configuration_description" text="Kaydedilmiş bir savaş yapılandırması seçin." />
     <string id="EnhancedBattleTest_configuration_saved" text="{CONFIGURATION_NAME} yapılandırması kaydedildi." />
     <string id="EnhancedBattleTest_configuration_save_failed" text="Savaş yapılandırması kaydedilemedi." />
+    <string id="EnhancedBattleTest_current_configuration_save_failed" text="Adlandırılmış yapılandırma kaydedildi, ancak mevcut savaş yapılandırması güncellenemedi." />
     <string id="EnhancedBattleTest_configuration_loaded" text="{CONFIGURATION_NAME} yapılandırması yüklendi." />
     <string id="EnhancedBattleTest_no_saved_configuration" text="Adlandırılmış bir savaş yapılandırması kaydedilmemiş." />
     <string id="EnhancedBattleTest_configuration_load_failed" text="Seçilen savaş yapılandırması yüklenemedi." />
+    <string id="EnhancedBattleTest_configuration_list_failed" text="Kaydedilmiş savaş yapılandırmaları okunamadı." />
+    <string id="EnhancedBattleTest_current_configuration_corrupt" text="Mevcut savaş yapılandırması bozuk. Varsayılan ayarlar yüklendi." />
     <string id="EnhancedBattleTest_configuration_name_required" text="Bir yapılandırma adı girin." />
     <string id="EnhancedBattleTest_configuration_name_invalid" text="Yapılandırma adı geçersiz karakterler içeriyor." />
     <string id="EnhancedBattleTest_configuration_name_exists" text="Bu adda bir yapılandırma zaten var. Üzerine yazmak için kaydetme listesinden seçin." />
