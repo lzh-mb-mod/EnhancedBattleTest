@@ -13,7 +13,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
         private readonly float _fogDensity;
         private readonly Vec3 _fogColor;
         private readonly float _fogFalloff;
-        private readonly float _targetExposure;
+        private readonly AtmosphereModel.ExposureInfo? _exposureInfo;
         private bool _reappliedAfterStart;
 
         public EnhancedBattleTestEnvironmentLogic(
@@ -24,7 +24,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             float fogDensity,
             Vec3 fogColor,
             float fogFalloff,
-            float targetExposure)
+            AtmosphereModel.ExposureInfo? exposureInfo)
         {
             _timeOfDay = timeOfDay;
             _sunInfo = sunInfo;
@@ -33,7 +33,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             _fogDensity = fogDensity;
             _fogColor = fogColor;
             _fogFalloff = fogFalloff;
-            _targetExposure = targetExposure;
+            _exposureInfo = exposureInfo;
         }
 
         public override void AfterStart()
@@ -63,19 +63,29 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             if (scene.IsAtmosphereIndoor)
                 return;
 
-            var sunColor = _sunInfo.Color;
-            scene.SetSun(
-                ref sunColor,
-                _sunInfo.Altitude,
-                _sunInfo.Angle,
-                _sunInfo.Brightness);
-            scene.SetSunSize(_sunInfo.Size);
-            scene.SetSunShaftStrength(_sunInfo.RayStrength);
+            // The issue of setting sun position is that,
+            // the sun light on cloud is bound to the current atmosphere.
+            // setting sun position won't change the light on cloud
+            // which causes wierd visual result.
+            //scene.SetSunAngleAltitude(
+            //    _sunInfo.Angle,
+            //    _sunInfo.Altitude);
+            //scene.SetSunSize(_sunInfo.Size);
+            //scene.SetSunShaftStrength(_sunInfo.RayStrength);
             scene.SetRainDensity(_rainDensity);
             scene.SetSnowDensity(_snowDensity);
 
-            if (!float.IsNaN(_targetExposure))
-                scene.SetTargetExposure(_targetExposure);
+            if (_exposureInfo.HasValue)
+            {
+                AtmosphereModel.ExposureInfo exposureInfo =
+                    _exposureInfo.Value;
+                if (exposureInfo.Min.HasValue)
+                    scene.SetMinExposure(exposureInfo.Min.Value);
+                if (exposureInfo.Max.HasValue)
+                    scene.SetMaxExposure(exposureInfo.Max.Value);
+                if (exposureInfo.Target.HasValue)
+                    scene.SetTargetExposure(exposureInfo.Target.Value);
+            }
 
             if (_fogDensity < 0f)
                 return;

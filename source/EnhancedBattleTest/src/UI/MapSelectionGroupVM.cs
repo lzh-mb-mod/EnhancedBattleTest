@@ -215,10 +215,9 @@ namespace EnhancedBattleTest.UI
 
         private void UpdateImproveExposureVisibility()
         {
-            IsImproveExposureVisible = !float.IsNaN(
-                AtmosphereModel.GetTargetExposure(
-                    SelectedTimeOfDay,
-                    SelectedWeatherId));
+            IsImproveExposureVisible = AtmosphereModel.GetExposureInfo(
+                SelectedTimeOfDay,
+                SelectedWeatherId).HasValue;
         }
 
         public void SetWeather(string weatherId)
