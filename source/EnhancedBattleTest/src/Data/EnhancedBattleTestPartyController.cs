@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Party.PartyComponents;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.TroopSuppliers;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
@@ -149,6 +150,10 @@ namespace EnhancedBattleTest.Data
                     Dictionary<BasicCharacterObject, List<int>>>();
         private static readonly PropertyInfo MainPartyProperty =
             AccessTools.Property(typeof(Campaign), nameof(Campaign.MainParty));
+        private static readonly PropertyInfo LastVisitedSettlementProperty =
+            AccessTools.Property(
+                typeof(MobileParty),
+                nameof(MobileParty.LastVisitedSettlement));
         private static readonly PropertyInfo PlayerEncounterProperty =
             AccessTools.Property(
                 typeof(Campaign),
@@ -1173,6 +1178,18 @@ namespace EnhancedBattleTest.Data
             PlayerIdentityState identity,
             MobileParty playerParty)
         {
+            Settlement settlement =
+                identity.OriginalMainParty.CurrentSettlement
+                ?? identity.OriginalMainParty.LastVisitedSettlement;
+            if (settlement != null
+                && playerParty.CurrentSettlement == null
+                && playerParty.LastVisitedSettlement == null)
+            {
+                LastVisitedSettlementProperty.SetValue(
+                    playerParty,
+                    settlement);
+            }
+
             HeroPartyField.SetValue(identity.BattleHero, playerParty);
             Game.Current.PlayerTroop = identity.BattleCharacter;
             MainPartyProperty.SetValue(Campaign.Current, playerParty);
