@@ -169,7 +169,8 @@ namespace EnhancedBattleTest.UI
         public EnhancedBattleTestVM(EnhancedBattleTestState state, TextObject title)
         {
             _state = state;
-            _config = BattleConfig.Deserialize();
+            _config = BattleConfig.Deserialize(
+                out bool recoveredConfiguration);
             BattleConfig.Instance = _config;
             _scenes = _state.Scenes;
 
@@ -186,15 +187,26 @@ namespace EnhancedBattleTest.UI
             LoadConfigurationText =
                 new TextVM(GameTexts.FindText("str_ebt_load_configuration"));
 
-            PlayerSide = CreateSide(_config.PlayerTeamConfig, true);
-            EnemySide = CreateSide(_config.EnemyTeamConfig, false);
+            PlayerSide = CreateSide(
+                _config,
+                _config.PlayerTeamConfig,
+                true);
+            EnemySide = CreateSide(
+                _config,
+                _config.EnemyTeamConfig,
+                false);
 
             MapSelectionGroup = new MapSelectionGroupVM(_scenes);
             BattleTypeSelectionGroup = new BattleTypeSelectionGroup(_config.BattleTypeConfig, MapSelectionGroup, OnPlayerTypeChange);
 
-            InitializeSiegeMachines();
+            InitializeSiegeMachines(_config);
             SetDefaultSiegeMachines();
-            RecoverConfig();
+            RecoverConfig(_config, MapSelectionGroup);
+            if (recoveredConfiguration)
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_current_configuration_corrupt");
+            }
         }
 
         public override void RefreshValues()
@@ -219,46 +231,54 @@ namespace EnhancedBattleTest.UI
             return PlayerSide.IsValid() && EnemySide.IsValid();
         }
 
-        private void RecoverConfig()
+        private static void RecoverConfig(
+            BattleConfig config,
+            MapSelectionGroupVM mapSelectionGroup)
         {
-            MapSelectionGroup.SelectedMapId = _config.MapConfig.MapId;
+            mapSelectionGroup.SelectedMapId = config.MapConfig.MapId;
             //if (MapSelectionGroup.SearchText.IsStringNoneOrEmpty())
             //{
             //    MapSelectionGroup.SearchText = new TextObject("{=7i1vmgQ9}Select a Map").ToString();
             //}
-            MapSelectionGroup.SceneLevelSelection.SelectedIndex = _config.MapConfig.SceneLevel - 1;
-            switch (_config.MapConfig.BreachedWallCount)
+            mapSelectionGroup.SceneLevelSelection.SelectedIndex = Math.Max(
+                Math.Min(
+                    config.MapConfig.SceneLevel - 1,
+                    mapSelectionGroup.SceneLevelSelection.ItemList.Count - 1),
+                0);
+            switch (config.MapConfig.BreachedWallCount)
             {
                 case 0:
-                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 0;
+                    mapSelectionGroup.WallHitpointSelection.SelectedIndex = 0;
                     break;
                 case 1:
-                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 1;
+                    mapSelectionGroup.WallHitpointSelection.SelectedIndex = 1;
                     break;
                 case 2:
-                    MapSelectionGroup.WallHitpointSelection.SelectedIndex = 2;
+                    mapSelectionGroup.WallHitpointSelection.SelectedIndex = 2;
                     break;
             }
 
-            _config.MapConfig.DayOfYear = GetConfiguredDayOfYear();
-            MapSelectionGroup.DayOfYear.Value = _config.MapConfig.DayOfYear;
+            config.MapConfig.DayOfYear = GetConfiguredDayOfYear(config);
+            mapSelectionGroup.DayOfYear.Value = config.MapConfig.DayOfYear;
 
-            MapSelectionGroup.TimeOfDay.Value = _config.MapConfig.TimeOfDay;
-            float fogDensity = _config.MapConfig.FogDensity;
+            mapSelectionGroup.TimeOfDay.Value = config.MapConfig.TimeOfDay;
+            float fogDensity = config.MapConfig.FogDensity;
             string weather = GetConfiguredWeather(
-                _config.MapConfig.Weather,
-                _config.MapConfig.RainDensity,
+                config,
+                config.MapConfig.Weather,
+                config.MapConfig.RainDensity,
                 ref fogDensity);
-            MapSelectionGroup.SetWeather(weather);
-            MapSelectionGroup.ImproveExposure =
-                _config.MapConfig.ImproveExposure;
-            MapSelectionGroup.CanUseLowAltitudeAtmosphere =
-                _config.MapConfig.CanUseLowAltitudeAtmosphere
-                || _config.MapConfig.Weather == "low_altitude";
-            MapSelectionGroup.SetFogDensity(fogDensity);
+            mapSelectionGroup.SetWeather(weather);
+            mapSelectionGroup.ImproveExposure =
+                config.MapConfig.ImproveExposure;
+            mapSelectionGroup.CanUseLowAltitudeAtmosphere =
+                config.MapConfig.CanUseLowAltitudeAtmosphere
+                || config.MapConfig.Weather == "low_altitude";
+            mapSelectionGroup.SetFogDensity(fogDensity);
         }
 
-        private string GetConfiguredWeather(
+        private static string GetConfiguredWeather(
+            BattleConfig config,
             string weather,
             float rainDensity,
             ref float fogDensity)
@@ -299,7 +319,7 @@ namespace EnhancedBattleTest.UI
                 return "clear";
 
             bool isWinter =
-                AtmosphereModel.GetSeasonIndex(_config.MapConfig.DayOfYear)
+                AtmosphereModel.GetSeasonIndex(config.MapConfig.DayOfYear)
                 == (int)CampaignTime.Seasons.Winter;
             if (isWinter)
                 return rainDensity < 0.75f ? "snowy" : "blizzard";
@@ -307,13 +327,13 @@ namespace EnhancedBattleTest.UI
             return rainDensity < 0.75f ? "light_rain" : "heavy_rain";
         }
 
-        private int GetConfiguredDayOfYear()
+        private static int GetConfiguredDayOfYear(BattleConfig config)
         {
-            if (_config.MapConfig.DayOfYear >= 1
-                && _config.MapConfig.DayOfYear <= CampaignTime.DaysInYear)
-                return _config.MapConfig.DayOfYear;
+            if (config.MapConfig.DayOfYear >= 1
+                && config.MapConfig.DayOfYear <= CampaignTime.DaysInYear)
+                return config.MapConfig.DayOfYear;
 
-            switch (_config.MapConfig.Season)
+            switch (config.MapConfig.Season)
             {
                 case "summer":
                     return 32;
@@ -362,8 +382,13 @@ namespace EnhancedBattleTest.UI
             if (!ApplyConfig())
                 return;
 
-            IReadOnlyList<string> names =
-                BattleConfig.GetSavedConfigurationNames();
+            if (!BattleConfig.TryGetSavedConfigurationNames(
+                    out IReadOnlyList<string> names))
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_configuration_list_failed");
+                return;
+            }
             if (names.Count == 0)
             {
                 ShowNewConfigurationInquiry(names);
@@ -478,7 +503,12 @@ namespace EnhancedBattleTest.UI
                     "str_ebt_configuration_save_failed");
                 return;
             }
-            _config.Serialize();
+            if (!_config.Serialize())
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_current_configuration_save_failed");
+                return;
+            }
 
             TextObject message = GameTexts.FindText(
                 "str_ebt_configuration_saved");
@@ -488,8 +518,13 @@ namespace EnhancedBattleTest.UI
 
         public void ExecuteLoadConfiguration()
         {
-            IReadOnlyList<string> names =
-                BattleConfig.GetSavedConfigurationNames();
+            if (!BattleConfig.TryGetSavedConfigurationNames(
+                    out IReadOnlyList<string> names))
+            {
+                Utility.DisplayLocalizedText(
+                    "str_ebt_configuration_list_failed");
+                return;
+            }
             if (names.Count == 0)
             {
                 Utility.DisplayLocalizedText(
@@ -526,7 +561,12 @@ namespace EnhancedBattleTest.UI
                             return;
                         }
 
-                        LoadConfiguration(loadedConfig);
+                        if (!TryLoadConfiguration(loadedConfig))
+                        {
+                            Utility.DisplayLocalizedText(
+                                "str_ebt_configuration_load_failed");
+                            return;
+                        }
                         TextObject message = GameTexts.FindText(
                             "str_ebt_configuration_loaded");
                         message.SetTextVariable(
@@ -660,26 +700,29 @@ namespace EnhancedBattleTest.UI
             return _scenes.First(data => data.Name.ToString() == selectedMap.MapName);
         }
 
-        private SideVM CreateSide(TeamConfig team, bool isPlayerSide)
+        private static SideVM CreateSide(
+            BattleConfig config,
+            TeamConfig team,
+            bool isPlayerSide)
         {
             return new SideVM(
                 team,
                 isPlayerSide,
-                _config.BattleTypeConfig,
-                GetHeroPlayerCharacters,
-                GetPartyHeroes);
+                config.BattleTypeConfig,
+                () => GetHeroPlayerCharacters(config),
+                () => GetPartyHeroes(config));
         }
 
-        private IEnumerable<BasicCharacterObject>
-            GetHeroPlayerCharacters()
+        private static IEnumerable<BasicCharacterObject>
+            GetHeroPlayerCharacters(BattleConfig config)
         {
-            if (_config.BattleTypeConfig.PlayerType == PlayerType.None)
+            if (config.BattleTypeConfig.PlayerType == PlayerType.None)
                 return Enumerable.Empty<BasicCharacterObject>();
 
             return new[]
                 {
-                    _config.PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
-                    _config.EnemyTeamConfig?.PlayerCharacter?.CharacterObject
+                    config.PlayerTeamConfig?.PlayerCharacter?.CharacterObject,
+                    config.EnemyTeamConfig?.PlayerCharacter?.CharacterObject
                 }
                 .Where(character =>
                     character is CharacterObject characterObject
@@ -687,10 +730,11 @@ namespace EnhancedBattleTest.UI
                 .Distinct();
         }
 
-        private IEnumerable<BasicCharacterObject> GetPartyHeroes()
+        private static IEnumerable<BasicCharacterObject> GetPartyHeroes(
+            BattleConfig config)
         {
-            return GetParties(_config.PlayerTeamConfig)
-                .Concat(GetParties(_config.EnemyTeamConfig))
+            return GetParties(config.PlayerTeamConfig)
+                .Concat(GetParties(config.EnemyTeamConfig))
                 .SelectMany(party => party.Heroes.Troops)
                 .Select(troop => troop?.Character?.CharacterObject)
                 .Where(character =>
@@ -717,39 +761,98 @@ namespace EnhancedBattleTest.UI
             PlayerSide.SetPlayerType(playerType);
         }
 
-        private void LoadConfiguration(BattleConfig config)
+        private bool TryLoadConfiguration(BattleConfig config)
         {
-            _config = config;
-            BattleConfig.Instance = config;
-            PlayerSide = CreateSide(config.PlayerTeamConfig, true);
-            EnemySide = CreateSide(config.EnemyTeamConfig, false);
-            BattleTypeSelectionGroup = new BattleTypeSelectionGroup(
-                config.BattleTypeConfig,
-                MapSelectionGroup,
-                OnPlayerTypeChange);
-            InitializeSiegeMachines();
-            MapSelectionGroup.OnGameTypeChange(
-                config.BattleTypeConfig.BattleType);
-            RecoverConfig();
-            OnPlayerTypeChange(config.BattleTypeConfig.PlayerType);
+            try
+            {
+                SideVM playerSide = CreateSide(
+                    config,
+                    config.PlayerTeamConfig,
+                    true);
+                SideVM enemySide = CreateSide(
+                    config,
+                    config.EnemyTeamConfig,
+                    false);
+                var battleTypeSelectionGroup =
+                    new BattleTypeSelectionGroup(
+                        config.BattleTypeConfig,
+                        MapSelectionGroup,
+                        OnPlayerTypeChange);
+                CreateSiegeMachines(
+                    config,
+                    out MBBindingList<CustomBattleSiegeMachineVM>
+                        attackerMeleeMachines,
+                    out MBBindingList<CustomBattleSiegeMachineVM>
+                        attackerRangedMachines,
+                    out MBBindingList<CustomBattleSiegeMachineVM>
+                        defenderMachines);
+                var validationMapSelectionGroup =
+                    new MapSelectionGroupVM(_scenes);
+                validationMapSelectionGroup.OnGameTypeChange(
+                    config.BattleTypeConfig.BattleType);
+                RecoverConfig(config, validationMapSelectionGroup);
+
+                _config = config;
+                BattleConfig.Instance = config;
+                PlayerSide = playerSide;
+                EnemySide = enemySide;
+                BattleTypeSelectionGroup = battleTypeSelectionGroup;
+                AttackerMeleeMachines = attackerMeleeMachines;
+                AttackerRangedMachines = attackerRangedMachines;
+                DefenderMachines = defenderMachines;
+                MapSelectionGroup.OnGameTypeChange(
+                    config.BattleTypeConfig.BattleType);
+                RecoverConfig(config, MapSelectionGroup);
+                playerSide.SetPlayerType(config.BattleTypeConfig.PlayerType);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
 
-        private void InitializeSiegeMachines()
+        private void InitializeSiegeMachines(BattleConfig config)
         {
-            AttackerMeleeMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
+            CreateSiegeMachines(
+                config,
+                out MBBindingList<CustomBattleSiegeMachineVM>
+                    attackerMeleeMachines,
+                out MBBindingList<CustomBattleSiegeMachineVM>
+                    attackerRangedMachines,
+                out MBBindingList<CustomBattleSiegeMachineVM>
+                    defenderMachines);
+            AttackerMeleeMachines = attackerMeleeMachines;
+            AttackerRangedMachines = attackerRangedMachines;
+            DefenderMachines = defenderMachines;
+        }
+
+        private void CreateSiegeMachines(
+            BattleConfig config,
+            out MBBindingList<CustomBattleSiegeMachineVM>
+                attackerMeleeMachines,
+            out MBBindingList<CustomBattleSiegeMachineVM>
+                attackerRangedMachines,
+            out MBBindingList<CustomBattleSiegeMachineVM> defenderMachines)
+        {
+            attackerMeleeMachines =
+                new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < MAX_ATTACKER_MELEE_MACHINE_COUNT; ++index)
-                AttackerMeleeMachines.Add(new CustomBattleSiegeMachineVM(
-                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerMeleeMachines.ElementAtOrDefault(index)),
+                attackerMeleeMachines.Add(new CustomBattleSiegeMachineVM(
+                    Utility.GetSiegeEngineType(config.SiegeMachineConfig.AttackerMeleeMachines.ElementAtOrDefault(index)),
                     OnMeleeMachineSelection, OnResetSelection));
-            AttackerRangedMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
+            attackerRangedMachines =
+                new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < MAX_ATTACKER_RANGED_MACHINE_COUNT; ++index)
-                AttackerRangedMachines.Add(new CustomBattleSiegeMachineVM(
-                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.AttackerRangedMachines.ElementAtOrDefault(index)),
+                attackerRangedMachines.Add(new CustomBattleSiegeMachineVM(
+                    Utility.GetSiegeEngineType(config.SiegeMachineConfig.AttackerRangedMachines.ElementAtOrDefault(index)),
                     OnAttackerRangedMachineSelection, OnResetSelection));
-            DefenderMachines = new MBBindingList<CustomBattleSiegeMachineVM>();
+            defenderMachines =
+                new MBBindingList<CustomBattleSiegeMachineVM>();
             for (var index = 0; index < MAX_DEFENDER_MACHINE_COUNT; ++index)
-                DefenderMachines.Add(new CustomBattleSiegeMachineVM(
-                    Utility.GetSiegeEngineType(_config.SiegeMachineConfig.DefenderMachines.ElementAtOrDefault(index)),
+                defenderMachines.Add(new CustomBattleSiegeMachineVM(
+                    Utility.GetSiegeEngineType(config.SiegeMachineConfig.DefenderMachines.ElementAtOrDefault(index)),
                     OnDefenderRangedMachineSelection, OnResetSelection));
         }
         private void SetDefaultSiegeMachines()

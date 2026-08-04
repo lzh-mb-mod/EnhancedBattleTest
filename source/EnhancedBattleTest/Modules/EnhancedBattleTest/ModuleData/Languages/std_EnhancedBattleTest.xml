@@ -28,6 +28,7 @@
     <string id="EnhancedBattleTest_equipment_modifier_type" text="Soldier Equipment Modifier type" />
     <string id="EnhancedBattleTest_modifier_type_random" text="Random" />
     <string id="EnhancedBattleTest_modifier_type_none" text="None" />
+    <string id="EnhancedBattleTest_balance_troop_spawn_order" text="Balance Troop Spawn Order" />
 
     <string id="EnhancedBattleTest_battle_size" text="Battle Size" />
 
@@ -92,9 +93,12 @@
     <string id="EnhancedBattleTest_load_configuration_description" text="Select a saved battle configuration." />
     <string id="EnhancedBattleTest_configuration_saved" text="Saved configuration {CONFIGURATION_NAME}." />
     <string id="EnhancedBattleTest_configuration_save_failed" text="The battle configuration could not be saved." />
+    <string id="EnhancedBattleTest_current_configuration_save_failed" text="The named configuration was saved, but the current battle configuration could not be updated." />
     <string id="EnhancedBattleTest_configuration_loaded" text="Loaded configuration {CONFIGURATION_NAME}." />
     <string id="EnhancedBattleTest_no_saved_configuration" text="No named battle configuration has been saved." />
     <string id="EnhancedBattleTest_configuration_load_failed" text="The selected battle configuration could not be loaded." />
+    <string id="EnhancedBattleTest_configuration_list_failed" text="The saved battle configurations could not be read." />
+    <string id="EnhancedBattleTest_current_configuration_corrupt" text="The current battle configuration is corrupt. Default settings were loaded." />
     <string id="EnhancedBattleTest_configuration_name_required" text="Enter a configuration name." />
     <string id="EnhancedBattleTest_configuration_name_invalid" text="The configuration name contains invalid characters." />
     <string id="EnhancedBattleTest_configuration_name_exists" text="A configuration with this name already exists. Select it from the save list to overwrite it." />
