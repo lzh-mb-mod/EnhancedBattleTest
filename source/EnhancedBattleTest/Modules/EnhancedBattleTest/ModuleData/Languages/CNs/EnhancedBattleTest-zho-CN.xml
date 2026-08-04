@@ -5,7 +5,11 @@
     <tag language="简体中文" />
   </tags>
   <strings>
-    <string id="EnhancedBattleTest_singleplayerbattleoption" text="单人战斗测试" />
+    <string id="EnhancedBattleTest_enhanced_battle_test" text="增强战斗测试" />
+    <string id="EnhancedBattleTest_escape_menu_campaign_only" text="仅可在战役地图中使用。" />
+    <string id="EnhancedBattleTest_escape_menu_captive" text="玩家被俘时不可使用。" />
+    <string id="EnhancedBattleTest_escape_menu_at_sea" text="暂不支持海战测试。" />
+    <string id="EnhancedBattleTest_escape_menu_party_busy" text="战斗、围城或劫掠期间不可使用。" />
 
     <string id="EnhancedBattleTest_all" text="所有" />
 
@@ -145,8 +149,6 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />
     <string id="EnhancedBattleTest_siege_player_character_required" text="攻城战必须设置玩家角色。" />
-    <string id="EnhancedBattleTest_campaign_menu_desc" text="准备一场自定义战斗测试。" />
-    <string id="EnhancedBattleTest_campaign_menu_start" text="配置战斗" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="增强战斗测试警告" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="增强战斗测试会尽力保持战役状态不变，但无法作出保证。战斗结束后，在重新加载战役前，手动保存和自动保存都将被禁用。" />
     <string id="EnhancedBattleTest_save_disabled" text="增强战斗测试结束后，保存功能已被禁用，直至重新加载战役。" />
