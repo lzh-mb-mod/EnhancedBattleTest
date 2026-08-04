@@ -1,5 +1,8 @@
 using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data.MissionData.Logic;
+#if DEBUG
+using EnhancedBattleTest.UI;
+#endif
 using SandBox.Missions.MissionLogics;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +72,12 @@ namespace EnhancedBattleTest.Data.MissionData
                 config.MapConfig.TimeOfDay,
                 config.MapConfig.Weather,
                 config.MapConfig.FogDensity);
+            AtmosphereModel.ExposureInfo? exposureInfo =
+                GetExposureInfo(config);
+#if DEBUG
+            AtmosphereModel.ExposureInfo initialExposureInfo =
+                GetInitialExposureInfo(atmosphereInfo, exposureInfo);
+#endif
             bool isDayInWinter =
                 AtmosphereModel.GetSeasonIndex(config.MapConfig.DayOfYear)
                 == (int)CampaignTime.Seasons.Winter;
@@ -112,11 +121,10 @@ namespace EnhancedBattleTest.Data.MissionData
                         atmosphereInfo.FogInfo.Density,
                         atmosphereInfo.FogInfo.Color,
                         atmosphereInfo.FogInfo.Falloff,
-                        config.MapConfig.ImproveExposure
-                            ? AtmosphereModel.GetTargetExposure(
-                                config.MapConfig.TimeOfDay,
-                                config.MapConfig.Weather)
-                            : float.NaN),
+                        exposureInfo),
+#if DEBUG
+                    new ExposureAdjustmentMissionView(initialExposureInfo),
+#endif
                     new EnhancedBattleTestPlayerAgentLogic(
                         context.PlayerCharacter,
                         context.PlayerParty.Party),
@@ -206,6 +214,12 @@ namespace EnhancedBattleTest.Data.MissionData
                     config.MapConfig.TimeOfDay,
                     config.MapConfig.Weather,
                     config.MapConfig.FogDensity);
+            AtmosphereModel.ExposureInfo? exposureInfo =
+                GetExposureInfo(config);
+#if DEBUG
+            AtmosphereModel.ExposureInfo initialExposureInfo =
+                GetInitialExposureInfo(atmosphereInfo, exposureInfo);
+#endif
             bool usesWinterWeather =
                 atmosphereInfo.TimeInfo.Season
                 == (int)CampaignTime.Seasons.Winter;
@@ -252,11 +266,11 @@ namespace EnhancedBattleTest.Data.MissionData
                             atmosphereInfo.FogInfo.Density,
                             atmosphereInfo.FogInfo.Color,
                             atmosphereInfo.FogInfo.Falloff,
-                            config.MapConfig.ImproveExposure
-                                ? AtmosphereModel.GetTargetExposure(
-                                    config.MapConfig.TimeOfDay,
-                                    config.MapConfig.Weather)
-                                : float.NaN),
+                            exposureInfo),
+#if DEBUG
+                        new ExposureAdjustmentMissionView(
+                            initialExposureInfo),
+#endif
                         new EnhancedBattleTestPlayerAgentLogic(
                             context.PlayerCharacter,
                             context.PlayerParty.Party),
@@ -336,6 +350,30 @@ namespace EnhancedBattleTest.Data.MissionData
                 .Select(MissionSiegeWeapon.CreateDefaultWeapon)
                 .ToList();
         }
+
+        private static AtmosphereModel.ExposureInfo? GetExposureInfo(
+            BattleConfig config)
+        {
+            return config.MapConfig.ImproveExposure
+                ? AtmosphereModel.GetExposureInfo(
+                    config.MapConfig.TimeOfDay,
+                    config.MapConfig.Weather)
+                : null;
+        }
+
+#if DEBUG
+        private static AtmosphereModel.ExposureInfo GetInitialExposureInfo(
+            AtmosphereInfo atmosphereInfo,
+            AtmosphereModel.ExposureInfo? exposureInfo)
+        {
+            return new AtmosphereModel.ExposureInfo(
+                exposureInfo?.Min
+                    ?? atmosphereInfo.PostProInfo.MinExposure,
+                exposureInfo?.Max
+                    ?? atmosphereInfo.PostProInfo.MaxExposure,
+                exposureInfo?.Target ?? 0f);
+        }
+#endif
 
         private static float[] CreateWallHitPointPercentages(
             int breachedWallCount)
