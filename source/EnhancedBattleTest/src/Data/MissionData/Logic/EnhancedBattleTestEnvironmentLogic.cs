@@ -12,6 +12,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
         private readonly float _fogDensity;
         private readonly Vec3 _fogColor;
         private readonly float _fogFalloff;
+        private readonly float _targetExposure;
         private bool _reappliedAfterStart;
 
         public EnhancedBattleTestEnvironmentLogic(
@@ -20,7 +21,8 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             float snowDensity,
             float fogDensity,
             Vec3 fogColor,
-            float fogFalloff)
+            float fogFalloff,
+            float targetExposure)
         {
             _timeOfDay = timeOfDay;
             _rainDensity = rainDensity;
@@ -28,6 +30,7 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             _fogDensity = fogDensity;
             _fogColor = fogColor;
             _fogFalloff = fogFalloff;
+            _targetExposure = targetExposure;
         }
 
         public override void AfterStart()
@@ -56,6 +59,9 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
             //scene.SetWinterTimeFactor(_isWinter ? 0.75f : 0f);
             if (scene.IsAtmosphereIndoor)
                 return;
+
+            if (!float.IsNaN(_targetExposure))
+                scene.SetTargetExposure(_targetExposure);
 
             //scene.SetRainDensity(_rainDensity);
             //scene.SetSnowDensity(_snowDensity);

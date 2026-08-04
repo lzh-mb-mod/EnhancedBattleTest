@@ -191,6 +191,31 @@ namespace EnhancedBattleTest.Data.MissionData
             };
         }
 
+        public static float GetTargetExposure(float timeOfDay, string weather)
+        {
+            float normalizedTime = timeOfDay % 24f;
+            if (normalizedTime < 0f)
+                normalizedTime += 24f;
+            switch (weather)
+            {
+                case "overcast":
+                case "heavy_rain":
+                    if (normalizedTime < 6f || normalizedTime >= 18f)
+                        return float.NaN;
+                    return -10f;
+                case "rain_storm":
+                    if (normalizedTime < 6f || normalizedTime >= 18f)
+                        return float.NaN;
+                    return -6f;
+                case "blizzard":
+                    if (normalizedTime < 6f || normalizedTime >= 18f)
+                        return float.NaN;
+                    return -7f;
+                default:
+                    return float.NaN;
+            }
+        }
+
         private static string GetBaseAtmosphereName(
             float timeOfDay,
             string weather)
@@ -199,16 +224,10 @@ namespace EnhancedBattleTest.Data.MissionData
             if (normalizedTime < 0f)
                 normalizedTime += 24f;
 
-            if (weather == "heavy_rain" || weather == "after_rain")
+            if (weather == "heavy_rain" ||
+                weather == "overcast")
             {
-                if (normalizedTime < 6f || normalizedTime >= 18f)
-                    return "TOD_01_00_HeavyRain";
                 return "TOD_12_00_Overcast";
-            }
-            if (weather == "rain_storm" || weather == "blizzard")
-            {
-                if (normalizedTime < 6f || normalizedTime >= 18f)
-                    return "TOD_01_00_HeavyRain";
             }
 
             return null;
@@ -232,7 +251,7 @@ namespace EnhancedBattleTest.Data.MissionData
                 case "clear":
                     season = GetNonWinterSeason(dayOfYear, season);
                     break;
-                case "after_rain":
+                case "overcast":
                     season = GetNonWinterSeason(dayOfYear, season);
                     rainValue = 0.65f;
                     break;
