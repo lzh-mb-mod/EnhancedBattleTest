@@ -1,0 +1,9 @@
+- [ ] Harden configuration loading and saving:
+  - [ ] Avoid assuming that at least one culture and basic troop exist when replacing an unavailable player character.
+  - [ ] Restore missing top-level configuration sections before constructing their view models.
+  - [ ] Handle errors while enumerating named configuration files and notify the player.
+  - [ ] Validate and construct a loaded configuration before replacing the active configuration and view models.
+  - [ ] Report failure if updating the current `spconfig-v3.xml` file fails after saving a named configuration.
+  - [ ] Write configurations atomically so an interrupted overwrite does not corrupt the existing file.
+  - [ ] Notify the player when the current configuration is corrupt and defaults are loa`ded.
+- [ ] About the troop spawning order: troops are spawned in the order of member roster. investigate to find a way to spawn all type of troops equally.

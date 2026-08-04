@@ -110,7 +110,12 @@ namespace EnhancedBattleTest.Data.MissionData
                             : 0f,
                         atmosphereInfo.FogInfo.Density,
                         atmosphereInfo.FogInfo.Color,
-                        atmosphereInfo.FogInfo.Falloff),
+                        atmosphereInfo.FogInfo.Falloff,
+                        config.MapConfig.ImproveExposure
+                            ? AtmosphereModel.GetTargetExposure(
+                                config.MapConfig.TimeOfDay,
+                                config.MapConfig.Weather)
+                            : float.NaN),
                     new EnhancedBattleTestPlayerAgentLogic(
                         context.PlayerCharacter,
                         context.PlayerParty.Party),
@@ -244,7 +249,12 @@ namespace EnhancedBattleTest.Data.MissionData
                                 : 0f,
                             atmosphereInfo.FogInfo.Density,
                             atmosphereInfo.FogInfo.Color,
-                            atmosphereInfo.FogInfo.Falloff),
+                            atmosphereInfo.FogInfo.Falloff,
+                            config.MapConfig.ImproveExposure
+                                ? AtmosphereModel.GetTargetExposure(
+                                    config.MapConfig.TimeOfDay,
+                                    config.MapConfig.Weather)
+                                : float.NaN),
                         new EnhancedBattleTestPlayerAgentLogic(
                             context.PlayerCharacter,
                             context.PlayerParty.Party),
