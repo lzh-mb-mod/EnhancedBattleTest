@@ -83,6 +83,7 @@
     <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}：{MEMBER_COUNT} 人" />
     <string id="EnhancedBattleTest_no_leader" text="无领队" />
     <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} 人" />
+    <string id="EnhancedBattleTest_total_troop_count" text="总兵力：{TROOP_COUNT}" />
     <string id="EnhancedBattleTest_save_configuration" text="保存配置" />
     <string id="EnhancedBattleTest_save_configuration_description" text="输入此战斗配置的名称。" />
     <string id="EnhancedBattleTest_save_configuration_destination_description" text="选择要覆盖的配置，或另存为新配置。" />

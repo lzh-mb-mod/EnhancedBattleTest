@@ -81,6 +81,7 @@
     <string id="EnhancedBattleTest_campaign_party_review_summary" text="{PARTY_NAME}: {MEMBER_COUNT} üye" />
     <string id="EnhancedBattleTest_no_leader" text="Lider Yok" />
     <string id="EnhancedBattleTest_party_member_count" text="{MEMBER_COUNT} üye" />
+    <string id="EnhancedBattleTest_total_troop_count" text="Toplam Birlik: {TROOP_COUNT}" />
     <string id="EnhancedBattleTest_save_configuration" text="Yapılandırmayı Kaydet" />
     <string id="EnhancedBattleTest_save_configuration_description" text="Bu savaş yapılandırması için bir ad girin." />
     <string id="EnhancedBattleTest_save_configuration_destination_description" text="Üzerine yazılacak bir yapılandırma seçin veya yeni bir yapılandırma olarak kaydedin." />

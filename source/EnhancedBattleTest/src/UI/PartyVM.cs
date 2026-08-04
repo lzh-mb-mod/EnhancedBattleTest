@@ -19,6 +19,7 @@ namespace EnhancedBattleTest.UI
         private readonly PartyConfig _config;
         private readonly BattleTypeConfig _battleTypeConfig;
         private readonly Action<PartyVM> _remove;
+        private readonly Action _onRosterChanged;
         private readonly CharacterConfig _playerCharacterConfig;
         private bool _isPlayerSide;
         private BannerImageIdentifierVM _banner;
@@ -117,12 +118,14 @@ namespace EnhancedBattleTest.UI
             Action<PartyVM> remove = null,
             Func<IEnumerable<BasicCharacterObject>>
                 heroPlayerCharacters = null,
-            Func<IEnumerable<BasicCharacterObject>> partyHeroes = null)
+            Func<IEnumerable<BasicCharacterObject>> partyHeroes = null,
+            Action onRosterChanged = null)
         {
             _config = config;
             _battleTypeConfig = battleTypeConfig;
             _playerCharacterConfig = playerCharacterConfig;
             _remove = remove;
+            _onRosterChanged = onRosterChanged;
             _isPlayerSide = isPlayerSide;
             Name = new TextVM(name);
             EnableGeneralText = new TextVM(GameTexts.FindText("str_ebt_enable"));
@@ -138,7 +141,7 @@ namespace EnhancedBattleTest.UI
             {
                 _config.HasHeroes = value;
                 Generals?.SetContentVisible(value);
-                RefreshBanner();
+                OnRosterChanged();
             };
             UseCustomBanner = new BoolVM(_config.UseCustomBanner);
             UseCustomBanner.OnValueChanged += value =>
@@ -158,7 +161,7 @@ namespace EnhancedBattleTest.UI
                     _playerCharacterConfig,
                     isPlayerSide,
                     battleTypeConfig,
-                    RefreshBanner,
+                    OnRosterChanged,
                     GetPreferredBannerCharacter,
                     () => GetPreferredBannerCharacter()
                           == _playerCharacterConfig.CharacterObject,
@@ -172,7 +175,7 @@ namespace EnhancedBattleTest.UI
                 true,
                 isPlayerSide,
                 battleTypeConfig,
-                RefreshBanner,
+                OnRosterChanged,
                 GetPreferredBannerCharacter,
                 heroPlayerCharacters);
             Generals.SetContentVisible(_config.HasHeroes);
@@ -183,7 +186,7 @@ namespace EnhancedBattleTest.UI
                 false,
                 isPlayerSide,
                 battleTypeConfig,
-                RefreshBanner,
+                OnRosterChanged,
                 GetPreferredBannerCharacter,
                 heroPlayerCharacters);
             IsBannerEditorEnabled = _config.UseCustomBanner;
@@ -269,6 +272,12 @@ namespace EnhancedBattleTest.UI
             Banner = new BannerImageIdentifierVM(ResolveBanner(), true);
         }
 
+        private void OnRosterChanged()
+        {
+            RefreshBanner();
+            _onRosterChanged?.Invoke();
+        }
+
         private Banner ResolveBanner()
         {
             return _config.ResolveBanner(
@@ -347,7 +356,7 @@ namespace EnhancedBattleTest.UI
             EnableGeneral.Value = _config.HasHeroes;
             Generals.Reload();
             Troops.Reload();
-            RefreshBanner();
+            OnRosterChanged();
 
             TextObject message =
                 GameTexts.FindText("str_ebt_campaign_party_imported");
