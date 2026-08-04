@@ -1,5 +1,6 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.Data;
+using EnhancedBattleTest.Data.MissionData;
 using EnhancedBattleTest.UI.Basic;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace EnhancedBattleTest.UI
         private SelectorVM<WallHitpointItemVM> _wallHitpointSelection;
         private SelectorVM<WeatherItemVM> _weatherSelection;
         private bool _isDefaultFogDensity;
+        private bool _improveExposure;
+        private bool _isImproveExposureVisible;
         private bool _canUseLowAltitudeAtmosphere;
         //private MBBindingList<MapItemVM> _mapSearchResults;
         private string _titleText;
@@ -35,6 +38,7 @@ namespace EnhancedBattleTest.UI
         private string _rainDensityText;
         private string _fogDensityText;
         private string _fogDefaultText;
+        private string _improveExposureText;
         private string _lowAltitudeAtmosphereText;
         private string _sceneLevelText;
         private string _wallHitpointsText;
@@ -99,8 +103,11 @@ namespace EnhancedBattleTest.UI
                 new SelectorVM<WeatherItemVM>(0, OnWeatherSelection);
             DayOfYear = new NumberVM<float>(1f, 1f, CampaignTime.DaysInYear, true);
             TimeOfDay = new NumberVM<float>(6f, 0f, 24f, false);
+            TimeOfDay.OnValueChanged += _ =>
+                UpdateImproveExposureVisibility();
             FogDensity = new NumberVM<float>(1f, 0f, 64f, false);
             IsDefaultFogDensity = true;
+            ImproveExposure = true;
             RefreshValues();
         }
 
@@ -115,6 +122,8 @@ namespace EnhancedBattleTest.UI
             TimeOfDayText = new TextObject("{=DszSWnc3}Time of Day").ToString();
             RainDensityText =
                 GameTexts.FindText("str_ebt_weather").ToString();
+            ImproveExposureText =
+                GameTexts.FindText("str_ebt_improve_exposure").ToString();
             LowAltitudeAtmosphereText =
                 GameTexts.FindText("str_ebt_low_altitude_atmosphere").ToString();
             FogDensityText = GameTexts.FindText("str_ebt_fog_density").ToString();
@@ -134,7 +143,7 @@ namespace EnhancedBattleTest.UI
             foreach (int sceneLevel in CustomBattleData.SceneLevels)
                 SceneLevelSelection.AddItem(new SceneLevelItemVM(sceneLevel));
             AddWeatherItem("clear", "str_ebt_weather_clear");
-            AddWeatherItem("after_rain", "str_ebt_weather_after_rain");
+            AddWeatherItem("overcast", "str_ebt_weather_overcast");
             AddWeatherItem("light_rain", "str_ebt_weather_light_rain");
             AddWeatherItem("heavy_rain", "str_ebt_weather_heavy_rain");
             AddWeatherItem("rain_storm", "str_ebt_weather_rain_storm");
@@ -143,6 +152,7 @@ namespace EnhancedBattleTest.UI
             WallHitpointSelection.SelectedIndex = 0;
             SceneLevelSelection.SelectedIndex = 0;
             WeatherSelection.SelectedIndex = 0;
+            UpdateImproveExposureVisibility();
         }
 
         private void AddWeatherItem(string id, string textId)
@@ -199,7 +209,16 @@ namespace EnhancedBattleTest.UI
 
         private void OnWeatherSelection(SelectorVM<WeatherItemVM> selector)
         {
-            SelectedWeatherId = selector.SelectedItem.WeatherId;
+            SelectedWeatherId = selector.SelectedItem?.WeatherId;
+            UpdateImproveExposureVisibility();
+        }
+
+        private void UpdateImproveExposureVisibility()
+        {
+            IsImproveExposureVisible = !float.IsNaN(
+                AtmosphereModel.GetTargetExposure(
+                    SelectedTimeOfDay,
+                    SelectedWeatherId));
         }
 
         public void SetWeather(string weatherId)
@@ -397,6 +416,32 @@ namespace EnhancedBattleTest.UI
         }
 
         [DataSourceProperty]
+        public bool ImproveExposure
+        {
+            get => _improveExposure;
+            set
+            {
+                if (value == _improveExposure)
+                    return;
+                _improveExposure = value;
+                OnPropertyChanged(nameof(ImproveExposure));
+            }
+        }
+
+        [DataSourceProperty]
+        public bool IsImproveExposureVisible
+        {
+            get => _isImproveExposureVisible;
+            private set
+            {
+                if (value == _isImproveExposureVisible)
+                    return;
+                _isImproveExposureVisible = value;
+                OnPropertyChanged(nameof(IsImproveExposureVisible));
+            }
+        }
+
+        [DataSourceProperty]
         public bool CanUseLowAltitudeAtmosphere
         {
             get => _canUseLowAltitudeAtmosphere;
@@ -544,6 +589,21 @@ namespace EnhancedBattleTest.UI
                     return;
                 _fogDefaultText = value;
                 OnPropertyChangedWithValue(value, nameof(FogDefaultText));
+            }
+        }
+
+        [DataSourceProperty]
+        public string ImproveExposureText
+        {
+            get => _improveExposureText;
+            set
+            {
+                if (value == _improveExposureText)
+                    return;
+                _improveExposureText = value;
+                OnPropertyChangedWithValue(
+                    value,
+                    nameof(ImproveExposureText));
             }
         }
 
