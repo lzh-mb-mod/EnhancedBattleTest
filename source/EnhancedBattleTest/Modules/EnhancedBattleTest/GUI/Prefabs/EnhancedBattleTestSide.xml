@@ -2,9 +2,14 @@
   <Window>
     <Widget WidthSizePolicy="Fixed" HeightSizePolicy="StretchToParent" SuggestedWidth="585" HorizontalAlignment="Left">
       <Children>
-        <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="30" Brush="CustomBattle.Character.Title.Text" />
+        <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" VerticalAlignment="Top" MarginTop="20" LayoutImp.LayoutMethod="VerticalTopToBottom">
+          <Children>
+            <RichTextWidget DataSource="{Name}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" Brush="CustomBattle.Character.Title.Text" />
+            <RichTextWidget DataSource="{TotalTroopCountText}" Text="@Text" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Center" MarginTop="5" Brush="CustomBattle.Value.Text" />
+          </Children>
+        </ListPanel>
 
-        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="85">
+        <ListPanel WidthSizePolicy="StretchToParent" HeightSizePolicy="StretchToParent" LayoutImp.LayoutMethod="VerticalBottomToTop" MarginTop="105">
           <Children>
             <ListPanel WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" HorizontalAlignment="Left" MarginLeft="30" LayoutImp.LayoutMethod="HorizontalLeftToRight">
               <Children>

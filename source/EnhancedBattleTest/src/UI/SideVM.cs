@@ -3,6 +3,7 @@ using EnhancedBattleTest.UI.Basic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
@@ -23,6 +24,7 @@ namespace EnhancedBattleTest.UI
         public TextVM OverrideTacticLevelText { get; }
         public TextVM TacticText { get; }
         public TextVM AddAlliedPartyText { get; }
+        public TextVM TotalTroopCountText { get; }
         public NumberVM<float> TacticLevel { get; }
         public PartyVM PrimaryParty { get; }
         public MBBindingList<PartyVM> AlliedParties { get; }
@@ -55,6 +57,7 @@ namespace EnhancedBattleTest.UI
                 PrimaryParty.IsPlayerSide = value;
                 foreach (PartyVM party in AlliedParties)
                     party.IsPlayerSide = value;
+                UpdateTotalTroopCount();
             }
         }
 
@@ -80,6 +83,7 @@ namespace EnhancedBattleTest.UI
             TacticText = new TextVM(GameTexts.FindText("str_ebt_tactic_level"));
             AddAlliedPartyText =
                 new TextVM(GameTexts.FindText("str_ebt_add_allied_party"));
+            TotalTroopCountText = new TextVM(TextObject.GetEmpty());
             TacticLevel = new NumberVM<float>(config.TacticLevel, 0, 100, true);
             TacticLevel.OnValueChanged += value =>
                 _config.TacticLevel = (int)value;
@@ -92,11 +96,13 @@ namespace EnhancedBattleTest.UI
                 _config.PlayerCharacter,
                 null,
                 _heroPlayerCharacters,
-                _partyHeroes);
+                _partyHeroes,
+                UpdateTotalTroopCount);
             AlliedParties = new MBBindingList<PartyVM>();
             foreach (PartyConfig party in _config.AlliedParties)
                 AlliedParties.Add(CreateAlliedPartyVM(party));
             UpdateAlliedPartyNames();
+            UpdateTotalTroopCount();
         }
 
         public void AddAlliedParty()
@@ -105,11 +111,13 @@ namespace EnhancedBattleTest.UI
             _config.AlliedParties.Add(config);
             AlliedParties.Add(CreateAlliedPartyVM(config));
             UpdateAlliedPartyNames();
+            UpdateTotalTroopCount();
         }
 
         public void SetPlayerType(PlayerType playerType)
         {
             PrimaryParty.SetPlayerType(playerType);
+            UpdateTotalTroopCount();
         }
 
         public bool IsValid()
@@ -125,6 +133,7 @@ namespace EnhancedBattleTest.UI
             OverrideTacticLevelText.RefreshValues();
             TacticText.RefreshValues();
             AddAlliedPartyText.RefreshValues();
+            TotalTroopCountText.RefreshValues();
             PrimaryParty.RefreshValues();
             foreach (PartyVM party in AlliedParties)
                 party.RefreshValues();
@@ -140,7 +149,8 @@ namespace EnhancedBattleTest.UI
                 null,
                 RemoveAlliedParty,
                 _heroPlayerCharacters,
-                _partyHeroes);
+                _partyHeroes,
+                UpdateTotalTroopCount);
         }
 
         private void RemoveAlliedParty(PartyVM party)
@@ -151,6 +161,7 @@ namespace EnhancedBattleTest.UI
             AlliedParties.RemoveAt(index);
             _config.AlliedParties.RemoveAt(index);
             UpdateAlliedPartyNames();
+            UpdateTotalTroopCount();
         }
 
         private void UpdateAlliedPartyNames()
@@ -161,6 +172,60 @@ namespace EnhancedBattleTest.UI
                 name.SetTextVariable("INDEX", i + 1);
                 AlliedParties[i].SetName(name);
             }
+        }
+
+        private void UpdateTotalTroopCount()
+        {
+            int total = GetParties()
+                .Sum(GetPartyTroopCount);
+            if (_isPlayerSide
+                && _battleTypeConfig.PlayerType != PlayerType.None
+                && _config.PlayerCharacter?.CharacterObject
+                    is CharacterObject playerCharacter
+                && !ContainsCharacter(
+                    _config.PrimaryParty,
+                    playerCharacter))
+            {
+                total++;
+            }
+            TextObject text =
+                GameTexts.FindText("str_ebt_total_troop_count");
+            text.SetTextVariable("TROOP_COUNT", total);
+            TotalTroopCountText.TextObject = text;
+        }
+
+        private static int GetPartyTroopCount(PartyConfig party)
+        {
+            int troopCount = party.Troops.Troops
+                .Where(troop =>
+                    troop?.Number > 0
+                    && troop.Character?.CharacterObject
+                        is CharacterObject)
+                .Sum(troop => troop.Number);
+            if (!party.HasHeroes)
+                return troopCount;
+
+            return troopCount + party.Heroes.Troops.Count(troop =>
+                troop?.Character?.CharacterObject is CharacterObject);
+        }
+
+        private static bool ContainsCharacter(
+            PartyConfig party,
+            CharacterObject character)
+        {
+            return party.HasHeroes
+                   && party.Heroes.Troops.Any(troop =>
+                       troop?.Character?.CharacterObject == character)
+                   || party.Troops.Troops.Any(troop =>
+                       troop?.Number > 0
+                       && troop.Character?.CharacterObject == character);
+        }
+
+        private IEnumerable<PartyConfig> GetParties()
+        {
+            yield return _config.PrimaryParty;
+            foreach (PartyConfig party in _config.AlliedParties)
+                yield return party;
         }
     }
 }
