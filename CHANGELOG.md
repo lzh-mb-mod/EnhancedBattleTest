@@ -10,6 +10,7 @@
 - Add an optional tactical-level override for each battle side.
 
 ### Changed
+- Target Bannerlord v1.4.8.
 - Use native campaign parties and agent origins for improved compatibility with other mods.
 - Preserve character, faction, and clan selections while dependent filters are rebuilt.
 - Improve party, troop, character-selection, and roster-review layouts.
