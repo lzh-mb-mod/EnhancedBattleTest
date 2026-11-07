@@ -1,63 +1,98 @@
 using EnhancedBattleTest.Data;
 using HarmonyLib;
+using System;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.Library;
+using TaleWorlds.Localization;
+using TaleWorlds.MountAndBlade.ViewModelCollection.EscapeMenu;
 
 namespace EnhancedBattleTest.Patch
 {
     public static class EnhancedBattleTestSavePatch
     {
+        private static bool _manualSaveConfirmed;
+
         [HarmonyPatch(typeof(SaveHandler), "SetSaveArgs")]
         private static class SetSaveArgsPatch
         {
-            private static bool Prefix()
+            private static readonly Type SaveModeType =
+                AccessTools.Method(typeof(SaveHandler), "SetSaveArgs")
+                    .GetParameters()[0].ParameterType;
+            private static readonly int AutoSaveMode =
+                Convert.ToInt32(Enum.Parse(SaveModeType, "AutoSave"));
+            private static readonly int SaveAsMode =
+                Convert.ToInt32(Enum.Parse(SaveModeType, "SaveAs"));
+
+            // Harmony 2.0.4 passes the private SaveMode enum as its underlying int.
+            private static bool Prefix(SaveHandler __instance, int __0, string __1)
             {
-                if (!EnhancedBattleTestSaveGuard.IsSavingDisabled)
+                if (EnhancedBattleTestPartyController.Current != null)
+                    return false;
+
+                if (!EnhancedBattleTestSaveGuard.RequiresManualSaveConfirmation)
                     return true;
 
-                EnhancedBattleTestSaveGuard.ShowSavingDisabledMessageOnce();
-                return false;
-            }
-        }
+                if (__0 == AutoSaveMode)
+                {
+                    EnhancedBattleTestSaveGuard.ShowAutosaveDisabledMessageOnce();
+                    return false;
+                }
 
-        [HarmonyPatch(typeof(SaveHandler), "SaveTick")]
-        private static class SaveTickPatch
-        {
-            private static bool Prefix()
-            {
-                if (!EnhancedBattleTestSaveGuard.IsSavingDisabled)
+                if (_manualSaveConfirmed)
                     return true;
 
-                EnhancedBattleTestSaveGuard.ShowSavingDisabledMessageOnce();
+                return __0 == SaveAsMode
+                    ? AllowManualSave(() => __instance.SaveAs(__1))
+                    : AllowManualSave(
+                        __instance.QuickSaveCurrentGame,
+                        skipIfInquiryActive: true);
+            }
+        }
+
+        [HarmonyPatch(typeof(EscapeMenuItemVM), nameof(EscapeMenuItemVM.ExecuteAction))]
+        private static class SaveAndExitPatch
+        {
+            private const string SaveAndExitTextId = "AbEh2y8o";
+
+            private static bool Prefix(EscapeMenuItemVM __instance, TextObject ____itemObj)
+            {
+                // The native action hides inquiries and sets the exit-on-save flag.
+                // Confirm before invoking it so cancellation does neither.
+                return ____itemObj?.GetID() != SaveAndExitTextId
+                       || AllowManualSave(__instance.ExecuteAction);
+            }
+        }
+
+        private static bool AllowManualSave(Action save, bool skipIfInquiryActive = false)
+        {
+            if (EnhancedBattleTestPartyController.Current != null)
                 return false;
-            }
-        }
 
-        [HarmonyPatch(
-            typeof(SaveHandler),
-            nameof(SaveHandler.QuickSaveCurrentGame))]
-        private static class QuickSaveCurrentGamePatch
-        {
-            private static bool Prefix()
-            {
-                return AllowManualSave();
-            }
-        }
-
-        [HarmonyPatch(typeof(SaveHandler), nameof(SaveHandler.SaveAs))]
-        private static class SaveAsPatch
-        {
-            private static bool Prefix()
-            {
-                return AllowManualSave();
-            }
-        }
-
-        private static bool AllowManualSave()
-        {
-            if (!EnhancedBattleTestSaveGuard.IsSavingDisabled)
+            if (!EnhancedBattleTestSaveGuard.RequiresManualSaveConfirmation
+                || _manualSaveConfirmed)
                 return true;
 
-            EnhancedBattleTestSaveGuard.ShowSavingDisabledMessage();
+            if (skipIfInquiryActive && InformationManager.IsAnyInquiryActive())
+                return false;
+
+            Campaign campaign = Campaign.Current;
+            EnhancedBattleTestSaveGuard.ShowManualSaveConfirmation(() =>
+            {
+                if (Campaign.Current != campaign
+                    || !EnhancedBattleTestSaveGuard.RequiresManualSaveConfirmation
+                    || EnhancedBattleTestPartyController.Current != null)
+                    return;
+
+                _manualSaveConfirmed = true;
+                try
+                {
+                    save();
+                }
+                finally
+                {
+                    _manualSaveConfirmed = false;
+                }
+            });
             return false;
         }
     }
