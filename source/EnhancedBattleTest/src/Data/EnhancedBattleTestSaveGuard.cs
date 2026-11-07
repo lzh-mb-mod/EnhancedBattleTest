@@ -1,27 +1,28 @@
 using System;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.Localization;
 
 namespace EnhancedBattleTest.Data
 {
     public static class EnhancedBattleTestSaveGuard
     {
-        public static bool IsSavingDisabled { get; private set; }
+        public static bool RequiresManualSaveConfirmation { get; private set; }
         private static bool _postBattleWarningPending;
-        private static bool _savingSkippedMessageShown;
+        private static bool _autosaveDisabledMessageShown;
 
-        public static void Disable()
+        public static void MarkCampaignChanged()
         {
-            IsSavingDisabled = true;
+            RequiresManualSaveConfirmation = true;
             _postBattleWarningPending = true;
-            _savingSkippedMessageShown = false;
+            _autosaveDisabledMessageShown = false;
         }
 
         public static void Reset()
         {
-            IsSavingDisabled = false;
+            RequiresManualSaveConfirmation = false;
             _postBattleWarningPending = false;
-            _savingSkippedMessageShown = false;
+            _autosaveDisabledMessageShown = false;
         }
 
         public static bool ConsumePostBattleWarning()
@@ -55,18 +56,28 @@ namespace EnhancedBattleTest.Data
                 false);
         }
 
-        public static void ShowSavingDisabledMessage()
+        public static void ShowManualSaveConfirmation(Action onConfirm)
         {
-            Utility.DisplayLocalizedText("str_ebt_save_disabled");
+            InformationManager.ShowInquiry(
+                new InquiryData(
+                    GameTexts.FindText("str_ebt_confirm_manual_save_title").ToString(),
+                    GameTexts.FindText("str_ebt_confirm_manual_save").ToString(),
+                    true,
+                    true,
+                    new TextObject("{=bV75iwKa}Save").ToString(),
+                    GameTexts.FindText("str_cancel").ToString(),
+                    onConfirm,
+                    null),
+                pauseGameActiveState: true);
         }
 
-        public static void ShowSavingDisabledMessageOnce()
+        public static void ShowAutosaveDisabledMessageOnce()
         {
-            if (_savingSkippedMessageShown)
+            if (_autosaveDisabledMessageShown)
                 return;
 
-            _savingSkippedMessageShown = true;
-            ShowSavingDisabledMessage();
+            _autosaveDisabledMessageShown = true;
+            Utility.DisplayLocalizedText("str_ebt_autosave_disabled");
         }
     }
 }

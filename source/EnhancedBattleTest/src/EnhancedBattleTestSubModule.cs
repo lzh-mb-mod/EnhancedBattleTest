@@ -65,7 +65,7 @@ namespace EnhancedBattleTest
             if (Campaign.Current == null)
                 return;
 
-            if (EnhancedBattleTestSaveGuard.IsSavingDisabled)
+            if (EnhancedBattleTestSaveGuard.RequiresManualSaveConfirmation)
             {
                 OpenBattleTestConfiguration();
                 return;
@@ -109,6 +109,12 @@ namespace EnhancedBattleTest
 
         private static void OpenBattleTestConfiguration()
         {
+            if (Campaign.Current?.SaveHandler.IsSaving == true)
+            {
+                Utility.DisplayLocalizedText("str_ebt_save_in_progress");
+                return;
+            }
+
             Game.Current.GameStateManager.PushState(
                 Game.Current.GameStateManager.CreateState<EnhancedBattleTestState>());
         }
