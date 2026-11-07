@@ -147,10 +147,13 @@
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Kuşatma savaşları bir oyuncu karakteri gerektirir." />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />
-    <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test, sefer durumunu korumak için elinden geleni yapar ancak değişmeden kalacağını garanti edemez. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır." />
-    <string id="EnhancedBattleTest_save_disabled" text="Enhanced Battle Test savaşından sonra sefer yeniden yüklenene kadar kayıt devre dışıdır." />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="Test savaşı seferinizde kalıcı değişiklikler bırakabilir. Savaştan sonra seferi yeniden yükleyene kadar otomatik kayıt yapılmaz ve elle kaydetmek için onay gerekir." />
+    <string id="EnhancedBattleTest_autosave_disabled" text="Seferi yeniden yükleyene kadar otomatik kayıt yapılmaz." />
+    <string id="EnhancedBattleTest_confirm_manual_save_title" text="Test Savaşından Sonra Kaydedilsin mi?" />
+    <string id="EnhancedBattleTest_confirm_manual_save" text="Test savaşı seferinizde değişiklikler bırakmış olabilir. Yine de kaydetmek istiyor musunuz?" />
+    <string id="EnhancedBattleTest_save_in_progress" text="Test savaşına başlamadan önce kaydın tamamlanmasını bekleyin." />
     <string id="EnhancedBattleTest_save_before_battle_title" text="Savaş Yapılandırmasından Önce Kaydet?" />
-    <string id="EnhancedBattleTest_save_before_battle_description" text="Enhanced Battle Test, savaşı çalıştırmak için sefer durumunu geçici olarak değiştirir. Sonrasında durumu geri yüklemeye çalışsa da bazı değişiklikler kalabilir. Savaştan sonra mevcut sefere devam etmek önerilmez; oynamaya devam etmek istiyorsanız kayıtlı bir oyunu yükleyin. Savaştan sonra sefer yeniden yüklenene kadar tüm manuel ve otomatik kayıtlar devre dışı bırakılır. Şimdi kaydetmek güvenli bir yeniden yükleme noktası sağlar. Önce oyunu kaydetmek ister misiniz?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="Test savaşı seferinizde kalıcı değişiklikler bırakabilir. Savaştan sonra seferi yeniden yükleyene kadar otomatik kayıt yapılmaz ve elle kaydetmek için onay gerekir. Daha sonra güvenle dönebileceğiniz bir kayıt oluşturmak ister misiniz?" />
     <string id="EnhancedBattleTest_save_before_battle" text="Önce oyunu kaydet" />
     <string id="EnhancedBattleTest_continue_without_saving" text="Kaydetmeden devam et" />
     <string id="EnhancedBattleTest_rain_snow_density" text="Yağmur/Kar Yoğunluğu" />

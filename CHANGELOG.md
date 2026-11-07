@@ -10,6 +10,7 @@
 - Add an optional tactical-level override for each battle side.
 
 ### Changed
+- Ask for confirmation before saving manually after a test battle. Automatic saves remain disabled until the campaign is reloaded.
 - Use native campaign parties and agent origins for improved compatibility with other mods.
 - Preserve character, faction, and clan selections while dependent filters are rebuilt.
 - Improve party, troop, character-selection, and roster-review layouts.

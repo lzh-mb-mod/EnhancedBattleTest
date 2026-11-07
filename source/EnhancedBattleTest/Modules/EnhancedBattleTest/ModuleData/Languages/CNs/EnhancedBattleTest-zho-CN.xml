@@ -150,10 +150,13 @@
     <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />
     <string id="EnhancedBattleTest_siege_player_character_required" text="攻城战必须设置玩家角色。" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="增强战斗测试警告" />
-    <string id="EnhancedBattleTest_campaign_state_warning" text="增强战斗测试会尽力保持战役状态不变，但无法作出保证。战斗结束后，在重新加载战役前，手动保存和自动保存都将被禁用。" />
-    <string id="EnhancedBattleTest_save_disabled" text="增强战斗测试结束后，保存功能已被禁用，直至重新加载战役。" />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="测试战斗可能会在战役中留下改动。战斗结束后，自动保存将暂停，手动保存需要确认，直到重新加载战役。" />
+    <string id="EnhancedBattleTest_autosave_disabled" text="自动保存已暂停，重新加载战役后将恢复。" />
+    <string id="EnhancedBattleTest_confirm_manual_save_title" text="要保存测试后的战役吗？" />
+    <string id="EnhancedBattleTest_confirm_manual_save" text="测试战斗可能在战役中留下了改动。仍要保存当前战役吗？" />
+    <string id="EnhancedBattleTest_save_in_progress" text="请等待当前保存完成，再开始测试战斗。" />
     <string id="EnhancedBattleTest_save_before_battle_title" text="在配置战斗前保存？" />
-    <string id="EnhancedBattleTest_save_before_battle_description" text="增强战斗测试需要临时修改战役状态以进行战斗。虽然模组会在战斗后尝试还原状态，但仍可能残留部分变化。不建议在战斗后继续当前战役；如需继续游玩，请加载已保存的游戏。战斗结束后，在重新加载战役前，手动保存和自动保存都将被禁用。现在保存可提供一个安全的重新加载点。是否先保存游戏？" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="测试战斗可能会在战役中留下改动。战斗结束后，自动保存将暂停，手动保存需要确认，直到重新加载战役。是否先保存一份可以安全读回的存档？" />
     <string id="EnhancedBattleTest_save_before_battle" text="先保存游戏" />
     <string id="EnhancedBattleTest_continue_without_saving" text="不保存并继续" />
     <string id="EnhancedBattleTest_rain_snow_density" text="雨雪强度" />

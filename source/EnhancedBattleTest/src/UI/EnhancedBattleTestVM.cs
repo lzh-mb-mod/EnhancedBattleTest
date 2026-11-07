@@ -645,6 +645,12 @@ namespace EnhancedBattleTest.UI
 
         private void OpenMission(SceneData sceneData)
         {
+            if (Campaign.Current.SaveHandler.IsSaving)
+            {
+                Utility.DisplayLocalizedText("str_ebt_save_in_progress");
+                return;
+            }
+
             GameTexts.SetVariable("MapName", sceneData.Name);
             Utility.DisplayLocalizedText("str_ebt_current_map");
             EnhancedBattleTestMissions.OpenMission(

@@ -30,6 +30,7 @@ namespace EnhancedBattleTest.Data.MissionData
         {
             try
             {
+                EnhancedBattleTestSaveGuard.MarkCampaignChanged();
                 EnhancedBattleTestPartyController.BattleContext context =
                     EnhancedBattleTestPartyController.Create(config);
                 return config.BattleTypeConfig.BattleType == BattleType.Siege
