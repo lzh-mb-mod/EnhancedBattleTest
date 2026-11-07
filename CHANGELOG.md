@@ -10,6 +10,7 @@
 - Add an optional tactical-level override for each battle side.
 
 ### Changed
+- Target Bannerlord v1.4.6.
 - Ask for confirmation before saving manually after a test battle. Automatic saves remain disabled until the campaign is reloaded.
 - Use native campaign parties and agent origins for improved compatibility with other mods.
 - Preserve character, faction, and clan selections while dependent filters are rebuilt.

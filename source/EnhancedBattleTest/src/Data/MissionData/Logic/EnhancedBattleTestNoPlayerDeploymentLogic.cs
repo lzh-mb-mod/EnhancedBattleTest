@@ -31,9 +31,11 @@ namespace EnhancedBattleTest.Data.MissionData.Logic
 
         public override void OnMissionTick(float dt)
         {
-            if (!Mission.IsDeploymentFinished)
+            if (!_spawnLogic.IsInitialSpawnOver)
                 return;
 
+            Mission.OnDeploymentFinished();
+            Mission.OnAfterDeploymentFinished();
             _spawnLogic.SetReinforcementsSpawnEnabled(true);
             RestoreDeploymentBypass();
             Mission.RemoveMissionBehavior(this);
