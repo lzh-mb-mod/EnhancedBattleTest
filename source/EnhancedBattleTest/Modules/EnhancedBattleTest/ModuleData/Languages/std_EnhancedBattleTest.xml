@@ -150,10 +150,13 @@
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Siege battles require a player character." />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />
-    <string id="EnhancedBattleTest_campaign_state_warning" text="Enhanced Battle Test will try its best to preserve the campaign state, but cannot guarantee that it will remain unchanged. After the battle, all manual and automatic game saving will be disabled until the campaign is reloaded." />
-    <string id="EnhancedBattleTest_save_disabled" text="Saving is disabled after an Enhanced Battle Test battle until the campaign is reloaded." />
+    <string id="EnhancedBattleTest_campaign_state_warning" text="The test battle may leave changes in your campaign. After the battle, automatic saves are disabled and manual saves require confirmation until you reload the campaign." />
+    <string id="EnhancedBattleTest_autosave_disabled" text="Automatic saves are disabled until you reload the campaign." />
+    <string id="EnhancedBattleTest_confirm_manual_save_title" text="Save After Test Battle?" />
+    <string id="EnhancedBattleTest_confirm_manual_save" text="The test battle may have left changes in your campaign. Do you want to save it anyway?" />
+    <string id="EnhancedBattleTest_save_in_progress" text="Wait for the current save to finish before starting a test battle." />
     <string id="EnhancedBattleTest_save_before_battle_title" text="Save Before Battle Configuration?" />
-    <string id="EnhancedBattleTest_save_before_battle_description" text="Enhanced Battle Test temporarily changes the campaign state to run a battle. Although it tries to restore the state afterward, some changes may remain. Continuing the campaign afterward is not encouraged; load a saved game if you want to continue playing. After the battle, all manual and automatic saving will be disabled until the campaign is reloaded. Saving now provides a safe point to reload. Would you like to save the game first?" />
+    <string id="EnhancedBattleTest_save_before_battle_description" text="A test battle may leave changes in your campaign. After the battle, automatic saves are disabled and manual saves require confirmation until you reload the campaign. Save now to keep a safe point to return to?" />
     <string id="EnhancedBattleTest_save_before_battle" text="Save the game first" />
     <string id="EnhancedBattleTest_continue_without_saving" text="Continue without saving" />
     <string id="EnhancedBattleTest_rain_snow_density" text="Rain/Snow Density" />

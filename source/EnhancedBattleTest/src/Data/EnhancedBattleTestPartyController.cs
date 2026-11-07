@@ -365,7 +365,6 @@ namespace EnhancedBattleTest.Data
                     config.BattleTypeConfig.EquipmentModifierType,
                     playerIdentity,
                     originalPlayerEncounter);
-                EnhancedBattleTestSaveGuard.Disable();
                 return Current;
             }
             catch
