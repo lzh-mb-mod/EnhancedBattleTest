@@ -1,5 +1,7 @@
 ﻿using EnhancedBattleTest.Config;
 using EnhancedBattleTest.UI.Basic;
+using EnhancedBattleTest.SinglePlayer.Config;
+using EnhancedBattleTest.SinglePlayer.Data;
 using System;
 using System.Linq;
 using TaleWorlds.CampaignSystem;
@@ -194,21 +196,9 @@ namespace EnhancedBattleTest.UI
                 if (source != null)
                     return result;
 
-                CultureObject culture =
-                    Utility.GetCulture(_partyConfig) as CultureObject;
-                CharacterObject basicTroop = culture?.BasicTroop
-                    ?? Game.Current.ObjectManager
-                        .GetObjectTypeList<BasicCharacterObject>()
-                        .OfType<CharacterObject>()
-                        .FirstOrDefault(character =>
-                            !character.IsHero
-                            && !character.IsTemplate
-                            && !character.IsChildTemplate);
-                if (basicTroop != null)
-                {
-                    result.Character =
-                        CharacterConfig.Create(basicTroop.StringId);
-                }
+                CharacterObject basicTroop = SPCharacterCollection.FindDefaultTroop(
+                    Utility.GetCulture(_partyConfig));
+                result.Character = new SPCharacterConfig(basicTroop);
                 return result;
             }
 
@@ -226,18 +216,10 @@ namespace EnhancedBattleTest.UI
                     usedCharacters.Add(playerCharacter);
                 }
             }
-            var candidates = Game.Current.ObjectManager
-                .GetObjectTypeList<BasicCharacterObject>()
-                .OfType<CharacterObject>()
-                .Where(character =>
-                    !character.IsTemplate
-                    && !character.IsChildTemplate
-                    && character.IsHero)
-                .ToList();
-            CharacterObject character = candidates.FirstOrDefault(
-                candidate => !usedCharacters.Contains(candidate));
-            if (character != null)
-                result.Character = CharacterConfig.Create(character.StringId);
+            CharacterObject character = SPCharacterCollection.GetCampaignCharacters()
+                .FirstOrDefault(candidate =>
+                    candidate.IsHero && !usedCharacters.Contains(candidate));
+            result.Character = new SPCharacterConfig(character);
             return result;
         }
 

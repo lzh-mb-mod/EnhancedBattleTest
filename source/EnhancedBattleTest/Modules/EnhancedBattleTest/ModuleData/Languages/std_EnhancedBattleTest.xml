@@ -149,6 +149,8 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Sergeant mode requires an available general in the player team." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Siege battles require a player character." />
+    <string id="EnhancedBattleTest_select_player_character" text="Choose a player character before starting the battle." />
+    <string id="EnhancedBattleTest_both_sides_need_troops" text="Each side needs at least one available troop or hero." />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Warning" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="The test battle may leave changes in your campaign. After the battle, automatic saves are disabled and manual saves require confirmation until you reload the campaign." />
     <string id="EnhancedBattleTest_autosave_disabled" text="Automatic saves are disabled until you reload the campaign." />

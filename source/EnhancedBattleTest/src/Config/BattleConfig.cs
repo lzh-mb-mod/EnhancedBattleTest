@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+using EnhancedBattleTest.SinglePlayer.Config;
+using EnhancedBattleTest.SinglePlayer.Data;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
@@ -26,11 +28,42 @@ namespace EnhancedBattleTest.Config
 
         public static BattleConfig CreateDefault()
         {
-            return new BattleConfig
+            var playerCharacter = Game.Current?.PlayerTroop as CharacterObject;
+            var config = new BattleConfig
             {
-                PlayerTeamConfig = CreatePlayerTeam(),
+                PlayerTeamConfig = CreatePlayerTeam(playerCharacter),
                 EnemyTeamConfig = CreateEnemyTeam()
             };
+            CharacterObject playerTroop = EnsureDefaultTroop(
+                config.PlayerTeamConfig, SPCharacterCollection.GetCharacterCulture(playerCharacter));
+            EnsureDefaultTroop(config.EnemyTeamConfig, otherSideTroop: playerTroop);
+            return Normalize(config);
+        }
+
+        private static CharacterObject EnsureDefaultTroop(
+            TeamConfig team,
+            BasicCultureObject preferredCulture = null,
+            CharacterObject otherSideTroop = null)
+        {
+            List<TroopConfig> troops = team.PrimaryParty.Troops.Troops;
+            CharacterObject firstTroop = troops
+                .Select(troop => troop.Character.CharacterObject)
+                .OfType<CharacterObject>()
+                .FirstOrDefault(character => !character.IsHero);
+            if (firstTroop != null)
+                return firstTroop;
+
+            CharacterObject fallback = SPCharacterCollection.FindDefaultTroop(
+                preferredCulture, otherSideTroop);
+            if (fallback != null)
+            {
+                troops.Add(new TroopConfig
+                {
+                    Character = new SPCharacterConfig(fallback),
+                    Number = 40
+                });
+            }
+            return fallback;
         }
 
         public void Reset()
@@ -43,10 +76,8 @@ namespace EnhancedBattleTest.Config
             SiegeMachineConfig = defaults.SiegeMachineConfig;
         }
 
-        private static TeamConfig CreatePlayerTeam()
+        private static TeamConfig CreatePlayerTeam(CharacterObject playerCharacter)
         {
-            string playerCharacterId =
-                Hero.MainHero?.CharacterObject?.StringId;
             return new TeamConfig
             {
                 PrimaryParty = new PartyConfig
@@ -76,9 +107,7 @@ namespace EnhancedBattleTest.Config
                         }
                     }
                 },
-                PlayerCharacter = string.IsNullOrEmpty(playerCharacterId)
-                    ? CharacterConfig.Create()
-                    : CharacterConfig.Create(playerCharacterId)
+                PlayerCharacter = new SPCharacterConfig(playerCharacter)
             };
         }
 
@@ -153,7 +182,9 @@ namespace EnhancedBattleTest.Config
             if (team == null)
                 return;
 
-            RemoveUnavailableCharacters(team.PrimaryParty);
+            team.AlliedParties?.RemoveAll(party => party == null);
+            foreach (PartyConfig party in GetParties(team))
+                RemoveUnavailableCharacters(party);
             if (team.PlayerCharacter?.CharacterObject == null)
             {
                 CharacterConfig defaultCharacter =
@@ -167,25 +198,10 @@ namespace EnhancedBattleTest.Config
                         .Select(troop => troop?.Character)
                         .FirstOrDefault(character =>
                             character?.CharacterObject != null);
-                CharacterObject fallbackCharacter =
-                    Game.Current?.ObjectManager
-                        .GetObjectTypeList<BasicCharacterObject>()
-                        .OfType<CharacterObject>()
-                        .FirstOrDefault(character =>
-                            !character.IsHero
-                            && !character.IsTemplate
-                            && !character.IsChildTemplate);
                 team.PlayerCharacter =
                     defaultCharacter?.Clone()
-                    ?? (fallbackCharacter == null
-                        ? CharacterConfig.Create()
-                        : CharacterConfig.Create(fallbackCharacter.StringId));
+                    ?? new SPCharacterConfig(SPCharacterCollection.FindDefaultTroop());
             }
-            team.AlliedParties?.RemoveAll(party => party == null);
-            if (team.AlliedParties == null)
-                return;
-            foreach (PartyConfig party in team.AlliedParties)
-                RemoveUnavailableCharacters(party);
         }
 
         private static void RemoveUnavailableCharacters(PartyConfig party)

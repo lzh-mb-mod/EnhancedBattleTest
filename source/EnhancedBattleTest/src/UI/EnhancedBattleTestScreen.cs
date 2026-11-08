@@ -74,14 +74,15 @@ namespace EnhancedBattleTest.UI
         protected override void OnFinalize()
         {
             UnloadMovie();
-            RemoveLayer(this._gauntletLayer);
+            if (_gauntletLayer != null)
+                RemoveLayer(_gauntletLayer);
             _dataSource?.OnFinalize();
             _dataSource = null;
             _gauntletLayer = null;
 
-            CharacterSelectionView.OnFinalize();
-            PartySelectionView.OnFinalize();
-            PartyRosterReviewView.OnFinalize();
+            CharacterSelectionView?.OnFinalize();
+            PartySelectionView?.OnFinalize();
+            PartyRosterReviewView?.OnFinalize();
             base.OnFinalize();
         }
 
@@ -104,14 +105,15 @@ namespace EnhancedBattleTest.UI
         {
             base.OnFrameTick(dt);
 
-            if (_gauntletLayer.Input.IsHotKeyReleased("Exit")
-                && !CharacterSelectionView.OnEscape())
+            if (_dataSource != null
+                && _gauntletLayer?.Input.IsHotKeyReleased("Exit") == true
+                && CharacterSelectionView?.OnEscape() != true)
                 _dataSource.ExecuteBack();
         }
 
         private void LoadMovie()
         {
-            if (_isMovieLoaded)
+            if (_isMovieLoaded || _gauntletLayer == null || _dataSource == null)
                 return;
             _gauntletMovie = _gauntletLayer.LoadMovie(nameof(EnhancedBattleTestScreen), _dataSource);
             _isMovieLoaded = true;

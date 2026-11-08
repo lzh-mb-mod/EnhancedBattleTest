@@ -180,7 +180,7 @@
               </Children>
             </ListPanel>
 
-            <ListPanel DataSource="{Characters\Character}" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="Fixed" SuggestedWidth="970" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginTop="10" MarginBottom="10">
+            <ListPanel DataSource="{Characters\Character}" IsVisible="@HasSelectedCharacter" LayoutImp.LayoutMethod="HorizontalLeftToRight" WidthSizePolicy="Fixed" SuggestedWidth="970" HeightSizePolicy="StretchToParent" HorizontalAlignment="Center" MarginTop="10" MarginBottom="10">
               <Children>
 
                 <ListPanel WidthSizePolicy="Fixed" SuggestedWidth="390" HeightSizePolicy="StretchToParent" MarginRight="30" LayoutImp.LayoutMethod="VerticalBottomToTop">
