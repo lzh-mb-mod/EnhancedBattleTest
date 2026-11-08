@@ -1,6 +1,6 @@
 # Changelog
 
-## [v4.0.2] - Unreleased
+## [v4.0.2] - 2026-11-09
 
 ### Changed
 - Ask for confirmation before saving manually after a test battle. Automatic saves remain disabled until the campaign is reloaded.
