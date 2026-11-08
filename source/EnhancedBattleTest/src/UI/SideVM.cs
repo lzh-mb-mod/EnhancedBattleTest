@@ -183,8 +183,15 @@ namespace EnhancedBattleTest.UI
 
         private void UpdateTotalTroopCount()
         {
-            int total = GetParties()
-                .Sum(GetPartyTroopCount);
+            TextObject text =
+                GameTexts.FindText("str_ebt_total_troop_count");
+            text.SetTextVariable("TROOP_COUNT", GetTotalTroopCount());
+            TotalTroopCountText.TextObject = text;
+        }
+
+        internal int GetTotalTroopCount()
+        {
+            int total = GetParties().Sum(GetPartyTroopCount);
             if (_isPlayerSide
                 && _battleTypeConfig.PlayerType != PlayerType.None
                 && _config.PlayerCharacter?.CharacterObject
@@ -195,10 +202,7 @@ namespace EnhancedBattleTest.UI
             {
                 total++;
             }
-            TextObject text =
-                GameTexts.FindText("str_ebt_total_troop_count");
-            text.SetTextVariable("TROOP_COUNT", total);
-            TotalTroopCountText.TextObject = text;
+            return total;
         }
 
         private static int GetPartyTroopCount(PartyConfig party)

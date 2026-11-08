@@ -36,6 +36,9 @@ namespace EnhancedBattleTest.UI
         private string _equipmentSetText;
         public CharacterPreviewVM Character { get; }
 
+        [DataSourceProperty]
+        public bool HasSelectedCharacter => _config.ActualCharacterObject != null;
+
         public TextVM MaleRatioText { get; }
         public TextVM FemaleRatioText { get; }
 
@@ -178,11 +181,11 @@ namespace EnhancedBattleTest.UI
 
         public override void SelectedCharacterChanged(Character character)
         {
-            if (character == null)
+            if (!(character is SPCharacter selectedCharacter))
                 return;
-            _config.CharacterId = character.StringId;
+            _config.SelectCharacter(selectedCharacter.CharacterObject);
             _config.EquipmentSetIndex = 0;
-            FemaleRatio.Value = _config.FemaleRatio = _config.CharacterObject.IsFemale ? 1 : 0;
+            FemaleRatio.Value = _config.FemaleRatio = selectedCharacter.CharacterObject.IsFemale ? 1 : 0;
             SetCharacterToViewModel();
         }
 
@@ -219,10 +222,9 @@ namespace EnhancedBattleTest.UI
 
         private void SetCharacterToViewModel()
         {
-            if (!(_config.Character is SPCharacter mpCharacter))
-                return;
-            var characterObject = _config.CharacterObject;
-            FillFrom(characterObject);
+            OnPropertyChanged(nameof(HasSelectedCharacter));
+            if (HasSelectedCharacter)
+                FillFrom(_config.ActualCharacterObject);
         }
 
         private void FillFrom(BasicCharacterObject character, int seed = -1)
@@ -280,7 +282,8 @@ namespace EnhancedBattleTest.UI
             text.SetTextVariable("COUNT", equipmentSets.Count);
             EquipmentSetText = text.ToString();
             return equipmentSets.ElementAtOrDefault(selectedIndex)
-                   ?? character.Equipment;
+                   ?? character.Equipment
+                   ?? new Equipment();
         }
 
         private void RefreshReview(

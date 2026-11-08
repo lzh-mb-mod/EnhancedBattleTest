@@ -1,6 +1,19 @@
 # Changelog
 
-## Unreleased
+## [v4.0.2] - Unreleased
+
+### Changed
+- Ask for confirmation before saving manually after a test battle. Automatic saves remain disabled until the campaign is reloaded.
+
+### Fixed
+- Fix crashes in the battle setup and character picker when total conversion mods omit vanilla troops or use custom or missing cultures.
+
+## [v4.0.1] - 2026-08-05
+
+### Fixed
+- Preserve the campaign party's settlement context during test battles.
+
+## [v4.0.0] - 2026-08-05
 
 ### Added
 - Add campaign party importing with culture, faction, clan, type, and name filters.
@@ -10,7 +23,6 @@
 - Add an optional tactical-level override for each battle side.
 
 ### Changed
-- Ask for confirmation before saving manually after a test battle. Automatic saves remain disabled until the campaign is reloaded.
 - Use native campaign parties and agent origins for improved compatibility with other mods.
 - Preserve character, faction, and clan selections while dependent filters are rebuilt.
 - Improve party, troop, character-selection, and roster-review layouts.

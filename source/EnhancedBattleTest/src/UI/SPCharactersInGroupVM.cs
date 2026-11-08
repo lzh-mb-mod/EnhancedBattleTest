@@ -414,7 +414,7 @@ namespace EnhancedBattleTest.UI
             {
                 BasicCultureObject culture = characterObject.IsHero
                     ? characterObject.HeroObject?.MapFaction?.Culture
-                    : characterObject.Culture;
+                    : spCharacter.Culture;
                 if (CultureId(culture) != _factionCultureId)
                     return false;
             }
@@ -539,7 +539,7 @@ namespace EnhancedBattleTest.UI
 
         private static string CultureId(BasicCultureObject culture)
         {
-            return culture?.StringId ?? "null";
+            return CharacterCollection.GetCultureId(culture);
         }
     }
 }

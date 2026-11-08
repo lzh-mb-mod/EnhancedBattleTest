@@ -72,7 +72,7 @@ namespace EnhancedBattleTest.Patch
                 || _manualSaveConfirmed)
                 return true;
 
-            if (skipIfInquiryActive && InformationManager.IsAnyInquiryActive())
+            if (skipIfInquiryActive && InformationManager.IsAnyInquiryActive?.Invoke() == true)
                 return false;
 
             Campaign campaign = Campaign.Current;

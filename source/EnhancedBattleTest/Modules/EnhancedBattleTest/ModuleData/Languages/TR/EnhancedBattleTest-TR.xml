@@ -146,6 +146,8 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="Oyuncu çavuş olduğunda oyuncu takımında kullanılabilir bir komutan bulunmalıdır." />
     <string id="EnhancedBattleTest_siege_player_character_required" text="Kuşatma savaşları bir oyuncu karakteri gerektirir." />
+    <string id="EnhancedBattleTest_select_player_character" text="Savaşı başlatmadan önce bir oyuncu karakteri seçin." />
+    <string id="EnhancedBattleTest_both_sides_need_troops" text="Her iki tarafta da en az bir kullanılabilir asker veya kahraman olmalıdır." />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="Enhanced Battle Test Uyarısı" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="Test savaşı seferinizde kalıcı değişiklikler bırakabilir. Savaştan sonra seferi yeniden yükleyene kadar otomatik kayıt yapılmaz ve elle kaydetmek için onay gerekir." />
     <string id="EnhancedBattleTest_autosave_disabled" text="Seferi yeniden yükleyene kadar otomatik kayıt yapılmaz." />

@@ -54,7 +54,7 @@ namespace EnhancedBattleTest.UI
         public override void RefreshValues()
         {
             base.RefreshValues();
-            Name.ActionText = _config.Character.Name.ToString();
+            Name.ActionText = GetCharacterName();
         }
 
         private void SetConfig(
@@ -78,8 +78,7 @@ namespace EnhancedBattleTest.UI
                         characterConfig =>
                         {
                             _config.CopyFrom(characterConfig);
-                            Name.ActionText =
-                                _config.Character.Name.ToString();
+                            Name.ActionText = GetCharacterName();
                             onCharacterChanged?.Invoke();
                         },
                         false,
@@ -90,9 +89,12 @@ namespace EnhancedBattleTest.UI
                         cancelAction));
             Name = new StringItemWithActionVM(
                 o => SelectCharacter(),
-                _config.Character.Name.ToString(),
+                GetCharacterName(),
                 this);
         }
+
+        private string GetCharacterName() =>
+            (_config.Character?.Name ?? GameTexts.FindText("str_ebt_select_character")).ToString();
 
         public void SelectCharacter(Action cancelAction = null)
         {

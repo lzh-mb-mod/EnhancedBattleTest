@@ -44,7 +44,7 @@ namespace EnhancedBattleTest.UI
             _isInitialized = false;
             _screen = null;
             _characterCollection = null;
-            _dataSource.OnFinalize();
+            _dataSource?.OnFinalize();
             _dataSource = null;
             GameStateManager.Current.UnregisterActiveStateDisableRequest(this);
         }
@@ -67,7 +67,7 @@ namespace EnhancedBattleTest.UI
             if (!_isActive)
                 return false;
 
-            EndSelection();
+            _dataSource.CancelSelection();
             return true;
         }
 
