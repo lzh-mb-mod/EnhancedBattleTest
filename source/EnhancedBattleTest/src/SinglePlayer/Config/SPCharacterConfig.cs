@@ -22,17 +22,9 @@ namespace EnhancedBattleTest.SinglePlayer.Config
             get => _characterId;
             set
             {
-                if (value == null)
-                    return;
-                _characterId = value;
-                ActualCharacterObject = null;
-                Character = null;
-                var characterObject = TaleWorlds.Core.Game.Current.ObjectManager.GetObject<CharacterObject>(value);
-                if (characterObject == null)
-                    return;
-                ActualCharacterObject = characterObject;
-                Character = new SPCharacter(ActualCharacterObject,
-                    new SPGroup(CharacterObject.DefaultFormationClass).Info);
+                string id = string.IsNullOrWhiteSpace(value) ? null : value;
+                SetCharacter(id == null ? null
+                    : Game.Current?.ObjectManager?.GetObject<CharacterObject>(id), id);
             }
         }
 
@@ -42,6 +34,19 @@ namespace EnhancedBattleTest.SinglePlayer.Config
         [XmlIgnore] public override BasicCharacterObject CharacterObject => ActualCharacterObject;
 
         [XmlIgnore] public CharacterObject ActualCharacterObject;
+
+        internal void SelectCharacter(CharacterObject character) =>
+            SetCharacter(character, character?.StringId);
+
+        private void SetCharacter(CharacterObject character, string id)
+        {
+            _characterId = id;
+            ActualCharacterObject = SPCharacterCollection.IsSelectable(character)
+                ? character : null;
+            Character = ActualCharacterObject == null ? null
+                : new SPCharacter(ActualCharacterObject,
+                    new SPGroup(ActualCharacterObject.DefaultFormationClass).Info);
+        }
 
         public override CharacterConfig Clone()
         {
@@ -55,7 +60,7 @@ namespace EnhancedBattleTest.SinglePlayer.Config
             var spOther = other as SPCharacterConfig;
             if (spOther == null)
                 return;
-            CharacterId = spOther.CharacterId;
+            SetCharacter(spOther.ActualCharacterObject, spOther.CharacterId);
             OverrideGender = spOther.OverrideGender;
             FemaleRatio = spOther.FemaleRatio;
             EquipmentSetIndex = spOther.EquipmentSetIndex;
@@ -76,7 +81,8 @@ namespace EnhancedBattleTest.SinglePlayer.Config
 
             if (character != null)
             {
-                foreach (Equipment equipment in character.BattleEquipments)
+                foreach (Equipment equipment in character.BattleEquipments
+                    ?? Enumerable.Empty<Equipment>())
                 {
                     if (equipment != null
                         && !result.Any(existing =>
@@ -104,7 +110,11 @@ namespace EnhancedBattleTest.SinglePlayer.Config
 
         public SPCharacterConfig()
         {
-            CharacterId = Game.Current.ObjectManager.GetObjectTypeList<CultureObject>().First().BasicTroop.StringId;
+        }
+
+        internal SPCharacterConfig(CharacterObject character)
+        {
+            SelectCharacter(character);
         }
 
         public SPCharacterConfig(string id, float femaleRatio = 0)
