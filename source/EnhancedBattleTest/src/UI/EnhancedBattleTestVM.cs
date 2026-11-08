@@ -585,6 +585,17 @@ namespace EnhancedBattleTest.UI
         {
             if (!IsValid())
                 return;
+            if (_config.BattleTypeConfig.PlayerType != PlayerType.None
+                && _config.PlayerTeamConfig.PlayerCharacter?.CharacterObject == null)
+            {
+                Utility.DisplayLocalizedText("str_ebt_select_player_character");
+                return;
+            }
+            if (PlayerSide.GetTotalTroopCount() == 0 || EnemySide.GetTotalTroopCount() == 0)
+            {
+                Utility.DisplayLocalizedText("str_ebt_both_sides_need_troops");
+                return;
+            }
             if (_config.BattleTypeConfig.BattleType == BattleType.Siege
                 && _config.BattleTypeConfig.PlayerType == PlayerType.None)
             {

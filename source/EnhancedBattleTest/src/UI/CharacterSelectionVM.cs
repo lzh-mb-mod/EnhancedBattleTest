@@ -8,7 +8,6 @@ using TaleWorlds.Core;
 using TaleWorlds.Core.ViewModelCollection.Selector;
 using TaleWorlds.Library;
 using TaleWorlds.Localization;
-using TaleWorlds.ObjectSystem;
 
 namespace EnhancedBattleTest.UI
 {
@@ -146,7 +145,6 @@ namespace EnhancedBattleTest.UI
         {
             _beginSelection = beginSelection;
             _endSelection = endSelection;
-            EnhancedBattleTestSubModule.Instance.OnSelectCharacter += this.Open;
             _characterCollection = characterCollection;
 
             TitleText = new TextVM(GameTexts.FindText("str_ebt_select_character"));
@@ -171,6 +169,7 @@ namespace EnhancedBattleTest.UI
             RefreshFactionCultures();
             RefreshClanCultures();
             RefreshGroups();
+            EnhancedBattleTestSubModule.Instance.OnSelectCharacter += this.Open;
         }
 
         public override void OnFinalize()
@@ -243,6 +242,7 @@ namespace EnhancedBattleTest.UI
             List<string> cultures)
         {
             return selector == null || selector.SelectedIndex < 1
+                                    || selector.SelectedIndex > cultures.Count
                 ? null
                 : cultures[selector.SelectedIndex - 1];
         }
@@ -270,7 +270,7 @@ namespace EnhancedBattleTest.UI
             var characterObject =
                 (character as SinglePlayer.Data.SPCharacter)?.CharacterObject;
             string factionCultureId = data.HeroOnly == false
-                ? characterObject?.Culture?.StringId
+                ? character?.Culture?.StringId
                 : characterObject?.HeroObject?.MapFaction?.Culture?.StringId;
             FactionCultures.SelectedIndex =
                 _factionCulturesInSelection.IndexOf(
@@ -339,7 +339,7 @@ namespace EnhancedBattleTest.UI
                 SelectedCultureId(selector, culturesInSelection);
             string search = searchText.Trim();
             culturesInSelection.Clear();
-            culturesInSelection.AddRange(_characterCollection.Cultures
+            culturesInSelection.AddRange(_characterCollection.Cultures.Keys
                 .Where(cultureId =>
                     string.IsNullOrEmpty(search)
                     || Contains(CultureName(cultureId).ToString(), search)
@@ -358,12 +358,14 @@ namespace EnhancedBattleTest.UI
                 OnFilterChanged);
         }
 
-        private static TextObject CultureName(string cultureId)
+        private TextObject CultureName(string cultureId)
         {
-            return cultureId == "null"
-                ? GameTexts.FindText("str_ebt_null_culture")
-                : MBObjectManager.Instance
-                    .GetObject<BasicCultureObject>(cultureId).Name;
+            if (cultureId == CharacterCollection.NoCultureId)
+                return GameTexts.FindText("str_ebt_null_culture");
+
+            _characterCollection.Cultures.TryGetValue(cultureId, out var culture);
+            TextObject name = culture?.Name;
+            return TextObject.IsNullOrEmpty(name) ? new TextObject(cultureId) : name;
         }
 
         private static bool Contains(string value, string search)
@@ -375,6 +377,11 @@ namespace EnhancedBattleTest.UI
 
         private void Done()
         {
+            if (_data.Config.CharacterObject == null)
+            {
+                Utility.DisplayLocalizedText("str_ebt_select_character");
+                return;
+            }
             _data.SelectAction?.Invoke(_data.Config);
             EndSelection();
         }
@@ -384,6 +391,8 @@ namespace EnhancedBattleTest.UI
             _data.CancelAction?.Invoke();
             EndSelection();
         }
+
+        internal void CancelSelection() => Close();
 
         private void EndSelection()
         {

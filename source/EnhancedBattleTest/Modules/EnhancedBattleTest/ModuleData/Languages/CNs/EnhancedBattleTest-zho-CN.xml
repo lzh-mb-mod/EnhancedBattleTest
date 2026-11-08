@@ -149,6 +149,8 @@
 
     <string id="EnhancedBattleTest_sergeant_general_required" text="玩家为士官时，玩家队伍中必须有一名可用的将领。" />
     <string id="EnhancedBattleTest_siege_player_character_required" text="攻城战必须设置玩家角色。" />
+    <string id="EnhancedBattleTest_select_player_character" text="请先选择玩家角色，再开始战斗。" />
+    <string id="EnhancedBattleTest_both_sides_need_troops" text="双方都需要至少一名可用的士兵或英雄。" />
     <string id="EnhancedBattleTest_campaign_state_warning_title" text="增强战斗测试警告" />
     <string id="EnhancedBattleTest_campaign_state_warning" text="测试战斗可能会在战役中留下改动。战斗结束后，自动保存将暂停，手动保存需要确认，直到重新加载战役。" />
     <string id="EnhancedBattleTest_autosave_disabled" text="自动保存已暂停，重新加载战役后将恢复。" />

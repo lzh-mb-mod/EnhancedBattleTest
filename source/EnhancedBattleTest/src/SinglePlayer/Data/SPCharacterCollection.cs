@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using EnhancedBattleTest.Data;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -7,46 +8,73 @@ namespace EnhancedBattleTest.SinglePlayer.Data
 {
     public class SPCharacterCollection : CharacterCollection
     {
-        public override List<string> Cultures { get; } = new List<string>();
-        public override Dictionary<string, List<Group>> GroupsInCultures { get; } = new Dictionary<string, List<Group>>();
+        public override Dictionary<string, List<Group>> GroupsInCultures { get; } =
+            new Dictionary<string, List<Group>>();
+
+        internal static bool IsSelectable(CharacterObject character) =>
+            character != null && !character.IsTemplate && !character.IsChildTemplate
+            && !string.IsNullOrWhiteSpace(character.StringId);
+
+        // CharacterObject.Culture casts non-hero cultures to CultureObject.
+        internal static BasicCultureObject GetCharacterCulture(CharacterObject character) =>
+            character?.HeroObject?.Culture ?? ((BasicCharacterObject)character)?.Culture;
+
+        internal static IEnumerable<CharacterObject> GetCampaignCharacters() =>
+            Game.Current?.ObjectManager?.GetObjectTypeList<BasicCharacterObject>()
+                ?.OfType<CharacterObject>().Where(IsSelectable)
+            ?? Enumerable.Empty<CharacterObject>();
+
+        internal static CharacterObject FindDefaultTroop(
+            BasicCultureObject preferredCulture = null,
+            CharacterObject otherSideTroop = null)
+        {
+            CharacterObject basicTroop = (preferredCulture as CultureObject)?.BasicTroop;
+            if (IsSelectable(basicTroop) && !basicTroop.IsHero && basicTroop != otherSideTroop)
+                return basicTroop;
+
+            return GetCampaignCharacters()
+                .Where(character => !character.IsHero)
+                .OrderBy(character => character == otherSideTroop)
+                .ThenByDescending(character => preferredCulture != null
+                    ? GetCharacterCulture(character) == preferredCulture
+                    : otherSideTroop != null && GetCharacterCulture(character) != GetCharacterCulture(otherSideTroop))
+                .FirstOrDefault();
+        }
+
         public override void Initialize()
         {
             Cultures.Clear();
+            GroupsInCultures.Clear();
 
-            foreach (var basicCharacterObject in TaleWorlds.Core.Game.Current.ObjectManager.GetObjectTypeList<BasicCharacterObject>())
+            foreach (CharacterObject character in GetCampaignCharacters())
             {
-                if (basicCharacterObject is CharacterObject characterObject)
+                string cultureId = RegisterCulture(GetCharacterCulture(character));
+                if (character.IsHero)
                 {
-                    if (characterObject.IsTemplate || characterObject.IsChildTemplate)
-                        continue;
-                    var culture = characterObject.Culture;
-                    var cultureId = culture?.StringId ?? "null";
-                    if (!Cultures.Contains(cultureId))
-                        Cultures.Add(cultureId);
-                    if (!GroupsInCultures.TryGetValue(cultureId, out var groupsInCurrentCulture))
-                    {
-                        GroupsInCultures[cultureId] = groupsInCurrentCulture = new List<Group>();
-                    }
-
-                    var formationClass = characterObject.DefaultFormationClass;
-                    var group = groupsInCurrentCulture.Find(g => g.Info.FormationClass == formationClass) as SPGroup;
-                    if (group == null)
-                    {
-                        var newGroup = new SPGroup(formationClass);
-                        groupsInCurrentCulture.Add(newGroup);
-                        groupsInCurrentCulture.Sort((lhs, rhs) => lhs.Info.FormationClass - rhs.Info.FormationClass);
-                        group = newGroup;
-                    }
-
-                    var occupation = characterObject.Occupation;
-                    if (!group.OccupationsInGroup.TryGetValue(occupation, out var charactersInOccupation))
-                    {
-                        group.OccupationsInGroup[occupation] = charactersInOccupation = new CharactersInOccupation();
-                    }
-
-                    charactersInOccupation.Characters.Add(characterObject.StringId,
-                        new SPCharacter(characterObject, group.Info));
+                    RegisterCulture(character.HeroObject?.MapFaction?.Culture);
+                    RegisterCulture(character.HeroObject?.Clan?.Culture);
                 }
+                if (!GroupsInCultures.TryGetValue(cultureId, out var groups))
+                {
+                    GroupsInCultures[cultureId] = groups = new List<Group>();
+                }
+
+                var formationClass = character.DefaultFormationClass;
+                var group = groups.Find(g => g.Info.FormationClass == formationClass) as SPGroup;
+                if (group == null)
+                {
+                    group = new SPGroup(formationClass);
+                    groups.Add(group);
+                    groups.Sort((lhs, rhs) => lhs.Info.FormationClass - rhs.Info.FormationClass);
+                }
+
+                var occupation = character.Occupation;
+                if (!group.OccupationsInGroup.TryGetValue(occupation, out var characters))
+                {
+                    group.OccupationsInGroup[occupation] = characters = new CharactersInOccupation();
+                }
+
+                characters.Characters[character.StringId] = new SPCharacter(character, group.Info);
             }
         }
     }
