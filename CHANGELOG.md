@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [v4.3.2] - Unreleased
 
 ### Fixed
 - Fix battle setup and character selection when total conversion mods omit vanilla troops or use custom or missing cultures.
