@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Fix a deployment crash when playing as a regular troop by spawning the temporary player hero consistently with the campaign player identity.
+
 ## [v4.2.3] - 2026-11-09
 
 ### Fixed

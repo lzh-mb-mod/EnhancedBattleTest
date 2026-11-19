@@ -192,6 +192,9 @@ namespace EnhancedBattleTest.Data
                     : GetPlayerCharacter(config.PlayerTeamConfig);
             PlayerIdentityState playerIdentity =
                 CreatePlayerIdentity(selectedPlayerCharacter);
+            CharacterObject battlePlayerCharacter = selectedPlayerCharacter == null
+                ? null
+                : playerIdentity.BattleCharacter;
             PlayerEncounter originalPlayerEncounter =
                 Campaign.Current.PlayerEncounter;
             Dictionary<Hero, int> originalHeroHitPoints = null;
@@ -207,13 +210,14 @@ namespace EnhancedBattleTest.Data
                     new TextObject("{=sSJSTe5p}Player Party"),
                     config.PlayerTeamConfig.PrimaryParty,
                     isPlayerAttacker,
-                    selectedPlayerCharacter,
-                    selectedPlayerCharacter != null,
+                    battlePlayerCharacter,
+                    battlePlayerCharacter != null,
                     true,
                     preferredPlayerPartyCharacter,
                     out CharacterObject playerCharacter,
                     out List<CharacterObject> playerSpawnPriorityCharacters,
-                    out List<string> playerPriorityCharacterIds);
+                    out List<string> playerPriorityCharacterIds,
+                    selectedPlayerCharacter);
                 playerParties.Add(playerParty);
                 ownedTemporaryParties.Add(playerParty);
                 ApplyPartyMoraleOverride(
@@ -572,7 +576,8 @@ namespace EnhancedBattleTest.Data
             BasicCharacterObject preferredCharacter,
             out CharacterObject playerCharacter,
             out List<CharacterObject> spawnPriorityCharacters,
-            out List<string> priorityCharacterIds)
+            out List<string> priorityCharacterIds,
+            CharacterObject selectedPlayerTemplate = null)
         {
             TroopRoster roster = CreateRoster(
                 config,
@@ -580,7 +585,8 @@ namespace EnhancedBattleTest.Data
                 addControlledCharacter,
                 out playerCharacter,
                 out spawnPriorityCharacters,
-                out priorityCharacterIds);
+                out priorityCharacterIds,
+                selectedPlayerTemplate);
             TemporaryPartyProfile profile = ResolvePartyProfile(
                 config,
                 isAttacker,
@@ -661,7 +667,8 @@ namespace EnhancedBattleTest.Data
             bool addControlledCharacter,
             out CharacterObject playerCharacter,
             out List<CharacterObject> spawnPriorityCharacters,
-            out List<string> priorityCharacterIds)
+            out List<string> priorityCharacterIds,
+            CharacterObject selectedPlayerTemplate = null)
         {
             TroopRoster roster = TroopRoster.CreateDummyTroopRoster();
             playerCharacter = controlledCharacter;
@@ -694,6 +701,15 @@ namespace EnhancedBattleTest.Data
 
             if (addControlledCharacter && controlledCharacter != null)
             {
+                // A regular troop is represented by a temporary hero for the campaign
+                // player identity. Spawn that same object so Mission registers it as
+                // InitialPlayerAgent, while replacing only one configured soldier.
+                if (selectedPlayerTemplate != null
+                    && selectedPlayerTemplate != controlledCharacter
+                    && roster.GetTroopCount(selectedPlayerTemplate) > 0)
+                {
+                    roster.AddToCounts(selectedPlayerTemplate, -1);
+                }
                 if (!roster.Contains(controlledCharacter))
                     roster.AddToCounts(controlledCharacter, 1);
                 spawnPriorityCharacters.Remove(controlledCharacter);
