@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Fixed
+- Use the mission result on the test battle scoreboard so victories are not shown as defeats.
 - Keep the spawned player character, priority roster, and campaign player identity consistent when playing as a regular troop.
 
 ## [v4.1.3] - 2026-11-09
